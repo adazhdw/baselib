@@ -1,0 +1,67 @@
+package com.adazhdw.baselibrary.base
+
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.PersistableBundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
+import org.greenrobot.eventbus.EventBus
+import kotlin.coroutines.CoroutineContext
+
+abstract class BaseActivity : AppCompatActivity(),CoroutineScope {
+
+    private val myViewModel = BaseViewModelImpl()
+    override val coroutineContext: CoroutineContext
+        get() = myViewModel.viewModelScope.coroutineContext
+    protected val TAG = javaClass.simpleName + "------"
+    protected val mHandler: Handler by lazy { Handler(Looper.getMainLooper()) }
+
+    /**
+     * 返回布局Id
+     */
+    abstract fun layoutId(): Int
+
+    /**
+     * 初始化数据
+     */
+    abstract fun initData()
+
+    /**
+     * 初始化View
+     */
+    abstract fun initView()
+
+    /**
+     * 是否需要EventBus
+     */
+    open fun needEventBus(): Boolean = false
+
+    /**
+     * 网络请求开始
+     */
+    abstract fun requestStart()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(layoutId())
+        initView()
+        initData()
+        requestStart()
+        if (needEventBus()) {
+            EventBus.getDefault().register(this)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        myViewModel.viewModelScope.cancel()
+        if (needEventBus()) {
+            EventBus.getDefault().unregister(this)
+        }
+    }
+
+}
+

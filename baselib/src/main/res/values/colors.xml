@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="color_FAFAFA">#FAFAFA</color>
+
+    <color name="text_hint_color">#B3B2b2</color>
+    <color name="white">#FFFFFF</color>
+
+</resources>
