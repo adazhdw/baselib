@@ -35,15 +35,15 @@ class OkHttpLogger : HttpLoggingInterceptor.Logger {
             }
             message.startWidth("--> GET") -> {
                 msgBuilder.clear()
-                msgBuilder.append("\n \nRequest Type-GET,URL: ${message.replace("--> GET", "")}\n")
+                msgBuilder.append("\n \nRequest Type-GET, URL: ${message.replace("--> GET", "")}\n")
             }
             message.startWidth("--> POST") -> {
                 msgBuilder.clear()
-                msgBuilder.append("\n \nRequest Type-POST,URL: ${message.replace("--> POST", "")}\n")
+                msgBuilder.append("\n \nRequest Type-POST, URL: ${message.replace("--> POST", "")}\n")
             }
-            message.startWidth("<-- 200 OK") -> msgBuilder.append("Request Success,URL: ${message.replace("<-- 200 OK", "")}\n")
+            message.startWidth("<-- 200 OK") -> msgBuilder.append("Request Success, URL: ${message.replace("<-- 200 OK", "")}\n")
             message.startWidth("Date:") -> msgBuilder.append("Request Return Time: $message\n")
-            message.startWidth("{")->msgBuilder.append("Response Data：\n"+JsonUtils.formatJson(message)+"\n")
+            message.startWidth("{")->msgBuilder.append("Response Data: \n"+JsonUtils.formatJson(message)+"\n")
             message.startWidth("<-- END HTTP") -> {
                 msgBuilder.append("Response End---Body Size:${message.replace("<-- END HTTP", "")}\n")
                 logD(TAG,msgBuilder.toString())

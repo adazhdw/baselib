@@ -11,6 +11,7 @@ import com.adazhdw.baselibrary.http.subsC
 import com.adazhdw.baselibrary.list.BaseRvAdapter
 import com.adazhdw.baselibrary.list.BaseViewHolder
 import com.adazhdw.baselibrary.list.ListFragmentLine
+import com.grantgz.baseapp.InjectorUtil
 import com.grantgz.baseapp.R
 import com.grantgz.baseapp.http.ChapterHistory
 import com.grantgz.baseapp.http.apiService
@@ -24,14 +25,14 @@ class NetRequestActivity : BaseActivityImpl() {
     }
 
     private val mNetViewModel: NetViewModel by lazy {
-        ViewModelProviders.of(this, NetModelFactory()).get(NetViewModel::class.java)
+        ViewModelProviders.of(this, InjectorUtil.getNetModelFactory()).get(NetViewModel::class.java)
     }
 
     override fun initView() {
         mNetViewModel.mHotKeyList.observe(this, Observer {
-//            it.forEach {key->
-//                Log.d(TAG, key.name)
-//            }
+            it.forEach {key->
+                Log.d(TAG, key.name)
+            }
         })
         mNetViewModel.mChapterList.observe(this, Observer {data->
             data?.forEach {

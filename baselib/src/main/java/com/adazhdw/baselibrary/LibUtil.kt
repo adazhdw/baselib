@@ -95,7 +95,6 @@ fun Application.initLibrary(baseUrl: String, debug: Boolean = false) {
     Utils.init(this)
     RetrofitModel.initBaseUrl(baseUrl)
     LibUtil.init(this)
-    SPUtils.init(this)
     isDebug = debug
 }
 

@@ -28,7 +28,7 @@ abstract class RetrofitFactory<T> {
     init {
         mBaseUrl = this.baseUrl()
         if (mBaseUrl.isEmpty()) {
-            throw BaseUrlNullException()
+            error("base url is null ")
         }
         apiService = this.getRetrofit().create(this.getService())
     }
@@ -64,6 +64,5 @@ abstract class RetrofitFactory<T> {
     }
 }
 
-class BaseUrlNullException : Exception("base url is null ")
 
 

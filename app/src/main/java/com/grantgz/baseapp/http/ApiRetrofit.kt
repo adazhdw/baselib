@@ -1,6 +1,7 @@
 package com.grantgz.baseapp.http
 
 import com.adazhdw.baselibrary.http.RetrofitFactory
+import com.grantgz.baseapp.BuildConfig
 
 class ApiRetrofit : RetrofitFactory<ApiService>(){
     override fun getService(): Class<ApiService> {
@@ -8,7 +9,7 @@ class ApiRetrofit : RetrofitFactory<ApiService>(){
     }
 
     override fun baseUrl(): String {
-        return "https://wanandroid.com"
+        return BuildConfig.DOMAIN
     }
 }
 

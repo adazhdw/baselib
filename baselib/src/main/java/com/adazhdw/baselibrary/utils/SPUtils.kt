@@ -1,33 +1,20 @@
 package com.adazhdw.baselibrary.utils
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import com.adazhdw.baselibrary.LibUtil
-import java.lang.Exception
 
 class SPUtils {
 
     companion object {
-        @SuppressLint("StaticFieldLeak")
-        private var mContext: Context? = null
         private const val SP_NAME = "base_sp_name"
-        fun init(context: Context?) {
-            mContext = context
-        }
-
 
         private val spMap: Map<String, SharedPreferences> by lazy {
-            HashMap<String, SharedPreferences>().apply {
-                put(SP_NAME, mSharedPreferences)
-            }
+            HashMap<String, SharedPreferences>().apply { put(SP_NAME, mSharedPreferences) }
         }
 
         private val mSharedPreferences: SharedPreferences by lazy {
-            (mContext ?: LibUtil.getApp()).getSharedPreferences(
-                SP_NAME,
-                Context.MODE_PRIVATE
-            )
+            LibUtil.getApp().getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
         }
         private var mCurrentSP: SharedPreferences = mSharedPreferences
 
@@ -38,10 +25,7 @@ class SPUtils {
             if (spMap.contains(name ?: SP_NAME)) {
                 spMap[name ?: SP_NAME] ?: error("SharedPreferences init fail")
             } else {
-                (mContext ?: LibUtil.getApp()).getSharedPreferences(
-                    name ?: SP_NAME,
-                    Context.MODE_PRIVATE
-                )
+                LibUtil.getApp().getSharedPreferences(name ?: SP_NAME, Context.MODE_PRIVATE)
             }.also { mCurrentSP = it }
             return SPUtils()
         }

@@ -27,7 +27,7 @@ class RetrofitModel {
 
     init {
         if (mBaseUrl.isBlank()) {
-            throw BaseUrlNullException()
+            error("base url is null ")
         }
         mRetrofit = Retrofit.Builder()
             .baseUrl(mBaseUrl)
