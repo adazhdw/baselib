@@ -8,7 +8,7 @@ class App : Application() {
 
     companion object {
         //Delegate 单例 委托属性
-        var instance by DelegateExt.notNullSingleValue<android.app.Application>()
+        var instance by DelegateExt.notNullSingleValue<App>()
     }
 
     override fun onCreate() {
