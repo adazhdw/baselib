@@ -6,6 +6,8 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.baselibrary.base.BaseActivityImpl
+import com.adazhdw.baselibrary.ext.DelegateExt
+import com.adazhdw.baselibrary.ext.logD
 import com.adazhdw.baselibrary.http.await
 import com.adazhdw.baselibrary.http.subsC
 import com.adazhdw.baselibrary.list.BaseRvAdapter
@@ -28,7 +30,15 @@ class NetRequestActivity : BaseActivityImpl() {
         ViewModelProviders.of(this, InjectorUtil.getNetModelFactory()).get(NetViewModel::class.java)
     }
 
+    private var isLogin by DelegateExt.preference("isLogin",false)
+
     override fun initView() {
+        /*logD("isLogin-----$isLogin")
+        isLogin = true
+        logD("isLogin-----$isLogin")
+        isLogin = false
+        logD("isLogin-----$isLogin")*/
+
         mNetViewModel.mHotKeyList.observe(this, Observer {
             it.forEach {key->
                 Log.d(TAG, key.name?:"")

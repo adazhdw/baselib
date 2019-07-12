@@ -1,6 +1,5 @@
 package com.adazhdw.baselibrary.ext
 
-import java.lang.IllegalArgumentException
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -10,6 +9,9 @@ import kotlin.reflect.KProperty
  */
 object DelegateExt {
     fun <T> notNullSingleValue(): ReadWriteProperty<Any?, T> = NotNullSingleValueVar()
+
+    fun <T> preference(name: String, default: T, spName: String = "base_sp_name"): Preference<T> =
+        Preference(spName, name, default)
 }
 
 class NotNullSingleValueVar<T : Any?> : ReadWriteProperty<Any?, T> {
