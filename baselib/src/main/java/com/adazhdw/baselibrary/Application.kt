@@ -6,11 +6,11 @@ import com.adazhdw.baselibrary.ext.DelegateExt
 /**
  * use application implement is better than getApplication() by using reflect(反射)
  */
-open class Application : Application() {
+abstract class Application : Application() {
 
     companion object {
-        //单例委托
-        var instance: com.adazhdw.baselibrary.Application by DelegateExt.notNullSingleValue()
+        //Delegate 单例 委托属性
+        var instance by DelegateExt.notNullSingleValue<Application>()
     }
 
     override fun onCreate() {
@@ -19,6 +19,6 @@ open class Application : Application() {
         initLibrary(baseUrl(), isDebug())
     }
 
-    open fun baseUrl(): String = ""
+    abstract fun baseUrl(): String
     open fun isDebug(): Boolean = false
 }

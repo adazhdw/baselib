@@ -40,11 +40,6 @@ android {
     }
 }
 
-kotlin {
-    experimental {
-        coroutines "enable"
-    }
-}
 dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
@@ -107,9 +102,9 @@ ext {
 
     publishedGroupId = 'com.adazhdw' // the id you want to add in "implement" line
     artifact = 'baselib' // = libraryName  the id you want to add in "implement" line--must be the module name in android project
-    libraryVersion = '0.1.1'
+    libraryVersion = '0.1.3'
 
-    libraryDescription = 'first version 0.1.1'
+    libraryDescription = 'version 0.1.3 fix Application DelegateExt'
     siteUrl = 'https://github.com/adazhdw/baselib'
     gitUrl = 'https://github.com/adazhdw/baselib.git'
     developerId = 'adazhdw1207'
