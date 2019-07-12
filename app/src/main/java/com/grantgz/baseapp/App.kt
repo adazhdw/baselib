@@ -6,8 +6,14 @@ import com.adazhdw.baselibrary.ext.logD
 
 class App : Application() {
 
+    companion object {
+        //Delegate 单例 委托属性
+        var instance by DelegateExt.notNullSingleValue<android.app.Application>()
+    }
+
     override fun onCreate() {
         super.onCreate()
+        instance = this
         logD(instance.packageName)
     }
 

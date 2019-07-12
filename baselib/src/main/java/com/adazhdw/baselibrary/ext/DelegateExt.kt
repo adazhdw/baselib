@@ -12,7 +12,7 @@ object DelegateExt {
     fun <T> notNullSingleValue(): ReadWriteProperty<Any?, T> = NotNullSingleValueVar()
 }
 
-private class NotNullSingleValueVar<T : Any?> : ReadWriteProperty<Any?, T> {
+class NotNullSingleValueVar<T : Any?> : ReadWriteProperty<Any?, T> {
     private var value: T? = null
     override fun getValue(thisRef: Any?, property: KProperty<*>): T {
         return this.value ?: throw IllegalArgumentException("${property.name} not initialized")
