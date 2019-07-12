@@ -1,8 +1,7 @@
 package com.adazhdw.baselibrary
 
-import android.annotation.SuppressLint
 import android.app.Application
-import android.content.Context
+import com.adazhdw.baselibrary.ext.DelegateExt
 
 /**
  * use application implement is better than getApplication() by using reflect(反射)
@@ -10,14 +9,13 @@ import android.content.Context
 open class Application : Application() {
 
     companion object {
-        @SuppressLint("StaticFieldLeak")
-        lateinit var context: Context
-            private set
+        //单例委托
+        var instance: com.adazhdw.baselibrary.Application by DelegateExt.notNullSingleValue()
     }
 
     override fun onCreate() {
         super.onCreate()
-        context = this
+        instance = this
         initLibrary(baseUrl(), isDebug())
     }
 

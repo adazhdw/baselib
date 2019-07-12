@@ -31,17 +31,17 @@ class NetRequestActivity : BaseActivityImpl() {
     override fun initView() {
         mNetViewModel.mHotKeyList.observe(this, Observer {
             it.forEach {key->
-                Log.d(TAG, key.name)
+                Log.d(TAG, key.name?:"")
             }
         })
         mNetViewModel.mChapterList.observe(this, Observer {data->
             data?.forEach {
-                Log.d(TAG, it.name)
+                Log.d(TAG, it.name?:"")
             }
         })
         mNetViewModel.mHistoryData.observe(this, Observer {data->
             data?.datas?.forEach {
-                Log.d(TAG, it.title)
+                Log.d(TAG, it.title?:"")
             }
         })
         requestBtn.setOnClickListener {

@@ -6,7 +6,6 @@ import android.app.Application
 import android.os.Bundle
 import com.adazhdw.baselibrary.ext.logD
 import com.adazhdw.baselibrary.http.RetrofitModel
-import com.adazhdw.baselibrary.utils.SPUtils
 import com.blankj.utilcode.util.Utils
 import java.lang.reflect.InvocationTargetException
 
