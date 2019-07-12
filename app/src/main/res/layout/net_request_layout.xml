@@ -19,4 +19,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/permissionBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="请求权限"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/requestBtn" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

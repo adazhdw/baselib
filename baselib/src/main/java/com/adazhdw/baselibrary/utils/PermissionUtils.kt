@@ -50,14 +50,14 @@ object PermissionUtils {
         if (permissions.isEmpty())
             return
         if (isGranted(permissions, context)) {
-            onGranted?.invoke(permissions.filter { isGranted(it, context) }.toTypedArray())
+            onGranted?.invoke(permissions)
             return
         }
         this.mExplainString = mExplainString ?: ""
-        mPermissionList.clear()
-        mPermissionList.addAll(permissions.map { it }.toList())
-        mOnGranted = onGranted
-        mOnDenied = onDenied
+        this.mPermissionList.clear()
+        this.mPermissionList.addAll(permissions.toList())
+        this.mOnGranted = onGranted
+        this.mOnDenied = onDenied
         if (context != null) {
             PermissionActivity.start(context)
         } else {
@@ -80,8 +80,8 @@ object PermissionUtils {
             permissionSP.putParam(s, 1)
             grantResults[index] != PackageManager.PERMISSION_GRANTED
         }.toTypedArray()
-        mOnGranted?.invoke(grantedArray)
-        mOnDenied?.invoke(deniedArray)
+        this.mOnGranted?.invoke(grantedArray)
+        this.mOnDenied?.invoke(deniedArray)
     }
 
     /**
@@ -131,10 +131,7 @@ object PermissionUtils {
                     if (mExplainString.isNotEmpty()) {
                         mExplainString
                     } else {
-                        "App needs permissions:\n" + TextUtils.join(
-                            "\n",
-                            getPermissionText(permissions)
-                        ) + "\nplease grant permission"
+                        "应用需要相关权限才能运行，请前往应用详情页面授予相关权限"
                     }
                 )
                 .setCancelable(false)
@@ -191,78 +188,4 @@ object PermissionUtils {
             }
         }
     }
-
-    private const val normalReplaceStr = "android.permission."
-    private const val replaceStr1 = "com.android.launcher.permission."
-    private const val replaceStr2 = "com.android.voicemail.permission."
-    fun getPermissionText(permissions: MutableList<String>): MutableList<String> {
-        return permissions.map {
-            when {
-                it.contains(replaceStr1) -> it.replace(replaceStr1, "").toLowerCase()
-                it.contains(replaceStr2) -> it.replace(replaceStr2, "").toLowerCase()
-                it.contains(normalReplaceStr) -> it.replace(normalReplaceStr, "").toLowerCase()
-                else -> {
-                    ""
-                }
-            }
-        }.toMutableList()
-    }
-
 }
-/*
-
-*/
-/**
- * permissions callback
- *//*
-
-interface OnPermissionCallback {
-    fun onGranted(permissions: Array<out String>)
-    fun onDenied(permissions: Array<out String>)
-}
-
-*/
-/**
- * Permissions simple
- *//*
-
-
-//CALENDAR
-const val READ_CALENDAR = Manifest.permission.READ_CALENDAR
-const val WRITE_CALENDAR = Manifest.permission.WRITE_CALENDAR
-//CALL_LOG
-const val READ_CALL_LOG = Manifest.permission.READ_CALL_LOG
-const val WRITE_CALL_LOG = Manifest.permission.WRITE_CALL_LOG
-const val PROCESS_OUTGOING_CALLS = Manifest.permission.PROCESS_OUTGOING_CALLS
-//CONTACTS
-const val READ_CONTACTS = Manifest.permission.READ_CONTACTS
-const val WRITE_CONTACTS = Manifest.permission.WRITE_CONTACTS
-const val GET_ACCOUNTS = Manifest.permission.GET_ACCOUNTS
-//LOCATION
-const val ACCESS_FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
-const val ACCESS_COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION
-//MICROPHONE
-const val RECORD_AUDIO = Manifest.permission.RECORD_AUDIO
-//PHONE
-const val READ_PHONE_STATE = Manifest.permission.READ_PHONE_STATE
-@RequiresApi(Build.VERSION_CODES.O)
-const val READ_PHONE_NUMBERS = Manifest.permission.READ_PHONE_NUMBERS
-const val CALL_PHONE = Manifest.permission.CALL_PHONE
-@RequiresApi(Build.VERSION_CODES.O)
-const val ANSWER_PHONE_CALLS = Manifest.permission.ANSWER_PHONE_CALLS
-const val ADD_VOICEMAIL = Manifest.permission.ADD_VOICEMAIL
-const val USE_SIP = Manifest.permission.USE_SIP
-//SENSORS
-@RequiresApi(Build.VERSION_CODES.KITKAT_WATCH)
-const val BODY_SENSORS = Manifest.permission.BODY_SENSORS
-//SMS
-const val SEND_SMS = Manifest.permission.SEND_SMS
-const val RECEIVE_SMS = Manifest.permission.RECEIVE_SMS
-const val READ_SMS = Manifest.permission.READ_SMS
-const val RECEIVE_WAP_PUSH = Manifest.permission.RECEIVE_WAP_PUSH
-const val RECEIVE_MMS = Manifest.permission.RECEIVE_MMS
-//STORAGE
-const val READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
-const val WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
-
-*/

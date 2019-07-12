@@ -23,6 +23,10 @@
             android:name=".utils.PermissionUtils$PermissionActivity"
             android:launchMode="singleTask"
             android:theme="@style/ActivityTranslucentTheme" />
+        <activity
+            android:name=".ext.PermissionExt$PermissionActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/ActivityTranslucentTheme" />
 
         <service android:name=".component.DownloadService"/>
     </application>

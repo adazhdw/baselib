@@ -6,7 +6,7 @@ dependencies {
 
     //BaseLibrary
     implementation project(path: ':baselib')
-//    implementation 'com.adazhdw:baselib:0.1.4'
+//    implementation 'com.adazhdw:baselib:0.1.5'
 
     //Base
     implementation 'androidx.appcompat:appcompat:1.0.2'

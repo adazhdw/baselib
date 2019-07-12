@@ -6,7 +6,7 @@ import com.adazhdw.baselibrary.LibUtil
 import com.adazhdw.baselibrary.http.RetrofitModel
 import java.lang.IllegalArgumentException
 
-class SPUtils private constructor(){
+class SPUtils {
 
     companion object {
         private const val SP_NAME = "base_sp_name"
@@ -14,25 +14,29 @@ class SPUtils private constructor(){
         /**
          * new SPUtils Instance
          */
-        val instance: SPUtils by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { SPUtils() }
+        val instance: SPUtils by lazy { SPUtils() }
 
     }
 
-    fun initSp(name: String? = null){
+    private val spMap: Map<String, SharedPreferences>
+    private val mSharedPreferences: SharedPreferences
+    private var mCurrentSP: SharedPreferences
+
+    init {
+        mSharedPreferences = LibUtil.getApp().getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
+        spMap = HashMap()
+        spMap.put(SP_NAME, mSharedPreferences)
+        mCurrentSP = mSharedPreferences
+        initSp()
+    }
+
+    fun initSp(name: String? = null) {
         if (spMap.contains(name ?: SP_NAME)) {
             spMap[name ?: SP_NAME] ?: error("SharedPreferences init fail")
         } else {
             LibUtil.getApp().getSharedPreferences(name ?: SP_NAME, Context.MODE_PRIVATE)
         }.also { mCurrentSP = it }
     }
-    private val spMap: Map<String, SharedPreferences> by lazy {
-        HashMap<String, SharedPreferences>().apply { put(SP_NAME, mSharedPreferences) }
-    }
-
-    private val mSharedPreferences: SharedPreferences by lazy {
-        LibUtil.getApp().getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
-    }
-    private var mCurrentSP: SharedPreferences = mSharedPreferences
 
 
     fun <T> putParam(key: String, value: T) = with(mCurrentSP.edit()) {
@@ -94,4 +98,4 @@ class SPUtils private constructor(){
 
 val spUtils by lazy { SPUtils.instance }
 
-val permissionSP:SPUtils by lazy { SPUtils.instance.apply { initSp(PermissionUtils.PERMISSION_SP) } }
+val permissionSP: SPUtils by lazy { SPUtils.instance.apply { initSp(PermissionUtils.PERMISSION_SP) } }

@@ -1,5 +1,6 @@
 package com.grantgz.baseapp.ui
 
+import android.Manifest
 import android.content.Context
 import android.util.Log
 import android.view.View
@@ -7,12 +8,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.baselibrary.base.BaseActivityImpl
 import com.adazhdw.baselibrary.ext.DelegateExt
+import com.adazhdw.baselibrary.ext.PermissionExt
 import com.adazhdw.baselibrary.ext.logD
+import com.adazhdw.baselibrary.ext.toast
 import com.adazhdw.baselibrary.http.await
 import com.adazhdw.baselibrary.http.subsC
 import com.adazhdw.baselibrary.list.BaseRvAdapter
 import com.adazhdw.baselibrary.list.BaseViewHolder
 import com.adazhdw.baselibrary.list.ListFragmentLine
+import com.adazhdw.baselibrary.utils.PermissionUtils
 import com.grantgz.baseapp.InjectorUtil
 import com.grantgz.baseapp.R
 import com.grantgz.baseapp.http.ChapterHistory
@@ -31,6 +35,12 @@ class NetRequestActivity : BaseActivityImpl() {
     }
 
     private var isLogin by DelegateExt.preference("isLogin",false)
+    private val permissions = arrayOf(
+        Manifest.permission.READ_PHONE_STATE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    )
+
 
     override fun initView() {
         /*logD("isLogin-----$isLogin")
@@ -59,9 +69,25 @@ class NetRequestActivity : BaseActivityImpl() {
 //            mNetViewModel.getWxArticleChapters2()
 //            mNetViewModel.getWxArticleHistory2(408, 1)
         }
-        /*supportFragmentManager.beginTransaction()
+        permissionBtn.setOnClickListener {
+            if (!PermissionExt.isGranted(permissions, this)) {
+                PermissionExt.requestPermissions(this, permissions,
+                    granted = {
+                        it.forEach {permission->
+                            logD("onGranted----",permission)
+                        }
+                    }, denied = {
+                        it.forEach {permission->
+                            logD("onDenied----",permission)
+                        }
+                    })
+            }else{
+                toast("权限已授予")
+            }
+        }
+        supportFragmentManager.beginTransaction()
             .add(R.id.chaptersFl, WxChaptersFragment())
-            .commit()*/
+            .commit()
     }
 }
 
