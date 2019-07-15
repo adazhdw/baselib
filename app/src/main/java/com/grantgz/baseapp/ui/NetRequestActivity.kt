@@ -3,7 +3,6 @@ package com.grantgz.baseapp.ui
 import android.Manifest
 import android.content.Context
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.baselibrary.base.BaseActivityImpl
@@ -12,11 +11,9 @@ import com.adazhdw.baselibrary.ext.PermissionExt
 import com.adazhdw.baselibrary.ext.logD
 import com.adazhdw.baselibrary.ext.toast
 import com.adazhdw.baselibrary.http.await
-import com.adazhdw.baselibrary.http.subsC
 import com.adazhdw.baselibrary.list.BaseRvAdapter
 import com.adazhdw.baselibrary.list.BaseViewHolder
 import com.adazhdw.baselibrary.list.ListFragmentLine
-import com.adazhdw.baselibrary.utils.PermissionUtils
 import com.grantgz.baseapp.InjectorUtil
 import com.grantgz.baseapp.R
 import com.grantgz.baseapp.http.ChapterHistory
@@ -40,7 +37,6 @@ class NetRequestActivity : BaseActivityImpl() {
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
-
 
     override fun initView() {
         /*logD("isLogin-----$isLogin")
@@ -66,8 +62,8 @@ class NetRequestActivity : BaseActivityImpl() {
         })
         requestBtn.setOnClickListener {
             mNetViewModel.getHotKey()
-//            mNetViewModel.getWxArticleChapters2()
-//            mNetViewModel.getWxArticleHistory2(408, 1)
+            mNetViewModel.getWxArticleChapters2()
+            mNetViewModel.getWxArticleHistory2(408, 1)
         }
         permissionBtn.setOnClickListener {
             if (!PermissionExt.isGranted(permissions, this)) {

@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.adazhdw.baselibrary.R
-import com.adazhdw.baselibrary.base.BaseFragment
 import com.adazhdw.baselibrary.base.BaseFragmentImpl
 import com.adazhdw.baselibrary.ext.isSlideToBottom
 import kotlinx.android.synthetic.main.fragment_list_line.*
@@ -49,7 +48,9 @@ abstract class ListFragmentLine<M, VH : RecyclerView.ViewHolder, A : BaseRvAdapt
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (recyclerView.isSlideToBottom()) {
-                    nextPage()
+                    mHandler.post {
+                        nextPage()
+                    }
                 }
             }
         })
