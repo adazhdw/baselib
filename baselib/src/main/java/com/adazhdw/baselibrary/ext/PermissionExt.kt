@@ -81,20 +81,14 @@ object PermissionExt {
                 val needRequest = mPermissions.filterKeys { permissionSP.getParam(it, 0) == 0 }.isNotEmpty()
                 val shouldNotShow = mPermissions.filter { !shouldShowRequestPermissionRationale(it.key) }
                 if (needRequest) {
-                    requestPermissionss()
+                    requestPermissions(mPermissions.map { it.key }.toTypedArray(), IntentCode.REQUEST_PERMISSION_CODE)
                 } else {
                     if (shouldNotShow.isNotEmpty()) {
                         showLogDialog()
                     } else {
-                        requestPermissionss()
+                        requestPermissions(mPermissions.map { it.key }.toTypedArray(), IntentCode.REQUEST_PERMISSION_CODE)
                     }
                 }
-            }
-        }
-
-        private fun requestPermissionss() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(mPermissions.map { it.key }.toTypedArray(), IntentCode.REQUEST_PERMISSION_CODE)
             }
         }
 
@@ -143,7 +137,9 @@ object PermissionExt {
                 onDenied.add(permissions[index])
             }
         }
+        if (onGranted.isNotEmpty())
         this.mOnGranted?.invoke(onGranted.toTypedArray())
+        if (onDenied.isNotEmpty())
         this.mOnDenied?.invoke(onDenied.toTypedArray())
     }
 }
