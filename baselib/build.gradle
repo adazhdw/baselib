@@ -101,9 +101,9 @@ ext {
 
     publishedGroupId = 'com.adazhdw' // the id you want to add in "implement" line
     artifact = 'baselib' // = libraryName  the id you want to add in "implement" line--must be the module name in android project
-    libraryVersion = '0.1.5'
+    libraryVersion = '0.1.6'
 
-    libraryDescription = 'oprimize SPUtils code'
+    libraryDescription = 'add Preference单例，优化PermissionExt'
     siteUrl = 'https://github.com/adazhdw/baselib'
     gitUrl = 'https://github.com/adazhdw/baselib.git'
     developerId = 'adazhdw1207'

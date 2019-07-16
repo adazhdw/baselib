@@ -88,6 +88,7 @@ class NetRequestActivity : BaseActivityImpl() {
 }
 
 class WxChaptersFragment : ListFragmentLine<ChapterHistory, BaseViewHolder, ChaptersAdapter>() {
+
     override fun onNextPage(page: Int, callback: LoadCallback) {
         launch {
             val data = apiService.getWxArticleHistory2(408, page).await()
@@ -102,6 +103,10 @@ class WxChaptersFragment : ListFragmentLine<ChapterHistory, BaseViewHolder, Chap
 class ChaptersAdapter(context: Context?) : BaseRvAdapter<ChapterHistory>(context) {
     override fun onLayoutId(): Int {
         return R.layout.net_chapter_item
+    }
+
+    override fun onFooterLayoutId(): Int {
+        return R.layout.list_base_footer_impl
     }
 
     override fun initData(holder: BaseViewHolder, position: Int) {

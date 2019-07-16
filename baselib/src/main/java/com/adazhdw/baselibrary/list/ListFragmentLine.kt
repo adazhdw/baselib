@@ -5,7 +5,6 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -98,26 +97,8 @@ abstract class ListFragmentLine<M, VH : RecyclerView.ViewHolder, A : BaseRvAdapt
         return DefaultItemAnimator()
     }
 
-    fun onListFooter(mProgressBar: ProgressBar) {
-
-    }
-
     fun onListHeader(mHeader: SwipeRefreshLayout) {
 
-    }
-
-    /**
-     * return ProgressBar'Style file
-     *
-     * @return
-     */
-    fun onListFooterStyle(footerStyle: FooterStyle): Int {
-        return when {
-            footerStyle === FooterStyle.BLUE -> R.drawable.loading_bar_style_blue
-            footerStyle === FooterStyle.RED -> R.drawable.loading_bar_style_red
-            footerStyle === FooterStyle.YELLOW -> R.drawable.loading_bar_style_yellow
-            else -> R.drawable.loading_bar_style_blue
-        }
     }
 
     protected fun showToast(msg: String) {
@@ -177,7 +158,8 @@ abstract class ListFragmentLine<M, VH : RecyclerView.ViewHolder, A : BaseRvAdapt
                     }
                 }
             })
-        }, 500)
+        }, 1000)
+
     }
 
     abstract inner class LoadCallback {

@@ -15,7 +15,7 @@ abstract class BaseRvAdapter<T>(private val mContext: Context?) : RecyclerView.A
             field.addAll(value)
             notifyItemRangeChanged(size, mData.size)
         }
-    private var mInflater: LayoutInflater? = null
+    private val mInflater: LayoutInflater by lazy { LayoutInflater.from(mContext) }
     var isRefresh: Boolean = false
     var isLoading: Boolean = false
 
@@ -31,13 +31,10 @@ abstract class BaseRvAdapter<T>(private val mContext: Context?) : RecyclerView.A
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        if (mInflater == null) {
-            mInflater = LayoutInflater.from(parent.context)
-        }
         return if (viewType == onFooterLayoutId()) {
-            BaseViewHolder(mInflater!!.inflate(onFooterLayoutId(), parent, false))
+            BaseViewHolder(mInflater.inflate(onFooterLayoutId(), parent, false))
         } else {
-            BaseViewHolder(mInflater!!.inflate(onLayoutId(), parent, false))
+            BaseViewHolder(mInflater.inflate(onLayoutId(), parent, false))
         }
     }
 
