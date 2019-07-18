@@ -3,19 +3,10 @@ package com.adazhdw.baselibrary.base
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.PersistableBundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
 import org.greenrobot.eventbus.EventBus
-import kotlin.coroutines.CoroutineContext
 
-abstract class BaseActivity : AppCompatActivity(),CoroutineScope {
+abstract class BaseActivity : CoroutinesActivity() {
 
-    private val myViewModel = BaseViewModelImpl()
-    override val coroutineContext: CoroutineContext
-        get() = myViewModel.viewModelScope.coroutineContext
     protected val TAG = javaClass.simpleName + "------"
     protected val mHandler: Handler by lazy { Handler(Looper.getMainLooper()) }
 
@@ -57,7 +48,6 @@ abstract class BaseActivity : AppCompatActivity(),CoroutineScope {
 
     override fun onDestroy() {
         super.onDestroy()
-        myViewModel.viewModelScope.cancel()
         if (needEventBus()) {
             EventBus.getDefault().unregister(this)
         }
