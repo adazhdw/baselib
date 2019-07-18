@@ -8,13 +8,13 @@ class App : Application() {
 
     companion object {
         //Delegate 单例 委托属性
-        var instance by DelegateExt.notNullSingleValue<App>()
+        var context by DelegateExt.notNullSingleValue<App>()
     }
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
-        logD(instance.packageName)
+        context = this
+        logD(context.packageName)
     }
 
     override fun baseUrl(): String = BuildConfig.DOMAIN

@@ -70,11 +70,11 @@ class NetRequestActivity : BaseActivityImpl() {
                 PermissionExt.requestPermissions(this, permissions,
                     granted = {
                         it.forEach {permission->
-                            logD("onGranted----",permission)
+                            logD(TAG, "onGranted----$permission")
                         }
                     }, denied = {
                         it.forEach {permission->
-                            logD("onDenied----",permission)
+                            logD(TAG, "onDenied----$permission")
                         }
                     })
             }else{
@@ -91,7 +91,7 @@ class WxChaptersFragment : ListFragmentLine<ChapterHistory, BaseViewHolder, Chap
 
     override fun onNextPage(page: Int, callback: LoadCallback) {
         launch {
-            val data = apiService.getWxArticleHistory2(408, page).await()
+            val data = apiService.getWxArticleHistory2(428, page).await()
             callback.onResult()
             callback.onSuccessLoad(data.data?.datas ?: listOf())
         }

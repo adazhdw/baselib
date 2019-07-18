@@ -8,7 +8,7 @@ import kotlin.coroutines.CoroutineContext
 
 abstract class CoroutinesActivity : AppCompatActivity(), CoroutineScope {
 
-    private val myViewModel = BaseViewModelImpl()
+    private val myViewModel = InternalViewModel()
     override val coroutineContext: CoroutineContext
         get() = myViewModel.viewModelScope.coroutineContext
 
