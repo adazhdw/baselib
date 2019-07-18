@@ -10,6 +10,9 @@ import android.webkit.WebViewClient
 import androidx.annotation.RequiresApi
 import com.adazhdw.baselibrary.ext.startWidth
 
+/**
+ * 解决正常情况下的回退栈问题
+ */
 open class WebViewImpl : WebView {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
