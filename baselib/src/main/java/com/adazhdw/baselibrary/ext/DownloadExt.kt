@@ -5,18 +5,25 @@ import android.app.DownloadManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Environment
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import com.adazhdw.baselibrary.LibUtil
+import java.io.File
 
 
 private val downloadMap = mutableMapOf<String?, Long>()
 private val downloadManager: DownloadManager by lazy { LibUtil.getApp().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager }
+private val downloadReceiver by lazy { DownloadReceiver() }
 
 /**
  * 下载文件
  */
-fun Context.downloadFile(
+fun FragmentActivity.downloadFile(
     url: String?,
     isPkgDown: Boolean = true,// 是否在应用默认包内目录下载
     isWifiDown: Boolean = true// 是否在wifi网络下下载
@@ -49,16 +56,13 @@ fun Context.downloadFile(
             download(request, url)
         }
     }
-}
-
-/**
- * 下载apk
- */
-fun Context.downloadApk(url: String?) {
-    if (url.isNullOrBlank() || !url.endsWith(".apk")) return
-    val request = DownloadManager.Request(Uri.parse(url))
-    request.setMimeType("application/vnd.android.package-archive")
-    download(request, url)
+    registerReceiver(downloadReceiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+    lifecycle.addObserver(object : LifecycleObserver {
+        @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+        fun onDestory() {
+            unregisterReceiver(downloadReceiver)
+        }
+    })
 }
 
 private fun download(request: DownloadManager.Request, url: String) {
@@ -80,8 +84,7 @@ fun Context.clearDown() {
 
 fun Context.getDownloadInfo(url: String?): DownloadInfo? {
     val infoId = downloadMap[url] ?: return null
-    val query = DownloadManager.Query()
-    val cursor = downloadManager.query(query.setFilterById(infoId))
+    val cursor = downloadManager.query(DownloadManager.Query().setFilterById(infoId))
     if (cursor != null && cursor.moveToFirst()) {
         //下载文件的本地路径
         val localPath = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
@@ -95,10 +98,9 @@ fun Context.getDownloadInfo(url: String?): DownloadInfo? {
         val notificationDescription = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_DESCRIPTION))
         //下载对应的Id
         val downloadId = cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_ID))
-        //下载文件的本地文件名称
-        val loadlFileName = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME))
         //下载文件的url链接
         val downloadUrl = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_URI))
+        //下载文件的本地文件名称
         return DownloadInfo(
             localPath,
             hasDownByte,
@@ -106,7 +108,6 @@ fun Context.getDownloadInfo(url: String?): DownloadInfo? {
             notificationTitle,
             notificationDescription,
             downloadId,
-            loadlFileName,
             downloadUrl
         )
     }
@@ -120,7 +121,6 @@ data class DownloadInfo(
     val title: String = "",
     val description: String = "",
     val downloadId: Long = 0,
-    val fileName: String = "",
     val downloadUrl: String = ""
 )
 
@@ -131,9 +131,21 @@ fun getFileName(url: String?): String {
 }
 
 private class DownloadReceiver : BroadcastReceiver() {
+    companion object {
+        const val TAG = "DownloadReceiver"
+    }
     override fun onReceive(context: Context?, intent: Intent?) {
-        val downloadId = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-        if (downloadId != (-1L)) {
+        if (intent?.action == DownloadManager.ACTION_DOWNLOAD_COMPLETE) {
+            val downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+            if (downloadId != (-1L)) {
+                val downList = downloadMap.filter { it.value == downloadId }.toList()
+                if (downList.isNotEmpty()) {
+                    val downloadInfo = context?.getDownloadInfo(downList[0].first)
+                    logD(TAG, downloadInfo.toString())
+                    val file = File(downloadInfo?.localPath?.substring(6))
+                    if (file.exists()) context?.installApk(file)
+                }
+            }
         }
     }
 
