@@ -2,39 +2,50 @@ package com.adazhdw.baselibrary.ext
 
 import android.Manifest
 import android.app.DownloadManager
-import android.content.ContentResolver
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Environment
-import android.webkit.MimeTypeMap
 import com.adazhdw.baselibrary.LibUtil
-import java.io.File
 
 
-private val URL = "https://static.usasishu.com/com.uuabc.samakenglish_5.1.12_35.apk"
 private val downloadMap = mutableMapOf<String?, Long>()
-val downloadManager: DownloadManager by lazy { LibUtil.getApp().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager }
+private val downloadManager: DownloadManager by lazy { LibUtil.getApp().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager }
 
 /**
  * 下载文件
  */
-fun DownloadManager.downloadFile(url: String?, isPackageDown: Boolean = true) {
+fun Context.downloadFile(
+    url: String?,
+    isPkgDown: Boolean = true,// 是否在应用默认包内目录下载
+    isWifiDown: Boolean = true// 是否在wifi网络下下载
+) {
     if (url.isNullOrBlank()) return
     val request = DownloadManager.Request(Uri.parse(url))
-    val dirType = Environment.DIRECTORY_DOWNLOADS
-    if (isPackageDown) {
-        request.setDestinationInExternalFilesDir(LibUtil.getApp(), dirType, getFileName(url))
+    //设置通知栏是否显示
+    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+    //设置mimeType
+    request.setMimeType(getMimeType(LibUtil.getApp(), url))
+    //设置下载网络
+    if (isWifiDown) {
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
+    } else {
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE)
+    }
+    if (isPkgDown) {
+        request.setDestinationInExternalFilesDir(LibUtil.getApp(), Environment.DIRECTORY_DOWNLOADS, getFileName(url))
         download(request, url)
     } else {
         if (!PermissionExt.isGranted(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
             PermissionExt.requestPermissions(
                 permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                 granted = {
-                    request.setDestinationInExternalPublicDir(dirType, getFileName(url))
+                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, getFileName(url))
                     download(request, url)
                 })
         } else {
-            request.setDestinationInExternalPublicDir(dirType, getFileName(url))
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, getFileName(url))
             download(request, url)
         }
     }
@@ -43,7 +54,7 @@ fun DownloadManager.downloadFile(url: String?, isPackageDown: Boolean = true) {
 /**
  * 下载apk
  */
-fun DownloadManager.downloadApk(url: String?) {
+fun Context.downloadApk(url: String?) {
     if (url.isNullOrBlank() || !url.endsWith(".apk")) return
     val request = DownloadManager.Request(Uri.parse(url))
     request.setMimeType("application/vnd.android.package-archive")
@@ -55,19 +66,19 @@ private fun download(request: DownloadManager.Request, url: String) {
     downloadMap[url] = downloadId
 }
 
-fun DownloadManager.cancel(url: String?) {
+fun Context.cancelDown(url: String?) {
     val cancelId = downloadMap.remove(url) ?: return
     downloadManager.remove(cancelId)
 }
 
-fun DownloadManager.clear() {
+fun Context.clearDown() {
     downloadMap.values.forEach {
         downloadManager.remove(it)
     }
     downloadMap.clear()
 }
 
-fun DownloadManager.getDownloadInfo(url: String?): DownloadInfo? {
+fun Context.getDownloadInfo(url: String?): DownloadInfo? {
     val infoId = downloadMap[url] ?: return null
     val query = DownloadManager.Query()
     val cursor = downloadManager.query(query.setFilterById(infoId))
@@ -102,20 +113,6 @@ fun DownloadManager.getDownloadInfo(url: String?): DownloadInfo? {
     return null
 }
 
-private fun initDownloadPath(isPackageDown: Boolean): String {
-    return if (isPackageDown) {
-        val file = File("${LibUtil.getApp().packageName}/")
-        if (!file.exists()) file.mkdirs()
-        file.absolutePath
-    } else Environment.DIRECTORY_DOWNLOADS
-}
-
-fun getFileName(url: String?): String {
-    if (url.isNullOrBlank()) return ""
-    val namePos = url.lastIndexOf("/")
-    return url.substring(namePos + 1)
-}
-
 data class DownloadInfo(
     val localPath: String = "",
     val hasDownByte: Int = 0,
@@ -127,23 +124,17 @@ data class DownloadInfo(
     val downloadUrl: String = ""
 )
 
-fun getMimeType(context: Context, uri: Uri): String? {
-    return if (uri.scheme == ContentResolver.SCHEME_CONTENT) {
-        val cr = context.contentResolver
-        cr.getType(uri)
-    } else {
-        val fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
-        MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase())
-    }
+fun getFileName(url: String?): String {
+    if (url.isNullOrBlank()) return ""
+    val namePos = url.lastIndexOf("/")
+    return url.substring(namePos + 1)
 }
 
-fun getMimeType(context: Context, url: String?): String? {
-    val uri = Uri.parse(url)
-    return if (uri.scheme == ContentResolver.SCHEME_CONTENT) {
-        val cr = context.contentResolver
-        cr.getType(uri)
-    } else {
-        val fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
-        MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase())
+private class DownloadReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+        val downloadId = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+        if (downloadId != (-1L)) {
+        }
     }
+
 }

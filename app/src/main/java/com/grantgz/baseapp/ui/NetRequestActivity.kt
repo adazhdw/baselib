@@ -6,10 +6,7 @@ import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.baselibrary.base.BaseActivityImpl
-import com.adazhdw.baselibrary.ext.DelegateExt
-import com.adazhdw.baselibrary.ext.PermissionExt
-import com.adazhdw.baselibrary.ext.logD
-import com.adazhdw.baselibrary.ext.toast
+import com.adazhdw.baselibrary.ext.*
 import com.adazhdw.baselibrary.http.await
 import com.adazhdw.baselibrary.list.BaseRvAdapter
 import com.adazhdw.baselibrary.list.BaseViewHolder
@@ -31,6 +28,7 @@ class NetRequestActivity : BaseActivityImpl() {
         ViewModelProviders.of(this, InjectorUtil.getNetModelFactory()).get(NetViewModel::class.java)
     }
 
+    private val URL = "https://static.usasishu.com/com.uuabc.samakenglish_5.1.12_35.apk"
     private var isLogin by DelegateExt.preference("isLogin",false)
     private val permissions = arrayOf(
         Manifest.permission.READ_PHONE_STATE,
@@ -80,6 +78,10 @@ class NetRequestActivity : BaseActivityImpl() {
             }else{
                 toast("权限已授予")
             }
+        }
+
+        downloadBtn.setOnClickListener {
+            downloadFile(URL)
         }
         supportFragmentManager.beginTransaction()
             .add(R.id.chaptersFl, WxChaptersFragment())
