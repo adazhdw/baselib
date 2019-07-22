@@ -81,4 +81,45 @@ object NetworkUtils {
         }
     }
 
+    /**
+     * 获取网络类型hw
+     */
+    fun getNetworkTypeHw(context: Context?): Int {
+        return getPsType(activeNetworkInfo)
+    }
+
+    private fun getPsType(netInfo: NetworkInfo?): Int {
+        var psType = 0
+        if (netInfo != null && netInfo.isConnected) {
+            if (netInfo.getType() == 1) {
+                psType = 1
+            } else if (0 == netInfo.getType()) {
+                psType = when (netInfo.subtype) {
+                    1, 2, 4 -> 2
+                    3, 5, 6, 7, 8, 9, 10, 11, 12, 15 -> 3
+                    13, 14 -> 4
+                    else -> 6
+                }
+            }
+        }
+
+        return psType
+    }
+
+
+    class NetType {
+        companion object {
+            const val WAP = -3
+            const val NET = -2
+            const val TYPE_NEED_INIT = -1
+            const val TYPE_UNKNOWN = 0
+            const val TYPE_WIFI = 1
+            const val TYPE_2G = 2
+            const val TYPE_3G = 3
+            const val TYPE_4G = 4
+            const val TYPE_5G = 5
+            const val TYPE_OTHER = 6
+        }
+    }
+
 }
