@@ -29,7 +29,7 @@ class NetRequestActivity : BaseActivityImpl() {
     }
 
     private val URL = "https://static.usasishu.com/com.uuabc.samakenglish_5.1.12_35.apk"
-    private var isLogin by DelegateExt.preference("isLogin",false)
+    private var isLogin by DelegateExt.preference("isLogin", false)
     private val permissions = arrayOf(
         Manifest.permission.READ_PHONE_STATE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -44,38 +44,50 @@ class NetRequestActivity : BaseActivityImpl() {
         logD("isLogin-----$isLogin")*/
 
         mNetViewModel.mHotKeyList.observe(this, Observer {
-            it.forEach {key->
-                Log.d(TAG, key.name?:"")
+            it.forEach { key ->
+                Log.d(TAG, key.name ?: "")
             }
         })
-        mNetViewModel.mChapterList.observe(this, Observer {data->
+        mNetViewModel.mChapterList.observe(this, Observer { data ->
             data?.forEach {
-                Log.d(TAG, it.name?:"")
+                Log.d(TAG, it.name ?: "")
             }
         })
-        mNetViewModel.mHistoryData.observe(this, Observer {data->
+        mNetViewModel.mHistoryData.observe(this, Observer { data ->
             data?.datas?.forEach {
-                Log.d(TAG, it.title?:"")
+                Log.d(TAG, it.title ?: "")
             }
         })
         requestBtn.setOnClickListener {
             mNetViewModel.getHotKey()
             mNetViewModel.getWxArticleChapters2()
             mNetViewModel.getWxArticleHistory2(408, 1)
+            /*launch {
+                arrayOf(
+                    async {
+                        apiService.getWxArticleChapters2().await()
+                    },
+                    async {
+                        apiService.getHotKey().await()
+                    },
+                    async {
+                        apiService.getWxArticleHistory2(428, 1).await()
+                    }).forEach { it.await() }
+            }*/
         }
         permissionBtn.setOnClickListener {
             if (!PermissionExt.isGranted(permissions, this)) {
                 PermissionExt.requestPermissions(this, permissions,
                     granted = {
-                        it.forEach {permission->
+                        it.forEach { permission ->
                             logD(TAG, "onGranted----$permission")
                         }
                     }, denied = {
-                        it.forEach {permission->
+                        it.forEach { permission ->
                             logD(TAG, "onDenied----$permission")
                         }
                     })
-            }else{
+            } else {
                 toast("权限已授予")
             }
         }
