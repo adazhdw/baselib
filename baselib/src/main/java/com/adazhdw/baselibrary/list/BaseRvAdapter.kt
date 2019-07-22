@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.adazhdw.baselibrary.R
 
-abstract class BaseRvAdapter<T>(private val mContext: Context?) : RecyclerView.Adapter<BaseViewHolder>() {
+abstract class BaseRvAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
 
     var mData: MutableList<T> = mutableListOf()
         set(value) {
@@ -18,6 +18,7 @@ abstract class BaseRvAdapter<T>(private val mContext: Context?) : RecyclerView.A
     private val mInflater: LayoutInflater by lazy { LayoutInflater.from(mContext) }
     var isRefresh: Boolean = false
     var isLoading: Boolean = false
+    lateinit var mContext: Context
 
     fun clearData() {
         mData.clear()
@@ -31,11 +32,12 @@ abstract class BaseRvAdapter<T>(private val mContext: Context?) : RecyclerView.A
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        return if (viewType == onFooterLayoutId()) {
-            BaseViewHolder(mInflater.inflate(onFooterLayoutId(), parent, false))
+        val itemView: View = if (viewType == onFooterLayoutId()) {
+            mInflater.inflate(onFooterLayoutId(), parent, false)
         } else {
-            BaseViewHolder(mInflater.inflate(onLayoutId(), parent, false))
+            mInflater.inflate(onLayoutId(), parent, false)
         }
+        return BaseViewHolder(itemView)
     }
 
     final override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {

@@ -1,7 +1,6 @@
 package com.grantgz.baseapp.ui
 
 import android.Manifest
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -111,10 +110,10 @@ class WxChaptersFragment : ListFragmentLine<ChapterHistory, BaseViewHolder, Chap
         }
     }
 
-    override fun onAdapter(): ChaptersAdapter = ChaptersAdapter(context)
+    override fun onAdapter(): ChaptersAdapter = ChaptersAdapter()
 }
 
-class ChaptersAdapter(context: Context?) : BaseRvAdapter<ChapterHistory>(context) {
+class ChaptersAdapter : BaseRvAdapter<ChapterHistory>() {
     override fun onLayoutId(): Int {
         return R.layout.net_chapter_item
     }

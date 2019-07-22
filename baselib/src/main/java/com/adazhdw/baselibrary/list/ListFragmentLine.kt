@@ -42,7 +42,7 @@ abstract class ListFragmentLine<M, VH : RecyclerView.ViewHolder, A : BaseRvAdapt
         onListHeader(swipe)
         lineRecyclerView.itemAnimator = onItemAnimator()
         lineRecyclerView.layoutManager = onLayoutManager()
-        lineRecyclerView.adapter = mListAdapter
+        lineRecyclerView.adapter = mListAdapter.apply { mContext = view.context }
         lineRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
