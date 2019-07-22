@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
+import android.os.Build
+import androidx.core.content.FileProvider
 import java.io.File
 
 /**
@@ -40,12 +42,18 @@ fun Context.goHome() {
  * 安装apk
  */
 fun Context.installApk(file: File) {
+    val uri: Uri = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+        Uri.fromFile(file)
+    } else {
+        FileProvider.getUriForFile(this, "com.grantgz.baseapp.fileprovider", file)
+    }
     startActivity(Intent().apply {
         action = "android.intent.action.VIEW"
         addCategory("android.intent.category.DEFAULT")
         type = "application/vnd.android.package-archive"
-        setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive")
+        setDataAndType(uri, "application/vnd.android.package-archive")
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     })
 }
 

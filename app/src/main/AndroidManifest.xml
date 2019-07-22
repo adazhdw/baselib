@@ -29,6 +29,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--添加FileProvider来适配7.0以上app安装时 FileUriExposedException 的错误-->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.grantgz.baseapp.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

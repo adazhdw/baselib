@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!--添加 file_paths 来适配7.0以上app安装时 FileUriExposedException 的错误-->
+
+</paths>
