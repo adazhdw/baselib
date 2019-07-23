@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.NetRequestActivity">
+        <activity android:name=".NetRequestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

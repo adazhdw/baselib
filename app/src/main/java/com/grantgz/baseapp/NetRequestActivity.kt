@@ -1,8 +1,6 @@
-package com.grantgz.baseapp.ui
+package com.grantgz.baseapp
 
 import android.Manifest
-import android.util.Log
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.baselibrary.base.BaseActivityImpl
 import com.adazhdw.baselibrary.ext.*
@@ -10,12 +8,11 @@ import com.adazhdw.baselibrary.http.await
 import com.adazhdw.baselibrary.list.BaseRvAdapter
 import com.adazhdw.baselibrary.list.BaseViewHolder
 import com.adazhdw.baselibrary.list.ListFragmentLine
-import com.grantgz.baseapp.InjectorUtil
-import com.grantgz.baseapp.R
 import com.grantgz.baseapp.http.ChapterHistory
 import com.grantgz.baseapp.http.apiService
 import kotlinx.android.synthetic.main.net_chapter_item.view.*
 import kotlinx.android.synthetic.main.net_request_layout.*
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class NetRequestActivity : BaseActivityImpl() {
@@ -42,37 +39,16 @@ class NetRequestActivity : BaseActivityImpl() {
         isLogin = false
         logD("isLogin-----$isLogin")*/
 
-        mNetViewModel.mHotKeyList.observe(this, Observer {
-            it.forEach { key ->
-                Log.d(TAG, key.name ?: "")
-            }
-        })
-        mNetViewModel.mChapterList.observe(this, Observer { data ->
-            data?.forEach {
-                Log.d(TAG, it.name ?: "")
-            }
-        })
-        mNetViewModel.mHistoryData.observe(this, Observer { data ->
-            data?.datas?.forEach {
-                Log.d(TAG, it.title ?: "")
-            }
-        })
         requestBtn.setOnClickListener {
-            mNetViewModel.getHotKey()
-            mNetViewModel.getWxArticleChapters2()
-            mNetViewModel.getWxArticleHistory2(408, 1)
-            /*launch {
+            launch {
                 arrayOf(
-                    async {
-                        apiService.getWxArticleChapters2().await()
-                    },
                     async {
                         apiService.getHotKey().await()
                     },
                     async {
-                        apiService.getWxArticleHistory2(428, 1).await()
+                        apiService.getWxArticleChapters2().await()
                     }).forEach { it.await() }
-            }*/
+            }
         }
         permissionBtn.setOnClickListener {
             if (!PermissionExt.isGranted(permissions, this)) {

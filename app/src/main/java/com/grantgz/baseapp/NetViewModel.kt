@@ -1,6 +1,8 @@
-package com.grantgz.baseapp.ui
+package com.grantgz.baseapp
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.adazhdw.baselibrary.base.mvvm.BaseRepository
 import com.adazhdw.baselibrary.base.mvvm.BaseViewModel
 import com.adazhdw.baselibrary.http.await
@@ -55,5 +57,12 @@ class NetRepository : BaseRepository() {
         return apiCall {
             apiService.getWxArticleHistory2(articleId, page).await()
         }
+    }
+}
+
+class NetModelFactory : ViewModelProvider.NewInstanceFactory() {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return NetViewModel() as T
     }
 }
