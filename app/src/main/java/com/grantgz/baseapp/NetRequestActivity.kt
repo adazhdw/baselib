@@ -14,6 +14,7 @@ import com.adazhdw.baselibrary.list.BaseRvAdapter
 import com.adazhdw.baselibrary.list.BaseViewHolder
 import com.adazhdw.baselibrary.list.ListFragmentLine
 import com.adazhdw.baselibrary.utils.PermissionUtil
+import com.blankj.utilcode.util.UriUtils
 import com.grantgz.baseapp.ext.downloadFile
 import com.grantgz.baseapp.http.ChapterHistory
 import com.grantgz.baseapp.http.apiService
@@ -78,11 +79,12 @@ class NetRequestActivity : BaseActivityImpl() {
             downloadFile(URL)
         }
         selectImgBtn.setOnClickListener {
-            captureImage(
-                fileProvider = "$packageName.fileprovider",
-                onResult = { imgUri,file ->
-                selectImg.setImageURI(imgUri)
-            },onError = { toast(it)})
+            selectImage (
+                onResult = { imgUri, file ->
+                    logD(file?.path)
+                    selectImg.setImageURI(imgUri)
+                },
+                onError = { toast(it) })
         }
         supportFragmentManager.beginTransaction()
             .add(R.id.chaptersFl, WxChaptersFragment())

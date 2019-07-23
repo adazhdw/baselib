@@ -1,6 +1,7 @@
 package com.adazhdw.baselibrary.img
 
 import android.Manifest
+import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
@@ -12,31 +13,36 @@ import androidx.core.content.FileProvider
 import com.adazhdw.baselibrary.base.ForResultActivity
 import com.adazhdw.baselibrary.ext.logD
 import com.adazhdw.baselibrary.utils.PermissionUtil
+import com.adazhdw.baselibrary.utils.UriUtil
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
 fun ForResultActivity.selectImage(
-    onResult: ((imgUri: Uri?) -> Unit)? = null,
-    onError: ((String) -> Unit)? = null
+    onResult: ((imgUri: Uri?, file: File?) -> Unit)? = null,
+    onError: ((String) -> Unit)? = null,
+    onCancel: (() -> Unit)? = null
 ) {
     PermissionUtil.requestPermissions(
         context = this,
         permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
         granted = {
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.type = "image/*"
-            if (intent.resolveActivity(packageManager) != null) {
-                startActivityForResultCompat(intent, resultCallback = { resultCode, data ->
-                    if (resultCode == RESULT_OK) {
-                        val imgUri: Uri? = data?.data
-                        onResult?.invoke(imgUri)
-                    } else {
-                        onError?.invoke("No image selected")
-                    }
-                })
-            } else onError?.invoke("Application is't exits")
+            Intent(Intent.ACTION_GET_CONTENT).setType("image/*").also { intent ->
+                intent.resolveActivity(packageManager)?.also {
+                    startActivityForResultCompat(intent, resultCallback = { resultCode, data ->
+                        when (resultCode) {
+                            RESULT_OK -> {
+                                val imgUri: Uri? = data?.data
+                                onResult?.invoke(imgUri, UriUtil.getFileByUri(this, imgUri))
+                            }
+                            RESULT_CANCELED -> onCancel?.invoke()
+                            else -> onError?.invoke("No image selected")
+                        }
+                    })
+                }
+            }
+            logD("ACTION_GET_CONTENT-image/*")
         },
         denied = {
             onError?.invoke("Permission Denied")
@@ -44,7 +50,6 @@ fun ForResultActivity.selectImage(
 }
 
 fun ForResultActivity.captureImage(
-    fileProvider:String,
     onResult: ((imgUri: Uri?, file: File) -> Unit)? = null,
     onError: ((String?) -> Unit)? = null
 ) {
@@ -63,7 +68,7 @@ fun ForResultActivity.captureImage(
                         onError?.invoke(io.message)
                         null
                     }?.also { file ->
-                        val photoURI: Uri? = FileProvider.getUriForFile(this, fileProvider, file)
+                        val photoURI: Uri? = FileProvider.getUriForFile(this, "$packageName.fileprovider", file)
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                         startActivityForResultCompat(intent, resultCallback = { resultCode, data ->
                             if (resultCode == RESULT_OK) {
