@@ -5,7 +5,9 @@ import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.*
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.MediaStore.ACTION_IMAGE_CAPTURE
@@ -20,7 +22,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 fun ForResultActivity.selectImage(
-    onResult: ((imgUri: Uri?, file: File?) -> Unit)? = null,
+    onResult: ((imgUri: Uri?) -> Unit)? = null,
     onError: ((String) -> Unit)? = null,
     onCancel: (() -> Unit)? = null
 ) {
@@ -28,13 +30,16 @@ fun ForResultActivity.selectImage(
         context = this,
         permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
         granted = {
-            Intent(Intent.ACTION_GET_CONTENT).setType("image/*").also { intent ->
+            Intent(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                    ACTION_OPEN_DOCUMENT else ACTION_GET_CONTENT
+            ).setType("image/*").addCategory(CATEGORY_OPENABLE).also { intent ->
                 intent.resolveActivity(packageManager)?.also {
                     startActivityForResultCompat(intent, resultCallback = { resultCode, data ->
                         when (resultCode) {
                             RESULT_OK -> {
                                 val imgUri: Uri? = data?.data
-                                onResult?.invoke(imgUri, UriUtil.getFileByUri(this, imgUri))
+                                onResult?.invoke(imgUri)
                             }
                             RESULT_CANCELED -> onCancel?.invoke()
                             else -> onError?.invoke("No image selected")
@@ -68,7 +73,7 @@ fun ForResultActivity.captureImage(
                         onError?.invoke(io.message)
                         null
                     }?.also { file ->
-                        val photoURI: Uri? = FileProvider.getUriForFile(this, "$packageName.fileprovider", file)
+                        val photoURI: Uri? = getUriForFile(file)
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                         startActivityForResultCompat(intent, resultCallback = { resultCode, data ->
                             if (resultCode == RESULT_OK) {
@@ -85,6 +90,10 @@ fun ForResultActivity.captureImage(
         denied = {
             onError?.invoke("Permission Denied")
         })
+}
+
+fun Context.getUriForFile(file: File):Uri{
+    return FileProvider.getUriForFile(this, "$packageName.fileprovider", file)
 }
 
 @Throws(IOException::class)
@@ -105,5 +114,5 @@ private fun Context.createImageFile(): File {
  * @param uri
  */
 fun updateAlum(context: Context, uri: Uri) {
-    context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
+    context.sendBroadcast(Intent(ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
 }
