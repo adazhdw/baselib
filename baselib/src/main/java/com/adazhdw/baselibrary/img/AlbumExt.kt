@@ -3,25 +3,31 @@ package com.adazhdw.baselibrary.img
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.net.Uri.parse
 import android.net.Uri.withAppendedPath
+import android.provider.MediaStore
 import android.provider.MediaStore.ACTION_IMAGE_CAPTURE
 import android.provider.MediaStore.EXTRA_OUTPUT
 import com.adazhdw.baselibrary.base.ForResultActivity
 import com.adazhdw.baselibrary.utils.PermissionUtil
 
 
-fun ForResultActivity.openAlbum() {
-    albumPermission(granted = {
-        val intent = Intent(ACTION_IMAGE_CAPTURE)
-        intent.putExtra(EXTRA_OUTPUT, withAppendedPath(parse(cacheDir.path), "$.png"))
-        startActivityForResultCompat(Intent(), resultCallback = { resultCode, data ->
+fun ForResultActivity.imageCapture() {
+    PermissionUtil.requestPermissions(
+        context = this,
+        permissions = arrayOf(Manifest.permission_group.STORAGE),
+        granted = {
+            val intent = Intent(ACTION_IMAGE_CAPTURE)
+            intent.putExtra(EXTRA_OUTPUT, withAppendedPath(parse(cacheDir.path), "$.png"))
+            startActivityForResultCompat(intent, resultCallback = { resultCode, data ->
+                val image: Bitmap? = data?.getParcelableExtra("data")
+            })
+        },
+        denied = {
 
         })
-    }, denied = {
-
-    })
 }
 
 private fun ForResultActivity.albumPermission(
