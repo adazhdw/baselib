@@ -5,7 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import org.greenrobot.eventbus.EventBus
 
-abstract class BaseActivity : CoroutinesActivity() {
+abstract class BaseActivity : ForResultActivity() {
 
     protected val TAG = javaClass.simpleName + "------"
     protected val mHandler: Handler by lazy { Handler(Looper.getMainLooper()) }

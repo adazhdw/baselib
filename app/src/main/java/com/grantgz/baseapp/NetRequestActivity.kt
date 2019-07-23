@@ -1,10 +1,15 @@
 package com.grantgz.baseapp
 
 import android.Manifest
+import android.util.Log
+import androidx.core.net.toFile
 import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.baselibrary.base.BaseActivityImpl
 import com.adazhdw.baselibrary.ext.*
 import com.adazhdw.baselibrary.http.await
+import com.adazhdw.baselibrary.img.captureImage
+import com.adazhdw.baselibrary.img.glideLoader
+import com.adazhdw.baselibrary.img.selectImage
 import com.adazhdw.baselibrary.list.BaseRvAdapter
 import com.adazhdw.baselibrary.list.BaseViewHolder
 import com.adazhdw.baselibrary.list.ListFragmentLine
@@ -71,6 +76,13 @@ class NetRequestActivity : BaseActivityImpl() {
 
         downloadBtn.setOnClickListener {
             downloadFile(URL)
+        }
+        selectImgBtn.setOnClickListener {
+            captureImage(
+                fileProvider = "$packageName.fileprovider",
+                onResult = { imgUri,file ->
+                selectImg.setImageURI(imgUri)
+            },onError = { toast(it)})
         }
         supportFragmentManager.beginTransaction()
             .add(R.id.chaptersFl, WxChaptersFragment())

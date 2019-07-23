@@ -69,7 +69,7 @@ object PermissionUtil {
 
         companion object {
             fun start(context: Context) {
-                val starter = Intent(context, PermissionUtil.PermissionActivity::class.java)
+                val starter = Intent(context, PermissionActivity::class.java)
                 starter.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(starter)
             }

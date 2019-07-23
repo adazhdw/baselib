@@ -33,7 +33,7 @@
         <!--添加FileProvider来适配7.0以上app安装时 FileUriExposedException 的错误-->
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.grantgz.baseapp.fileprovider"
+            android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

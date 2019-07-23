@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<paths>
-    <!--添加 file_paths 来适配7.0以上app安装时 FileUriExposedException 的错误-->
-
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-path name="my_images" path="Android/data/com.grantgz.baseapp/files/Pictures" />
 </paths>
