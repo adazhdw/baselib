@@ -6,7 +6,7 @@ import com.adazhdw.baselibrary.ext.logD
 import com.adazhdw.baselibrary.ext.logE
 import com.adazhdw.baselibrary.mvp.IModel
 import com.adazhdw.baselibrary.mvp.IView
-import com.adazhdw.baselibrary.utils.NetworkUtils
+import com.adazhdw.baselibrary.utils.NetworkUtil
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -31,7 +31,7 @@ fun <T> Observable<T>.subsC(
     if (isShowLoading) {
         view?.showLoading()
     }
-    if (!NetworkUtils.isConnected) {
+    if (!NetworkUtil.isConnected) {
         view?.showToast(LibUtil.getApp().getString(R.string.net_work_unavailable))
         view?.hideLoading()
     }
@@ -65,7 +65,7 @@ fun <T> Observable<T>.subsO(
     onFail: ((Throwable) -> Unit)? = null,
     doOnNextFun: ((T) -> Unit)? = null
 ) {
-    if (!NetworkUtils.isConnected) {
+    if (!NetworkUtil.isConnected) {
         view?.showToast(LibUtil.getApp().getString(R.string.net_work_unavailable))
         view?.hideLoading()
     }
@@ -85,7 +85,7 @@ fun <T> Observable<T>.subsO(
                 }
                 model?.addDisposable(d)
                 logD(view?.tag(), "addDisposable")
-                if (!NetworkUtils.isConnected) {
+                if (!NetworkUtil.isConnected) {
                     view?.showToast(LibUtil.getApp().getString(R.string.net_work_unavailable))
                     onComplete()
                 }

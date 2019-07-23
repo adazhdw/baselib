@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 
-object MatrixUtils {
+object MatrixUtil {
 
     /**
      * 图片旋转

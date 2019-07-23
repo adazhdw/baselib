@@ -4,6 +4,7 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import com.adazhdw.baselibrary.LibUtil
 
 
@@ -25,4 +26,10 @@ fun FragmentActivity.showMsg(msg: String?) {
 
 fun toast(msg: String?) {
     Toast.makeText(LibUtil.getApp(), msg, Toast.LENGTH_SHORT).show()
+}
+
+fun <T : Fragment> FragmentManager.showFragment(clazz: Class<T>) {
+    beginTransaction()
+        .add(clazz.newInstance(), clazz.simpleName)
+        .commitAllowingStateLoss()
 }

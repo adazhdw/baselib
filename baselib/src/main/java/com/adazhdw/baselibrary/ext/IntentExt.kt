@@ -89,12 +89,6 @@ fun FragmentActivity.launchSettings(code: Int? = null) {
     }
 }
 
-/**
- * open setting main page
- */
-fun FragmentActivity.launchMainSettting() {
-    startActivity(Intent().apply { action = Settings.ACTION_SETTINGS })
-}
 
 
 

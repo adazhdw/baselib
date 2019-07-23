@@ -4,7 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class JsonUtils {
+public class JsonUtil {
 
     /**
      * http 请求数据返回 json 中文字符为 unicode 编码转汉字转码

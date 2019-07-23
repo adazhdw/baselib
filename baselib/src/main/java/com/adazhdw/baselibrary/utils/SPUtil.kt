@@ -3,18 +3,17 @@ package com.adazhdw.baselibrary.utils
 import android.content.Context
 import android.content.SharedPreferences
 import com.adazhdw.baselibrary.LibUtil
-import com.adazhdw.baselibrary.http.RetrofitModel
 import java.lang.IllegalArgumentException
 
-class SPUtils {
+class SPUtil {
 
     companion object {
         private const val SP_NAME = "base_sp_name"
 
         /**
-         * new SPUtils Instance
+         * new SPUtil Instance
          */
-        val instance: SPUtils by lazy { SPUtils() }
+        val INSTANCE: SPUtil by lazy { SPUtil() }
 
     }
 
@@ -96,6 +95,6 @@ class SPUtils {
 
 }
 
-val spUtils by lazy { SPUtils.instance }
+val spUtils by lazy { SPUtil.INSTANCE }
 
-val permissionSP: SPUtils by lazy { SPUtils.instance.apply { initSp(PermissionUtils.PERMISSION_SP) } }
+val PERMISSION_SP: SPUtil by lazy { SPUtil.INSTANCE.apply { initSp(PermissionUtil.PERMISSION_SP) } }

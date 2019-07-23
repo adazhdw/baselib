@@ -8,6 +8,8 @@ import com.adazhdw.baselibrary.http.await
 import com.adazhdw.baselibrary.list.BaseRvAdapter
 import com.adazhdw.baselibrary.list.BaseViewHolder
 import com.adazhdw.baselibrary.list.ListFragmentLine
+import com.adazhdw.baselibrary.utils.PermissionUtil
+import com.grantgz.baseapp.ext.downloadFile
 import com.grantgz.baseapp.http.ChapterHistory
 import com.grantgz.baseapp.http.apiService
 import kotlinx.android.synthetic.main.net_chapter_item.view.*
@@ -51,8 +53,8 @@ class NetRequestActivity : BaseActivityImpl() {
             }
         }
         permissionBtn.setOnClickListener {
-            if (!PermissionExt.isGranted(permissions, this)) {
-                PermissionExt.requestPermissions(this, permissions,
+            if (!PermissionUtil.isGranted(permissions, this)) {
+                PermissionUtil.requestPermissions(this, permissions,
                     granted = {
                         it.forEach { permission ->
                             logD(TAG, "onGranted----$permission")

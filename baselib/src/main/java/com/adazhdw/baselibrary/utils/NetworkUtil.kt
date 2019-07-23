@@ -10,7 +10,7 @@ import android.os.Build
 import androidx.annotation.RequiresPermission
 import com.adazhdw.baselibrary.LibUtil
 
-object NetworkUtils {
+object NetworkUtil {
     val isConnected: Boolean
         @RequiresPermission(ACCESS_NETWORK_STATE)
         get() {

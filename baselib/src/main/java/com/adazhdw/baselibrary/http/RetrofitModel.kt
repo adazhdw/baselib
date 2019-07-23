@@ -12,10 +12,10 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 
-val retrofitUtil by lazy { RetrofitModel.retrofitModel }
+val retrofitModel by lazy { RetrofitModel.retrofitModel }
 
 fun <T> apiService(service: Class<T>): T {
-    return retrofitUtil.mRetrofit.create(service)
+    return retrofitModel.mRetrofit.create(service)
 }
 
 /**
@@ -58,11 +58,11 @@ class RetrofitModel {
         val retrofitModel: RetrofitModel by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { RetrofitModel() }
         /*//由于该对象会被频繁调用，采用单例模式，下面是一种线程安全模式的单例写法
         @Volatile
-        private var instance: RetrofitModel? = null
+        private var INSTANCE: RetrofitModel? = null
 
-        fun getInstance(): RetrofitModel =
-            instance ?: synchronized(RetrofitModel::class.java) {
-                instance ?: RetrofitModel().also { instance = it }
+        fun getINSTANCE(): RetrofitModel =
+            INSTANCE ?: synchronized(RetrofitModel::class.java) {
+                INSTANCE ?: RetrofitModel().also { INSTANCE = it }
             }*/
         fun initBaseUrl(baseUrl: String) {
             mBaseUrl = baseUrl

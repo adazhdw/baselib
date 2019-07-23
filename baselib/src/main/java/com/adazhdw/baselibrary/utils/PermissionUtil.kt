@@ -1,4 +1,4 @@
-package com.adazhdw.baselibrary.ext
+package com.adazhdw.baselibrary.utils
 
 import android.content.Context
 import android.content.Intent
@@ -11,9 +11,9 @@ import androidx.core.content.ContextCompat
 import com.adazhdw.baselibrary.LibUtil
 import com.adazhdw.baselibrary.R
 import com.adazhdw.baselibrary.annotation.IntentCode
-import com.adazhdw.baselibrary.utils.permissionSP
+import com.adazhdw.baselibrary.ext.launchSettings
 
-object PermissionExt {
+object PermissionUtil {
 
     const val PERMISSION_SP = "permission_sp"
 
@@ -48,17 +48,17 @@ object PermissionExt {
             granted?.invoke(permissions)
             return
         }
-        this.mOnGranted = granted
-        this.mOnDenied = denied
+        mOnGranted = granted
+        mOnDenied = denied
 
         permissions.forEach {
             if (!isGranted(it, context))
                 mPermissions[it] = false
         }
         if (context != null) {
-            PermissionActivity.start(context)
+            PermissionUtil.PermissionActivity.start(context)
         } else {
-            PermissionActivity.start(LibUtil.getApp())
+            PermissionUtil.PermissionActivity.start(LibUtil.getApp())
         }
     }
 
@@ -69,7 +69,7 @@ object PermissionExt {
 
         companion object {
             fun start(context: Context) {
-                val starter = Intent(context, PermissionActivity::class.java)
+                val starter = Intent(context, PermissionUtil.PermissionActivity::class.java)
                 starter.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(starter)
             }
@@ -78,7 +78,7 @@ object PermissionExt {
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val needRequest = mPermissions.filterKeys { permissionSP.getParam(it, 0) == 0 }.isNotEmpty()
+                val needRequest = mPermissions.filterKeys { com.adazhdw.baselibrary.utils.PERMISSION_SP.getParam(it, 0) == 0 }.isNotEmpty()
                 val shouldNotShow = mPermissions.filter { !shouldShowRequestPermissionRationale(it.key) }
                 if (needRequest) {
                     requestPermissions(mPermissions.map { it.key }.toTypedArray(), IntentCode.REQUEST_PERMISSION_CODE)
@@ -138,8 +138,8 @@ object PermissionExt {
             }
         }
         if (onGranted.isNotEmpty())
-        this.mOnGranted?.invoke(onGranted.toTypedArray())
+        mOnGranted?.invoke(onGranted.toTypedArray())
         if (onDenied.isNotEmpty())
-        this.mOnDenied?.invoke(onDenied.toTypedArray())
+        mOnDenied?.invoke(onDenied.toTypedArray())
     }
 }

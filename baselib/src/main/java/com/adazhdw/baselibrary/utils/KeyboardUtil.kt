@@ -9,7 +9,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 
-object KeyboardUtils {
+object KeyboardUtil {
 
     /**
      * 动态隐藏软键盘

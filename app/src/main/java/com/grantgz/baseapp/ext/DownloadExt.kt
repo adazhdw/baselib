@@ -1,4 +1,4 @@
-package com.adazhdw.baselibrary.ext
+package com.grantgz.baseapp.ext
 
 import android.Manifest
 import android.app.DownloadManager
@@ -13,6 +13,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import com.adazhdw.baselibrary.LibUtil
+import com.adazhdw.baselibrary.ext.installApk
+import com.adazhdw.baselibrary.ext.logD
+import com.adazhdw.baselibrary.utils.MimeUtil.getMimeType
+import com.adazhdw.baselibrary.utils.PermissionUtil
 import java.io.File
 
 
@@ -41,18 +45,24 @@ fun FragmentActivity.downloadFile(
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE)
     }
     if (isPkgDown) {
-        request.setDestinationInExternalFilesDir(LibUtil.getApp(), Environment.DIRECTORY_DOWNLOADS, getFileName(url))
+        request.setDestinationInExternalFilesDir(LibUtil.getApp(), Environment.DIRECTORY_DOWNLOADS,
+            getFileName(url)
+        )
         download(request, url)
     } else {
-        if (!PermissionExt.isGranted(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
-            PermissionExt.requestPermissions(
+        if (!PermissionUtil.isGranted(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
+            PermissionUtil.requestPermissions(
                 permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                 granted = {
-                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, getFileName(url))
+                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,
+                        getFileName(url)
+                    )
                     download(request, url)
                 })
         } else {
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, getFileName(url))
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,
+                getFileName(url)
+            )
             download(request, url)
         }
     }
@@ -142,8 +152,14 @@ private class DownloadReceiver : BroadcastReceiver() {
                 if (downList.isNotEmpty()) {
                     val downloadInfo = context?.getDownloadInfo(downList[0].first)
                     val file = File(downloadInfo?.localPath?.substring(8))
-                    logD(TAG, "------${downloadInfo.toString()}")
-                    logD(TAG, "------${file.exists()}")
+                    logD(
+                        TAG,
+                        "------${downloadInfo.toString()}"
+                    )
+                    logD(
+                        TAG,
+                        "------${file.exists()}"
+                    )
                     if (file.exists()) context?.installApk(File(downloadInfo?.localPath))
                 }
             }

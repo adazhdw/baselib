@@ -3,7 +3,7 @@ package com.adazhdw.baselibrary.http
 import com.adazhdw.baselibrary.ext.logD
 import com.adazhdw.baselibrary.ext.logE
 import com.adazhdw.baselibrary.ext.startWidth
-import com.adazhdw.baselibrary.utils.JsonUtils
+import com.adazhdw.baselibrary.utils.JsonUtil
 import okhttp3.logging.HttpLoggingInterceptor
 
 class OkHttpLogger : HttpLoggingInterceptor.Logger {
@@ -43,7 +43,7 @@ class OkHttpLogger : HttpLoggingInterceptor.Logger {
             }
             message.startWidth("<-- 200 OK") -> msgBuilder.append("Request Success, URL: ${message.replace("<-- 200 OK", "")}\n")
             message.startWidth("Date:") -> msgBuilder.append("Request Return Time: $message\n")
-            message.startWidth("{")->msgBuilder.append("Response Data: \n"+JsonUtils.formatJson(message)+"\n")
+            message.startWidth("{")->msgBuilder.append("Response Data: \n"+ JsonUtil.formatJson(message)+"\n")
             message.startWidth("<-- END HTTP") -> {
                 msgBuilder.append("Response End---Body Size:${message.replace("<-- END HTTP", "")}\n")
                 logD(TAG,msgBuilder.toString())
