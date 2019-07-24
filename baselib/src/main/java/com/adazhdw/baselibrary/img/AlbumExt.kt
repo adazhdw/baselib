@@ -40,29 +40,15 @@ fun ForResultActivity.selectImage(
                 intent.resolveActivity(packageManager)?.also {
                     launch {
                         //协程方法启动intent
-                        val data: Intent = startActivityForResultCoroutines(
+                        startActivityForResultCoroutines(
                             intent,
                             onFailure = { onError?.invoke("Image data is null") },
-                            onCancel = { onCancel?.invoke() })
-                            ?: run { onError?.invoke("No image selected");return@launch }
-                        val imgUri: Uri = data.data ?: run { onError?.invoke("Image data Uri is null");return@launch }
-                        val file: File = UriUtil.getFileByUri(this@selectImage, imgUri)
-                            ?: run { onError?.invoke("Image data File is null");return@launch }
-                        onResult.invoke(DocumentModel(imgUri, file))
-                    }
-                    /*
-                    //回调方法启动intent
-                    startActivityForResultCompat(intent, resultCallback = { resultCode, data ->
-                        when (resultCode) {
-                            RESULT_OK -> {
-                                val imgUri: Uri = data?.data?:run { onError.invoke("Image data Uri is null");return@startActivityForResultCompat }
-                                val file:File = UriUtil.getFileByUri(this,imgUri)?:run { onError.invoke("Image data File is null");return@startActivityForResultCompat }
-                                onResult.invoke(DocumentModel(imgUri,file))
+                            onCancel = { onCancel?.invoke() })?.data?.also { data ->
+                            UriUtil.getFileByUri(this@selectImage, data)?.also { file ->
+                                onResult.invoke(DocumentModel(data, file))
                             }
-                            RESULT_CANCELED -> onCancel?.invoke()
-                            else -> onError.invoke("No image selected")
                         }
-                    })*/
+                    }
                 }
             }
             logD("ACTION_GET_CONTENT-image/*")
@@ -103,14 +89,6 @@ fun ForResultActivity.captureImage(
                             updateAlum(this@captureImage, photoURI)
                             onResult?.invoke(DocumentModel(photoURI, file))
                         }
-                        /*//回调方式启动intent
-                        startActivityForResultCompat(intent, resultCallback = { resultCode, data ->
-                            when (resultCode) {
-                                RESULT_OK -> onResult?.invoke(DocumentModel(photoURI, file))
-                                RESULT_CANCELED -> onCancel?.invoke()
-                                else -> onError?.invoke("No image selected")
-                            }
-                        })*/
                     }
                 }
             }

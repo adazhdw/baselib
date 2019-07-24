@@ -22,9 +22,7 @@ suspend fun ForResultActivity.selectImageCoroutines(
                     logE(it)
                     continuation.resumeWithException(CancellationException(it))
                 }, onCancel = {
-                    logE("cancel selectImage")
                     onCancel?.invoke()
-                    continuation.resumeWithException(CancellationException("cancel captureImage"))
                 }
             )
         }
@@ -44,12 +42,9 @@ suspend fun ForResultActivity.captureImageCoroutines(
                     continuation.resume(it)
                 }, onError = {
                     onError?.invoke(it)
-                    logE(it)
                     continuation.resumeWithException(CancellationException(it))
                 }, onCancel = {
-                    logE("cancel captureImage")
                     onCancel?.invoke()
-                    continuation.resumeWithException(CancellationException("cancel captureImage"))
                 }
             )
         }
