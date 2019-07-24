@@ -15,7 +15,7 @@ import com.adazhdw.baselibrary.ext.launchSettings
 
 object PermissionUtil {
 
-    const val PERMISSION_SP = "permission_sp"
+    const val PERMISSION_SP_NAME = "permission_sp"
 
     fun isGranted(permissions: Array<String>, context: Context? = null): Boolean {
         return permissions.all {
@@ -25,14 +25,13 @@ object PermissionUtil {
 
     fun isGranted(permission: String, context: Context? = null): Boolean {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(
-            context ?: LibUtil.getApp(),
+            context ?: LibUtil.getApp().applicationContext,
             permission
         )
     }
 
     private var mOnGranted: ((Array<String>) -> Unit?)? = null
     private var mOnDenied: ((Array<String>) -> Unit?)? = null
-    private val mPermissions = hashMapOf<String, Boolean>()
 
     /**
      * one method request
@@ -51,14 +50,10 @@ object PermissionUtil {
         mOnGranted = granted
         mOnDenied = denied
 
-        permissions.forEach {
-            if (!isGranted(it, context))
-                mPermissions[it] = false
-        }
         if (context != null) {
-            PermissionUtil.PermissionActivity.start(context)
+            PermissionUtil.PermissionActivity.start(context, permissions)
         } else {
-            PermissionUtil.PermissionActivity.start(LibUtil.getApp())
+            PermissionUtil.PermissionActivity.start(LibUtil.getApp(), permissions)
         }
     }
 
@@ -68,25 +63,27 @@ object PermissionUtil {
     class PermissionActivity : AppCompatActivity() {
 
         companion object {
-            fun start(context: Context) {
+            fun start(context: Context, permissions: Array<String>) {
                 val starter = Intent(context, PermissionActivity::class.java)
                 starter.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                starter.putExtra("permissions", permissions)
                 context.startActivity(starter)
             }
         }
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
+            val permissions = intent.getStringArrayExtra("permissions") ?: emptyArray()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val needRequest = mPermissions.filterKeys { com.adazhdw.baselibrary.utils.PERMISSION_SP.getParam(it, 0) == 0 }.isNotEmpty()
-                val shouldNotShow = mPermissions.filter { !shouldShowRequestPermissionRationale(it.key) }
+                val needRequest = permissions.any { PERMISSION_SP.getParam(it, 0) == 0 }
+                val shouldNotShow = permissions.filter { !shouldShowRequestPermissionRationale(it) }
                 if (needRequest) {
-                    requestPermissions(mPermissions.map { it.key }.toTypedArray(), IntentCode.REQUEST_PERMISSION_CODE)
+                    requestPermissions(permissions, IntentCode.REQUEST_PERMISSION_CODE)
                 } else {
                     if (shouldNotShow.isNotEmpty()) {
                         showLogDialog()
                     } else {
-                        requestPermissions(mPermissions.map { it.key }.toTypedArray(), IntentCode.REQUEST_PERMISSION_CODE)
+                        requestPermissions(permissions, IntentCode.REQUEST_PERMISSION_CODE)
                     }
                 }
             }
@@ -137,9 +134,10 @@ object PermissionUtil {
                 onDenied.add(permissions[index])
             }
         }
+        permissions.forEach { PERMISSION_SP.putParam(it, 1) }
         if (onGranted.isNotEmpty())
-        mOnGranted?.invoke(onGranted.toTypedArray())
+            mOnGranted?.invoke(onGranted.toTypedArray())
         if (onDenied.isNotEmpty())
-        mOnDenied?.invoke(onDenied.toTypedArray())
+            mOnDenied?.invoke(onDenied.toTypedArray())
     }
 }

@@ -11,12 +11,12 @@ import androidx.annotation.RequiresPermission
 import com.adazhdw.baselibrary.LibUtil
 
 object NetworkUtil {
-    val isConnected: Boolean
-        @RequiresPermission(ACCESS_NETWORK_STATE)
-        get() {
-            val info = activeNetworkInfo
-            return info != null && info.isConnected
-        }
+
+    @RequiresPermission(ACCESS_NETWORK_STATE)
+    fun isConnected(): Boolean {
+        val info = activeNetworkInfo
+        return info != null && info.isConnected
+    }
 
 
     private val activeNetworkInfo: NetworkInfo?
@@ -27,8 +27,7 @@ object NetworkUtil {
             return cm?.activeNetworkInfo
         }
 
-    val isWifiConnected: Boolean
-        get() {
+    fun isWifiConnected(): Boolean{
             val connectivityManager =
                 LibUtil.getApp().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
             val networkInfo = connectivityManager?.activeNetworkInfo

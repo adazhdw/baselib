@@ -31,7 +31,7 @@ fun <T> Observable<T>.subsC(
     if (isShowLoading) {
         view?.showLoading()
     }
-    if (!NetworkUtil.isConnected) {
+    if (!NetworkUtil.isConnected()) {
         view?.showToast(LibUtil.getApp().getString(R.string.net_work_unavailable))
         view?.hideLoading()
     }
@@ -65,7 +65,7 @@ fun <T> Observable<T>.subsO(
     onFail: ((Throwable) -> Unit)? = null,
     doOnNextFun: ((T) -> Unit)? = null
 ) {
-    if (!NetworkUtil.isConnected) {
+    if (!NetworkUtil.isConnected()) {
         view?.showToast(LibUtil.getApp().getString(R.string.net_work_unavailable))
         view?.hideLoading()
     }
@@ -85,7 +85,7 @@ fun <T> Observable<T>.subsO(
                 }
                 model?.addDisposable(d)
                 logD(view?.tag(), "addDisposable")
-                if (!NetworkUtil.isConnected) {
+                if (!NetworkUtil.isConnected()) {
                     view?.showToast(LibUtil.getApp().getString(R.string.net_work_unavailable))
                     onComplete()
                 }

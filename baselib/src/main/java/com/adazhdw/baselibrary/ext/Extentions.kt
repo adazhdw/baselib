@@ -27,9 +27,3 @@ fun FragmentActivity.showMsg(msg: String?) {
 fun toast(msg: String?) {
     Toast.makeText(LibUtil.getApp(), msg, Toast.LENGTH_SHORT).show()
 }
-
-fun <T : Fragment> FragmentManager.showFragment(clazz: Class<T>) {
-    beginTransaction()
-        .add(clazz.newInstance(), clazz.simpleName)
-        .commitAllowingStateLoss()
-}

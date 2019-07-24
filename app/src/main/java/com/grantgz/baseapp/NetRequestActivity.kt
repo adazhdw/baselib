@@ -1,8 +1,6 @@
 package com.grantgz.baseapp
 
 import android.Manifest
-import android.util.Log
-import androidx.core.net.toFile
 import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.baselibrary.base.BaseActivityImpl
 import com.adazhdw.baselibrary.ext.*
@@ -11,8 +9,8 @@ import com.adazhdw.baselibrary.img.*
 import com.adazhdw.baselibrary.list.BaseRvAdapter
 import com.adazhdw.baselibrary.list.BaseViewHolder
 import com.adazhdw.baselibrary.list.ListFragmentLine
+import com.adazhdw.baselibrary.utils.MatrixUtil
 import com.adazhdw.baselibrary.utils.PermissionUtil
-import com.blankj.utilcode.util.UriUtils
 import com.grantgz.baseapp.ext.downloadFile
 import com.grantgz.baseapp.http.ChapterHistory
 import com.grantgz.baseapp.http.apiService
@@ -30,7 +28,7 @@ class NetRequestActivity : BaseActivityImpl() {
         ViewModelProviders.of(this, InjectorUtil.getNetModelFactory()).get(NetViewModel::class.java)
     }
 
-    private val URL = "https://static.usasishu.com/com.uuabc.samakenglish_5.1.12_35.apk"
+    private val downloadUrl = "https://static.usasishu.com/com.uuabc.samakenglish_5.1.12_35.apk"
     private var isLogin by DelegateExt.preference("isLogin", false)
     private val permissions = arrayOf(
         Manifest.permission.READ_PHONE_STATE,
@@ -39,11 +37,11 @@ class NetRequestActivity : BaseActivityImpl() {
     )
 
     override fun initView() {
-        /*logD("isLogin-----$isLogin")
+        logD("isLogin-----$isLogin")
         isLogin = true
         logD("isLogin-----$isLogin")
         isLogin = false
-        logD("isLogin-----$isLogin")*/
+        logD("isLogin-----$isLogin")
 
         requestBtn.setOnClickListener {
             launch {
@@ -74,19 +72,17 @@ class NetRequestActivity : BaseActivityImpl() {
         }
 
         downloadBtn.setOnClickListener {
-            downloadFile(URL)
+            downloadFile(downloadUrl)
         }
         selectImgBtn.setOnClickListener {
             launch {
                 val model = selectImageCoroutines()
-                logD("toString----",model.toString())
                 selectImg.setImageURI(model.uri)
             }
         }
         captureImgBtn.setOnClickListener {
             launch {
                 val model = captureImageCoroutines()
-                logD("toString----",model.toString())
                 selectImg.setImageURI(model.uri)
             }
         }

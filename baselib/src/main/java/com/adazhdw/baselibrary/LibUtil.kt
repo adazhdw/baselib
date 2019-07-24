@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException
 object LibUtil {
 
     private var currentApplication: Application? = null
-    private const val TAG = "com.adazhdw.baselibrary"
+    private val TAG by lazy { LibUtil.getApp().packageName }
 
     fun getApp(): Application {
         if (currentApplication != null) return currentApplication!!

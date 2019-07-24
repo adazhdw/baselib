@@ -97,4 +97,4 @@ class SPUtil {
 
 val spUtils by lazy { SPUtil.INSTANCE }
 
-val PERMISSION_SP: SPUtil by lazy { SPUtil.INSTANCE.apply { initSp(PermissionUtil.PERMISSION_SP) } }
+val PERMISSION_SP: SPUtil by lazy { SPUtil.INSTANCE.apply { initSp(PermissionUtil.PERMISSION_SP_NAME) } }
