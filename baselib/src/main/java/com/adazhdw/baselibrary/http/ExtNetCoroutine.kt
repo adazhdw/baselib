@@ -3,6 +3,7 @@ package com.adazhdw.baselibrary.http
 import com.adazhdw.baselibrary.ext.logD
 import com.adazhdw.baselibrary.ext.logE
 import kotlinx.coroutines.suspendCancellableCoroutine
+import okhttp3.HttpUrl
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,11 +26,16 @@ suspend fun <T> Call<T>.await(): T {
             }
 
             override fun onResponse(call: Call<T>, response: Response<T>) {
-                val body = response.body()
-                if (body != null) continuation.resume(body)
-                else continuation.resumeWithException(RuntimeException("response body is null"))
-                logD("onSuccess")
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) continuation.resume(body)
+                    else continuation.resumeWithException(RuntimeException("response body is null"))
+                    logD("onSuccess")
+                }else{
+                    continuation.resumeWithException(HttpException(call.request().url, response.code(), response.message()))
+                }
             }
         })
     }
 }
+class HttpException(val url: HttpUrl, val code: Int, message: String) : Exception("HTTP $code $message")

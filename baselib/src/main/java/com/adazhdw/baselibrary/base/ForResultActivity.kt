@@ -1,10 +1,9 @@
 package com.adazhdw.baselibrary.base
 
-import android.app.Activity
 import android.content.Intent
-import kotlin.coroutines.resume
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 abstract class ForResultActivity : CoroutinesActivity() {
