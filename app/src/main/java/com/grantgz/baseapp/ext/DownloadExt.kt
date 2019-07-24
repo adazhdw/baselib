@@ -151,7 +151,7 @@ private class DownloadReceiver : BroadcastReceiver() {
                 val downList = downloadMap.filter { it.value == downloadId }.toList()
                 if (downList.isNotEmpty()) {
                     val downloadInfo = context?.getDownloadInfo(downList[0].first)
-                    val file = File(downloadInfo?.localPath?.substring(8))
+                    val file = File(downloadInfo?.localPath?.substring(8)?:"")
                     logD(
                         TAG,
                         "------${downloadInfo.toString()}"
@@ -160,7 +160,7 @@ private class DownloadReceiver : BroadcastReceiver() {
                         TAG,
                         "------${file.exists()}"
                     )
-                    if (file.exists()) context?.installApk(File(downloadInfo?.localPath))
+                    if (file.exists()) context?.installApk(File(downloadInfo?.localPath?:""))
                 }
             }
         }
