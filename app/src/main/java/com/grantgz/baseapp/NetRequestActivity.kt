@@ -7,9 +7,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.baselibrary.base.BaseActivityImpl
 import com.adazhdw.baselibrary.ext.*
 import com.adazhdw.baselibrary.http.await
-import com.adazhdw.baselibrary.img.captureImage
-import com.adazhdw.baselibrary.img.glideLoader
-import com.adazhdw.baselibrary.img.selectImage
+import com.adazhdw.baselibrary.img.*
 import com.adazhdw.baselibrary.list.BaseRvAdapter
 import com.adazhdw.baselibrary.list.BaseViewHolder
 import com.adazhdw.baselibrary.list.ListFragmentLine
@@ -79,12 +77,18 @@ class NetRequestActivity : BaseActivityImpl() {
             downloadFile(URL)
         }
         selectImgBtn.setOnClickListener {
-            selectImage (
-                onResult = { imgUri, file ->
-                    logD(file?.path)
-                    selectImg.setImageURI(imgUri)
-                },
-                onError = { toast(it) })
+            launch {
+                val model = selectImageCoroutines()
+                logD("toString----",model.toString())
+                selectImg.setImageURI(model.uri)
+            }
+        }
+        captureImgBtn.setOnClickListener {
+            launch {
+                val model = captureImageCoroutines()
+                logD("toString----",model.toString())
+                selectImg.setImageURI(model.uri)
+            }
         }
         supportFragmentManager.beginTransaction()
             .add(R.id.chaptersFl, WxChaptersFragment())

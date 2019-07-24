@@ -1,6 +1,11 @@
 package com.adazhdw.baselibrary.base
 
+import android.app.Activity
 import android.content.Intent
+import kotlin.coroutines.resume
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resumeWithException
 
 abstract class ForResultActivity : CoroutinesActivity() {
 
@@ -13,6 +18,22 @@ abstract class ForResultActivity : CoroutinesActivity() {
         resultCallbackSet[currentCode] = resultCallback
         startActivityForResult(intent, currentCode)
     }
+
+    suspend fun startActivityForResultCoroutines(intent: Intent, onFailure: (() -> Unit)? = null, onCancel: (() -> Unit)? = null): Intent? =
+        try {
+            suspendCancellableCoroutine { continuation ->
+                startActivityForResultCompat(intent) { resultCode, data ->
+                    when (resultCode) {
+                        RESULT_OK -> continuation.resume(data)
+                        RESULT_CANCELED -> onCancel?.invoke()
+                        else -> continuation.resumeWithException(CancellationException())
+                    }
+                }
+            }
+        } catch (ex: CancellationException) {
+            onFailure?.invoke()
+            throw ex
+        }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

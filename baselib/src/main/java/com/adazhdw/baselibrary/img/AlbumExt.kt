@@ -16,13 +16,16 @@ import com.adazhdw.baselibrary.base.ForResultActivity
 import com.adazhdw.baselibrary.ext.logD
 import com.adazhdw.baselibrary.utils.PermissionUtil
 import com.adazhdw.baselibrary.utils.UriUtil
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
+data class DocumentModel(val uri: Uri, val file: File)
+
 fun ForResultActivity.selectImage(
-    onResult: ((imgUri: Uri?) -> Unit)? = null,
+    onResult: ((documentModel: DocumentModel) -> Unit),
     onError: ((String) -> Unit)? = null,
     onCancel: (() -> Unit)? = null
 ) {
@@ -35,16 +38,31 @@ fun ForResultActivity.selectImage(
                     ACTION_OPEN_DOCUMENT else ACTION_GET_CONTENT
             ).setType("image/*").addCategory(CATEGORY_OPENABLE).also { intent ->
                 intent.resolveActivity(packageManager)?.also {
+                    launch {
+                        //协程方法启动intent
+                        val data: Intent = startActivityForResultCoroutines(
+                            intent,
+                            onFailure = { onError?.invoke("Image data is null") },
+                            onCancel = { onCancel?.invoke() })
+                            ?: run { onError?.invoke("No image selected");return@launch }
+                        val imgUri: Uri = data.data ?: run { onError?.invoke("Image data Uri is null");return@launch }
+                        val file: File = UriUtil.getFileByUri(this@selectImage, imgUri)
+                            ?: run { onError?.invoke("Image data File is null");return@launch }
+                        onResult.invoke(DocumentModel(imgUri, file))
+                    }
+                    /*
+                    //回调方法启动intent
                     startActivityForResultCompat(intent, resultCallback = { resultCode, data ->
                         when (resultCode) {
                             RESULT_OK -> {
-                                val imgUri: Uri? = data?.data
-                                onResult?.invoke(imgUri)
+                                val imgUri: Uri = data?.data?:run { onError.invoke("Image data Uri is null");return@startActivityForResultCompat }
+                                val file:File = UriUtil.getFileByUri(this,imgUri)?:run { onError.invoke("Image data File is null");return@startActivityForResultCompat }
+                                onResult.invoke(DocumentModel(imgUri,file))
                             }
                             RESULT_CANCELED -> onCancel?.invoke()
-                            else -> onError?.invoke("No image selected")
+                            else -> onError.invoke("No image selected")
                         }
-                    })
+                    })*/
                 }
             }
             logD("ACTION_GET_CONTENT-image/*")
@@ -55,8 +73,9 @@ fun ForResultActivity.selectImage(
 }
 
 fun ForResultActivity.captureImage(
-    onResult: ((imgUri: Uri?, file: File) -> Unit)? = null,
-    onError: ((String?) -> Unit)? = null
+    onResult: ((model: DocumentModel) -> Unit)? = null,
+    onError: ((String) -> Unit)? = null,
+    onCancel: (() -> Unit)? = null
 ) {
     PermissionUtil.requestPermissions(
         context = this,
@@ -70,18 +89,28 @@ fun ForResultActivity.captureImage(
                     try {
                         createImageFile()
                     } catch (io: IOException) {
-                        onError?.invoke(io.message)
+                        onError?.invoke(io.message ?: "")
                         null
                     }?.also { file ->
-                        val photoURI: Uri? = getUriForFile(file)
+                        val photoURI: Uri = getUriForFile(file)
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                        launch {
+                            //协程方法启动intent
+                            startActivityForResultCoroutines(
+                                intent,
+                                onFailure = { onError?.invoke("Image data is null") },
+                                onCancel = { onCancel?.invoke() })
+                            updateAlum(this@captureImage, photoURI)
+                            onResult?.invoke(DocumentModel(photoURI, file))
+                        }
+                        /*//回调方式启动intent
                         startActivityForResultCompat(intent, resultCallback = { resultCode, data ->
-                            if (resultCode == RESULT_OK) {
-                                onResult?.invoke(photoURI, file)
-                            } else {
-                                onError?.invoke("No image selected")
+                            when (resultCode) {
+                                RESULT_OK -> onResult?.invoke(DocumentModel(photoURI, file))
+                                RESULT_CANCELED -> onCancel?.invoke()
+                                else -> onError?.invoke("No image selected")
                             }
-                        })
+                        })*/
                     }
                 }
             }
@@ -92,7 +121,7 @@ fun ForResultActivity.captureImage(
         })
 }
 
-fun Context.getUriForFile(file: File):Uri{
+fun Context.getUriForFile(file: File): Uri {
     return FileProvider.getUriForFile(this, "$packageName.fileprovider", file)
 }
 
