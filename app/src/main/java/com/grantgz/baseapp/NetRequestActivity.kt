@@ -31,7 +31,8 @@ class NetRequestActivity : BaseActivityImpl() {
     private val downloadUrl = "https://static.usasishu.com/com.uuabc.samakenglish_5.1.12_35.apk"
     private var isLogin by DelegateExt.preference("isLogin", false)
     private val permissions = arrayOf(
-        Manifest.permission.READ_PHONE_STATE,
+        Manifest.permission.CAMERA,
+        Manifest.permission.RECORD_AUDIO,
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.ACCESS_COARSE_LOCATION
     )

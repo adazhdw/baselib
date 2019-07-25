@@ -130,11 +130,12 @@ object PermissionUtil {
         grantResults.forEachIndexed { index, i ->
             if (i == PackageManager.PERMISSION_GRANTED) {
                 onGranted.add(permissions[index])
+                PERMISSION_SP.putParam(permissions[index], 1)
             } else {
                 onDenied.add(permissions[index])
+                PERMISSION_SP.putParam(permissions[index], 0)
             }
         }
-        permissions.forEach { PERMISSION_SP.putParam(it, 1) }
         if (onGranted.isNotEmpty())
             mOnGranted?.invoke(onGranted.toTypedArray())
         if (onDenied.isNotEmpty())

@@ -5,8 +5,8 @@ apply plugin: 'kotlin-kapt'
 dependencies {
 
     //BaseLibrary
-//    implementation project(path: ':baselib')
-    implementation 'com.adazhdw:baselib:0.1.10'
+    implementation project(path: ':baselib')
+//    implementation 'com.adazhdw:baselib:0.1.10'
 
     //Base
     implementation 'androidx.appcompat:appcompat:1.0.2'

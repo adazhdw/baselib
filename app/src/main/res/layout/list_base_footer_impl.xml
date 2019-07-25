@@ -10,7 +10,7 @@
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:indeterminate="true"
-        android:indeterminateDrawable="@drawable/loading_bar_style_blue"
+        android:indeterminateDrawable="@drawable/progress_bar_drawable"
         android:padding="10dp" />
 
 </FrameLayout>
