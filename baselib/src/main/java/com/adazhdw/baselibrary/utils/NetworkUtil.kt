@@ -1,6 +1,7 @@
 package com.adazhdw.baselibrary.utils
 
 import android.Manifest.permission.ACCESS_NETWORK_STATE
+import android.Manifest.permission.ACCESS_WIFI_STATE
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
@@ -14,35 +15,19 @@ object NetworkUtil {
 
     @RequiresPermission(ACCESS_NETWORK_STATE)
     fun isConnected(): Boolean {
-        val info = activeNetworkInfo
+        val info = activeNetworkInfo()
         return info != null && info.isConnected
     }
 
 
-    private val activeNetworkInfo: NetworkInfo?
-        @RequiresPermission(ACCESS_NETWORK_STATE)
-        get() {
-            val cm =
-                LibUtil.getApp().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-            return cm?.activeNetworkInfo
-        }
+    @RequiresPermission(ACCESS_NETWORK_STATE)
+    private fun activeNetworkInfo(context: Context? = null): NetworkInfo? {
+        return getCm(context)?.activeNetworkInfo
+    }
 
-    fun isWifiConnected(): Boolean{
-            val connectivityManager =
-                LibUtil.getApp().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-            val networkInfo = connectivityManager?.activeNetworkInfo
-            return when {
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-                    val network: Network? = connectivityManager?.activeNetwork
-                    val capabilities = connectivityManager?.getNetworkCapabilities(network)
-                    capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true && networkInfo?.isConnected == true
-                }
-                else -> networkInfo?.isConnected ?: false && networkInfo?.type == ConnectivityManager.TYPE_WIFI
-            }
-        }
-
-    fun isWifiConnected(context: Context): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+    @RequiresPermission(ACCESS_WIFI_STATE)
+    fun isWifiConnected(context: Context?=null): Boolean {
+        val connectivityManager = getCm(context)
         val networkInfo = connectivityManager?.activeNetworkInfo
         return when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
@@ -58,7 +43,7 @@ object NetworkUtil {
      * 获取网络类型
      */
     fun getNetworkType(context: Context?): String {
-        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        val connectivityManager = getCm(context)
         val info = connectivityManager?.activeNetworkInfo
         when {
             info?.isConnected == true -> return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -84,7 +69,7 @@ object NetworkUtil {
      * 获取网络类型hw
      */
     fun getNetworkTypeHw(context: Context?): Int {
-        return getPsType(activeNetworkInfo)
+        return getPsType(activeNetworkInfo(context))
     }
 
     private fun getPsType(netInfo: NetworkInfo?): Int {
@@ -104,6 +89,15 @@ object NetworkUtil {
 
         return psType
     }
+
+    private fun getCm(context: Context?=null): ConnectivityManager? {
+        return if (context != null) {
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        } else {
+            LibUtil.getApp().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        }
+    }
+
 
 
     class NetType {

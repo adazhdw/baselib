@@ -136,9 +136,13 @@ object PermissionUtil {
                 PERMISSION_SP.putParam(permissions[index], 0)
             }
         }
-        if (onGranted.isNotEmpty())
-            mOnGranted?.invoke(onGranted.toTypedArray())
-        if (onDenied.isNotEmpty())
+        if (onDenied.isNotEmpty()) {
             mOnDenied?.invoke(onDenied.toTypedArray())
+            return
+        }
+        if (onGranted.isNotEmpty() && onGranted.size == grantResults.size) {
+            mOnGranted?.invoke(onGranted.toTypedArray())
+            return
+        }
     }
 }

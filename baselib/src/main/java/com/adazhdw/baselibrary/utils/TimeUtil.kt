@@ -1,5 +1,7 @@
 package com.adazhdw.baselibrary.utils
 
+import com.blankj.utilcode.util.TimeUtils
+import java.text.SimpleDateFormat
 import java.util.*
 
 object TimeUtil {
@@ -19,6 +21,30 @@ object TimeUtil {
         } else {
             mFormatter.format("%02d:%02d", minutes, seconds).toString()
         }
+    }
+
+    fun getWholeFormat(timeMs: Long): String {
+        if (timeMs <= 0) return ""
+        val format = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+        return format.format(Date(timeMs))
+    }
+
+    fun getWholeFormatEx(timeMs: Long): String {
+        if (timeMs <= 0) return ""
+        val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return format.format(Date(timeMs))
+    }
+
+    fun getYmdFormat(timeMs: Long): String {
+        if (timeMs <= 0) return ""
+        val format = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
+        return format.format(Date(timeMs))
+    }
+
+    fun getYmdFormatEx(timeMs: Long): String {
+        if (timeMs <= 0) return ""
+        val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return format.format(Date(timeMs))
     }
 
 }
