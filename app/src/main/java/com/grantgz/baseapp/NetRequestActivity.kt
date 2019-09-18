@@ -1,6 +1,7 @@
 package com.grantgz.baseapp
 
 import android.Manifest
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.baselibrary.base.BaseActivityImpl
 import com.adazhdw.baselibrary.ext.*
@@ -10,6 +11,7 @@ import com.adazhdw.baselibrary.list.BaseRvAdapter
 import com.adazhdw.baselibrary.list.BaseViewHolder
 import com.adazhdw.baselibrary.list.ListFragmentLine
 import com.adazhdw.baselibrary.utils.MatrixUtil
+import com.adazhdw.baselibrary.utils.NumUtil
 import com.adazhdw.baselibrary.utils.PermissionUtil
 import com.grantgz.baseapp.ext.downloadFile
 import com.grantgz.baseapp.http.ChapterHistory
@@ -25,7 +27,9 @@ class NetRequestActivity : BaseActivityImpl() {
     }
 
     private val mNetViewModel: NetViewModel by lazy {
-        ViewModelProviders.of(this, InjectorUtil.getNetModelFactory()).get(NetViewModel::class.java)
+        // @Deprecated---ViewModelProviders.of
+        // ViewModelProviders.of(this, InjectorUtil.getNetModelFactory()).get(NetViewModel::class.java)
+        ViewModelProvider(this, InjectorUtil.getNetModelFactory()).get(NetViewModel::class.java)
     }
 
     private val downloadUrl = "https://static.usasishu.com/com.uuabc.samakenglish_5.1.12_35.apk"

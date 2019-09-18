@@ -35,7 +35,7 @@ fun FragmentActivity.intentBattery() {
  * open browser
  */
 fun FragmentActivity.intentBrowser(url: String) {
-    val viewIntent = Intent("android.intent.action.VIEW", Uri.parse(url))
+    val viewIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
     startActivity(viewIntent)
 }
 

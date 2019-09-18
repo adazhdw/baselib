@@ -38,4 +38,4 @@ suspend fun <T> Call<T>.await(): T {
         })
     }
 }
-class HttpException(val url: HttpUrl, val code: Int, message: String) : Exception("HTTP $code $message")
+class HttpException(val url: HttpUrl, code: Int, message: String) : RuntimeException("HTTP $code $message")
