@@ -47,27 +47,25 @@ class Preference<T>(private val spName: String, private val paramName: String, p
 
     @Suppress("UNCHECKED_CAST")
     private fun <T> getParam(paramName: String, default: T): T = with(pref) {
-        val result = when (default) {
+        return  when (default) {
             is Long -> {
-                getLong(paramName, 0L)
+                getLong(paramName, 0L) as T
             }
             is Boolean -> {
-                getBoolean(paramName, false)
+                getBoolean(paramName, false)as T
             }
             is Int -> {
-                getInt(paramName, 0)
+                getInt(paramName, 0)as T
             }
             is String -> {
-                getString(paramName, "")
+                getString(paramName, "")as T
             }
             is Float -> {
-                getFloat(paramName, 0f)
+                getFloat(paramName, 0f)as T
             }
             else -> {
                 throw IllegalArgumentException("This type can't be saved into Preferences")
             }
         }
-
-        return result as T
     }
 }

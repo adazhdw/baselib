@@ -10,8 +10,8 @@ import kotlin.reflect.KProperty
 object DelegateExt {
     fun <T> notNullSingleValue(): ReadWriteProperty<Any?, T> = NotNullSingleValueVar()
 
-    fun <T> preference(name: String, default: T, spName: String = "base_sp_name"): Preference<T> =
-        Preference(spName, name, default)
+    fun <T> preference(paramName: String, default: T, spName: String = "base_sp_name"): Preference<T> =
+        Preference(spName, paramName, default)
 }
 
 class NotNullSingleValueVar<T : Any?> : ReadWriteProperty<Any?, T> {

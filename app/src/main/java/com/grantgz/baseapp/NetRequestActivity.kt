@@ -2,16 +2,17 @@ package com.grantgz.baseapp
 
 import android.Manifest
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.baselibrary.base.BaseActivityImpl
-import com.adazhdw.baselibrary.ext.*
+import com.adazhdw.baselibrary.base.mvvm.getViewModel
+import com.adazhdw.baselibrary.ext.DelegateExt
+import com.adazhdw.baselibrary.ext.logD
+import com.adazhdw.baselibrary.ext.toast
 import com.adazhdw.baselibrary.http.await
-import com.adazhdw.baselibrary.img.*
+import com.adazhdw.baselibrary.img.captureImageCoroutines
+import com.adazhdw.baselibrary.img.selectImageCoroutines
 import com.adazhdw.baselibrary.list.BaseRvAdapter
 import com.adazhdw.baselibrary.list.BaseViewHolder
 import com.adazhdw.baselibrary.list.ListFragmentLine
-import com.adazhdw.baselibrary.utils.MatrixUtil
-import com.adazhdw.baselibrary.utils.NumUtil
 import com.adazhdw.baselibrary.utils.PermissionUtil
 import com.grantgz.baseapp.ext.downloadFile
 import com.grantgz.baseapp.http.ChapterHistory
@@ -30,6 +31,8 @@ class NetRequestActivity : BaseActivityImpl() {
         // @Deprecated---ViewModelProviders.of
         // ViewModelProviders.of(this, InjectorUtil.getNetModelFactory()).get(NetViewModel::class.java)
         ViewModelProvider(this, InjectorUtil.getNetModelFactory()).get(NetViewModel::class.java)
+        // 自己的扩展方法
+        // getViewModel(NetViewModel::class.java,InjectorUtil.getNetModelFactory())
     }
 
     private val downloadUrl = "https://static.usasishu.com/com.uuabc.samakenglish_5.1.12_35.apk"
