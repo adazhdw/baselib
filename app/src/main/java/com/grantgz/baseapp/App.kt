@@ -1,7 +1,7 @@
 package com.grantgz.baseapp
 
 import com.adazhdw.baselibrary.Application
-import com.adazhdw.baselibrary.ext.DelegateExt
+import com.adazhdw.baselibrary.delegate.DelegateExt
 import com.adazhdw.baselibrary.ext.logD
 
 class App : Application() {

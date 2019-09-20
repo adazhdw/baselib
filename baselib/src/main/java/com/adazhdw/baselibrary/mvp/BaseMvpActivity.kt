@@ -1,7 +1,7 @@
 package com.adazhdw.baselibrary.mvp
 
 import com.adazhdw.baselibrary.base.BaseActivity
-import com.adazhdw.baselibrary.ext.showMsg
+import com.adazhdw.baselibrary.ext.toast
 
 @Suppress("UNCHECKED_CAST")
 abstract class BaseMvpActivity<V : IView, P : IPresenter<V>> : BaseActivity(), IView {
@@ -29,6 +29,6 @@ abstract class BaseMvpActivity<V : IView, P : IPresenter<V>> : BaseActivity(), I
     }
 
     override fun showToast(msg: String?) {
-        showMsg(msg)
+        toast(msg?:"")
     }
 }

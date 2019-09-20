@@ -1,9 +1,8 @@
 package com.grantgz.baseapp
 
 import android.Manifest
-import androidx.lifecycle.ViewModelProvider
 import com.adazhdw.baselibrary.base.BaseActivityImpl
-import com.adazhdw.baselibrary.ext.DelegateExt
+import com.adazhdw.baselibrary.delegate.DelegateExt
 import com.adazhdw.baselibrary.ext.logD
 import com.adazhdw.baselibrary.ext.toast
 import com.adazhdw.baselibrary.http.await

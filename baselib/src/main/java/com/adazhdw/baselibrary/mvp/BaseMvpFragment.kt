@@ -2,14 +2,14 @@ package com.adazhdw.baselibrary.mvp
 
 import android.view.View
 import com.adazhdw.baselibrary.base.BaseFragment
-import com.adazhdw.baselibrary.ext.showMsg
+import com.adazhdw.baselibrary.ext.toast
 
 @Suppress("UNCHECKED_CAST")
-abstract class BaseMvpFragment<V:IView,P:IPresenter<V>> : BaseFragment(),IView {
+abstract class BaseMvpFragment<V : IView, P : IPresenter<V>> : BaseFragment(), IView {
 
-    protected abstract fun obtainPresenter():P
+    protected abstract fun obtainPresenter(): P
 
-    protected var mPresenter:P? = null
+    protected var mPresenter: P? = null
 
     override fun initView(view: View) {
         mPresenter = obtainPresenter()
@@ -35,7 +35,7 @@ abstract class BaseMvpFragment<V:IView,P:IPresenter<V>> : BaseFragment(),IView {
     }
 
     override fun showToast(msg: String?) {
-        showMsg(msg)
+        toast(msg ?: "")
     }
 
 }

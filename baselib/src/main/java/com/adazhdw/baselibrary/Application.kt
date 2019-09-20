@@ -1,7 +1,6 @@
 package com.adazhdw.baselibrary
 
 import android.app.Application
-import com.adazhdw.baselibrary.ext.DelegateExt
 
 /**
  * use application implement is better than getApplication() by using reflect(反射)
