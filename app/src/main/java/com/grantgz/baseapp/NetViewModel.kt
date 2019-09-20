@@ -3,8 +3,8 @@ package com.grantgz.baseapp
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.adazhdw.baselibrary.base.mvvm.BaseRepository
-import com.adazhdw.baselibrary.base.mvvm.BaseViewModel
+import com.adazhdw.baselibrary.mvvm.BaseRepository
+import com.adazhdw.baselibrary.mvvm.BaseViewModel
 import com.adazhdw.baselibrary.http.await
 import com.grantgz.baseapp.http.*
 

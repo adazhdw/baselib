@@ -1,9 +1,7 @@
 package com.adazhdw.baselibrary.utils
 
-import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
-import android.os.Build
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -15,7 +13,6 @@ object KeyboardUtil {
      * 动态隐藏软键盘
      * @param activity
      */
-    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     fun hideSoftInput(activity: Activity) {
         val view = activity.window.peekDecorView()
         if (view != null) {
@@ -29,7 +26,6 @@ object KeyboardUtil {
      * @param context
      * @param edit
      */
-    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     fun hideSoftInput(context: Context, edit: EditText) {
         edit.clearFocus()
 
@@ -42,7 +38,6 @@ object KeyboardUtil {
      * @param context
      * @param edit
      */
-    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     fun showSoftInput(context: Context, edit: EditText) {
         edit.isFocusable = true
         edit.isFocusableInTouchMode = true

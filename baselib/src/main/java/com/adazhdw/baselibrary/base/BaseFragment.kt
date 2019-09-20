@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import org.greenrobot.eventbus.EventBus
 
 abstract class BaseFragment : CoroutinesFragment() {
@@ -11,22 +12,23 @@ abstract class BaseFragment : CoroutinesFragment() {
     /**
      * 返回布局Id
      */
-    abstract fun layoutId(): Int
+    @LayoutRes
+    protected abstract fun layoutId(): Int
 
     /**
      * 初始化数据
      */
-    abstract fun initData()
+    protected abstract fun initData()
 
     /**
      * 初始化View
      */
-    abstract fun initView(view: View)
+    protected abstract fun initView(view: View)
 
     /**
      * 是否需要EventBus
      */
-    open fun needEventBus(): Boolean = false
+    protected open fun needEventBus(): Boolean = false
 
     /**
      * 网络请求开始

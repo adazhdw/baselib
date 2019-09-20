@@ -1,4 +1,4 @@
-package com.adazhdw.baselibrary.base.mvvm
+package com.adazhdw.baselibrary.mvvm
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
