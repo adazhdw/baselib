@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import com.adazhdw.baselibrary.LibUtil
 import com.adazhdw.baselibrary.R
 import com.adazhdw.baselibrary.annotation.IntentCode
-import com.adazhdw.baselibrary.ext.launchSettings
+import com.adazhdw.baselibrary.ext.jumpSettings
 
 object PermissionUtil {
 
@@ -97,7 +97,7 @@ object PermissionUtil {
                 .setTitle(getString(R.string.permission_need_grant_title))
                 .setMessage("应用需要相关权限才能运行，请前往应用详情页面授予相关权限")
                 .setPositiveButton(getString(R.string.confirm_text)) { dialog, _ ->
-                    launchSettings(IntentCode.USER_CHANGE_PERMISSION_CODE)
+                    jumpSettings(IntentCode.USER_CHANGE_PERMISSION_CODE)
                     dialog?.dismiss()
                     finish()
                 }

@@ -26,7 +26,7 @@ fun FragmentActivity.isIntentAvailable(action: String): Boolean {
 /**
  * open manage battery page
  */
-fun FragmentActivity.intentBattery() {
+fun FragmentActivity.jumpBattery() {
     val intentBatteryUsage = Intent(Intent.ACTION_POWER_USAGE_SUMMARY)
     startActivity(intentBatteryUsage)
 }
@@ -34,7 +34,7 @@ fun FragmentActivity.intentBattery() {
 /**
  * open browser
  */
-fun FragmentActivity.intentBrowser(url: String) {
+fun FragmentActivity.jumpBrowser(url: String) {
     val viewIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
     startActivity(viewIntent)
 }
@@ -42,7 +42,7 @@ fun FragmentActivity.intentBrowser(url: String) {
 /**
  * 调用便携式热点和数据共享设置
  */
-fun FragmentActivity.getHotspotSetting() {
+fun FragmentActivity.jumpHotSpots() {
     val intent = Intent()
     intent.action = Intent.ACTION_MAIN
     val com = ComponentName("com.android.settings", "com.android.seings.TetherSettings")
@@ -78,7 +78,7 @@ fun FragmentActivity.startApkActivity(packageName: String) {
 /**
  * start application detail page
  */
-fun FragmentActivity.launchSettings(code: Int? = null) {
+fun FragmentActivity.jumpSettings(code: Int? = null) {
     val intent = Intent()
     intent.action = android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
     intent.data = Uri.parse("package:$packageName")

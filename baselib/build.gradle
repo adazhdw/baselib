@@ -63,8 +63,9 @@ dependencies {
 
     //网络相关
     // Moshi
-    implementation 'com.squareup.moshi:moshi-kotlin:1.8.0'
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.8.0"
+    def moshi_version = "1.8.0"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
 
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.6.1'
@@ -102,9 +103,9 @@ ext {
 
     publishedGroupId = 'com.adazhdw' // the id you want to add in "implement" line
     artifact = 'baselib' // = libraryName  the id you want to add in "implement" line--must be the module name in android project
-    libraryVersion = '0.1.12'
+    libraryVersion = '0.1.13'
 
-    libraryDescription = 'version 0.1.12--add inline fun and observer function'
+    libraryDescription = 'version 0.1.13--Delete InternalViewModel'
     siteUrl = 'https://github.com/adazhdw/baselib'
     gitUrl = 'https://github.com/adazhdw/baselib.git'
     developerId = 'adazhdw1207'

@@ -9,7 +9,7 @@ import kotlin.coroutines.resumeWithException
 abstract class ForResultActivity : CoroutinesActivity() {
 
     private val resultCallbackSet = mutableMapOf<Int, ((resultCode: Int, data: Intent?) -> Unit)>()
-    fun startActivityForResultCompat(
+    fun startActivityForResultCompact(
         intent: Intent,
         resultCallback: ((resultCode: Int, data: Intent?) -> Unit)
     ) {
@@ -21,7 +21,7 @@ abstract class ForResultActivity : CoroutinesActivity() {
     suspend fun startActivityForResultCoroutines(intent: Intent, onFailure: (() -> Unit)? = null, onCancel: (() -> Unit)? = null): Intent? =
         try {
             suspendCancellableCoroutine { continuation ->
-                startActivityForResultCompat(intent) { resultCode, data ->
+                startActivityForResultCompact(intent) { resultCode, data ->
                     when (resultCode) {
                         RESULT_OK -> continuation.resume(data)
                         RESULT_CANCELED -> onCancel?.invoke()
