@@ -8,7 +8,9 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModel
 import com.adazhdw.baselibrary.LibUtil
+import com.adazhdw.baselibrary.mvvm.KotlinViewModelProvider
 
 
 inline fun <reified T : Activity> Fragment.startActivity() {
@@ -30,3 +32,11 @@ inline fun Context.toast(msg: CharSequence): Toast =
 
 inline fun toast(msg: CharSequence): Toast =
     Toast.makeText(LibUtil.getApp(), msg, Toast.LENGTH_SHORT).apply { show() }
+
+inline fun <reified T : ViewModel> Fragment.getViewModel(crossinline factory: () -> T): T {
+    return KotlinViewModelProvider.of(this, factory)
+}
+
+inline fun <reified T : ViewModel> FragmentActivity.getViewModel(crossinline factory: () -> T): T {
+    return KotlinViewModelProvider.of(this, factory)
+}

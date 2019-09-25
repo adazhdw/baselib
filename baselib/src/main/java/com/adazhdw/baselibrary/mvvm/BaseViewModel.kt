@@ -1,9 +1,6 @@
 package com.adazhdw.baselibrary.mvvm
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.adazhdw.baselibrary.ext.logE
 import com.adazhdw.baselibrary.ext.toast
@@ -36,12 +33,4 @@ abstract class BaseViewModel<R : BaseRepository> : ViewModel() {
                 }
             }
 
-}
-
-inline fun <reified T : ViewModel> Fragment.getViewModel(crossinline factory: () -> T): T {
-    return KotlinViewModelProvider.of(this, factory)
-}
-
-inline fun <reified T : ViewModel> FragmentActivity.getViewModel(crossinline factory: () -> T): T {
-    return KotlinViewModelProvider.of(this, factory)
 }

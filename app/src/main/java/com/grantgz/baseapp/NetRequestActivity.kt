@@ -3,6 +3,7 @@ package com.grantgz.baseapp
 import android.Manifest
 import com.adazhdw.baselibrary.base.BaseActivityImpl
 import com.adazhdw.baselibrary.delegate.DelegateExt
+import com.adazhdw.baselibrary.ext.getViewModel
 import com.adazhdw.baselibrary.ext.logD
 import com.adazhdw.baselibrary.ext.toast
 import com.adazhdw.baselibrary.http.await
@@ -11,7 +12,6 @@ import com.adazhdw.baselibrary.img.selectImageCoroutines
 import com.adazhdw.baselibrary.list.BaseRvAdapter
 import com.adazhdw.baselibrary.list.BaseViewHolder
 import com.adazhdw.baselibrary.list.ListFragmentLine
-import com.adazhdw.baselibrary.mvvm.getViewModel
 import com.adazhdw.baselibrary.utils.PermissionUtil
 import com.grantgz.baseapp.ext.downloadFile
 import com.grantgz.baseapp.http.ChapterHistory
