@@ -1,4 +1,4 @@
-package com.adazhdw.baselibrary.utils;
+package com.adazhdw.baselibrary.http;
 
 import org.json.JSONArray;
 import org.json.JSONException;

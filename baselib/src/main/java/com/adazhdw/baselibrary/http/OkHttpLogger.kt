@@ -3,7 +3,6 @@ package com.adazhdw.baselibrary.http
 import com.adazhdw.baselibrary.ext.logD
 import com.adazhdw.baselibrary.ext.logE
 import com.adazhdw.baselibrary.ext.startWidth
-import com.adazhdw.baselibrary.utils.JsonUtil
 import okhttp3.logging.HttpLoggingInterceptor
 
 class OkHttpLogger : HttpLoggingInterceptor.Logger {
