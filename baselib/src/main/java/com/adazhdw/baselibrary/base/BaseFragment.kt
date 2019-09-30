@@ -12,8 +12,7 @@ abstract class BaseFragment : CoroutinesFragment() {
     /**
      * 返回布局Id
      */
-    @LayoutRes
-    protected abstract fun layoutId(): Int
+    protected abstract val layoutId: Int
 
     /**
      * 初始化数据
@@ -35,23 +34,26 @@ abstract class BaseFragment : CoroutinesFragment() {
      */
     abstract fun requestStart()
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(layoutId(), container, false)
+        return inflater.inflate(layoutId, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (needEventBus()) {
-            EventBus.getDefault().register(this)
-        }
         initView(view)
         initData()
         requestStart()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onStart() {
+        super.onStart()
+        if (needEventBus()) {
+            EventBus.getDefault().register(this)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
         if (needEventBus()) {
             EventBus.getDefault().unregister(this)
         }

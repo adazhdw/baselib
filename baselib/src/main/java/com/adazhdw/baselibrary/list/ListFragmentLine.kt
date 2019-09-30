@@ -34,9 +34,8 @@ abstract class ListFragmentLine<M, VH : RecyclerView.ViewHolder, A : BaseRvAdapt
     private var currPage = 0
     private var lastPullTime = 0
 
-    override fun layoutId(): Int {
-        return R.layout.fragment_list_line
-    }
+    override val layoutId: Int
+        get() = R.layout.fragment_list_line
 
     override fun initView(view: View) {
         onListHeader(swipe)

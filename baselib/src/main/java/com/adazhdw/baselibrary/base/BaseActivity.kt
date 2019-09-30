@@ -14,8 +14,7 @@ abstract class BaseActivity : ForResultActivity() {
     /**
      * 返回布局Id
      */
-    @LayoutRes
-    protected abstract fun layoutId(): Int
+    protected abstract val layoutId: Int
 
     /**
      * 初始化数据
@@ -39,17 +38,21 @@ abstract class BaseActivity : ForResultActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layoutId())
+        setContentView(layoutId)
         initView()
         initData()
         requestStart()
+    }
+
+    override fun onStart() {
+        super.onStart()
         if (needEventBus()) {
             EventBus.getDefault().register(this)
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStop() {
+        super.onStop()
         if (needEventBus()) {
             EventBus.getDefault().unregister(this)
         }

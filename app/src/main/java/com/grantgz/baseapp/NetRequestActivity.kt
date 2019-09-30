@@ -3,9 +3,7 @@ package com.grantgz.baseapp
 import android.Manifest
 import com.adazhdw.baselibrary.base.BaseActivityImpl
 import com.adazhdw.baselibrary.delegate.DelegateExt
-import com.adazhdw.baselibrary.ext.getViewModel
-import com.adazhdw.baselibrary.ext.logD
-import com.adazhdw.baselibrary.ext.toast
+import com.adazhdw.baselibrary.ext.*
 import com.adazhdw.baselibrary.http.await
 import com.adazhdw.baselibrary.img.captureImageCoroutines
 import com.adazhdw.baselibrary.img.selectImageCoroutines
@@ -22,9 +20,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class NetRequestActivity : BaseActivityImpl() {
-    override fun layoutId(): Int {
-        return R.layout.net_request_layout
-    }
+    override val layoutId: Int
+        get() = R.layout.net_request_layout
 
     private val mNetViewModel: NetViewModel by lazy {
         // @Deprecated---ViewModelProviders.of
@@ -44,6 +41,11 @@ class NetRequestActivity : BaseActivityImpl() {
     )
 
     override fun initView() {
+
+        //设置actionbar
+        setActionbarCompact(R.id.toolbar)
+
+        //login值输出
         logD("isLogin-----$isLogin")
         isLogin = true
         logD("isLogin-----$isLogin")
@@ -93,9 +95,13 @@ class NetRequestActivity : BaseActivityImpl() {
                 selectImg.setImageURI(model.uri)
             }
         }
-        supportFragmentManager.beginTransaction()
-            .add(R.id.chaptersFl, WxChaptersFragment())
-            .commit()
+
+        replaceFragment(WxChaptersFragment(),R.id.chaptersFl)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }
 
