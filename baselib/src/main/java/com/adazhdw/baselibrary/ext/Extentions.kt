@@ -61,33 +61,37 @@ fun AppCompatActivity.setActionbarCompact(@IdRes toolbarId: Int) {
     }
 }
 
-fun FragmentActivity.replaceFragment(fragment: Fragment, frameId: Int) {
-    supportFragmentManager.transact {
+fun FragmentActivity.replaceFragment(fragment: Fragment, frameId: Int,isAllowingStateLose:Boolean = false) {
+    supportFragmentManager.transact(isAllowingStateLose) {
         replace(frameId, fragment)
     }
 }
 
-fun FragmentActivity.addFragment(fragment: Fragment, frameId: Int) {
-    supportFragmentManager.transact {
+fun FragmentActivity.addFragment(fragment: Fragment, frameId: Int,isAllowingStateLose:Boolean = false) {
+    supportFragmentManager.transact(isAllowingStateLose) {
         add(frameId, fragment)
     }
 }
 
-fun Fragment.replaceFragment(fragment: Fragment, frameId: Int) {
-    childFragmentManager.transact {
+fun Fragment.replaceFragment(fragment: Fragment, frameId: Int,isAllowingStateLose:Boolean = false) {
+    childFragmentManager.transact(isAllowingStateLose) {
         replace(frameId, fragment)
     }
 }
 
-fun Fragment.addFragment(fragment: Fragment, frameId: Int) {
-    childFragmentManager.transact {
+fun Fragment.addFragment(fragment: Fragment, frameId: Int,isAllowingStateLose:Boolean = false) {
+    childFragmentManager.transact(isAllowingStateLose) {
         add(frameId, fragment)
     }
 }
 
-fun FragmentManager.transact(action: (FragmentTransaction.() -> Unit)) {
-    beginTransaction().apply {
-        action()
-    }.commit()
+fun FragmentManager.transact(isAllowingStateLose:Boolean = false,action: (FragmentTransaction.() -> Unit)) {
+    val transaction = beginTransaction()
+    transaction.action()
+    if (isAllowingStateLose){
+        transaction.commitAllowingStateLoss()
+    }else{
+        transaction.commit()
+    }
 }
 
