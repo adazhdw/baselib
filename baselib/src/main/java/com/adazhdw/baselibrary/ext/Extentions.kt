@@ -18,12 +18,12 @@ import com.adazhdw.baselibrary.LibUtil
 import com.adazhdw.baselibrary.mvvm.KotlinViewModelProvider
 
 
-inline fun <reified T : Activity> Fragment.startActivity() {
-    startActivity(Intent(context, T::class.java))
+inline fun <reified T : Activity> Fragment.startActivity(vararg extras: Pair<String, Any?>) {
+    startActivity(Intent(context, T::class.java).putExtrasEx(*extras))
 }
 
-inline fun <reified T : Activity> FragmentActivity.startActivity() {
-    startActivity(Intent(applicationContext, T::class.java))
+inline fun <reified T : Activity> FragmentActivity.startActivity(vararg extras: Pair<String, Any?>) {
+    startActivity(Intent(applicationContext, T::class.java).putExtrasEx(*extras))
 }
 
 inline fun Fragment.toast(msg: CharSequence): Toast =
@@ -61,36 +61,51 @@ fun AppCompatActivity.setActionbarCompact(@IdRes toolbarId: Int) {
     }
 }
 
-fun FragmentActivity.replaceFragment(fragment: Fragment, frameId: Int,isAllowingStateLose:Boolean = false) {
+fun FragmentActivity.replaceFragment(
+    fragment: Fragment,
+    frameId: Int,
+    isAllowingStateLose: Boolean = false
+) {
     supportFragmentManager.transact(isAllowingStateLose) {
         replace(frameId, fragment)
     }
 }
 
-fun FragmentActivity.addFragment(fragment: Fragment, frameId: Int,isAllowingStateLose:Boolean = false) {
+fun FragmentActivity.addFragment(
+    fragment: Fragment,
+    frameId: Int,
+    isAllowingStateLose: Boolean = false
+) {
     supportFragmentManager.transact(isAllowingStateLose) {
         add(frameId, fragment)
     }
 }
 
-fun Fragment.replaceFragment(fragment: Fragment, frameId: Int,isAllowingStateLose:Boolean = false) {
+fun Fragment.replaceFragment(
+    fragment: Fragment,
+    frameId: Int,
+    isAllowingStateLose: Boolean = false
+) {
     childFragmentManager.transact(isAllowingStateLose) {
         replace(frameId, fragment)
     }
 }
 
-fun Fragment.addFragment(fragment: Fragment, frameId: Int,isAllowingStateLose:Boolean = false) {
+fun Fragment.addFragment(fragment: Fragment, frameId: Int, isAllowingStateLose: Boolean = false) {
     childFragmentManager.transact(isAllowingStateLose) {
         add(frameId, fragment)
     }
 }
 
-fun FragmentManager.transact(isAllowingStateLose:Boolean = false,action: (FragmentTransaction.() -> Unit)) {
+fun FragmentManager.transact(
+    isAllowingStateLose: Boolean = false,
+    action: (FragmentTransaction.() -> Unit)
+) {
     val transaction = beginTransaction()
     transaction.action()
-    if (isAllowingStateLose){
+    if (isAllowingStateLose) {
         transaction.commitAllowingStateLoss()
-    }else{
+    } else {
         transaction.commit()
     }
 }

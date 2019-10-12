@@ -1,12 +1,15 @@
 package com.adazhdw.baselibrary.ext
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
 import androidx.core.content.FileProvider
+import androidx.fragment.app.FragmentActivity
 import java.io.File
 
 /**
@@ -72,5 +75,89 @@ fun Context.getApkName(packageId: String): String {
 fun Context.getVersionName(): String? {
     return packageManager.getPackageInfo(packageName, 0).versionName
 }
+
+
+/**
+ * check if there has apps that accept your intent
+ * @param context
+ * @param action
+ * @return
+ */
+fun Context.isIntentAvailable(action: String): Boolean {
+    val packageManager = packageManager
+    val intent = Intent(action)
+    val list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+    return list.size > 0
+}
+
+
+/**
+ * open manage battery page
+ */
+fun Context.jumpBattery() {
+    val intentBatteryUsage = Intent(Intent.ACTION_POWER_USAGE_SUMMARY)
+    startActivity(intentBatteryUsage)
+}
+
+/**
+ * open browser
+ */
+fun Context.jumpBrowser(url: String) {
+    val viewIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    startActivity(viewIntent)
+}
+
+/**
+ * 调用便携式热点和数据共享设置
+ */
+fun Context.jumpHotSpots() {
+    val intent = Intent()
+    intent.action = Intent.ACTION_MAIN
+    val com = ComponentName("com.android.settings", "com.android.seings.TetherSettings")
+    intent.component = com
+    startActivity(intent)
+}
+
+/**
+ * start APK‘s default Activity
+ */
+fun Context.startApkActivity(packageName: String) {
+    val pm = packageManager
+    val pi: PackageInfo
+    try {
+        pi = pm.getPackageInfo(packageName, 0)
+        val intent = Intent(Intent.ACTION_MAIN, null)
+        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+        intent.setPackage(pi.packageName)
+
+        val apps = pm.queryIntentActivities(intent, 0)
+
+        val ri = apps.iterator().next()
+        if (ri != null) {
+            val className = ri.activityInfo.name
+            intent.component = ComponentName(packageName, className)
+            startActivity(intent)
+        }
+    } catch (e: PackageManager.NameNotFoundException) {
+        logE(e)
+    }
+}
+
+/**
+ * start application detail page
+ */
+fun FragmentActivity.jumpSettings(code: Int? = null) {
+    val intent = Intent()
+    intent.action = android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+    intent.data = Uri.parse("package:$packageName")
+    if (code != null) {
+        startActivityForResult(intent, code)
+    } else {
+        startActivity(intent)
+    }
+}
+
+
+
 
 

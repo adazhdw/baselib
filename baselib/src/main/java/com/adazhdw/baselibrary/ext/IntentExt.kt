@@ -1,94 +1,59 @@
 package com.adazhdw.baselibrary.ext
 
-import android.content.ComponentName
 import android.content.Intent
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.provider.Settings
-import androidx.fragment.app.FragmentActivity
+import android.os.Bundle
+import android.os.Parcelable
+import java.io.Serializable
+import java.util.ArrayList
 
-
-/**
- * check if there has apps that accept your intent
- * @param context
- * @param action
- * @return
- */
-fun FragmentActivity.isIntentAvailable(action: String): Boolean {
-    val packageManager = packageManager
-    val intent = Intent(action)
-    val list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
-    return list.size > 0
-}
-
-
-/**
- * open manage battery page
- */
-fun FragmentActivity.jumpBattery() {
-    val intentBatteryUsage = Intent(Intent.ACTION_POWER_USAGE_SUMMARY)
-    startActivity(intentBatteryUsage)
-}
-
-/**
- * open browser
- */
-fun FragmentActivity.jumpBrowser(url: String) {
-    val viewIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-    startActivity(viewIntent)
-}
-
-/**
- * 调用便携式热点和数据共享设置
- */
-fun FragmentActivity.jumpHotSpots() {
-    val intent = Intent()
-    intent.action = Intent.ACTION_MAIN
-    val com = ComponentName("com.android.settings", "com.android.seings.TetherSettings")
-    intent.component = com
-    startActivity(intent)
-}
-
-/**
- * start APK‘s default Activity
- */
-fun FragmentActivity.startApkActivity(packageName: String) {
-    val pm = packageManager
-    val pi: PackageInfo
-    try {
-        pi = pm.getPackageInfo(packageName, 0)
-        val intent = Intent(Intent.ACTION_MAIN, null)
-        intent.addCategory(Intent.CATEGORY_LAUNCHER)
-        intent.setPackage(pi.packageName)
-
-        val apps = pm.queryIntentActivities(intent, 0)
-
-        val ri = apps.iterator().next()
-        if (ri != null) {
-            val className = ri.activityInfo.name
-            intent.component = ComponentName(packageName, className)
-            startActivity(intent)
+fun Intent.putExtrasEx(vararg extras: Pair<String, Any?>): Intent {
+    if (extras.isEmpty()) return this
+    extras.forEach { (key, value) ->
+        value ?: let {
+            //value 为空
+            it.putExtra(key, value.toString())
+            return@forEach
         }
-    } catch (e: PackageManager.NameNotFoundException) {
-        logE(e)
+        when (value) {
+            is Bundle -> this.putExtra(key, value)
+            is Boolean -> this.putExtra(key, value)
+            is BooleanArray -> this.putExtra(key, value)
+            is Byte -> this.putExtra(key, value)
+            is ByteArray -> this.putExtra(key, value)
+            is Char -> this.putExtra(key, value)
+            is CharArray -> this.putExtra(key, value)
+            is String -> this.putExtra(key, value)
+            is CharSequence -> this.putExtra(key, value)
+            is Double -> this.putExtra(key, value)
+            is DoubleArray -> this.putExtra(key, value)
+            is Float -> this.putExtra(key, value)
+            is FloatArray -> this.putExtra(key, value)
+            is Int -> this.putExtra(key, value)
+            is IntArray -> this.putExtra(key, value)
+            is Long -> this.putExtra(key, value)
+            is LongArray -> this.putExtra(key, value)
+            is Short -> this.putExtra(key, value)
+            is ShortArray -> this.putExtra(key, value)
+            is Array<*> -> {
+                @Suppress("UNCHECKED_CAST")
+                when {
+                    value.isArrayOf<String>()->{
+                        this.putStringArrayListExtra(key, value as ArrayList<String?>)
+                    }
+                    value.isArrayOf<CharSequence>()->{
+                        this.putCharSequenceArrayListExtra(key, value as ArrayList<CharSequence?>)
+                    }
+                    value.isArrayOf<Parcelable>()->{
+                        this.putParcelableArrayListExtra(key, value as ArrayList<Parcelable?>)
+                    }
+                }
+            }
+            is Parcelable -> this.putExtra(key, value)
+            is Serializable -> this.putExtra(key, value)
+            else -> {
+                throw IllegalArgumentException("Not support $value type ${value.javaClass}..")
+            }
+        }
     }
+    return this
 }
-
-/**
- * start application detail page
- */
-fun FragmentActivity.jumpSettings(code: Int? = null) {
-    val intent = Intent()
-    intent.action = android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-    intent.data = Uri.parse("package:$packageName")
-    if (code != null) {
-        startActivityForResult(intent, code)
-    } else {
-        startActivity(intent)
-    }
-}
-
-
-
-
