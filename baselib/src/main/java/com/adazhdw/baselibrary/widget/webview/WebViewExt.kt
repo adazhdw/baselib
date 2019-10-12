@@ -1,4 +1,4 @@
-package com.adazhdw.baselibrary.ext
+package com.adazhdw.baselibrary.widget.webview
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
@@ -41,6 +41,16 @@ fun WebView.initSetting() {
     settings.loadsImagesAutomatically = true
     removeJavascriptInterfaces()
 
+}
+
+fun WebView.onClient(titleCallback: ((title: String?) -> Unit)? = null) {
+    webViewClient = SafeWebViewClient()
+    webChromeClient = object : SafeWebChromeClient() {
+        override fun onReceivedTitle(view: WebView?, title: String?) {
+            titleCallback?.invoke(title)
+            super.onReceivedTitle(view, title)
+        }
+    }
 }
 
 ////移除部分系统JavaScript接口

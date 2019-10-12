@@ -15,11 +15,11 @@ repositories {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
@@ -72,12 +72,12 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-moshi:2.6.0"
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
-    implementation 'com.squareup.okhttp3:okhttp:4.0.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.2.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.0'
 
     //Rxjava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
 
     //EventBus
@@ -103,9 +103,9 @@ ext {
 
     publishedGroupId = 'com.adazhdw' // the id you want to add in "implement" line
     artifact = 'baselib' // = libraryName  the id you want to add in "implement" line--must be the module name in android project
-    libraryVersion = '0.1.20'
+    libraryVersion = '0.1.30'
 
-    libraryDescription = 'add replaceFragment,addFragment extension functions'
+    libraryDescription = 'add WebView Client extension function'
     siteUrl = 'https://github.com/adazhdw/baselib'
     gitUrl = 'https://github.com/adazhdw/baselib.git'
     developerId = 'adazhdw1207'

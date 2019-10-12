@@ -42,7 +42,7 @@ fun String.checkNickname(): Boolean {
 fun Context.copyText(content: String) {
     val cmb = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
     val myClip = ClipData.newPlainText("text", content)
-    cmb?.primaryClip = myClip
+    cmb?.setPrimaryClip(myClip)
 }
 
 /**
