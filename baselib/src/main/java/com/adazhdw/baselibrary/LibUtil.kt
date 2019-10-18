@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import com.adazhdw.baselibrary.core.lifecycle.KtLifecycleCallback
 import com.adazhdw.baselibrary.ext.logD
 import com.adazhdw.baselibrary.http.RetrofitModel
 import com.blankj.utilcode.util.Utils
@@ -13,6 +14,7 @@ object LibUtil {
 
     private var currentApplication: Application? = null
     private val TAG by lazy { LibUtil.getApp().packageName }
+    private val mKtLifecycleCallback = KtLifecycleCallback()
 
     fun getApp(): Application {
         if (currentApplication != null) return currentApplication!!
@@ -45,44 +47,13 @@ object LibUtil {
     fun init(application: Application?) {
         if (currentApplication == null) {
             currentApplication = application ?: getAppByReflect()
-            currentApplication?.registerActivityLifecycleCallbacks(mActivityLifecycleCallbacks)
+            currentApplication?.registerActivityLifecycleCallbacks(mKtLifecycleCallback)
         } else {
             if (application != null && application.javaClass != currentApplication?.javaClass) {
-                currentApplication?.unregisterActivityLifecycleCallbacks(mActivityLifecycleCallbacks)
+                currentApplication?.unregisterActivityLifecycleCallbacks(mKtLifecycleCallback)
                 currentApplication = application
-                currentApplication?.registerActivityLifecycleCallbacks(mActivityLifecycleCallbacks)
+                currentApplication?.registerActivityLifecycleCallbacks(mKtLifecycleCallback)
             }
-        }
-    }
-
-
-    private val mActivityLifecycleCallbacks = object : Application.ActivityLifecycleCallbacks {
-        override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-            logD(TAG, "onCreated: " + activity.componentName.className)
-        }
-
-        override fun onActivityStarted(activity: Activity) {
-            logD(TAG, "onStarted: " + activity.componentName.className)
-        }
-
-        override fun onActivityResumed(activity: Activity) {
-            logD(TAG, "onResumed: " + activity.componentName.className)
-        }
-
-        override fun onActivityPaused(activity: Activity) {
-            logD(TAG, "onPaused: " + activity.componentName.className)
-        }
-
-        override fun onActivityStopped(activity: Activity) {
-            logD(TAG, "onStopped: " + activity.componentName.className)
-        }
-
-        override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-            logD(TAG, "onActivitySaveInstanceState: " + activity.componentName.className)
-        }
-
-        override fun onActivityDestroyed(activity: Activity) {
-            logD(TAG, "onDestroyed: " + activity.componentName.className)
         }
     }
 }
