@@ -14,7 +14,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         context = this
-        logD(context.packageName)
+        context.packageName.logD()
     }
 
     override fun baseUrl(): String = BuildConfig.DOMAIN

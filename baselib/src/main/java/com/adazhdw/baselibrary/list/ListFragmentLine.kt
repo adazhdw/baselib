@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.adazhdw.baselibrary.R
 import com.adazhdw.baselibrary.base.BaseFragmentImpl
-import com.adazhdw.baselibrary.ext.isSlideToBottom
+import com.adazhdw.baselibrary.ext.recycler.isSlideToBottom
 import kotlinx.android.synthetic.main.fragment_list_line.*
 
 /**

@@ -1,7 +1,8 @@
 package com.adazhdw.baselibrary.img
 
 import com.adazhdw.baselibrary.base.ForResultActivity
-import com.adazhdw.baselibrary.ext.logE
+import com.adazhdw.baselibrary.ext.loge
+
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -19,7 +20,7 @@ suspend fun ForResultActivity.selectImageCoroutines(
                     continuation.resume(it)
                 }, onError = {
                     onError?.invoke(it)
-                    logE(it)
+                    loge(content = it)
                     continuation.resumeWithException(CancellationException(it))
                 }, onCancel = {
                     onCancel?.invoke()
@@ -27,7 +28,7 @@ suspend fun ForResultActivity.selectImageCoroutines(
             )
         }
     } catch (ex: CancellationException) {
-        logE(ex.message)
+        loge(content = ex.message)
         throw ex
     }
 
@@ -49,6 +50,6 @@ suspend fun ForResultActivity.captureImageCoroutines(
             )
         }
     } catch (ex: CancellationException) {
-        logE(ex.message?:"")
+        loge(content = ex.message?:"")
         throw ex
     }

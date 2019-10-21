@@ -16,30 +16,30 @@ import com.adazhdw.baselibrary.ext.logD
 class KtLifecycleCallback : Application.ActivityLifecycleCallbacks {
     private val TAG by lazy { LibUtil.getApp().packageName }
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        logD(TAG, "onCreated: " + activity.componentName.className)
+        ("onCreated: " + activity.componentName.className).logD(TAG)
     }
 
     override fun onActivityStarted(activity: Activity) {
-        logD(TAG, "onStarted: " + activity.componentName.className)
+        ("onStarted: " + activity.componentName.className).logD(TAG)
     }
 
     override fun onActivityResumed(activity: Activity) {
-        logD(TAG, "onResumed: " + activity.componentName.className)
+        ("onResumed: " + activity.componentName.className).logD(TAG)
     }
 
     override fun onActivityPaused(activity: Activity) {
-        logD(TAG, "onPaused: " + activity.componentName.className)
+        ("onPaused: " + activity.componentName.className).logD(TAG)
     }
 
     override fun onActivityStopped(activity: Activity) {
-        logD(TAG, "onStopped: " + activity.componentName.className)
+        ("onStopped: " + activity.componentName.className).logD(TAG)
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-        logD(TAG, "onActivitySaveInstanceState: " + activity.componentName.className)
+        ("onActivitySaveInstanceState: " + activity.componentName.className).logD(TAG)
     }
 
     override fun onActivityDestroyed(activity: Activity) {
-        logD(TAG, "onDestroyed: " + activity.componentName.className)
+        ("onDestroyed: " + activity.componentName.className).logD(TAG)
     }
 }

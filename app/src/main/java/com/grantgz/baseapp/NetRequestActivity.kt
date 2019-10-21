@@ -46,11 +46,11 @@ class NetRequestActivity : BaseActivityImpl() {
         setActionbarCompact(R.id.toolbar)
 
         //login值输出
-        logD("isLogin-----$isLogin")
+        ("isLogin-----$isLogin").logD()
         isLogin = true
-        logD("isLogin-----$isLogin")
+        ("isLogin-----$isLogin").logD()
         isLogin = false
-        logD("isLogin-----$isLogin")
+        ("isLogin-----$isLogin").logD()
 
         requestBtn.setOnClickListener {
             launch {
@@ -68,11 +68,11 @@ class NetRequestActivity : BaseActivityImpl() {
                 PermissionUtil.requestPermissions(this, permissions,
                     granted = {
                         it.forEach { permission ->
-                            logD(TAG, "onGranted----$permission")
+                            ("onGranted----$permission").logD(TAG)
                         }
                     }, denied = {
                         it.forEach { permission ->
-                            logD(TAG, "onDenied----$permission")
+                            ("onDenied----$permission").logD(TAG)
                         }
                     })
             } else {

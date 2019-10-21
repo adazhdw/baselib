@@ -8,8 +8,9 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Log
-import com.adazhdw.baselibrary.ext.logD
-import com.adazhdw.baselibrary.ext.logE
+import com.adazhdw.baselibrary.ext.loge
+
+
 import com.blankj.utilcode.util.Utils
 import java.io.File
 
@@ -45,7 +46,7 @@ object UriUtil {
                             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
                         }
                         else -> {
-                            logE("$uri parse failed. -> 3")
+                            loge(content = "$uri parse failed. -> 3")
                             return null
                         }
                     }
@@ -57,7 +58,7 @@ object UriUtil {
                     return getFileFromUri(uri, 5)
                 }
                 else -> {
-                    logE("$uri parse failed. -> 6")
+                    loge(content = "$uri parse failed. -> 6")
                     return null
                 }
             }
@@ -95,12 +96,17 @@ object UriUtil {
         return getFileFromUri(uri, null, null, code)
     }
 
-    private fun getFileFromUri(uri: Uri, selection: String?, selectionArgs: Array<String>?, code: Int): File? {
+    private fun getFileFromUri(
+        uri: Uri,
+        selection: String?,
+        selectionArgs: Array<String>?,
+        code: Int
+    ): File? {
         val cursor = Utils.getApp().contentResolver.query(
             uri, arrayOf("_data"), selection, selectionArgs, null
         )
         if (cursor == null) {
-            logE("$uri parse failed(cursor is null). -> $code")
+            loge(content = "$uri parse failed(cursor is null). -> $code")
             return null
         }
         try {
@@ -109,15 +115,15 @@ object UriUtil {
                 if (columnIndex > -1) {
                     File(cursor.getString(columnIndex))
                 } else {
-                    logE("$uri parse failed(columnIndex: $columnIndex is wrong). -> $code")
+                    loge(content = "$uri parse failed(columnIndex: $columnIndex is wrong). -> $code")
                     null
                 }
             } else {
-                logE("$uri parse failed(moveToFirst return false). -> $code")
+                loge(content = "$uri parse failed(moveToFirst return false). -> $code")
                 null
             }
         } catch (e: Exception) {
-            logE("$uri parse failed. -> $code")
+            loge(content = "$uri parse failed. -> $code")
             return null
         } finally {
             cursor.close()

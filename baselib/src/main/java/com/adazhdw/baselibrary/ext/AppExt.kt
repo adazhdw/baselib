@@ -12,6 +12,16 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentActivity
 import java.io.File
 
+
+val Context.versionName: String
+    get() = packageManager.getPackageInfo(packageName, 0).versionName
+
+val Context.versionCode: Long
+    get() = with(packageManager.getPackageInfo(packageName, 0)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) longVersionCode else versionCode.toLong()
+    }
+
+
 /**
  * 获取应用程序下所有Activity
  *
@@ -65,17 +75,13 @@ fun Context.installApk(file: File) {
  */
 fun Context.getApkName(packageId: String): String {
     try {
-        return packageManager.getPackageInfo(packageId, 0).applicationInfo.loadLabel(packageManager).toString()
+        return packageManager.getPackageInfo(packageId, 0).applicationInfo.loadLabel(packageManager)
+            .toString()
     } catch (e: PackageManager.NameNotFoundException) {
         e.printStackTrace()
     }
     return ""
 }
-
-fun Context.getVersionName(): String? {
-    return packageManager.getPackageInfo(packageName, 0).versionName
-}
-
 
 /**
  * check if there has apps that accept your intent
@@ -139,7 +145,7 @@ fun Context.startApkActivity(packageName: String) {
             startActivity(intent)
         }
     } catch (e: PackageManager.NameNotFoundException) {
-        logE(e)
+        e.message?.logE()
     }
 }
 

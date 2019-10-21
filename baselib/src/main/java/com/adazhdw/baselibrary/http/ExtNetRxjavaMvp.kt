@@ -4,6 +4,8 @@ import com.adazhdw.baselibrary.LibUtil
 import com.adazhdw.baselibrary.R
 import com.adazhdw.baselibrary.ext.logD
 import com.adazhdw.baselibrary.ext.logE
+
+
 import com.adazhdw.baselibrary.mvp.IModel
 import com.adazhdw.baselibrary.mvp.IView
 import com.adazhdw.baselibrary.utils.NetworkUtil
@@ -42,18 +44,18 @@ fun <T> Observable<T>.subsC(
         .subscribe({
             onSuccess(it)
             view?.hideLoading()
-            logD(view?.tag(), "onSuccess")
+            "onSuccess".logD(view?.tag())
         }, { ex ->
             onFail?.invoke(ex)
             view?.hideLoading()
             view?.showToast(ex.message)
-            logE(view?.tag(), "onFail---${ex.message}")
+            "onFail---${ex.message}".logE(view?.tag())
         }, {
             view?.hideLoading()
-            logD(view?.tag(), "onComplete")
+            "onComplete".logD(view?.tag())
         })
     model?.addDisposable(disposable)
-    logD(view?.tag(), "addDisposable")
+    "addDisposable".logD(view?.tag())
 }
 
 //Observer
@@ -76,7 +78,7 @@ fun <T> Observable<T>.subsO(
         .subscribe(object : Observer<T> {
             override fun onComplete() {
                 view?.hideLoading()
-                logD(view?.tag(), "onComplete")
+                "onComplete".logD(view?.tag())
             }
 
             override fun onSubscribe(d: Disposable) {
@@ -84,7 +86,7 @@ fun <T> Observable<T>.subsO(
                     view?.showLoading()
                 }
                 model?.addDisposable(d)
-                logD(view?.tag(), "addDisposable")
+                "addDisposable".logD(view?.tag())
                 if (!NetworkUtil.isConnected()) {
                     view?.showToast(LibUtil.getApp().getString(R.string.net_work_unavailable))
                     onComplete()
@@ -93,14 +95,14 @@ fun <T> Observable<T>.subsO(
 
             override fun onNext(t: T) {
                 onSuccess(t)
-                logD(view?.tag(), "onSuccess")
+                "onSuccess".logD(view?.tag())
             }
 
             override fun onError(e: Throwable) {
                 onFail?.invoke(e)
                 view?.hideLoading()
                 view?.showToast(e.message)
-                logE(view?.tag(), "onError---${e.message}")
+                "onError---${e.message}".logE(view?.tag())
             }
 
         })

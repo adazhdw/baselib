@@ -2,7 +2,8 @@ package com.adazhdw.baselibrary.mvvm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.adazhdw.baselibrary.ext.logE
+import com.adazhdw.baselibrary.ext.loge
+
 import com.adazhdw.baselibrary.ext.toast
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -20,8 +21,7 @@ abstract class BaseViewModel<R : BaseRepository> : ViewModel() {
     }
 
     open fun errorFun(throwable: Throwable) {
-        toast(throwable.message ?: "")
-        logE(throwable)
+        loge(content = throwable.message)
     }
 
     private fun launchOnUI(block: suspend () -> Unit, error: suspend (Throwable) -> Unit): Job =

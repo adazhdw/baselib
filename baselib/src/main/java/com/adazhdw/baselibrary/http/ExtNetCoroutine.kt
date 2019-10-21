@@ -1,5 +1,7 @@
 package com.adazhdw.baselibrary.http
 
+
+
 import com.adazhdw.baselibrary.ext.logD
 import com.adazhdw.baselibrary.ext.logE
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -22,7 +24,7 @@ suspend fun <T> Call<T>.await(): T {
         this.enqueue(object : Callback<T> {
             override fun onFailure(call: Call<T>, t: Throwable) {
                 continuation.resumeWithException(t)
-                logE("onError---${t.message}")
+                "onError---${t.message}".logE()
             }
 
             override fun onResponse(call: Call<T>, response: Response<T>) {
@@ -30,7 +32,7 @@ suspend fun <T> Call<T>.await(): T {
                     val body = response.body()
                     if (body != null) continuation.resume(body)
                     else continuation.resumeWithException(RuntimeException("response body is null"))
-                    logD("onSuccess")
+                    ("onSuccess").logD()
                 }else{
                     continuation.resumeWithException(HttpException(call.request().url, response.code(), response.message()))
                 }

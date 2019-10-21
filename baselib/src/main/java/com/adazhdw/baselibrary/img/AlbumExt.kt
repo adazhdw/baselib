@@ -14,6 +14,7 @@ import android.provider.MediaStore.ACTION_IMAGE_CAPTURE
 import androidx.core.content.FileProvider
 import com.adazhdw.baselibrary.base.ForResultActivity
 import com.adazhdw.baselibrary.ext.logD
+
 import com.adazhdw.baselibrary.utils.PermissionUtil
 import com.adazhdw.baselibrary.utils.UriUtil
 import kotlinx.coroutines.launch
@@ -51,7 +52,7 @@ fun ForResultActivity.selectImage(
                     }
                 }
             }
-            logD("ACTION_GET_CONTENT-image/*")
+            ("ACTION_GET_CONTENT-image/*").logD()
         },
         denied = {
             onError?.invoke("Permission Denied")
@@ -92,7 +93,7 @@ fun ForResultActivity.captureImage(
                     }
                 }
             }
-            logD("ACTION_IMAGE_CAPTURE")
+            ("ACTION_IMAGE_CAPTURE").logD()
         },
         denied = {
             onError?.invoke("Permission Denied")

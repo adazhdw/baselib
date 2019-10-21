@@ -5,7 +5,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import com.adazhdw.baselibrary.core.lifecycle.KtLifecycleCallback
-import com.adazhdw.baselibrary.ext.logD
+
 import com.adazhdw.baselibrary.http.RetrofitModel
 import com.blankj.utilcode.util.Utils
 import java.lang.reflect.InvocationTargetException
@@ -13,7 +13,6 @@ import java.lang.reflect.InvocationTargetException
 object LibUtil {
 
     private var currentApplication: Application? = null
-    private val TAG by lazy { LibUtil.getApp().packageName }
     private val mKtLifecycleCallback = KtLifecycleCallback()
 
     fun getApp(): Application {

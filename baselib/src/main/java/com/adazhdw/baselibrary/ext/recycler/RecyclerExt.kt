@@ -1,4 +1,4 @@
-package com.adazhdw.baselibrary.ext
+package com.adazhdw.baselibrary.ext.recycler
 
 import androidx.recyclerview.widget.RecyclerView
 
