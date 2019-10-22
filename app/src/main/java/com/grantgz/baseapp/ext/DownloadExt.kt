@@ -12,11 +12,11 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import com.adazhdw.baselibrary.LibUtil
-import com.adazhdw.baselibrary.ext.installApk
-import com.adazhdw.baselibrary.ext.logD
-import com.adazhdw.baselibrary.utils.MimeUtil.getMimeType
-import com.adazhdw.baselibrary.utils.PermissionUtil
+import com.adazhdw.ktlib.LibUtil
+import com.adazhdw.ktlib.ext.installApk
+import com.adazhdw.ktlib.ext.logD
+import com.adazhdw.ktlib.utils.MimeUtil.getMimeType
+import com.adazhdw.ktlib.utils.PermissionUtil
 import java.io.File
 
 
@@ -152,14 +152,8 @@ private class DownloadReceiver : BroadcastReceiver() {
                 if (downList.isNotEmpty()) {
                     val downloadInfo = context?.getDownloadInfo(downList[0].first)
                     val file = File(downloadInfo?.localPath?.substring(8)?:"")
-                    logD(
-                        TAG,
-                        "------${downloadInfo.toString()}"
-                    )
-                    logD(
-                        TAG,
-                        "------${file.exists()}"
-                    )
+                    "------${downloadInfo.toString()}".logD(TAG)
+                    "------${file.exists()}".logD(TAG)
                     if (file.exists()) context?.installApk(File(downloadInfo?.localPath?:""))
                 }
             }

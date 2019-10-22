@@ -1,16 +1,16 @@
 package com.grantgz.baseapp
 
 import android.Manifest
-import com.adazhdw.baselibrary.base.BaseActivityImpl
-import com.adazhdw.baselibrary.delegate.DelegateExt
-import com.adazhdw.baselibrary.ext.*
-import com.adazhdw.baselibrary.http.await
-import com.adazhdw.baselibrary.img.captureImageCoroutines
-import com.adazhdw.baselibrary.img.selectImageCoroutines
-import com.adazhdw.baselibrary.list.BaseRvAdapter
-import com.adazhdw.baselibrary.list.BaseViewHolder
-import com.adazhdw.baselibrary.list.ListFragmentLine
-import com.adazhdw.baselibrary.utils.PermissionUtil
+import com.adazhdw.ktlib.base.BaseActivityImpl
+import com.adazhdw.ktlib.delegate.DelegateExt
+import com.adazhdw.ktlib.ext.*
+import com.adazhdw.ktlib.http.await
+import com.adazhdw.ktlib.img.captureImageCoroutines
+import com.adazhdw.ktlib.img.selectImageCoroutines
+import com.adazhdw.ktlib.list.BaseRvAdapter
+import com.adazhdw.ktlib.list.BaseViewHolder
+import com.adazhdw.ktlib.list.ListFragmentLine
+import com.adazhdw.ktlib.utils.PermissionUtil
 import com.grantgz.baseapp.ext.downloadFile
 import com.grantgz.baseapp.http.ChapterHistory
 import com.grantgz.baseapp.http.apiService

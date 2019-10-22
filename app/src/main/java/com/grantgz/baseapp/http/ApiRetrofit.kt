@@ -1,6 +1,6 @@
 package com.grantgz.baseapp.http
 
-import com.adazhdw.baselibrary.http.RetrofitFactory
+import com.adazhdw.ktlib.http.RetrofitFactory
 import com.grantgz.baseapp.BuildConfig
 
 class ApiRetrofit : RetrofitFactory<ApiService>(){
