@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.ext
+package com.adazhdw.ktlib.ext.textview
 
 import android.text.Editable
 import android.text.TextWatcher

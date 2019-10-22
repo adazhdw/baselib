@@ -98,12 +98,12 @@ dependencies {
 //发布jcenter    gradlew clean build install bintrayUpload
 ext {
     bintrayRepo = 'android-libraries' // the repository name in Bintray dashboard
-    bintrayName = 'baselib' // the package name of the bintray repository
+    bintrayName = 'ktlib' // the package name of the bintray repository
     libraryName = 'ktlib'// the module name in android studio project
 
     publishedGroupId = 'com.adazhdw' // the id you want to add in "implement" line
     artifact = 'ktlib' // = libraryName  the id you want to add in "implement" line--must be the module name in android project
-    libraryVersion = '0.2.1'
+    libraryVersion = '0.2.0'
 
     libraryDescription = 'Change module name'
     siteUrl = 'https://github.com/adazhdw/KtLibTest'
