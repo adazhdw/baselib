@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.ext
+package com.adazhdw.ktlib.core.lifecycle
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle

@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.webkit.MimeTypeMap
+import java.util.*
 
 
 object MimeUtil {
@@ -14,7 +15,8 @@ object MimeUtil {
             cr.getType(uri)
         } else {
             val fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
-            MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase())
+            MimeTypeMap.getSingleton()
+                .getMimeTypeFromExtension(fileExtension.toLowerCase(Locale.CHINA))
         }
     }
 }

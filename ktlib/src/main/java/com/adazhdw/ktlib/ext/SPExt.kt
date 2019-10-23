@@ -1,71 +1,66 @@
 package com.adazhdw.ktlib.ext
 
+import android.app.Activity
 import android.content.Context
-import com.adazhdw.ktlib.LibUtil
+import android.content.SharedPreferences
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.lang.IllegalArgumentException
-import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KProperty
 
-class Preference<T>(private val spName: String, private val paramName: String, private val default: T) :
-    ReadWriteProperty<Any, T> {
+/**
+ * author: daguozhu
+ * created on: 2019/10/22 19:33
+ * description:
+ */
 
-    private val pref by lazy {
-        LibUtil.getApp().applicationContext
-            .getSharedPreferences(spName, Context.MODE_PRIVATE)
+inline fun SharedPreferences.edit(
+    commit: Boolean = false,
+    action: SharedPreferences.Editor.() -> Unit
+) {
+    val editor = edit()
+    action(editor)
+    if (commit) {
+        editor.commit()
+    } else {
+        editor.apply()
+    }
+}
+
+/**
+ * return the SharePreference instance
+ */
+fun FragmentActivity.sp(spName: String = packageName, mode: Int = Context.MODE_PRIVATE): SharedPreferences =
+    getSharedPreferences(spName, mode)
+
+/**
+ * set a [T] into sp
+ */
+fun <T> FragmentActivity.spPutValue(key: String, value: T, spName: String = packageName) = sp(spName).edit {
+    when (value) {
+        is Long -> putLong(key, value)
+        is Boolean -> putBoolean(key, value)
+        is Int -> putInt(key, value)
+        is String -> putString(key, value)
+        is Float -> putFloat(key, value)
+        else -> putString(key,Gson().toJson(value))
+    }
+}
+/**
+ * get a [T] into sp
+ */
+@Suppress("IMPLICIT_CAST_TO_ANY", "UNCHECKED_CAST")
+fun <T> FragmentActivity.spGetValue(key: String, default: T, spName: String = packageName):T = sp(spName).run {
+    val result = when (default) {
+        is Long -> getLong(key, default)
+        is Boolean -> getBoolean(key, default)
+        is Int -> getInt(key, default)
+        is String -> getString(key, default)
+        is Float -> getFloat(key, default)
+        else -> Gson().fromJson(getString(key,""),object :TypeToken<T>(){}.type)
     }
 
-    override fun getValue(thisRef: Any, property: KProperty<*>): T {
-        return getParam(paramName, default)
-    }
+    return result as T
 
-    override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
-        putParam(paramName, value)
-    }
-
-    private fun putParam(paramName: String, value: T) = with(pref.edit()) {
-        when (value) {
-            is Long -> {
-                putLong(paramName, value)
-            }
-            is Boolean -> {
-                putBoolean(paramName, value)
-            }
-            is Int -> {
-                putInt(paramName, value)
-            }
-            is String -> {
-                putString(paramName, value)
-            }
-            is Float -> {
-                putFloat(paramName, value)
-            }
-            else -> {
-                throw IllegalArgumentException("This type can't be saved into Preferences")
-            }
-        }
-    }.apply()
-
-    @Suppress("UNCHECKED_CAST")
-    private fun <T> getParam(paramName: String, default: T): T = with(pref) {
-        return  when (default) {
-            is Long -> {
-                getLong(paramName, 0L) as T
-            }
-            is Boolean -> {
-                getBoolean(paramName, false)as T
-            }
-            is Int -> {
-                getInt(paramName, 0)as T
-            }
-            is String -> {
-                getString(paramName, "")as T
-            }
-            is Float -> {
-                getFloat(paramName, 0f)as T
-            }
-            else -> {
-                throw IllegalArgumentException("This type can't be saved into Preferences")
-            }
-        }
-    }
 }

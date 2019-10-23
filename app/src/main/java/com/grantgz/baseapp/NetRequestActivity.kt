@@ -2,7 +2,6 @@ package com.grantgz.baseapp
 
 import android.Manifest
 import com.adazhdw.ktlib.base.BaseActivityImpl
-import com.adazhdw.ktlib.delegate.DelegateExt
 import com.adazhdw.ktlib.ext.*
 import com.adazhdw.ktlib.http.await
 import com.adazhdw.ktlib.img.captureImageCoroutines
@@ -32,7 +31,7 @@ class NetRequestActivity : BaseActivityImpl() {
     }
 
     private val downloadUrl = "https://static.usasishu.com/com.uuabc.samakenglish_5.1.12_35.apk"
-    private var isLogin by DelegateExt.preference("isLogin", false)
+    private var isLogin by SPDelegateExt.preference("isLogin", false)
     private val permissions = arrayOf(
         Manifest.permission.CAMERA,
         Manifest.permission.RECORD_AUDIO,
@@ -45,6 +44,7 @@ class NetRequestActivity : BaseActivityImpl() {
         //设置actionbar
         setActionbarCompact(R.id.toolbar)
 
+        spPutValue("","")
         //login值输出
         ("isLogin-----$isLogin").logD()
         isLogin = true

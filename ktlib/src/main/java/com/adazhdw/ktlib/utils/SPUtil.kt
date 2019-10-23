@@ -37,51 +37,34 @@ class SPUtil {
         }.also { mCurrentSP = it }
     }
 
+    fun getSp(name: String?=null): SharedPreferences? {
+        return if (spMap.contains(name ?: SP_NAME)) {
+            spMap[name ?: SP_NAME] ?: error("SharedPreferences init fail")
+        } else {
+            LibUtil.getApp().getSharedPreferences(name ?: SP_NAME, Context.MODE_PRIVATE)
+        }
+    }
 
     fun <T> putParam(key: String, value: T) = with(mCurrentSP.edit()) {
         when (value) {
-            is Int -> {
-                putInt(key, value)
-            }
-            is Boolean -> {
-                putBoolean(key, value)
-            }
-            is String -> {
-                putString(key, value)
-            }
-            is Float -> {
-                putFloat(key, value)
-            }
-            is Long -> {
-                putLong(key, value)
-            }
-            else -> {
-                throw IllegalArgumentException("This type can't be saved into Preferences")
-            }
+            is Int -> putInt(key, value)
+            is Boolean -> putBoolean(key, value)
+            is String -> putString(key, value)
+            is Float -> putFloat(key, value)
+            is Long -> putLong(key, value)
+            else -> throw IllegalArgumentException("This type can't be saved into Preferences")
         }
     }.apply()
 
     @Suppress("UNCHECKED_CAST")
     fun <T> getParam(key: String, delValue: T): T = with(mCurrentSP) {
         return when (delValue) {
-            is Int -> {
-                getInt(key, delValue) as T
-            }
-            is Boolean -> {
-                getBoolean(key, delValue) as T
-            }
-            is String -> {
-                getString(key, delValue) as T
-            }
-            is Float -> {
-                getFloat(key, delValue) as T
-            }
-            is Long -> {
-                getLong(key, delValue) as T
-            }
-            else -> {
-                throw IllegalArgumentException("This type can't be saved into Preferences")
-            }
+            is Int -> getInt(key, delValue) as T
+            is Boolean -> getBoolean(key, delValue) as T
+            is String -> getString(key, delValue) as T
+            is Float -> getFloat(key, delValue) as T
+            is Long -> getLong(key, delValue) as T
+            else -> throw IllegalArgumentException("This type can't be saved into Preferences")
         }
     }
 

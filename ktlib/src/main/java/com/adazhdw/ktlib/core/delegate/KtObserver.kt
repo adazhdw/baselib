@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.delegate
+package com.adazhdw.ktlib.core.delegate
 
 import kotlin.properties.ObservableProperty
 import kotlin.properties.ReadWriteProperty

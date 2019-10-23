@@ -1,7 +1,7 @@
 package com.grantgz.baseapp
 
 import com.adazhdw.ktlib.Application
-import com.adazhdw.ktlib.delegate.DelegateExt
+import com.adazhdw.ktlib.core.delegate.DelegateExt
 import com.adazhdw.ktlib.ext.logD
 
 class App : Application() {

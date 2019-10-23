@@ -1,6 +1,5 @@
-package com.adazhdw.ktlib.delegate
+package com.adazhdw.ktlib.core.delegate
 
-import com.adazhdw.ktlib.ext.Preference
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -12,8 +11,6 @@ object DelegateExt {
     fun <T> notNullSingleValue(): ReadWriteProperty<Any?, T> =
         NotNullSingleValueVar()
 
-    fun <T> preference(paramName: String, default: T, spName: String = "base_sp_name"): Preference<T> =
-        Preference(spName, paramName, default)
 }
 
 class NotNullSingleValueVar<T : Any?> : ReadWriteProperty<Any?, T> {

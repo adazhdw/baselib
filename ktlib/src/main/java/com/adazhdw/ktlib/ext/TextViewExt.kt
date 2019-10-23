@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.ext.textview
+package com.adazhdw.ktlib.ext
 
 import android.util.TypedValue
 import android.widget.TextView
