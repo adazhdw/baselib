@@ -6,14 +6,7 @@ import android.view.View
  * View 设置大小缩放
  * View需要事先设置scaleX和scaleY来适应即将产生的缩放变化
  */
-fun View.viewSizeAnim(animDuration: Long = 300, scaleTo: Float = 1.5F) {
-    /*val animScaleX = ObjectAnimator.ofFloat(this, "scaleX", scale, scaleTo)
-    val animScaleY = ObjectAnimator.ofFloat(this, "scaleY", scale, scaleTo)
-    AnimatorSet().apply {
-        play(animScaleX).with(animScaleY)
-        duration = animDuration
-        start()
-    }*/
+fun View.sizeAnim(animDuration: Long = 300, scaleTo: Float = 1.5F) {
     this.apply {
         animate()
             .apply { cancel() }

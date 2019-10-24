@@ -3,13 +3,18 @@ package com.adazhdw.ktlib.list
 import android.os.Handler
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.adazhdw.ktlib.R
 import com.adazhdw.ktlib.base.BaseFragmentImpl
+import com.adazhdw.ktlib.ext.view.invisible
+import com.adazhdw.ktlib.ext.view.layoutParamsWrap
 import com.adazhdw.ktlib.ext.recycler.isSlideToBottom
+import com.adazhdw.ktlib.ext.view.isVisible
+import com.adazhdw.ktlib.ext.view.visible
 import com.blankj.utilcode.util.SizeUtils
 import kotlinx.android.synthetic.main.fragment_list_line.*
 
@@ -18,22 +23,18 @@ import kotlinx.android.synthetic.main.fragment_list_line.*
  *
  * ViewModel mode isn't suitable for the current Loading data mode of the ListFragment
  */
-abstract class ListFragmentLine<M, VH : RecyclerView.ViewHolder, A : BaseRvAdapter<M>> :
+abstract class ListFragmentLine<M, A : BaseRvAdapter<M>> :
     BaseFragmentImpl(),
     SwipeRefreshLayout.OnRefreshListener {
     private val mListAdapter by lazy { onAdapter() }
-    private val mEmptyView by lazy { onEmptyView() }
+    private val mEmptyView: View by lazy { onEmptyView() }
+    private var currPage = 0
 
     protected val mHandler = Handler()
-
     protected val listSize: Int
         get() = mListAdapter.mData.size
-
     protected val list: List<M>
         get() = mListAdapter.mData
-
-    private var currPage = 0
-    private var lastPullTime = 0
 
     override val layoutId: Int
         get() = R.layout.fragment_list_line
@@ -56,6 +57,12 @@ abstract class ListFragmentLine<M, VH : RecyclerView.ViewHolder, A : BaseRvAdapt
         })
         swipe.setOnRefreshListener(this)
 
+        initEmptyView()
+    }
+
+    private fun initEmptyView() {
+        rooContentFl.addView(mEmptyView, rooContentFl.layoutParamsWrap())
+        mEmptyView.invisible()
     }
 
     override fun requestStart() {
@@ -166,8 +173,19 @@ abstract class ListFragmentLine<M, VH : RecyclerView.ViewHolder, A : BaseRvAdapt
 
             override fun onSuccessLoad(list: List<M>) {
                 if (list.isNotEmpty()) {
+                    if (mEmptyView.isVisible)
+                        mEmptyView.invisible()
+                    if (lineRecyclerView?.isInvisible == true)
+                        lineRecyclerView?.visible()
                     mListAdapter.mData = list as MutableList<M>
                 } else {
+                    if (mListAdapter.mData.isEmpty()) {
+                        mEmptyView.visible()
+                        lineRecyclerView?.invisible()
+                    } else {
+                        mEmptyView.invisible()
+                        lineRecyclerView.visible()
+                    }
                     Toast.makeText(context, noDataTip(), Toast.LENGTH_SHORT).show()
                 }
             }

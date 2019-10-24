@@ -6,7 +6,7 @@ dependencies {
 
     //BaseLibrary
 //    implementation project(path: ':ktlib')
-    implementation 'com.adazhdw:ktlib:0.2.2'
+    implementation 'com.adazhdw:ktlib:0.2.3'
 
     //Base
     implementation 'androidx.appcompat:appcompat:1.1.0'

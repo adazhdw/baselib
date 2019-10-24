@@ -1,7 +1,8 @@
-package com.adazhdw.ktlib.ext
+package com.adazhdw.ktlib.ext.view
 
 import android.os.Build
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.annotation.RequiresApi
 
@@ -11,38 +12,40 @@ import androidx.annotation.RequiresApi
  * description:
  */
 
+
 /**
  * Set visibility Visible
  */
-fun View.visible() {
+inline fun View.visible() {
     visibility = View.VISIBLE
 }
 
 /**
  * Set visibility invisible
  */
-fun View.invisible() {
+inline fun View.invisible() {
     visibility = View.INVISIBLE
 }
 
 /**
  * Set visibility gone
  */
-fun View.gone() {
+inline fun View.gone() {
     visibility = View.GONE
 }
 
-var View.isVisible
+inline var View.isVisible
     get() = visibility == View.VISIBLE
     set(value) = if (value) visible() else gone()
 
-var View.isInvisible
+inline var View.isInvisible
     get() = visibility == View.INVISIBLE
     set(value) = if (value) invisible() else visible()
 
-var View.isGone
+inline var View.isGone
     get() = visibility == View.GONE
     set(value) = if (value) gone() else visible()
+
 
 /**
  * Causes the Runnable which contains action() to be added to the message queue, to be run
@@ -73,5 +76,24 @@ inline fun View.afterMeasure(crossinline callback: View.() -> Unit) {
             }
         }
     })
+}
+
+/**
+ * Executes [block] with the View's layoutParams and reassigns the layoutParams with the
+ * updated version.
+ **/
+inline fun View.updateLayoutParams(block: ViewGroup.LayoutParams.() -> Unit) {
+    updateLayoutParams<ViewGroup.LayoutParams>(block)
+}
+
+/**
+ * Executes [block] with a typed version of the View's layoutParams and reassigns the
+ * layoutParams with the updated version.
+ **/
+@JvmName("updateLayoutParamsTyped")
+inline fun <reified T : ViewGroup.LayoutParams> View.updateLayoutParams(block: T.() -> Unit) {
+    val params = layoutParams as T
+    block(params)
+    layoutParams = params
 }
 

@@ -1,8 +1,11 @@
+@file:Suppress("NOTHING_TO_INLINE","unused")
+
 package com.adazhdw.ktlib.ext
 
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.text.TextUtils
 import java.util.regex.Pattern
 
 /**
@@ -66,3 +69,10 @@ fun String.startWidth(prefix: String, ignoreCase: Boolean = true): Boolean {
     return startsWith(prefix, ignoreCase)
 }
 
+
+/**
+ * Html-encode the string.
+ *
+ * @see TextUtils.htmlEncode
+ */
+inline fun String.htmlEncode(): String = TextUtils.htmlEncode(this)

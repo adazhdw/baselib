@@ -99,7 +99,7 @@ class NetRequestActivity : BaseActivityImpl() {
             }
         }
 
-        replaceFragment(WxChaptersFragment(),R.id.chaptersFl)
+        addFragment(WxChaptersFragment(),R.id.chaptersFl)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -108,7 +108,7 @@ class NetRequestActivity : BaseActivityImpl() {
     }
 }
 
-class WxChaptersFragment : ListFragmentLine<ChapterHistory, BaseViewHolder, ChaptersAdapter>() {
+class WxChaptersFragment : ListFragmentLine<ChapterHistory, ChaptersAdapter>() {
     override fun onEmptyView(): View {
         return TextView(context).apply {
             text = "emptyText"
@@ -119,7 +119,7 @@ class WxChaptersFragment : ListFragmentLine<ChapterHistory, BaseViewHolder, Chap
         launch {
             val data = apiService.getWxArticleHistory2(428, page).await()
             callback.onResult()
-            callback.onSuccessLoad(data.data?.datas ?: listOf())
+            callback.onSuccessLoad(/*data.data?.datas ?: */listOf())
         }
     }
 

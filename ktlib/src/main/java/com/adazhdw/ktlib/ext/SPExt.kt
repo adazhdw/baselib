@@ -1,13 +1,10 @@
 package com.adazhdw.ktlib.ext
 
-import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.lang.IllegalArgumentException
 
 /**
  * author: daguozhu
