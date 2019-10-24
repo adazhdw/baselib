@@ -1,6 +1,9 @@
 package com.grantgz.baseapp
 
 import android.Manifest
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.TextView
 import com.adazhdw.ktlib.base.BaseActivityImpl
 import com.adazhdw.ktlib.ext.*
 import com.adazhdw.ktlib.http.await
@@ -106,6 +109,11 @@ class NetRequestActivity : BaseActivityImpl() {
 }
 
 class WxChaptersFragment : ListFragmentLine<ChapterHistory, BaseViewHolder, ChaptersAdapter>() {
+    override fun onEmptyView(): View {
+        return TextView(context).apply {
+            text = "emptyText"
+        }
+    }
 
     override fun onNextPage(page: Int, callback: LoadCallback) {
         launch {

@@ -1,10 +1,7 @@
 package com.adazhdw.ktlib.list
 
-import android.content.Context
 import android.os.Handler
-import android.os.Looper
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +10,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.adazhdw.ktlib.R
 import com.adazhdw.ktlib.base.BaseFragmentImpl
 import com.adazhdw.ktlib.ext.recycler.isSlideToBottom
+import com.blankj.utilcode.util.SizeUtils
 import kotlinx.android.synthetic.main.fragment_list_line.*
 
 /**
@@ -20,10 +18,13 @@ import kotlinx.android.synthetic.main.fragment_list_line.*
  *
  * ViewModel mode isn't suitable for the current Loading data mode of the ListFragment
  */
-abstract class ListFragmentLine<M, VH : RecyclerView.ViewHolder, A : BaseRvAdapter<M>> : BaseFragmentImpl(),
+abstract class ListFragmentLine<M, VH : RecyclerView.ViewHolder, A : BaseRvAdapter<M>> :
+    BaseFragmentImpl(),
     SwipeRefreshLayout.OnRefreshListener {
     private val mListAdapter by lazy { onAdapter() }
-    protected val mHandler = Handler(Looper.getMainLooper())
+    private val mEmptyView by lazy { onEmptyView() }
+
+    protected val mHandler = Handler()
 
     protected val listSize: Int
         get() = mListAdapter.mData.size
@@ -41,6 +42,7 @@ abstract class ListFragmentLine<M, VH : RecyclerView.ViewHolder, A : BaseRvAdapt
         onListHeader(swipe)
         lineRecyclerView.itemAnimator = onItemAnimator()
         lineRecyclerView.layoutManager = onLayoutManager()
+        lineRecyclerView.addItemDecoration(onItemDecoration())
         lineRecyclerView.adapter = mListAdapter.apply { mContext = view.context }
         lineRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -52,9 +54,7 @@ abstract class ListFragmentLine<M, VH : RecyclerView.ViewHolder, A : BaseRvAdapt
                 }
             }
         })
-
         swipe.setOnRefreshListener(this)
-        customizeView(context, view.findViewById(R.id.rooContentFl))
 
     }
 
@@ -62,6 +62,9 @@ abstract class ListFragmentLine<M, VH : RecyclerView.ViewHolder, A : BaseRvAdapt
         refresh()
     }
 
+    /**
+     * 刷新页面
+     */
     fun refresh() {
         if (swipe != null) {
             swipe.isRefreshing = true
@@ -69,52 +72,65 @@ abstract class ListFragmentLine<M, VH : RecyclerView.ViewHolder, A : BaseRvAdapt
         }
     }
 
-    /**
-     * The return value is not too small
-     */
-    protected fun pageSize(): Int {
-        return 10
-    }
-
-    protected fun pageStartAt(): Int {
-        return 1
-    }
-
-    protected fun customizeView(context: Context?, rooContentFl: ViewGroup) {}
-
-    protected open fun onLayoutManager(): LinearLayoutManager {
-        return LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-    }
-
-    protected fun addItemDecoration(decor: RecyclerView.ItemDecoration) {
-        if (lineRecyclerView != null) {
-            lineRecyclerView.addItemDecoration(decor)
-        }
-    }
-
-    protected fun onItemAnimator(): RecyclerView.ItemAnimator {
-        return DefaultItemAnimator()
-    }
-
-    fun onListHeader(mHeader: SwipeRefreshLayout) {
-
-    }
-
-    protected fun showToast(msg: String) {
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-    }
-
-    protected abstract fun onAdapter(): A
-
-    protected abstract fun onNextPage(page: Int, callback: LoadCallback)
 
     protected fun getListItem(position: Int): M {
         return mListAdapter.mData[position]
     }
 
+    /**
+     * none data tip text
+     */
     protected fun noDataTip(): String {
         return getString(R.string.no_more_data_text)
     }
+
+    /**
+     * SwipeRefreshLayout style define
+     */
+    protected open fun onListHeader(mHeader: SwipeRefreshLayout) {
+
+    }
+
+    /**
+     * network request pageSize
+     */
+    protected open fun pageSize(): Int {
+        return 10
+    }
+
+    /**
+     * network request start at [pageStartAt]
+     */
+    protected open fun pageStartAt(): Int {
+        return 1
+    }
+
+    protected open fun onLayoutManager(): LinearLayoutManager {
+        return LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+    }
+
+    protected open fun onItemDecoration(): RecyclerView.ItemDecoration {
+        return BottomItemDecoration(SizeUtils.dp2px(10F))
+    }
+
+    protected open fun onItemAnimator(): RecyclerView.ItemAnimator {
+        return DefaultItemAnimator()
+    }
+
+    /**
+     * return recyclerView adapter
+     */
+    protected abstract fun onAdapter(): A
+
+    /**
+     * return list empty view
+     */
+    protected abstract fun onEmptyView(): View
+
+    /**
+     * network request
+     */
+    protected abstract fun onNextPage(page: Int, callback: LoadCallback)
 
     override fun onRefresh() {
         mListAdapter.isRefresh = true
@@ -136,29 +152,26 @@ abstract class ListFragmentLine<M, VH : RecyclerView.ViewHolder, A : BaseRvAdapt
             mListAdapter.isRefresh = true
         }
 
-        mHandler.postDelayed({
-            onNextPage(currPage, object : LoadCallback() {
-                override fun onResult() {
-                    if (refresh) {
-                        mListAdapter.clearData()
-                    }
-                    mListAdapter.isLoading = false
-                    mListAdapter.isRefresh = false
-                    swipe?.isEnabled = true
-                    swipe?.isRefreshing = false
-                    mListAdapter.showLoading()
+        onNextPage(currPage, object : LoadCallback() {
+            override fun onResult() {
+                if (refresh) {
+                    mListAdapter.clearData()
                 }
+                mListAdapter.isLoading = false
+                mListAdapter.isRefresh = false
+                swipe?.isEnabled = true
+                swipe?.isRefreshing = false
+                mListAdapter.showLoading()
+            }
 
-                override fun onSuccessLoad(list: List<M>) {
-                    if (list.isNotEmpty()) {
-                        mListAdapter.mData = list as MutableList<M>
-                    } else {
-                        Toast.makeText(context, noDataTip(), Toast.LENGTH_SHORT).show()
-                    }
+            override fun onSuccessLoad(list: List<M>) {
+                if (list.isNotEmpty()) {
+                    mListAdapter.mData = list as MutableList<M>
+                } else {
+                    Toast.makeText(context, noDataTip(), Toast.LENGTH_SHORT).show()
                 }
-            })
-        }, 1000)
-
+            }
+        })
     }
 
     abstract inner class LoadCallback {
