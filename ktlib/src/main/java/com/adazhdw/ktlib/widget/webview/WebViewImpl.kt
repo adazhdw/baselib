@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.widget
+package com.adazhdw.ktlib.widget.webview
 
 import android.content.Context
 import android.os.Build
@@ -8,6 +8,10 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.OnLifecycleEvent
 import com.adazhdw.ktlib.ext.startWidth
 
 /**
@@ -100,6 +104,29 @@ open class WebViewImpl : WebView {
                 }
             }
 
+        })
+    }
+
+    /**
+     * set LifeCycleOwner
+     */
+    fun setLifeCycleOwner(lifecycleOwner: LifecycleOwner){
+        lifecycleOwner.lifecycle.addObserver(object :LifecycleObserver{
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+            fun onPause(){
+                this@WebViewImpl.onPause()
+            }
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+            fun onResume(){
+                this@WebViewImpl.onResume()
+            }
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+            fun onDestroy(){
+                this@WebViewImpl.destroy()
+            }
         })
     }
 

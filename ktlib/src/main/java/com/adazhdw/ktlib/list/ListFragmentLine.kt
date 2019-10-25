@@ -23,8 +23,7 @@ import kotlinx.android.synthetic.main.fragment_list_line.*
  *
  * ViewModel mode isn't suitable for the current Loading data mode of the ListFragment
  */
-abstract class ListFragmentLine<M, A : BaseRvAdapter<M>> :
-    BaseFragmentImpl(),
+abstract class ListFragmentLine<M, A : BaseRvAdapter<M>> : BaseFragmentImpl(),
     SwipeRefreshLayout.OnRefreshListener {
     private val mListAdapter by lazy { onAdapter() }
     private val mEmptyView: View by lazy { onEmptyView() }
@@ -39,6 +38,8 @@ abstract class ListFragmentLine<M, A : BaseRvAdapter<M>> :
     override val layoutId: Int
         get() = R.layout.fragment_list_line
 
+    protected abstract val mLoadMoreEnable: Boolean
+
     override fun initView(view: View) {
         onListHeader(swipe)
         lineRecyclerView.itemAnimator = onItemAnimator()
@@ -49,9 +50,10 @@ abstract class ListFragmentLine<M, A : BaseRvAdapter<M>> :
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (recyclerView.isSlideToBottom()) {
-                    mHandler.post {
-                        nextPage()
-                    }
+                    if (mLoadMoreEnable)
+                        mHandler.post {
+                            nextPage()
+                        }
                 }
             }
         })

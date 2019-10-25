@@ -1,7 +1,8 @@
-package com.adazhdw.ktlib.widget
+package com.adazhdw.ktlib.widget.webview
 
 import android.content.Context
 import android.util.AttributeSet
+import com.adazhdw.ktlib.widget.webview.WebViewImpl
 
 /**
  * 解决业务白屏问题

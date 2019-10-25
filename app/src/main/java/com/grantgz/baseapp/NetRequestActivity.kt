@@ -47,7 +47,7 @@ class NetRequestActivity : BaseActivityImpl() {
         //设置actionbar
         setActionbarCompact(R.id.toolbar)
 
-        spPutValue("","")
+        spPutValue("", "")
         //login值输出
         ("isLogin-----$isLogin").logD()
         isLogin = true
@@ -99,7 +99,7 @@ class NetRequestActivity : BaseActivityImpl() {
             }
         }
 
-        addFragment(WxChaptersFragment(),R.id.chaptersFl)
+        addFragment(WxChaptersFragment(), R.id.chaptersFl)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -109,6 +109,9 @@ class NetRequestActivity : BaseActivityImpl() {
 }
 
 class WxChaptersFragment : ListFragmentLine<ChapterHistory, ChaptersAdapter>() {
+    override val mLoadMoreEnable: Boolean
+        get() = true
+
     override fun onEmptyView(): View {
         return TextView(context).apply {
             text = "emptyText"
