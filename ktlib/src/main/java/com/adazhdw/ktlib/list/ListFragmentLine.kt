@@ -114,7 +114,7 @@ abstract class ListFragmentLine<M, A : BaseRvAdapter<M>> : BaseFragmentImpl(),
         return 1
     }
 
-    protected open fun onLayoutManager(): LinearLayoutManager {
+    private fun onLayoutManager(): LinearLayoutManager {
         return LinearLayoutManager(context, RecyclerView.VERTICAL, false)
     }
 

@@ -54,11 +54,11 @@ fun Context.goHome() {
 /**
  * 安装apk
  */
-fun Context.installApk(file: File) {
+private fun Context.installApk(file: File) {
     val uri: Uri = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
         Uri.fromFile(file)
     } else {
-        FileProvider.getUriForFile(this, "com.grantgz.baseapp.fileprovider", file)
+        FileProvider.getUriForFile(this, "packageName.fileprovider", file)
     }
     startActivity(Intent().apply {
         action = "android.intent.action.VIEW"
@@ -85,7 +85,6 @@ fun Context.getApkName(packageId: String): String {
 
 /**
  * check if there has apps that accept your intent
- * @param context
  * @param action
  * @return
  */

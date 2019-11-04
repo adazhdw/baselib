@@ -15,10 +15,13 @@ suspend fun ForResultActivity.selectImageCoroutines(
 ): DocumentModel =
     try {
         suspendCancellableCoroutine { continuation ->
-            selectImage(
+            selectImage2(
                 onResult = {
                     continuation.resume(it)
-                }, onError = {
+                },
+                onDenied = {
+
+                },onError = {
                     onError?.invoke(it)
                     loge(content = it)
                     continuation.resumeWithException(CancellationException(it))

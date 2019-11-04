@@ -1,7 +1,6 @@
 package com.grantgz.baseapp
 
 import android.Manifest
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import com.adazhdw.ktlib.base.BaseActivityImpl
@@ -13,7 +12,6 @@ import com.adazhdw.ktlib.list.BaseRvAdapter
 import com.adazhdw.ktlib.list.BaseViewHolder
 import com.adazhdw.ktlib.list.ListFragmentLine
 import com.adazhdw.ktlib.utils.PermissionUtil
-import com.grantgz.baseapp.ext.downloadFile
 import com.grantgz.baseapp.http.ChapterHistory
 import com.grantgz.baseapp.http.apiService
 import kotlinx.android.synthetic.main.net_chapter_item.view.*
@@ -81,10 +79,6 @@ class NetRequestActivity : BaseActivityImpl() {
             } else {
                 toast("权限已授予")
             }
-        }
-
-        downloadBtn.setOnClickListener {
-            downloadFile(downloadUrl)
         }
         selectImgBtn.setOnClickListener {
             launch {
