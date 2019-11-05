@@ -14,6 +14,9 @@ interface ApiService {
     @GET("/wxarticle/chapters/json")
     fun getWxArticleChapters2(): Call<ListResponse<WxArticleChapter>>
 
+    @GET("/wxarticle/chapters/json")
+    suspend fun getWxArticleChapters3(): ListResponse<WxArticleChapter>
+
     @GET("/wxarticle/list/{articleId}/{page}/json")
     fun getWxArticleHistory(@Path("articleId") articleId: Int, @Path("page") page: Int = 1): Observable<BaseResponse<HistoryData>>
 

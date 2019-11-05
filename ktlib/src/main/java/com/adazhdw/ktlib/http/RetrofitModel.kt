@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit
 
 val retrofitModel by lazy { RetrofitModel.retrofitModel }
 
-fun <T> apiService(service: Class<T>): T {
-    return retrofitModel.mRetrofit.create(service)
+inline fun <reified T> apiService(): T {
+    return retrofitModel.mRetrofit.create(T::class.java)
 }
 
 /**
@@ -32,7 +32,13 @@ class RetrofitModel {
         mRetrofit = Retrofit.Builder()
             .baseUrl(mBaseUrl)
             .client(getClient())
-            .addConverterFactory(MoshiConverterFactory.create(Moshi.Builder().add(KotlinJsonAdapterFactory()).build()))
+            .addConverterFactory(
+                MoshiConverterFactory.create(
+                    Moshi.Builder().add(
+                        KotlinJsonAdapterFactory()
+                    ).build()
+                )
+            )
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
@@ -40,7 +46,8 @@ class RetrofitModel {
 
     private fun getLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor(OkHttpLogger()).apply {
-            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.BASIC
+            level =
+                if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.BASIC
         }
     }
 
