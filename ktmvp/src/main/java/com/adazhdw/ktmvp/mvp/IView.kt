@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.mvp
+package com.adazhdw.ktmvp.mvp
 
 interface IView {
 

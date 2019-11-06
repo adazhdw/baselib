@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.http
+package com.adazhdw.ktmvp.http
 
 import com.adazhdw.ktlib.LibUtil
 import com.adazhdw.ktlib.R
@@ -6,8 +6,8 @@ import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.ext.logE
 
 
-import com.adazhdw.ktlib.mvp.IModel
-import com.adazhdw.ktlib.mvp.IView
+import com.adazhdw.ktmvp.mvp.IModel
+import com.adazhdw.ktmvp.mvp.IView
 import com.adazhdw.ktlib.utils.NetworkUtil
 import io.reactivex.Observable
 import io.reactivex.Observer

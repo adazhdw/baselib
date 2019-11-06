@@ -1,1 +1,1 @@
-include ':ktlib', ':app'
+include ':ktlib', ':app', ':ktmvp'

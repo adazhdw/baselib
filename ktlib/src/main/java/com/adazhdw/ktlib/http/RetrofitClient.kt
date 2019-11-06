@@ -12,18 +12,25 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 
-val retrofitModel by lazy { RetrofitModel.retrofitModel }
-
-inline fun <reified T> apiService(): T {
-    return retrofitModel.mRetrofit.create(T::class.java)
-}
-
 /**
  * Retrofit单例类
  */
-class RetrofitModel {
+object RetrofitClient {
     //声明Retrofit对象
-    val mRetrofit: Retrofit
+    private val mRetrofit: Retrofit
+    private var mBaseUrl = ""
+
+    inline fun <reified T> create(): T {
+        return create(T::class.java)
+    }
+
+    fun <T> create(clazz: Class<T>): T {
+        return mRetrofit.create(clazz)
+    }
+
+    fun initBaseUrl(baseUrl: String) {
+        mBaseUrl = baseUrl
+    }
 
     init {
         if (mBaseUrl.isBlank()) {
@@ -58,21 +65,5 @@ class RetrofitModel {
             .writeTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
             .addNetworkInterceptor(getLoggingInterceptor())
             .build()
-    }
-
-    companion object {
-        private var mBaseUrl = ""
-        val retrofitModel: RetrofitModel by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { RetrofitModel() }
-        /*//由于该对象会被频繁调用，采用单例模式，下面是一种线程安全模式的单例写法
-        @Volatile
-        private var INSTANCE: RetrofitModel? = null
-
-        fun getINSTANCE(): RetrofitModel =
-            INSTANCE ?: synchronized(RetrofitModel::class.java) {
-                INSTANCE ?: RetrofitModel().also { INSTANCE = it }
-            }*/
-        fun initBaseUrl(baseUrl: String) {
-            mBaseUrl = baseUrl
-        }
     }
 }

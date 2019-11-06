@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.mvp
+package com.adazhdw.ktmvp.mvp
 
 import io.reactivex.disposables.Disposable
 

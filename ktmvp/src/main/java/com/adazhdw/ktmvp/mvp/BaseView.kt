@@ -1,6 +1,6 @@
-package com.adazhdw.ktlib.mvp
+package com.adazhdw.ktmvp.mvp
 
-abstract class BaseView :IView{
+abstract class BaseView : IView {
     val TAG:String = this.javaClass.simpleName
 
     override fun tag(): String {

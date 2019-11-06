@@ -1,7 +1,7 @@
 package com.grantgz.baseapp.http
 
 import com.adazhdw.ktlib.http.RetrofitFactory
-import com.adazhdw.ktlib.http.apiService
+import com.adazhdw.ktlib.http.RetrofitClient
 import com.grantgz.baseapp.BuildConfig
 
 class ApiRetrofit : RetrofitFactory<ApiService>(){
@@ -16,4 +16,4 @@ class ApiRetrofit : RetrofitFactory<ApiService>(){
 
 val apiService by lazy { ApiRetrofit().apiService }
 
-val retrofitModel by lazy { apiService<ApiService>() }
+val apiService2 by lazy { RetrofitClient.create<ApiService>() }

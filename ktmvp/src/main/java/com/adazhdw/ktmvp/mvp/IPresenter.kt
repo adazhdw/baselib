@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.mvp
+package com.adazhdw.ktmvp.mvp
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.OnLifecycleEvent

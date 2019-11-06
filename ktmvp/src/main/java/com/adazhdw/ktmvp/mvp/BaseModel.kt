@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.mvp
+package com.adazhdw.ktmvp.mvp
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
@@ -7,7 +7,7 @@ import androidx.lifecycle.OnLifecycleEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class BaseModel :IModel,LifecycleObserver {
+abstract class BaseModel : IModel,LifecycleObserver {
     val TAG:String = this.javaClass.simpleName
 
     override fun tag(): String {

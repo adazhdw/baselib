@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.mvp
+package com.adazhdw.ktmvp.mvp
 
 import com.adazhdw.ktlib.base.BaseActivity
 import com.adazhdw.ktlib.ext.toast

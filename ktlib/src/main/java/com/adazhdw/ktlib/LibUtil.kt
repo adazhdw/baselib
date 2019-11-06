@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Application
 import com.adazhdw.ktlib.core.lifecycle.KtLifecycleCallback
 
-import com.adazhdw.ktlib.http.RetrofitModel
+import com.adazhdw.ktlib.http.RetrofitClient
 import com.blankj.utilcode.util.Utils
 import java.lang.reflect.InvocationTargetException
 
@@ -60,7 +60,7 @@ object LibUtil {
  */
 fun Application.initLibrary(baseUrl: String, debug: Boolean = false) {
     Utils.init(this)
-    RetrofitModel.initBaseUrl(baseUrl)
+    RetrofitClient.initBaseUrl(baseUrl)
     LibUtil.init(this)
     isDebug = debug
 }
