@@ -60,9 +60,10 @@ object LibUtil {
  */
 fun Application.initLibrary(baseUrl: String, debug: Boolean = false) {
     Utils.init(this)
-    RetrofitClient.initBaseUrl(baseUrl)
     LibUtil.init(this)
+    mBaseUrl = baseUrl
     isDebug = debug
 }
 
 internal var isDebug = false
+internal var mBaseUrl = ""

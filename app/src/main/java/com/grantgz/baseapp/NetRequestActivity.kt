@@ -114,9 +114,9 @@ class WxChaptersFragment : ListFragmentLine<ChapterHistory, ChaptersAdapter>() {
 
     override fun onNextPage(page: Int, callback: LoadCallback) {
         launch {
-            val data = apiService.getWxArticleHistory2(428, page).await()
+            val data = apiService.getWxArticleHistory2(408, page).await()
             callback.onResult()
-            callback.onSuccessLoad(/*data.data?.datas ?: */listOf())
+            callback.onSuccessLoad(data.data?.datas ?: listOf())
         }
     }
 

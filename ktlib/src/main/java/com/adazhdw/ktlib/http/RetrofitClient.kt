@@ -1,6 +1,7 @@
 package com.adazhdw.ktlib.http
 
 import com.adazhdw.ktlib.BuildConfig
+import com.adazhdw.ktlib.mBaseUrl
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -18,7 +19,6 @@ import java.util.concurrent.TimeUnit
 object RetrofitClient {
     //声明Retrofit对象
     private val mRetrofit: Retrofit
-    private var mBaseUrl = ""
 
     inline fun <reified T> create(): T {
         return create(T::class.java)
@@ -26,10 +26,6 @@ object RetrofitClient {
 
     fun <T> create(clazz: Class<T>): T {
         return mRetrofit.create(clazz)
-    }
-
-    fun initBaseUrl(baseUrl: String) {
-        mBaseUrl = baseUrl
     }
 
     init {
