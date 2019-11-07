@@ -1,13 +1,14 @@
 package com.adazhdw.ktlib.http
 
 
+import com.adazhdw.ktlib.LibUtil
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.ext.logE
 import com.adazhdw.ktlib.ext.startWidth
 import okhttp3.logging.HttpLoggingInterceptor
 
 class OkHttpLogger : HttpLoggingInterceptor.Logger {
-    private val TAG = "OkHttpLogger------"
+    private val TAG = "${LibUtil.getApp().packageName}---OkHttpLogger---"
     private val msgBuilder = StringBuilder()
     override fun log(message: String) {
         formatMessage(message)
@@ -22,30 +23,19 @@ class OkHttpLogger : HttpLoggingInterceptor.Logger {
             message.startWidth("--> POST") -> {
                 msgBuilder.clear()
                 msgBuilder.append(
-                    "\n \nRequest Type-POST, URL: ${message.replace(
-                        "--> POST",
-                        ""
-                    )}\n"
+                    "\n \nRequest Type-POST, URL: ${message.replace("--> POST", "")}\n"
                 )
             }
             message.startWidth("<-- 200 OK") -> msgBuilder.append(
-                "Request Success, URL: ${message.replace(
-                    "<-- 200 OK",
-                    ""
-                )}\n"
+                "Request Success, URL: ${message.replace("<-- 200 OK", "")}\n"
             )
             message.startWidth("Date:") -> msgBuilder.append("Request Return Time: $message\n")
             message.startWidth("{") -> msgBuilder.append(
-                "Response Data: \n" + JsonUtil.formatJson(
-                    message
-                ) + "\n"
+                "Response Data: \n" + JsonUtil.formatJson(message) + "\n"
             )
             message.startWidth("<-- END HTTP") -> {
                 msgBuilder.append(
-                    "Response End---Body Size:${message.replace(
-                        "<-- END HTTP",
-                        ""
-                    )}\n"
+                    "Response End---Body Size:${message.replace("<-- END HTTP", "")}\n"
                 )
                 msgBuilder.toString().logD(TAG)
             }

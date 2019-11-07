@@ -18,7 +18,6 @@ suspend fun <T> Call<T>.await(): T {
         continuation.invokeOnCancellation {
             cancel()
         }
-
         this.enqueue(object : Callback<T> {
             override fun onFailure(call: Call<T>, t: Throwable) {
                 continuation.resumeWithException(t)

@@ -13,7 +13,8 @@ abstract class BaseRvAdapter<T> : RecyclerView.Adapter<BaseViewHolder>() {
         set(value) {
             val size = mData.size
             field.addAll(value)
-            notifyItemRangeChanged(size, mData.size)
+//            notifyItemRangeChanged(size, mData.size)
+            notifyDataSetChanged()
         }
     private val mInflater: LayoutInflater by lazy { LayoutInflater.from(mContext) }
     var isRefresh: Boolean = false

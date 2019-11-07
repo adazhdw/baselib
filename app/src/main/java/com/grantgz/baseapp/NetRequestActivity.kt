@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.TextView
 import com.adazhdw.ktlib.base.BaseActivityImpl
 import com.adazhdw.ktlib.ext.*
+import com.adazhdw.ktlib.http.await
 import com.adazhdw.ktlib.img.captureImageCoroutines
 import com.adazhdw.ktlib.img.selectImageCoroutines
 import com.adazhdw.ktlib.list.BaseRvAdapter
@@ -18,7 +19,6 @@ import kotlinx.android.synthetic.main.net_chapter_item.view.*
 import kotlinx.android.synthetic.main.net_request_layout.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import retrofit2.await
 
 class NetRequestActivity : BaseActivityImpl() {
     override val layoutId: Int
@@ -66,7 +66,7 @@ class NetRequestActivity : BaseActivityImpl() {
         }
         permissionBtn.setOnClickListener {
             if (!KtPermission.isGranted(permissions, this)) {
-                KtPermission.request(this, Manifest.permission.READ_EXTERNAL_STORAGE,callback = object :PermissionCallback{
+                KtPermission.request(this, permissions.toList(),callback = object :PermissionCallback{
                     override fun invoke(p1: Boolean, p2: List<String>) {
 
                     }
