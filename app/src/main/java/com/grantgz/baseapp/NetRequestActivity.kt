@@ -11,6 +11,7 @@ import com.adazhdw.ktlib.img.selectImageCoroutines
 import com.adazhdw.ktlib.list.BaseRvAdapter
 import com.adazhdw.ktlib.list.BaseViewHolder
 import com.adazhdw.ktlib.list.ListFragmentLine
+import com.adazhdw.ktlib.mvvm.getViewModel
 import com.adazhdw.ktlib.utils.permission.KtPermission
 import com.adazhdw.ktlib.utils.permission.PermissionCallback
 import com.grantgz.baseapp.http.ChapterHistory

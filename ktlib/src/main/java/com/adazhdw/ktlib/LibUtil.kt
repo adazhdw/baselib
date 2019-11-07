@@ -2,6 +2,7 @@ package com.adazhdw.ktlib
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.content.Context
 import com.adazhdw.ktlib.core.lifecycle.KtLifecycleCallback
 import com.blankj.utilcode.util.Utils
 import java.lang.reflect.InvocationTargetException
@@ -11,11 +12,11 @@ object LibUtil {
     private var currentApplication: Application? = null
     private val mKtLifecycleCallback = KtLifecycleCallback()
 
-    fun getApp(): Application {
-        if (currentApplication != null) return currentApplication!!
+    fun getApp(): Context {
+        if (currentApplication != null) return currentApplication!!.applicationContext
         val app = getAppByReflect()
         init(app)
-        return app
+        return app.applicationContext
     }
 
     private fun getAppByReflect(): Application {
