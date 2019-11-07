@@ -12,6 +12,9 @@ import kotlin.coroutines.resumeWithException
  * 更直白的说法是 : 我的统一操作不依赖于特定的数据类型，而只需要一些共有的参数
  * 这时候可以使用doOnNext()
  */
+
+private val TAG = "ExtNetCoroutine---"
+
 //Retrofit.Call
 suspend fun <T> Call<T>.await(): T {
     return suspendCancellableCoroutine { continuation ->
@@ -29,10 +32,10 @@ suspend fun <T> Call<T>.await(): T {
                     if (body != null) {
                         continuation.resume(body)
                     } else {
-                        val invocation = call.request().tag(Invocation::class.java)!!
-                        val method = invocation.method()
+                        val invocation = call.request().tag(Invocation::class.java)
+                        val method = invocation?.method()
                         val errorMsg =
-                            "Response from ${method.declaringClass.name}.${method.name} was null but response body type was declared as non-null"
+                            "Response from ${method?.declaringClass?.name}.${method?.name} was null but response body type was declared as non-null"
                         val e = KotlinNullPointerException(errorMsg)
                         continuation.resumeWithException(e)
                     }
