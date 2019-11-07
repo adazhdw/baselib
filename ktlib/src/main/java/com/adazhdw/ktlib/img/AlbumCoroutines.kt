@@ -15,13 +15,13 @@ suspend fun ForResultActivity.selectImageCoroutines(
 ): DocumentModel =
     try {
         suspendCancellableCoroutine { continuation ->
-            selectImage2(
+            selectImage(
                 onResult = {
                     continuation.resume(it)
                 },
                 onDenied = {
-
-                },onError = {
+                    onError?.invoke("permission denied")
+                }, onError = {
                     onError?.invoke(it)
                     loge(content = it)
                     continuation.resumeWithException(CancellationException(it))
@@ -44,7 +44,11 @@ suspend fun ForResultActivity.captureImageCoroutines(
             captureImage(
                 onResult = {
                     continuation.resume(it)
-                }, onError = {
+                },
+                onDenied = {
+                    onError?.invoke("permission denied")
+                },
+                onError = {
                     onError?.invoke(it)
                     continuation.resumeWithException(CancellationException(it))
                 }, onCancel = {
@@ -53,6 +57,6 @@ suspend fun ForResultActivity.captureImageCoroutines(
             )
         }
     } catch (ex: CancellationException) {
-        loge(content = ex.message?:"")
+        loge(content = ex.message ?: "")
         throw ex
     }

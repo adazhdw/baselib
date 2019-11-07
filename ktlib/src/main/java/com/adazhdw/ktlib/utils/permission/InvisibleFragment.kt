@@ -15,9 +15,9 @@ typealias PermissionCallback = (Boolean, List<String>) -> Unit
 class InvisibleFragment : Fragment() {
     private var callback: PermissionCallback? = null
 
-    fun requestNow(cb: PermissionCallback, vararg permissions: String) {
+    fun requestNow(cb: PermissionCallback, permissions: Array<out String>) {
         callback = cb
-        requestPermissions(permissions, 1)
+        requestPermissions(permissions, 1024)
     }
 
     override fun onRequestPermissionsResult(
@@ -25,7 +25,7 @@ class InvisibleFragment : Fragment() {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-        if (requestCode == 1) {
+        if (requestCode == 1024) {
             val deniedList = ArrayList<String>()
             for ((index, result) in grantResults.withIndex()) {
                 if (result != PackageManager.PERMISSION_GRANTED) {

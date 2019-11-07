@@ -1,14 +1,8 @@
 package com.adazhdw.ktlib.http
 
 
-
-import com.adazhdw.ktlib.ext.logD
-import com.adazhdw.ktlib.ext.logE
 import kotlinx.coroutines.suspendCancellableCoroutine
-import okhttp3.HttpUrl
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import retrofit2.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -21,23 +15,71 @@ import kotlin.coroutines.resumeWithException
 //Retrofit.Call
 suspend fun <T> Call<T>.await(): T {
     return suspendCancellableCoroutine { continuation ->
+        continuation.invokeOnCancellation {
+            cancel()
+        }
+
         this.enqueue(object : Callback<T> {
             override fun onFailure(call: Call<T>, t: Throwable) {
                 continuation.resumeWithException(t)
-                "onError---${t.message}".logE()
             }
 
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
                     val body = response.body()
-                    if (body != null) continuation.resume(body)
-                    else continuation.resumeWithException(RuntimeException("response body is null"))
-                    ("onSuccess").logD()
-                }else{
-                    continuation.resumeWithException(HttpException(call.request().url, response.code(), response.message()))
+                    if (body != null) {
+                        continuation.resume(body)
+                    } else {
+                        val invocation = call.request().tag(Invocation::class.java)!!
+                        val method = invocation.method()
+                        val errorMsg =
+                            "Response from ${method.declaringClass.name}.${method.name} was null but response body type was declared as non-null"
+                        val e = KotlinNullPointerException(errorMsg)
+                        continuation.resumeWithException(e)
+                    }
+                } else {
+                    continuation.resumeWithException(HttpException(response))
                 }
             }
         })
     }
 }
-class HttpException(val url: HttpUrl, code: Int, message: String) : RuntimeException("HTTP $code $message")
+
+@JvmName("awaitNullable")
+suspend fun <T : Any> Call<T?>.awaitNull(): T? {
+    return suspendCancellableCoroutine { continuation ->
+        continuation.invokeOnCancellation {
+            cancel()
+        }
+        enqueue(object : Callback<T?> {
+            override fun onResponse(call: Call<T?>, response: Response<T?>) {
+                if (response.isSuccessful) {
+                    continuation.resume(response.body())
+                } else {
+                    continuation.resumeWithException(HttpException(response))
+                }
+            }
+
+            override fun onFailure(call: Call<T?>, t: Throwable) {
+                continuation.resumeWithException(t)
+            }
+        })
+    }
+}
+
+suspend fun <T : Any> Call<T>.awaitResponse(): Response<T> {
+    return suspendCancellableCoroutine { continuation ->
+        continuation.invokeOnCancellation {
+            cancel()
+        }
+        enqueue(object : Callback<T> {
+            override fun onResponse(call: Call<T>, response: Response<T>) {
+                continuation.resume(response)
+            }
+
+            override fun onFailure(call: Call<T>, t: Throwable) {
+                continuation.resumeWithException(t)
+            }
+        })
+    }
+}

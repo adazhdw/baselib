@@ -12,9 +12,9 @@ import android.provider.MediaStore.ACTION_IMAGE_CAPTURE
 import androidx.core.content.FileProvider
 import com.adazhdw.ktlib.base.ForResultActivity
 import com.adazhdw.ktlib.ext.logD
-
-import com.adazhdw.ktlib.utils.PermissionUtil
 import com.adazhdw.ktlib.utils.UriUtil
+import com.adazhdw.ktlib.utils.permission.KtPermission
+import com.adazhdw.ktlib.utils.permission.PermissionCallback
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
@@ -25,76 +25,83 @@ data class DocumentModel(val uri: Uri, val file: File)
 
 fun ForResultActivity.selectImage(
     onResult: ((documentModel: DocumentModel) -> Unit),
+    onDenied: ((denied: List<String>) -> Unit),
     onError: ((String) -> Unit)? = null,
     onCancel: (() -> Unit)? = null
 ) {
-    PermissionUtil.requestPermissions(
-        context = this,
-        permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-        granted = {
-            Intent(
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-                    ACTION_OPEN_DOCUMENT else ACTION_GET_CONTENT
-            ).setType("image/*").addCategory(CATEGORY_OPENABLE).also { intent ->
-                intent.resolveActivity(packageManager)?.also {
-                    launch {
-                        //协程方法启动intent
-                        startActivityForResultCoroutines(
-                            intent,
-                            onFailure = { onError?.invoke("Image data is null") },
-                            onCancel = { onCancel?.invoke() })?.data?.also { data ->
-                            UriUtil.getFileByUri(this@selectImage, data)?.also { file ->
-                                onResult.invoke(DocumentModel(data, file))
+    KtPermission.request(
+        this,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        callback = object : PermissionCallback {
+            override fun invoke(p1: Boolean, p2: List<String>) {
+                if (p1) {
+                    Intent(
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                            ACTION_OPEN_DOCUMENT else ACTION_GET_CONTENT
+                    ).setType("image/*").addCategory(CATEGORY_OPENABLE).also { intent ->
+                        intent.resolveActivity(packageManager)?.also {
+                            launch {
+                                //协程方法启动intent
+                                startActivityForResultCoroutines(
+                                    intent,
+                                    onFailure = { onError?.invoke("Image data is null") },
+                                    onCancel = { onCancel?.invoke() })?.data?.also { data ->
+                                    UriUtil.getFileByUri(this@selectImage, data)?.also { file ->
+                                        onResult.invoke(DocumentModel(data, file))
+                                    }
+                                }
                             }
                         }
                     }
+                    ("ACTION_GET_CONTENT-image/*").logD()
+                } else {
+                    onDenied.invoke(p2)
                 }
             }
-            ("ACTION_GET_CONTENT-image/*").logD()
-        },
-        denied = {
-            onError?.invoke("Permission Denied")
         })
 }
 
+
 fun ForResultActivity.captureImage(
-    onResult: ((model: DocumentModel) -> Unit)? = null,
+    onResult: ((model: DocumentModel) -> Unit),
+    onDenied: ((denied: List<String>) -> Unit),
     onError: ((String) -> Unit)? = null,
     onCancel: (() -> Unit)? = null
 ) {
-    PermissionUtil.requestPermissions(
-        context = this,
-        permissions = arrayOf(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.CAMERA
-        ),
-        granted = {
-            Intent(ACTION_IMAGE_CAPTURE).also { intent ->
-                intent.resolveActivity(packageManager)?.also {
-                    try {
-                        createImageFile()
-                    } catch (io: IOException) {
-                        onError?.invoke(io.message ?: "")
-                        null
-                    }?.also { file ->
-                        val photoURI: Uri = getUriForFile(file)
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                        launch {
-                            //协程方法启动intent
-                            startActivityForResultCoroutines(
-                                intent,
-                                onFailure = { onError?.invoke("Image data is null") },
-                                onCancel = { onCancel?.invoke() })
-                            updateAlum(this@captureImage, photoURI)
-                            onResult?.invoke(DocumentModel(photoURI, file))
+    KtPermission.request(
+        this,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.CAMERA,
+        callback = object : PermissionCallback {
+            override fun invoke(p1: Boolean, p2: List<String>) {
+                if (p1) {
+                    Intent(ACTION_IMAGE_CAPTURE).also { intent ->
+                        intent.resolveActivity(packageManager)?.also {
+                            try {
+                                createImageFile()
+                            } catch (io: IOException) {
+                                onError?.invoke(io.message ?: "")
+                                null
+                            }?.also { file ->
+                                val photoURI: Uri = getUriForFile(file)
+                                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                                launch {
+                                    //协程方法启动intent
+                                    startActivityForResultCoroutines(
+                                        intent,
+                                        onFailure = { onError?.invoke("Image data is null") },
+                                        onCancel = { onCancel?.invoke() })
+                                    updateAlum(this@captureImage, photoURI)
+                                    onResult.invoke(DocumentModel(photoURI, file))
+                                }
+                            }
                         }
                     }
+                    ("ACTION_IMAGE_CAPTURE").logD()
+                } else {
+                    onDenied.invoke(p2)
                 }
             }
-            ("ACTION_IMAGE_CAPTURE").logD()
-        },
-        denied = {
-            onError?.invoke("Permission Denied")
         })
 }
 
@@ -104,7 +111,8 @@ fun Context.getUriForFile(file: File): Uri {
 
 @Throws(IOException::class)
 private fun Context.createImageFile(): File {
-    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA).format(Date(System.currentTimeMillis()))
+    val timeStamp =
+        SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA).format(Date(System.currentTimeMillis()))
     val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
     return File.createTempFile(
         "JPEG_${timeStamp}_", /* prefix */

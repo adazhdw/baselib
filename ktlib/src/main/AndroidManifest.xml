@@ -17,10 +17,4 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
-    <application>
-        <activity
-            android:name="com.adazhdw.ktlib.utils.PermissionUtil$PermissionActivity"
-            android:launchMode="singleTask"
-            android:theme="@style/ActivityTranslucentTheme" />
-    </application>
 </manifest>

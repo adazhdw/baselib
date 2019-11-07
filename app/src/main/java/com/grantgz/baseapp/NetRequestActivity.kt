@@ -5,19 +5,20 @@ import android.view.View
 import android.widget.TextView
 import com.adazhdw.ktlib.base.BaseActivityImpl
 import com.adazhdw.ktlib.ext.*
-import com.adazhdw.ktlib.http.await
 import com.adazhdw.ktlib.img.captureImageCoroutines
 import com.adazhdw.ktlib.img.selectImageCoroutines
 import com.adazhdw.ktlib.list.BaseRvAdapter
 import com.adazhdw.ktlib.list.BaseViewHolder
 import com.adazhdw.ktlib.list.ListFragmentLine
-import com.adazhdw.ktlib.utils.PermissionUtil
+import com.adazhdw.ktlib.utils.permission.KtPermission
+import com.adazhdw.ktlib.utils.permission.PermissionCallback
 import com.grantgz.baseapp.http.ChapterHistory
 import com.grantgz.baseapp.http.apiService
 import kotlinx.android.synthetic.main.net_chapter_item.view.*
 import kotlinx.android.synthetic.main.net_request_layout.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import retrofit2.await
 
 class NetRequestActivity : BaseActivityImpl() {
     override val layoutId: Int
@@ -31,7 +32,6 @@ class NetRequestActivity : BaseActivityImpl() {
         getViewModel { NetViewModel() }
     }
 
-    private val downloadUrl = "https://static.usasishu.com/com.uuabc.samakenglish_5.1.12_35.apk"
     private var isLogin by SPDelegateExt.preference("isLogin", false)
     private val permissions = arrayOf(
         Manifest.permission.CAMERA,
@@ -65,17 +65,12 @@ class NetRequestActivity : BaseActivityImpl() {
             }
         }
         permissionBtn.setOnClickListener {
-            if (!PermissionUtil.isGranted(permissions, this)) {
-                PermissionUtil.requestPermissions(this, permissions,
-                    granted = {
-                        it.forEach { permission ->
-                            ("onGranted----$permission").logD(TAG)
-                        }
-                    }, denied = {
-                        it.forEach { permission ->
-                            ("onDenied----$permission").logD(TAG)
-                        }
-                    })
+            if (!KtPermission.isGranted(permissions, this)) {
+                KtPermission.request(this, Manifest.permission.READ_EXTERNAL_STORAGE,callback = object :PermissionCallback{
+                    override fun invoke(p1: Boolean, p2: List<String>) {
+
+                    }
+                })
             } else {
                 toast("权限已授予")
             }
