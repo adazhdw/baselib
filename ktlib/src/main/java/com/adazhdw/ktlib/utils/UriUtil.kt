@@ -7,10 +7,8 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import com.adazhdw.ktlib.LibUtil
 import com.adazhdw.ktlib.ext.loge
-
-
-import com.blankj.utilcode.util.Utils
 import java.io.File
 
 object UriUtil {
@@ -101,7 +99,7 @@ object UriUtil {
         selectionArgs: Array<String>?,
         code: Int
     ): File? {
-        val cursor = Utils.getApp().contentResolver.query(
+        val cursor = LibUtil.getApp().contentResolver.query(
             uri, arrayOf("_data"), selection, selectionArgs, null
         )
         if (cursor == null) {

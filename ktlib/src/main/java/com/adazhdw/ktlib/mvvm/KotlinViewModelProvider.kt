@@ -1,5 +1,6 @@
 package com.adazhdw.ktlib.mvvm
 
+import androidx.annotation.MainThread
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
@@ -28,4 +29,15 @@ class KotlinViewModelProvider private constructor() {
         }
     }
 
+}
+
+
+@MainThread
+inline fun <reified T : ViewModel> Fragment.getViewModel(crossinline factory: () -> T): T {
+    return KotlinViewModelProvider.of(this, factory)
+}
+
+@MainThread
+inline fun <reified T : ViewModel> FragmentActivity.getViewModel(crossinline factory: () -> T): T {
+    return KotlinViewModelProvider.of(this, factory)
 }

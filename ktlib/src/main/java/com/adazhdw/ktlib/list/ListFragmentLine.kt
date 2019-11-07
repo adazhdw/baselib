@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.adazhdw.ktlib.R
 import com.adazhdw.ktlib.base.BaseFragmentImpl
+import com.adazhdw.ktlib.ext.dp2px
 import com.adazhdw.ktlib.ext.view.invisible
 import com.adazhdw.ktlib.ext.view.layoutParamsWrap
 import com.adazhdw.ktlib.ext.recycler.isSlideToBottom
 import com.adazhdw.ktlib.ext.view.isVisible
 import com.adazhdw.ktlib.ext.view.visible
-import com.blankj.utilcode.util.SizeUtils
 import kotlinx.android.synthetic.main.fragment_list_line.*
 
 /**
@@ -119,7 +119,7 @@ abstract class ListFragmentLine<M, A : BaseRvAdapter<M>> : BaseFragmentImpl(),
     }
 
     protected open fun onItemDecoration(): RecyclerView.ItemDecoration {
-        return BottomItemDecoration(SizeUtils.dp2px(10F))
+        return BottomItemDecoration(dp2px(10F))
     }
 
     protected open fun onItemAnimator(): RecyclerView.ItemAnimator {

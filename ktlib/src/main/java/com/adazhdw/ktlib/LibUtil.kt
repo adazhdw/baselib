@@ -3,8 +3,6 @@ package com.adazhdw.ktlib
 import android.annotation.SuppressLint
 import android.app.Application
 import com.adazhdw.ktlib.core.lifecycle.KtLifecycleCallback
-
-import com.adazhdw.ktlib.http.RetrofitClient
 import com.blankj.utilcode.util.Utils
 import java.lang.reflect.InvocationTargetException
 
