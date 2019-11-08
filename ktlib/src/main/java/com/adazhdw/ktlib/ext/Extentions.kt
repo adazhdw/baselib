@@ -19,6 +19,7 @@ inline fun <reified T : Activity> FragmentActivity.startActivity(vararg extras: 
     startActivity(Intent(applicationContext, T::class.java).putExtrasEx(*extras))
 }
 
+
 inline fun Fragment.toast(msg: CharSequence): Toast =
     Toast.makeText(context, msg, Toast.LENGTH_SHORT).apply { show() }
 

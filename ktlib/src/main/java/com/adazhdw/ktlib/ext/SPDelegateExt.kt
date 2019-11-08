@@ -8,7 +8,7 @@ import kotlin.reflect.KProperty
 
 
 object SPDelegateExt {
-    fun <T> preference(paramName: String, default: T, spName: String = "base_sp_name"): SPPreference<T> =
+    fun <T> preference(paramName: String, default: T, spName: String = LibUtil.getApp().packageName+"_sharePreference"): SPPreference<T> =
         SPPreference(spName, paramName, default)
 }
 
