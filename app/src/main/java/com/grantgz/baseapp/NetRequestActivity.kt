@@ -4,6 +4,7 @@ import android.Manifest
 import android.view.View
 import android.widget.TextView
 import com.adazhdw.ktlib.base.BaseActivityImpl
+import com.adazhdw.ktlib.core.network.KtNetCallback
 import com.adazhdw.ktlib.ext.*
 import com.adazhdw.ktlib.http.await
 import com.adazhdw.ktlib.img.captureImageCoroutines
@@ -18,7 +19,6 @@ import com.grantgz.baseapp.http.ChapterHistory
 import com.grantgz.baseapp.http.apiService
 import kotlinx.android.synthetic.main.net_chapter_item.view.*
 import kotlinx.android.synthetic.main.net_request_layout.*
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class NetRequestActivity : BaseActivityImpl() {
@@ -35,39 +35,36 @@ class NetRequestActivity : BaseActivityImpl() {
 
     private var isLogin by SPDelegateExt.preference("isLogin", false)
     private val permissions = arrayOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.RECORD_AUDIO,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.ACCESS_COARSE_LOCATION
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_COARSE_LOCATION
     )
 
     override fun initView() {
 
-        //设置actionbar
-        setActionbarCompact(R.id.toolbar)
+        /* //设置actionbar
+         setActionbarCompact(R.id.toolbar)
 
-        spPutValue("", "")
-        //login值输出
-        ("isLogin-----$isLogin").logD()
-        isLogin = true
-        ("isLogin-----$isLogin").logD()
-        isLogin = false
-        ("isLogin-----$isLogin").logD()
+         spPutValue("", "")
+         //login值输出
+         ("isLogin-----$isLogin").logD()
+         isLogin = true
+         ("isLogin-----$isLogin").logD()
+         isLogin = false
+         ("isLogin-----$isLogin").logD()*/
 
         requestBtn.setOnClickListener {
-            launch {
-                arrayOf(
-                    async {
-                        apiService.getHotKey().await()
-                    },
-                    async {
-                        apiService.getWxArticleChapters2().await()
-                    }).forEach { it.await() }
+            launchOnUI {
+                apiService.getHotKey().await()
             }
+            /*launch {
+                apiService.getHotKey().await()
+            }*/
         }
         permissionBtn.setOnClickListener {
             if (!KtPermission.isGranted(permissions, this)) {
-                KtPermission.request(this, permissions.toList(),callback = object :PermissionCallback{
+                KtPermission.request(this, permissions.toList(), callback = object : PermissionCallback {
                     override fun invoke(p1: Boolean, p2: List<String>) {
 
                     }
@@ -89,13 +86,24 @@ class NetRequestActivity : BaseActivityImpl() {
             }
         }
 
-        addFragment(WxChaptersFragment(), R.id.chaptersFl)
+        /*addFragment(WxChaptersFragment(), R.id.chaptersFl)*/
     }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
     }
+
+    override fun needNetCallback(): Boolean = true
+
+    override fun onNetAvailable(netType: KtNetCallback.NetType, fromReceiver: Boolean) {
+        ("netType----onNetAvailable:$netType---fromReceiver:$fromReceiver").logD(TAG)
+    }
+
+    override fun onNetUnAvailable(netType: KtNetCallback.NetType, fromReceiver: Boolean) {
+        ("netType----onNetUnAvailable:$netType---fromReceiver:$fromReceiver").logD(TAG)
+    }
+
 }
 
 class WxChaptersFragment : ListFragmentLine<ChapterHistory, ChaptersAdapter>() {

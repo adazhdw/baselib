@@ -20,3 +20,9 @@ inline val Configuration.portrait: Boolean
 
 inline val Configuration.landscape: Boolean
     get() = orientation == Configuration.ORIENTATION_LANDSCAPE
+
+inline val Context.portrait: Boolean
+    get() = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+
+inline val Context.landscape: Boolean
+    get() = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE

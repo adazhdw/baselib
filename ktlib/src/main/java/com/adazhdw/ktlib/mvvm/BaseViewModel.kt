@@ -4,9 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.adazhdw.ktlib.ext.logE
 import com.adazhdw.ktlib.ext.loge
-
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 abstract class BaseViewModel<R : BaseRepository> : ViewModel() {
 
@@ -15,23 +13,34 @@ abstract class BaseViewModel<R : BaseRepository> : ViewModel() {
 
     abstract fun obtainRepository(): R
 
-    fun launch(block: suspend () -> Unit) {
-        launchOnUI(block, {
-            errorFun(it)
-        })
+    fun launch(block: suspend CoroutineScope.() -> Unit): Job {
+        return launchOnUI(block)
     }
 
-    open fun errorFun(throwable: Throwable) {
-        (throwable.message).logE(TAG)
+    private fun launchOnUI(block: suspend CoroutineScope.() -> Unit): Job {
+        return viewModelScope.launch {
+            tryCatch(block, { "error:${it.message}".logE(TAG) }, {}, true)
+        }
     }
 
-    private fun launchOnUI(block: suspend () -> Unit, error: suspend (Throwable) -> Unit): Job =
-            viewModelScope.launch {
-                try {
-                    block()
-                } catch (ex: Throwable) {
-                    error(ex)
+    private suspend fun tryCatch(
+            tryBlock: suspend CoroutineScope.() -> Unit,
+            catchBlock: suspend CoroutineScope.(Throwable) -> Unit,
+            finallyBlock: suspend CoroutineScope.() -> Unit,
+            handleCancellationExceptionManually: Boolean = false) {
+        coroutineScope {
+            try {
+                tryBlock()
+            } catch (e: Throwable) {
+                if (e !is CancellationException || handleCancellationExceptionManually) {
+                    catchBlock(e)
+                } else {
+                    throw e
                 }
+            } finally {
+                finallyBlock()
             }
+        }
+    }
 
 }

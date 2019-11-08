@@ -7,9 +7,6 @@ import org.greenrobot.eventbus.EventBus
 
 abstract class BaseActivity : ForResultActivity() {
 
-    protected val TAG = javaClass.simpleName + "------"
-    protected val mHandler: Handler by lazy { Handler(Looper.getMainLooper()) }
-
     /**
      * 返回布局Id
      */

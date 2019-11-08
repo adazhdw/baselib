@@ -19,14 +19,28 @@ object NetworkUtil {
         return info != null && info.isConnected
     }
 
-
     @RequiresPermission(ACCESS_NETWORK_STATE)
     private fun activeNetworkInfo(context: Context? = null): NetworkInfo? {
         return getCm(context)?.activeNetworkInfo
     }
 
+    val isNetConnected: Boolean
+        @RequiresPermission(ACCESS_NETWORK_STATE)
+        get() {
+            val connectivityManager = getCm()
+            val networkInfo = connectivityManager?.activeNetworkInfo
+            return when {
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
+                    val network: Network? = connectivityManager?.activeNetwork
+                    val capabilities = connectivityManager?.getNetworkCapabilities(network)
+                    capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true && networkInfo?.isConnected == true
+                }
+                else -> networkInfo?.isConnected ?: false && networkInfo?.type == ConnectivityManager.TYPE_WIFI
+            }
+        }
+
     @RequiresPermission(ACCESS_WIFI_STATE)
-    fun isWifiConnected(context: Context?=null): Boolean {
+    fun isWifiConnected(context: Context? = null): Boolean {
         val connectivityManager = getCm(context)
         val networkInfo = connectivityManager?.activeNetworkInfo
         return when {
@@ -90,14 +104,13 @@ object NetworkUtil {
         return psType
     }
 
-    private fun getCm(context: Context?=null): ConnectivityManager? {
+    private fun getCm(context: Context? = null): ConnectivityManager? {
         return if (context != null) {
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
         } else {
             LibUtil.getApp().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
         }
     }
-
 
 
     class NetType {

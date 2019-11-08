@@ -5,6 +5,7 @@ package com.adazhdw.ktlib.ext
 import android.content.Context
 import android.os.Build
 import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 
@@ -18,24 +19,16 @@ import androidx.fragment.app.FragmentActivity
 
 inline fun Fragment.getColorEx(@ColorRes res:Int): Int {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        resources.getColor(res,null)
+        resources.getColor(res,context?.theme)
     }else{
         resources.getColor(res)
     }
 }
 
 inline fun FragmentActivity.getColorEx(@ColorRes res:Int): Int {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        resources.getColor(res,null)
-    }else{
-        resources.getColor(res)
-    }
+    return ContextCompat.getColor(this,res)
 }
 
 inline fun Context.getColorEx(@ColorRes res:Int): Int {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        resources.getColor(res,null)
-    }else{
-        resources.getColor(res)
-    }
+    return ContextCompat.getColor(this,res)
 }

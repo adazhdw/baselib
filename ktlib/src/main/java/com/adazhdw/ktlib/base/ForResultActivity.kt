@@ -6,7 +6,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-abstract class ForResultActivity : CoroutinesActivity() {
+abstract class ForResultActivity : NetCallbackActivity() {
 
     private val resultCallbackSet = mutableMapOf<Int, ((resultCode: Int, data: Intent?) -> Unit)>()
     fun startActivityForResultCompact(
