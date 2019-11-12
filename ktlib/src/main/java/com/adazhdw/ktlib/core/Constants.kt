@@ -1,5 +1,6 @@
 package com.adazhdw.ktlib.core
 
+import android.content.res.Resources
 import android.os.Looper
 
 /**
@@ -9,3 +10,14 @@ import android.os.Looper
  */
 
 fun isOnMainThread() = Looper.myLooper() == Looper.getMainLooper()
+
+
+/**
+ * @return the status bar's height
+ */
+val statusBarHeight: Int
+    get() {
+        val resources = Resources.getSystem()
+        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+        return resources.getDimensionPixelSize(resourceId)
+    }

@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.ext
+package com.adazhdw.ktlib.core.delegate
 
 import android.content.Context
 import com.adazhdw.ktlib.LibUtil
@@ -7,18 +7,14 @@ import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 
-object SPDelegateExt {
-    fun <T> preference(paramName: String, default: T, spName: String = LibUtil.getApp().packageName+"_sharePreference"): SPPreference<T> =
-        SPPreference(spName, paramName, default)
+object SPDelegate {
+    fun <T> preference(paramName: String, default: T, spName: String = LibUtil.getApp().packageName + "_sharePreference"): SPPreference<T> =
+            SPPreference(spName, paramName, default)
 }
 
-class SPPreference<T>(private val spName: String, private val paramName: String, private val default: T) :
-    ReadWriteProperty<Any, T> {
+class SPPreference<T>(private val spName: String, private val paramName: String, private val default: T) : ReadWriteProperty<Any, T> {
 
-    private val pref by lazy {
-        LibUtil.getApp().applicationContext
-            .getSharedPreferences(spName, Context.MODE_PRIVATE)
-    }
+    private val pref by lazy { LibUtil.getApp().applicationContext.getSharedPreferences(spName, Context.MODE_PRIVATE) }
 
     override fun getValue(thisRef: Any, property: KProperty<*>): T {
         return getParam(paramName, default)
@@ -41,12 +37,12 @@ class SPPreference<T>(private val spName: String, private val paramName: String,
 
     @Suppress("UNCHECKED_CAST")
     private fun <T> getParam(paramName: String, default: T): T = with(pref) {
-        return  when (default) {
+        return when (default) {
             is Long -> getLong(paramName, 0L) as T
-            is Boolean -> getBoolean(paramName, false)as T
-            is Int -> getInt(paramName, 0)as T
-            is String -> getString(paramName, "")as T
-            is Float -> getFloat(paramName, 0f)as T
+            is Boolean -> getBoolean(paramName, false) as T
+            is Int -> getInt(paramName, 0) as T
+            is String -> getString(paramName, "") as T
+            is Float -> getFloat(paramName, 0f) as T
             else -> throw IllegalArgumentException("This type can't be saved into Preferences")
         }
     }

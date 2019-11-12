@@ -1,6 +1,5 @@
 package com.adazhdw.ktlib.ext
 
-import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.view.View
@@ -8,22 +7,13 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import androidx.fragment.app.FragmentActivity
+import com.adazhdw.ktlib.core.statusBarHeight
 
 private const val TAG_STATUS_BAR = "TAG_STATUS_BAR"
 private const val TAG_OFFSET = "TAG_OFFSET"
 private const val KEY_OFFSET = -123
-/**
- * Return the status bar's height.
- *
- * @return the status bar's height
- */
-fun getStatusBarHeight(): Int {
-    val resources = Resources.getSystem()
-    val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
-    return resources.getDimensionPixelSize(resourceId)
-}
 
-fun FragmentActivity.transparentScreen(){
+fun FragmentActivity.transparentScreen() {
     if (Build.VERSION.SDK_INT >= 21) {
         val decorView = window.decorView
         decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -64,18 +54,17 @@ fun FragmentActivity.setStatusBarVisibility(isVisible: Boolean = false) {
     }
 }
 
-fun hideStatusBarView(window: Window?) {
-    val decorView = window?.decorView as ViewGroup?
-    val fakeStatusBarView = decorView?.findViewWithTag<View>(TAG_STATUS_BAR) ?: return
-    fakeStatusBarView.visibility = View.GONE
-}
-
 fun showStatusBarView(window: Window?) {
     val decorView = window?.decorView as ViewGroup?
     val fakeStatusBarView = decorView?.findViewWithTag<View>(TAG_STATUS_BAR) ?: return
     fakeStatusBarView.visibility = View.VISIBLE
 }
 
+fun hideStatusBarView(window: Window?) {
+    val decorView = window?.decorView as ViewGroup?
+    val fakeStatusBarView = decorView?.findViewWithTag<View>(TAG_STATUS_BAR) ?: return
+    fakeStatusBarView.visibility = View.GONE
+}
 
 private fun addMarginTopEqualStatusBarHeight(window: Window?) {
     val tagView = window?.decorView?.findViewWithTag<View>(TAG_OFFSET) ?: return
@@ -88,10 +77,10 @@ private fun addMarginTopEqualStatusBarHeight(view: View) {
     if (haveSetOffset != null && haveSetOffset as Boolean) return
     val layoutParams = view.layoutParams as ViewGroup.MarginLayoutParams
     layoutParams.setMargins(
-        layoutParams.leftMargin,
-        layoutParams.topMargin + getStatusBarHeight(),
-        layoutParams.rightMargin,
-        layoutParams.bottomMargin
+            layoutParams.leftMargin,
+            layoutParams.topMargin + statusBarHeight,
+            layoutParams.rightMargin,
+            layoutParams.bottomMargin
     )
     view.setTag(KEY_OFFSET, true)
 }
@@ -107,10 +96,10 @@ private fun subtractMarginTopEqualStatusBarHeight(view: View) {
     if (haveSetOffset == null || !(haveSetOffset as Boolean)) return
     val layoutParams = view.layoutParams as ViewGroup.MarginLayoutParams
     layoutParams.setMargins(
-        layoutParams.leftMargin,
-        layoutParams.topMargin - getStatusBarHeight(),
-        layoutParams.rightMargin,
-        layoutParams.bottomMargin
+            layoutParams.leftMargin,
+            layoutParams.topMargin - statusBarHeight,
+            layoutParams.rightMargin,
+            layoutParams.bottomMargin
     )
     view.setTag(KEY_OFFSET, false)
 }

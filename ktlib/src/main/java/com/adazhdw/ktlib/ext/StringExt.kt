@@ -19,6 +19,13 @@ fun String.trimPunct(): String {
     } else this.replace("[\\pP\\p{Punct}]".toRegex(), "")
 }
 
+fun String.formatNum():String{
+    val regEx = "[^0-9]"
+    val p = Pattern.compile(regEx)
+    val m = p.matcher(this)
+    return m.replaceAll("").trim()
+}
+
 /**
  * 检查汉字
  */

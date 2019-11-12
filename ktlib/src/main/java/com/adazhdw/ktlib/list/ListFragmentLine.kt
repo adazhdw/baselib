@@ -12,9 +12,9 @@ import com.adazhdw.ktlib.R
 import com.adazhdw.ktlib.base.BaseFragmentImpl
 import com.adazhdw.ktlib.ext.dp2px
 import com.adazhdw.ktlib.ext.view.invisible
-import com.adazhdw.ktlib.ext.view.layoutParamsWrap
 import com.adazhdw.ktlib.ext.recycler.isSlideToBottom
 import com.adazhdw.ktlib.ext.view.isVisible
+import com.adazhdw.ktlib.ext.view.layoutParamsW_W
 import com.adazhdw.ktlib.ext.view.visible
 import kotlinx.android.synthetic.main.fragment_list_line.*
 
@@ -63,7 +63,7 @@ abstract class ListFragmentLine<M, A : BaseRvAdapter<M>> : BaseFragmentImpl(),
     }
 
     private fun initEmptyView() {
-        rooContentFl.addView(mEmptyView, rooContentFl.layoutParamsWrap())
+        rooContentFl.addView(mEmptyView, rooContentFl.layoutParamsW_W)
         mEmptyView.invisible()
     }
 

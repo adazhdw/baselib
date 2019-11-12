@@ -2,6 +2,9 @@ package com.adazhdw.ktlib.ext
 
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.Point
+import android.os.Build
+import android.view.WindowManager
 
 /**
  * author: daguozhu
@@ -26,3 +29,19 @@ inline val Context.portrait: Boolean
 
 inline val Context.landscape: Boolean
     get() = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+val Context.screenWidth: Int
+    get() {
+        val wm: WindowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val point = Point()
+        wm.defaultDisplay.getRealSize(point)// 小于17用：wm.defaultDisplay.getSize(point)
+        return point.x
+    }
+
+val Context.screenHeight: Int
+    get() {
+        val wm: WindowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val point = Point()
+        wm.defaultDisplay.getRealSize(point)// 小于17用：wm.defaultDisplay.getSize(point)
+        return point.y
+    }

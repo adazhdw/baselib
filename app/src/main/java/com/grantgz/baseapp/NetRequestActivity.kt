@@ -4,6 +4,7 @@ import android.Manifest
 import android.view.View
 import android.widget.TextView
 import com.adazhdw.ktlib.base.BaseActivityImpl
+import com.adazhdw.ktlib.core.delegate.SPDelegate
 import com.adazhdw.ktlib.core.network.KtNetCallback
 import com.adazhdw.ktlib.ext.*
 import com.adazhdw.ktlib.http.await
@@ -27,13 +28,13 @@ class NetRequestActivity : BaseActivityImpl() {
 
     private val mNetViewModel: NetViewModel by lazy {
         // @Deprecated---ViewModelProviders.of
-        // ViewModelProviders.of(this, InjectorUtil.getNetModelFactory()).get(NetViewModel::class.java)
-        // ViewModelProvider(this, InjectorUtil.getNetModelFactory()).get(NetViewModel::class.java)
+//         ViewModelProviders.of(this, InjectorUtil.getNetModelFactory()).get(NetViewModel::class.java)
+//         ViewModelProvider(this, InjectorUtil.getNetModelFactory()).get(NetViewModel::class.java)
         // 自己的扩展方法
         getViewModel { NetViewModel() }
     }
 
-    private var isLogin by SPDelegateExt.preference("isLogin", false)
+    private var isLogin by SPDelegate.preference("isLogin", false)
     private val permissions = arrayOf(
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO,
