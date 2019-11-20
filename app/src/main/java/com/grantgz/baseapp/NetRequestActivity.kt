@@ -87,7 +87,7 @@ class NetRequestActivity : BaseActivityImpl() {
             }
         }
 
-        /*addFragment(WxChaptersFragment(), R.id.chaptersFl)*/
+        addFragment(WxChaptersFragment(), R.id.chaptersFl)
     }
 
     override fun onSupportNavigateUp(): Boolean {

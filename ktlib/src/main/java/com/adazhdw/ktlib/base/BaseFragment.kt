@@ -43,10 +43,6 @@ abstract class BaseFragment : CoroutinesFragment() {
      */
     protected var isViewInitiated = false
     /**
-     * 当前界面是否可见
-     */
-    protected var isVisibleToUser = false
-    /**
      * 是否加载过数据
      */
     protected var isDataInitiated = false
@@ -67,30 +63,8 @@ abstract class BaseFragment : CoroutinesFragment() {
         prepareRequest()
     }
 
-    /**
-     * 使用 transition 的hide 或者 show 方法会调用
-     */
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-        this.isVisibleToUser = hidden
-        if (this.isVisibleToUser) {
-            prepareRequest()
-        }
-    }
-
-    /**
-     * 与ViewPager 配合使用
-     */
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        this.isVisibleToUser = isVisibleToUser
-        if (this.isVisibleToUser) {
-            prepareRequest()
-        }
-    }
-
     private fun prepareRequest() {
-        if (isVisibleToUser && isViewInitiated && !isDataInitiated) {
+        if (isViewInitiated && !isDataInitiated) {
             requestStart()
             isDataInitiated = true
         }
