@@ -6,6 +6,9 @@ import com.adazhdw.ktlib.isDebug
 
 const val TAG = "LogExt"
 
+inline val Any.TAG
+    get() = javaClass.simpleName
+
 private enum class LEVEL {
     V, D, I, W, E
 }
@@ -37,10 +40,10 @@ private fun log(tag: String?, content: String?, level: LEVEL) {
     }
 }
 
-fun loge(tag: String?=null, content: String?) {
+fun loge(tag: String? = null, content: String?) {
     content?.logE(tag)
 }
 
-fun logd(tag: String?=null, content: String?) {
+fun logd(tag: String? = null, content: String?) {
     content?.logD(tag)
 }
