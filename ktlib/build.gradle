@@ -78,7 +78,7 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50'
 
     //useful library
-    implementation 'com.blankj:utilcode:1.23.7'
+//    implementation 'com.blankj:utilcode:1.23.7'
 
 }
 

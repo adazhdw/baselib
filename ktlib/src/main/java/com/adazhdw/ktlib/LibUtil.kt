@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import com.adazhdw.ktlib.core.lifecycle.KtLifecycleCallback
-import com.blankj.utilcode.util.Utils
 import java.lang.reflect.InvocationTargetException
 
 object LibUtil {
@@ -58,11 +57,10 @@ object LibUtil {
  * 初始化 Utils工具包 和 BaseUrl
  */
 fun Application.initLibrary(baseUrl: String, debug: Boolean = false) {
-    Utils.init(this)
     LibUtil.init(this)
     mBaseUrl = baseUrl
     isDebug = debug
 }
 
-internal var isDebug = false
+internal var isDebug = BuildConfig.DEBUG
 internal var mBaseUrl = ""
