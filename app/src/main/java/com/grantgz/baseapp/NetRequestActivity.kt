@@ -6,13 +6,15 @@ import android.widget.TextView
 import com.adazhdw.ktlib.base.BaseActivityImpl
 import com.adazhdw.ktlib.core.delegate.SPDelegate
 import com.adazhdw.ktlib.core.network.KtNetCallback
-import com.adazhdw.ktlib.ext.*
+import com.adazhdw.ktlib.ext.addFragment
+import com.adazhdw.ktlib.ext.logD
+import com.adazhdw.ktlib.ext.toast
 import com.adazhdw.ktlib.http.await
 import com.adazhdw.ktlib.img.captureImageCoroutines
 import com.adazhdw.ktlib.img.selectImageCoroutines
-import com.adazhdw.ktlib.list.BaseRvAdapter
-import com.adazhdw.ktlib.list.BaseViewHolder
-import com.adazhdw.ktlib.list.ListFragmentLine
+import com.adazhdw.ktlib.list.ListAdapter
+import com.adazhdw.ktlib.list.ListFragmentEx
+import com.adazhdw.ktlib.list.ListViewHolder
 import com.adazhdw.ktlib.mvvm.getViewModel
 import com.adazhdw.ktlib.utils.permission.KtPermission
 import com.adazhdw.ktlib.utils.permission.PermissionCallback
@@ -36,10 +38,10 @@ class NetRequestActivity : BaseActivityImpl() {
 
     private var isLogin by SPDelegate.preference("isLogin", false)
     private val permissions = arrayOf(
-            Manifest.permission.CAMERA,
-            Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.ACCESS_COARSE_LOCATION
+        Manifest.permission.CAMERA,
+        Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.ACCESS_COARSE_LOCATION
     )
 
     override fun initView() {
@@ -65,11 +67,14 @@ class NetRequestActivity : BaseActivityImpl() {
         }
         permissionBtn.setOnClickListener {
             if (!KtPermission.isGranted(permissions, this)) {
-                KtPermission.request(this, permissions.toList(), callback = object : PermissionCallback {
-                    override fun invoke(p1: Boolean, p2: List<String>) {
+                KtPermission.request(
+                    this,
+                    permissions.toList(),
+                    callback = object : PermissionCallback {
+                        override fun invoke(p1: Boolean, p2: List<String>) {
 
-                    }
-                })
+                        }
+                    })
             } else {
                 toast("权限已授予")
             }
@@ -107,38 +112,33 @@ class NetRequestActivity : BaseActivityImpl() {
 
 }
 
-class WxChaptersFragment : ListFragmentLine<ChapterHistory, ChaptersAdapter>() {
+class WxChaptersFragment : ListFragmentEx<ChapterHistory, ChaptersAdapter>() {
+
     override val mLoadMoreEnable: Boolean
         get() = true
 
-    override fun onEmptyView(): View {
-        return TextView(context).apply {
-            text = "emptyText"
-        }
+    override fun starAtPage(): Int {
+        return 0
     }
 
-    override fun onNextPage(page: Int, callback: LoadCallback) {
+    override fun nextPage(page: Int, callback: OnRequestCallback<ChapterHistory>) {
         launch {
             val data = apiService.getWxArticleHistory2(408, page).await()
-            callback.onResult()
-            callback.onSuccessLoad(data.data?.datas ?: listOf())
+            mHandler.postDelayed({
+                callback.onSuccess(data.data?.datas ?: listOf())
+            },500)
         }
     }
 
     override fun onAdapter(): ChaptersAdapter = ChaptersAdapter()
 }
 
-class ChaptersAdapter : BaseRvAdapter<ChapterHistory>() {
-    override fun onLayoutId(): Int {
+class ChaptersAdapter : ListAdapter() {
+    override fun layoutId(): Int {
         return R.layout.net_chapter_item
     }
 
-    override fun onFooterLayoutId(): Int {
-        return R.layout.list_base_footer_impl
-    }
-
-    override fun initData(holder: BaseViewHolder, position: Int) {
-        super.initData(holder, position)
-        holder.itemView.chapterName.text = mData[position].title
+    override fun bindHolder(holder: ListViewHolder, data: Any, position: Int) {
+        holder.itemView.chapterName.text = (data as ChapterHistory).title
     }
 }

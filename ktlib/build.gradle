@@ -46,6 +46,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0'
@@ -90,9 +91,9 @@ ext {
 
     publishedGroupId = 'com.adazhdw' // the id you want to add in "implement" line
     artifact = 'ktlib' // = libraryName  the id you want to add in "implement" line--must be the module name in android project
-    libraryVersion = '0.3.6'
+    libraryVersion = '0.4.0'
 
-    libraryDescription = 'FragmentExt add inline '
+    libraryDescription = 'new ListFragmentEx---new Structure'
     siteUrl = 'https://github.com/adazhdw/KtLibTest'
     gitUrl = 'https://github.com/adazhdw/KtLibTest.git'
     developerId = 'adazhdw1207'
