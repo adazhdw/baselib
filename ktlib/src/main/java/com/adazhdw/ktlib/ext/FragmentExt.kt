@@ -1,4 +1,4 @@
-@file:Suppress("NOTHING_TO_INLINE","unused")
+@file:Suppress("NOTHING_TO_INLINE", "unused")
 
 package com.adazhdw.ktlib.ext
 
@@ -14,16 +14,6 @@ import androidx.fragment.app.FragmentTransaction
  */
 
 
-inline fun FragmentActivity.replaceFragment(
-    fragment: Fragment,
-    frameId: Int,
-    isAllowingStateLose: Boolean = false
-) {
-    supportFragmentManager.transact(isAllowingStateLose) {
-        replace(frameId, fragment)
-    }
-}
-
 inline fun FragmentActivity.addFragment(
     fragment: Fragment,
     frameId: Int,
@@ -34,9 +24,35 @@ inline fun FragmentActivity.addFragment(
     }
 }
 
+inline fun Fragment.addFragment(
+    fragment: Fragment,
+    frameId: Int,
+    isAllowingStateLose: Boolean = false
+) {
+    childFragmentManager.transact(isAllowingStateLose) {
+        add(frameId, fragment)
+    }
+}
+
 inline fun FragmentActivity.showFragment(fragment: Fragment, isAllowingStateLose: Boolean = false) {
     supportFragmentManager.transact(isAllowingStateLose) {
         show(fragment)
+    }
+}
+
+inline fun Fragment.showFragment(fragment: Fragment, isAllowingStateLose: Boolean = false) {
+    childFragmentManager.transact(isAllowingStateLose) {
+        show(fragment)
+    }
+}
+
+inline fun FragmentActivity.replaceFragment(
+    fragment: Fragment,
+    frameId: Int,
+    isAllowingStateLose: Boolean = false
+) {
+    supportFragmentManager.transact(isAllowingStateLose) {
+        replace(frameId, fragment)
     }
 }
 
@@ -47,18 +63,6 @@ inline fun Fragment.replaceFragment(
 ) {
     childFragmentManager.transact(isAllowingStateLose) {
         replace(frameId, fragment)
-    }
-}
-
-inline fun Fragment.addFragment(fragment: Fragment, frameId: Int, isAllowingStateLose: Boolean = false) {
-    childFragmentManager.transact(isAllowingStateLose) {
-        add(frameId, fragment)
-    }
-}
-
-inline fun Fragment.showFragment(fragment: Fragment, isAllowingStateLose: Boolean = false) {
-    childFragmentManager.transact(isAllowingStateLose) {
-        show(fragment)
     }
 }
 
