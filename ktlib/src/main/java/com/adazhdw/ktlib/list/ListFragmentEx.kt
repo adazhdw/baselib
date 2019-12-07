@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adazhdw.ktlib.R
 import com.adazhdw.ktlib.base.BaseFragment
-import com.adazhdw.ktlib.widget.LinearSpacingItemDecoration
+import com.adazhdw.ktlib.base.BaseFragmentImpl
 import kotlinx.android.synthetic.main.fragment_list_layout_ex.*
 
-abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragment() {
+abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
     override val layoutId: Int
         get() = R.layout.fragment_list_layout_ex
     open val mLoadMoreEnable: Boolean
@@ -37,10 +37,20 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragment() {
                 requestData(false)
             }
         })
-        val loadMoreView = DefaultLoadMoreView(view.context)
+        setLoadMoreView(view)
+        listRV.adapter = mListAdapter
+    }
+
+    private fun setLoadMoreView(view: View) {
+        val onLoadMoreView = onLoadMoreView(view)
+        val loadMoreView: ListRecyclerView.LoadMoreView =
+            if (onLoadMoreView is View) {
+                onLoadMoreView
+            } else {
+                DefaultLoadMoreView(view.context)
+            }
         listRV.setLoadMoreView(loadMoreView)
         mListAdapter.setLoadMoreView(loadMoreView)
-        listRV.adapter = mListAdapter
     }
 
     override fun requestStart() {
@@ -97,13 +107,12 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragment() {
         return BottomItemDecoration(5)
     }
 
+    open fun onLoadMoreView(rootView: View): ListRecyclerView.LoadMoreView {
+        return DefaultLoadMoreView(rootView.context)
+    }
+
     interface OnRequestCallback<M> {
         fun onSuccess(list: List<M>)
         fun onError(errorCode: Int, errorMsg: String)
     }
-
-    override fun initData() {
-
-    }
-
 }

@@ -11,7 +11,6 @@ import com.adazhdw.ktlib.ext.dp2px
 
 class DefaultLoadMoreView : FrameLayout, ListRecyclerView.LoadMoreView {
 
-
     private val loadTv: TextView
 
     constructor(context: Context) : this(context, null)
@@ -22,11 +21,11 @@ class DefaultLoadMoreView : FrameLayout, ListRecyclerView.LoadMoreView {
         defStyleAttr
     ) {
         val loadView =
-            LayoutInflater.from(context).inflate(R.layout.fragment_list_footer, this, false)
+            LayoutInflater.from(context).inflate(R.layout.fragment_list_footer, null, false)
         loadTv = loadView.findViewById(R.id.loadTv)
         this.addView(
             loadView,
-            LayoutParams(LayoutParams.WRAP_CONTENT, dp2px(45f)).apply { gravity = Gravity.CENTER })
+            LayoutParams(LayoutParams.MATCH_PARENT, dp2px(45f)).apply { gravity = Gravity.CENTER })
     }
 
     override fun onLoading() {
