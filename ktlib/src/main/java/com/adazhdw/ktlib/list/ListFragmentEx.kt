@@ -34,7 +34,8 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
         listRV.addItemDecoration(onItemDecoration())
         listRV.setLoadMoreListener(object : ListRecyclerView.LoadMoreListener {
             override fun onLoadMore() {
-                requestData(false)
+                if (mLoadMoreEnable)
+                    requestData(false)
             }
         })
         setLoadMoreView(view)
@@ -82,13 +83,13 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
                     mListAdapter.addData(list)
                     listRV?.onLoadFinish(list.isEmpty(), true)
                 }
-                mListAdapter.loading(false)
+                mHandler.post { mListAdapter.loading(false) }
             }
 
             override fun onError(errorCode: Int, errorMsg: String) {
                 swipe?.isRefreshing = false
                 listRV?.onLoadError(errorCode, errorMsg)
-                mListAdapter.loading(false)
+                mHandler.post { mListAdapter.loading(false) }
             }
         })
     }
@@ -109,6 +110,16 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
 
     open fun onLoadMoreView(rootView: View): ListRecyclerView.LoadMoreView {
         return DefaultLoadMoreView(rootView.context)
+    }
+
+    protected fun scrollToTop(smooth: Boolean = false) {
+        if (smooth) {
+            if (mListAdapter.getData().isNotEmpty())
+                listRV?.smoothScrollToPosition(0)
+        } else {
+            if (mListAdapter.getData().isNotEmpty())
+                listRV?.scrollToPosition(0)
+        }
     }
 
     interface OnRequestCallback<M> {

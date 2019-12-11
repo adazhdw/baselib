@@ -32,7 +32,7 @@ abstract class ListAdapter : RecyclerView.Adapter<ListViewHolder>() {
     override fun getItemCount(): Int = mData.size + if (isLoading) 1 else 0
 
     final override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        if (!isLastItem(position)) {
+        if (!isLastItem(position) && !isLoading) {
             bindHolder(holder, mData[position], position)
         }
     }
@@ -48,7 +48,7 @@ abstract class ListAdapter : RecyclerView.Adapter<ListViewHolder>() {
     /**
      * 判断是否是最后一个item
      */
-    protected fun isLastItem(position: Int): Boolean {
+    private fun isLastItem(position: Int): Boolean {
         return position == mData.size
     }
 

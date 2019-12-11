@@ -9,6 +9,7 @@ import com.adazhdw.ktlib.core.network.KtNetCallback
 import com.adazhdw.ktlib.ext.addFragment
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.ext.toast
+import com.adazhdw.ktlib.ext.view.invisible
 import com.adazhdw.ktlib.http.await
 import com.adazhdw.ktlib.img.captureImageCoroutines
 import com.adazhdw.ktlib.img.selectImageCoroutines
@@ -79,6 +80,8 @@ class NetRequestActivity : BaseActivityImpl() {
                 toast("权限已授予")
             }
         }
+        selectImgBtn.invisible()
+        captureImgBtn.invisible()
         selectImgBtn.setOnClickListener {
             launch {
                 val model = selectImageCoroutines()
@@ -126,7 +129,7 @@ class WxChaptersFragment : ListFragmentEx<ChapterHistory, ChaptersAdapter>() {
             val data = apiService.getWxArticleHistory2(408, page).await()
             mHandler.postDelayed({
                 callback.onSuccess(data.data?.datas ?: listOf())
-            },1000)
+            },100)
         }
     }
 
