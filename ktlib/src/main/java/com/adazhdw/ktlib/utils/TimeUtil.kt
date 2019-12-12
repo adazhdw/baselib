@@ -22,28 +22,15 @@ object TimeUtil {
         }
     }
 
-    fun getWholeFormat(timeMs: Long): String {
-        if (timeMs <= 0) return ""
-        val format = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
-        return format.format(Date(timeMs))
-    }
 
-    fun getWholeFormatEx(timeMs: Long): String {
-        if (timeMs <= 0) return ""
-        val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        return format.format(Date(timeMs))
-    }
+    const val ymdFormat = "yyyy-MM-dd"
+    const val ymdCNFormat = "yyyy年MM月dd日"
+    const val ymdHmFormat = "yyyy-MM-dd HH:mm"
+    const val allFormat = "yyyy-MM-dd HH:mm:ss"
 
-    fun getYmdFormat(timeMs: Long): String {
-        if (timeMs <= 0) return ""
-        val format = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
-        return format.format(Date(timeMs))
-    }
-
-    fun getYmdFormatEx(timeMs: Long): String {
-        if (timeMs <= 0) return ""
-        val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return format.format(Date(timeMs))
+    fun getFormatTime(date: Date, formatStr: String = allFormat): String {//可根据需要自行截取数据显示
+        val format = SimpleDateFormat(formatStr, Locale.CHINA)
+        return format.format(date)
     }
 
 }

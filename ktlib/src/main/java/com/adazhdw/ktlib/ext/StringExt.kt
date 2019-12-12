@@ -11,7 +11,6 @@ import java.util.regex.Pattern
 /**
  * 删除所有的标点符号
  *
- * @param str 处理的字符串
  */
 fun String.trimPunct(): String {
     return if (this.isEmpty()) {

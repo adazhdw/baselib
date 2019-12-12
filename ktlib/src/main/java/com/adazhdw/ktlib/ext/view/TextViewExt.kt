@@ -1,5 +1,8 @@
+@file:Suppress("NOTHING_TO_INLINE", "unused")
+
 package com.adazhdw.ktlib.ext.view
 
+import android.graphics.Typeface
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.TypedValue
@@ -11,16 +14,24 @@ import android.widget.TextView
  * description:
  */
 
-fun TextView.setTextSizeDp(size: Float) {
+inline fun TextView.setTextSizeDp(size: Float) {
     setTextSize(TypedValue.COMPLEX_UNIT_DIP, size)
 }
 
-fun TextView.setTextSizeSp(size: Float) {
+inline fun TextView.setTextSizeSp(size: Float) {
     setTextSize(TypedValue.COMPLEX_UNIT_SP, size)
 }
 
-fun TextView.setTextSizePx(size: Float) {
+inline fun TextView.setTextSizePx(size: Float) {
     setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
+}
+
+inline fun TextView.textBold(){
+    typeface = Typeface.DEFAULT_BOLD
+}
+
+inline fun TextView.textDefault(){
+    typeface = Typeface.DEFAULT
 }
 
 inline fun TextView.doBeforeTextChanged(
