@@ -16,19 +16,28 @@ abstract class CoroutinesActivity : AppCompatActivity(), CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + myJob
 
-    protected fun launchOnUI(block: suspend CoroutineScope.() -> Unit) {
-        launch { tryCatch(block, { "error:${it.message}".logE(TAG) }, {}, true) }
+    protected fun launchOnUI(
+        block: suspend CoroutineScope.() -> Unit,
+        error: ((Exception) -> Unit)? = null
+    ) {
+        launch {
+            tryCatch(block, {
+                error?.invoke(it)
+                "error:${it.message}".logE(TAG)
+            }, {}, true)
+        }
     }
 
     private suspend fun tryCatch(
-            tryBlock: suspend CoroutineScope.() -> Unit,
-            catchBlock: suspend CoroutineScope.(Throwable) -> Unit,
-            finallyBlock: suspend CoroutineScope.() -> Unit,
-            handleCancellationExceptionManually: Boolean = false) {
+        tryBlock: suspend CoroutineScope.() -> Unit,
+        catchBlock: suspend CoroutineScope.(Exception) -> Unit,
+        finallyBlock: suspend CoroutineScope.() -> Unit,
+        handleCancellationExceptionManually: Boolean = false
+    ) {
         coroutineScope {
             try {
                 tryBlock()
-            } catch (e: Throwable) {
+            } catch (e: Exception) {
                 if (e !is CancellationException || handleCancellationExceptionManually) {
                     catchBlock(e)
                 } else {

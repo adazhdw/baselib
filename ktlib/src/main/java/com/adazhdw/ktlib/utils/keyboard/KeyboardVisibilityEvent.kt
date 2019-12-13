@@ -21,16 +21,15 @@ object KeyboardVisibilityEvent {
     @JvmStatic
     fun setEventListener(
         activity: Activity,
-        listener: KeyboardVisibilityEventListener
+        listener: ((isOpen: Boolean) -> Unit)? = null
     ) {
-
         val unregistrar = registerEventListener(activity, listener)
-        activity.application
-            .registerActivityLifecycleCallbacks(object : AutoActivityLifecycleCallback(activity) {
-                override fun onTargetActivityDestroyed() {
-                    unregistrar.unregister()
-                }
-            })
+        activity.application.registerActivityLifecycleCallbacks(object :
+            AutoActivityLifecycleCallback(activity) {
+            override fun onTargetActivityDestroyed() {
+                unregistrar.unregister()
+            }
+        })
     }
 
     /**
@@ -42,7 +41,7 @@ object KeyboardVisibilityEvent {
      */
     fun registerEventListener(
         activity: Activity?,
-        listener: KeyboardVisibilityEventListener?
+        onVisibilityChanged: ((isOpen: Boolean) -> Unit)? = null
     ): UnRegistrar {
 
         if (activity == null) {
@@ -54,10 +53,11 @@ object KeyboardVisibilityEvent {
 
         // fix for #37 and #38.
         // The window will not be resized in case of SOFT_INPUT_ADJUST_NOTHING
-        val isNotAdjustNothing = softInputAdjust and WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING != WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING
+        val isNotAdjustNothing =
+            softInputAdjust and WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING != WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING
         require(isNotAdjustNothing) { "Parameter:activity window SoftInputMethod is SOFT_INPUT_ADJUST_NOTHING. In this case window will not be resized" }
 
-        if (listener == null) {
+        if (onVisibilityChanged == null) {
             throw NullPointerException("Parameter:listener must not be null")
         }
 
@@ -84,7 +84,7 @@ object KeyboardVisibilityEvent {
 
                 wasOpened = isOpen
 
-                listener.onVisibilityChanged(isOpen)
+                onVisibilityChanged(isOpen)
             }
         }
         activityRoot.viewTreeObserver.addOnGlobalLayoutListener(layoutListener)

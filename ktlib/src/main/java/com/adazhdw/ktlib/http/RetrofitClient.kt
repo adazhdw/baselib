@@ -35,11 +35,7 @@ object RetrofitClient {
             .baseUrl(mBaseUrl)
             .client(getClient())
             .addConverterFactory(
-                MoshiConverterFactory.create(
-                    Moshi.Builder().add(
-                        KotlinJsonAdapterFactory()
-                    ).build()
-                )
+                MoshiConverterFactory.create(Moshi.Builder().add(KotlinJsonAdapterFactory()).build())
             )
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
@@ -47,8 +43,11 @@ object RetrofitClient {
 
     private fun getLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor(OkHttpLogger()).apply {
-            level =
-                if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.BASIC
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.BASIC
+            }
         }
     }
 

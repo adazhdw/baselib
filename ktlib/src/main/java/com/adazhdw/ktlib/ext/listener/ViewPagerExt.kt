@@ -8,45 +8,45 @@ import androidx.viewpager.widget.ViewPager
  * description:
  */
 
-fun ViewPager.onPageSelected(action: (position: Int) -> Unit) =
-    addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-        override fun onPageScrollStateChanged(state: Int) {
+fun ViewPager.onPageSelected(
+    action: (position: Int) -> Unit
+) = addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+    override fun onPageScrollStateChanged(state: Int) {
 
-        }
+    }
 
-        override fun onPageScrolled(
-            position: Int,
-            positionOffset: Float,
-            positionOffsetPixels: Int
-        ) {
-        }
+    override fun onPageScrolled(
+        position: Int,
+        positionOffset: Float,
+        positionOffsetPixels: Int
+    ) {
+    }
 
-        override fun onPageSelected(position: Int) {
+    override fun onPageSelected(position: Int) {
 
-        }
-    })
+    }
+})
 
 fun ViewPager.onPageChange(
     onPageSelected: (pos: Int) -> Unit,
     onPageScrolled: ((pos: Int, posOffset: Float, posOffsetPixels: Int) -> Unit)? = null,
     onPageScrollStateChanged: ((state: Int) -> Unit)? = null
-) =
-    addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-        override fun onPageScrollStateChanged(state: Int) {
+) = addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+    override fun onPageScrollStateChanged(state: Int) {
 
-        }
+    }
 
-        override fun onPageScrolled(
-            position: Int,
-            positionOffset: Float,
-            positionOffsetPixels: Int
-        ) {
-        }
+    override fun onPageScrolled(
+        position: Int,
+        positionOffset: Float,
+        positionOffsetPixels: Int
+    ) {
+    }
 
-        override fun onPageSelected(position: Int) {
+    override fun onPageSelected(position: Int) {
 
-        }
-    })
+    }
+})
 
 
 fun ViewPager.setPageLoadMoreListener(listener: (() -> Unit)) {
