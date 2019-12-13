@@ -71,7 +71,7 @@ fun Context.pasteText(): String? {
 /**
  * startWith
  */
-fun String.startWidth(prefix: String, ignoreCase: Boolean = true): Boolean {
+inline fun String.startWidth(prefix: String, ignoreCase: Boolean = true): Boolean {
     return startsWith(prefix, ignoreCase)
 }
 

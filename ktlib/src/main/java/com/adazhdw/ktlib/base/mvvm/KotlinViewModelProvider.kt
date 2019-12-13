@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.mvvm
+package com.adazhdw.ktlib.base.mvvm
 
 import androidx.annotation.MainThread
 import androidx.fragment.app.Fragment

@@ -3,8 +3,10 @@ package com.adazhdw.ktlib.ext
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Point
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.WindowManager
+import androidx.annotation.DrawableRes
 
 /**
  * author: daguozhu
@@ -45,3 +47,11 @@ val Context.screenHeight: Int
         wm.defaultDisplay.getRealSize(point)// 小于17用：wm.defaultDisplay.getSize(point)
         return point.y
     }
+
+fun Context.getDrawableEx(@DrawableRes res:Int): Drawable? {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        resources.getDrawable(res,null)
+    } else {
+        resources.getDrawable(res)
+    }
+}

@@ -18,8 +18,8 @@ abstract class CoroutinesFragment : Fragment(), CoroutineScope {
     }
 
     protected fun launchOnUI(
-        block: suspend CoroutineScope.() -> Unit,
-        error: ((Exception) -> Unit)? = null
+        error: ((Exception) -> Unit)? = null,
+        block: suspend CoroutineScope.() -> Unit
     ) {
         launch {
             tryCatch(block, {

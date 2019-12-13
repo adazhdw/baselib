@@ -38,7 +38,7 @@ inline fun View.gone() {
 
 inline var View.isVisible
     get() = visibility == View.VISIBLE
-    set(value) = if (value) visible() else gone()
+    set(value) = if (value) visible() else invisible()
 
 inline var View.isInvisible
     get() = visibility == View.INVISIBLE

@@ -15,8 +15,6 @@ import androidx.fragment.app.FragmentActivity
  * description:
  */
 
-
-
 inline fun Fragment.getColorEx(@ColorRes res:Int): Int {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         resources.getColor(res,context?.theme)

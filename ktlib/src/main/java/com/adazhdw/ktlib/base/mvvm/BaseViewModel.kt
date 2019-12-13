@@ -1,9 +1,8 @@
-package com.adazhdw.ktlib.mvvm
+package com.adazhdw.ktlib.base.mvvm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.adazhdw.ktlib.ext.logE
-import com.adazhdw.ktlib.ext.loge
 import kotlinx.coroutines.*
 
 abstract class BaseViewModel<R : BaseRepository> : ViewModel() {

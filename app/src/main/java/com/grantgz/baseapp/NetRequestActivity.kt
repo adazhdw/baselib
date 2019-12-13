@@ -1,8 +1,6 @@
 package com.grantgz.baseapp
 
 import android.Manifest
-import android.view.View
-import android.widget.TextView
 import com.adazhdw.ktlib.base.BaseActivityImpl
 import com.adazhdw.ktlib.core.delegate.SPDelegate
 import com.adazhdw.ktlib.core.network.KtNetCallback
@@ -16,7 +14,7 @@ import com.adazhdw.ktlib.img.selectImageCoroutines
 import com.adazhdw.ktlib.list.ListAdapter
 import com.adazhdw.ktlib.list.ListFragmentEx
 import com.adazhdw.ktlib.list.ListViewHolder
-import com.adazhdw.ktlib.mvvm.getViewModel
+import com.adazhdw.ktlib.base.mvvm.getViewModel
 import com.adazhdw.ktlib.utils.permission.KtPermission
 import com.adazhdw.ktlib.utils.permission.PermissionCallback
 import com.grantgz.baseapp.http.ChapterHistory
