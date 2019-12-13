@@ -11,6 +11,9 @@ object LibUtil {
     private var currentApplication: Application? = null
     private val mKtLifecycleCallback = KtLifecycleCallback()
 
+    val context: Context
+        get() = getApp()
+
     fun getApp(): Context {
         if (currentApplication != null) return currentApplication!!.applicationContext
         val app = getAppByReflect()
