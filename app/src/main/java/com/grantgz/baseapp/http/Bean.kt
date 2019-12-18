@@ -1,15 +1,12 @@
 package com.grantgz.baseapp.http
 
-import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = true)
 data class BaseResponse<T>(
     val errorCode: Int = 0,
     val errorMsg: String = "",
     val data: T? = null
 )
 
-@JsonClass(generateAdapter = true)
 data class ListResponse<T>(
     val errorCode: Int = 0,
     val errorMsg: String = "",
@@ -17,7 +14,6 @@ data class ListResponse<T>(
 )
 
 
-@JsonClass(generateAdapter = true)
 data class WxArticleChapter(
     var children: List<String>? = null,
     var courseId: Int = 0,
@@ -29,7 +25,6 @@ data class WxArticleChapter(
     var visible: Int = 0
 )
 
-@JsonClass(generateAdapter = true)
 data class ChapterHistory(
     val apkLink: String? = null,
     val author: String? = null,
@@ -53,18 +48,15 @@ data class ChapterHistory(
     val tags: List<HistoryTag>? = null
 )
 
-@JsonClass(generateAdapter = true)
 data class HistoryTag(
     val name: String? = null,
     val url: String? = null
 )
 
-@JsonClass(generateAdapter = true)
 data class HistoryData(
     val datas: List<ChapterHistory>? = null
 )
 
-@JsonClass(generateAdapter = true)
 data class HotKey(
     val id: Int,
     val name: String?

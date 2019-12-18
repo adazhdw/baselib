@@ -3,12 +3,10 @@ package com.adazhdw.ktlib.http
 import com.adazhdw.ktlib.BuildConfig
 import com.adazhdw.ktlib.mBaseUrl
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 
@@ -35,7 +33,8 @@ object RetrofitClient {
             .baseUrl(mBaseUrl)
             .client(getClient())
             .addConverterFactory(
-                MoshiConverterFactory.create(Moshi.Builder().add(KotlinJsonAdapterFactory()).build())
+               /* MoshiConverterFactory.create(Moshi.Builder().add(KotlinJsonAdapterFactory()).build())*/
+                GsonConverterFactory.create()
             )
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()

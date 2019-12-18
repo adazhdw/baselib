@@ -57,12 +57,12 @@ class NetRequestActivity : BaseActivityImpl() {
          ("isLogin-----$isLogin").logD()*/
 
         requestBtn.setOnClickListener {
-            launchOnUI {
-                apiService.getHotKey().await()
-            }
-            /*launch {
+            /*launchOnUI {
                 apiService.getHotKey().await()
             }*/
+            launch {
+                apiService.getHotKey().await()
+            }
         }
         permissionBtn.setOnClickListener {
             if (!KtPermission.isGranted(permissions, this)) {
