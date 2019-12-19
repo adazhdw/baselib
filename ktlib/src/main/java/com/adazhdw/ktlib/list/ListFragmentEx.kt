@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adazhdw.ktlib.R
-import com.adazhdw.ktlib.base.BaseFragment
 import com.adazhdw.ktlib.base.BaseFragmentImpl
 import kotlinx.android.synthetic.main.fragment_list_layout_ex.*
 
@@ -29,7 +28,6 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
         swipe.setOnRefreshListener {
             refresh()
         }
-        mListAdapter.mContext = view.context
         listRV.layoutManager = onLayoutManager()
         listRV.addItemDecoration(onItemDecoration())
         listRV.setLoadMoreListener(object : ListRecyclerView.LoadMoreListener {
@@ -118,10 +116,10 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
 
     protected fun scrollToTop(smooth: Boolean = false) {
         if (smooth) {
-            if (mListAdapter.getData().isNotEmpty())
+            if (mListAdapter.data().isNotEmpty())
                 listRV?.smoothScrollToPosition(0)
         } else {
-            if (mListAdapter.getData().isNotEmpty())
+            if (mListAdapter.data().isNotEmpty())
                 listRV?.scrollToPosition(0)
         }
     }

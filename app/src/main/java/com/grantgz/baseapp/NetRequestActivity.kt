@@ -135,11 +135,11 @@ class WxChaptersFragment : ListFragmentEx<ChapterHistory, ChaptersAdapter>() {
 }
 
 class ChaptersAdapter : ListAdapter() {
-    override fun layoutId(): Int {
-        return R.layout.net_chapter_item
-    }
 
     override fun bindHolder(holder: ListViewHolder, data: Any, position: Int) {
         holder.itemView.chapterName.text = (data as ChapterHistory).title
     }
+
+    override val layoutId: Int
+        get() = R.layout.net_chapter_item
 }
