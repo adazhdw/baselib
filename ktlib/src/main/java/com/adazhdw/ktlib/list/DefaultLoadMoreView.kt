@@ -9,7 +9,7 @@ import android.widget.TextView
 import com.adazhdw.ktlib.R
 import com.adazhdw.ktlib.ext.dp2px
 
-class DefaultLoadMoreView : FrameLayout, ListRecyclerView.LoadMoreView {
+class DefaultLoadMoreView : FrameLayout, LoadMoreView {
 
     private val loadTv: TextView
 
@@ -20,12 +20,9 @@ class DefaultLoadMoreView : FrameLayout, ListRecyclerView.LoadMoreView {
         attrs,
         defStyleAttr
     ) {
-        val loadView =
-            LayoutInflater.from(context).inflate(R.layout.fragment_list_footer, null, false)
+        val loadView = LayoutInflater.from(context).inflate(R.layout.fragment_list_footer, null, false)
         loadTv = loadView.findViewById(R.id.loadTv)
-        this.addView(
-            loadView,
-            LayoutParams(LayoutParams.MATCH_PARENT, dp2px(45f)).apply { gravity = Gravity.CENTER })
+        this.addView(loadView)
     }
 
     override fun onLoading() {
@@ -40,8 +37,7 @@ class DefaultLoadMoreView : FrameLayout, ListRecyclerView.LoadMoreView {
 
     }
 
-    override fun onLoadError(errorCode: Int, errorMessage: String?) {
-        loadTv.text = "$errorMessage"
+    override fun onLoadError(errorCode: Int, errorMsg: String?) {
+        loadTv.text = "$errorMsg"
     }
-
 }

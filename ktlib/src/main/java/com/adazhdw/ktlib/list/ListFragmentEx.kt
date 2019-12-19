@@ -44,7 +44,7 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
 
     private fun setLoadMoreView(view: View) {
         val onLoadMoreView = onLoadMoreView(view)
-        val loadMoreView: ListRecyclerView.LoadMoreView =
+        val loadMoreView: LoadMoreView =
             if (onLoadMoreView is View) {
                 onLoadMoreView
             } else {
@@ -108,7 +108,7 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
         return BottomItemDecoration(5)
     }
 
-    open fun onLoadMoreView(rootView: View): ListRecyclerView.LoadMoreView {
+    open fun onLoadMoreView(rootView: View): LoadMoreView {
         return DefaultLoadMoreView(rootView.context)
     }
 

@@ -96,7 +96,7 @@ ext {
 
     publishedGroupId = 'com.adazhdw' // the id you want to add in "implement" line
     artifact = 'ktlib' // = libraryName  the id you want to add in "implement" line--must be the module name in android project
-    libraryVersion = '0.5.2'
+    libraryVersion = '0.5.3'
 
     libraryDescription = 'optimize the code of ListRecyclerView,avoiding repeated call of dispatchLoadMore()'
     siteUrl = 'https://github.com/adazhdw/KtLibTest'

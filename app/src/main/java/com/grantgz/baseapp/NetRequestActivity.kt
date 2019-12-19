@@ -127,7 +127,7 @@ class WxChaptersFragment : ListFragmentEx<ChapterHistory, ChaptersAdapter>() {
             val data = apiService.getWxArticleHistory2(428, page).await().data?.datas
             mHandler.postDelayed({
                 callback.onSuccess(data ?: listOf())
-            }, 1000)
+            }, 200)
         }
     }
 

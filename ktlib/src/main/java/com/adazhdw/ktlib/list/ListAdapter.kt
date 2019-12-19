@@ -12,45 +12,45 @@ import androidx.recyclerview.widget.RecyclerView
 abstract class ListAdapter : RecyclerView.Adapter<ListViewHolder>() {
 
     lateinit var mContext: Context
+    private val footerId :Int = 1024
     private val mData: MutableList<Any> = mutableListOf()
     private var isLoading = false
     private val mLayoutInflater by lazy { LayoutInflater.from(mContext) }
-    private var mLoadMoreView: ListRecyclerView.LoadMoreView? = null
-    private var addDataEmpty = false
+    private var mLoadMoreView: LoadMoreView? = null
 
     @LayoutRes
     abstract fun layoutId(): Int
 
-    private fun footerId(): Int = 1024
-
     abstract fun bindHolder(holder: ListViewHolder, data: Any, position: Int)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        if (viewType == footerId() && mLoadMoreView != null && mLoadMoreView is View)
+        if (viewType == footerId && mLoadMoreView != null && mLoadMoreView is View)
             return ListViewHolder(mLoadMoreView as View)
-        return ListViewHolder(mLayoutInflater.inflate(viewType, parent, false))
+        return ListViewHolder(mLayoutInflater.inflate(layoutId(), parent, false))
     }
 
-    override fun getItemCount(): Int = mData.size + if (isLoading && !addDataEmpty) 1 else 0
-
     final override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        if (!isLastItem(position) && !isLoading) {
+        if (!isLoadMoreView(position) && !isLoading) {
             bindHolder(holder, mData[position], position)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (isLastItem(position)) {
-            footerId()
+        return if (isLoadMoreView(position)) {
+            footerId
         } else {
-            layoutId()
+            super.getItemViewType(position)
         }
+    }
+
+    override fun getItemCount(): Int {
+        return mData.size + if (isLoading && mLoadMoreView != null) 1 else 0
     }
 
     /**
      * 判断是否是最后一个item
      */
-    private fun isLastItem(position: Int): Boolean {
+    private fun isLoadMoreView(position: Int): Boolean {
         return position == mData.size
     }
 
@@ -66,7 +66,6 @@ abstract class ListAdapter : RecyclerView.Adapter<ListViewHolder>() {
             this.mData.addAll(list)
             notifyItemRangeChanged(size, this.mData.size)
         }
-        addDataEmpty = list.isEmpty()
     }
 
     fun clearData() {
@@ -80,10 +79,14 @@ abstract class ListAdapter : RecyclerView.Adapter<ListViewHolder>() {
 
     fun loading(loading: Boolean) {
         isLoading = loading
-        notifyItemChanged(itemCount)
+        if (isLoading) {
+            notifyItemChanged(itemCount)
+        } else {
+            notifyItemRemoved(itemCount)
+        }
     }
 
-    fun setLoadMoreView(loadMoreView: ListRecyclerView.LoadMoreView) {
+    fun setLoadMoreView(loadMoreView: LoadMoreView) {
         this.mLoadMoreView = loadMoreView
     }
 
@@ -94,7 +97,7 @@ abstract class ListAdapter : RecyclerView.Adapter<ListViewHolder>() {
         if (manager is GridLayoutManager) {
             manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
-                    return if (isLastItem(position)) manager.spanCount else 1
+                    return if (isLoadMoreView(position)) manager.spanCount else 1
                 }
             }
         }

@@ -34,7 +34,8 @@ class ListRecyclerView : RecyclerView {
         val layoutManager = layoutManager
         val itemCount = layoutManager?.itemCount ?: 0
         if (itemCount <= 0) return
-        val isPullUp = (mScrollState == SCROLL_STATE_DRAGGING || mScrollState == SCROLL_STATE_SETTLING) && dy > 0//dy>0表示手指向上滑动时，才触发loadmore
+        val isPullUp =
+            (mScrollState == SCROLL_STATE_DRAGGING || mScrollState == SCROLL_STATE_SETTLING) && dy > 0//dy>0表示手指向上滑动时，才触发loadmore
         val lastVisiblePosition: Int
         when (layoutManager) {
             is GridLayoutManager -> {
@@ -62,13 +63,13 @@ class ListRecyclerView : RecyclerView {
 
     private fun dispatchLoadMore() {
         if (loadMoreEnabled && !isLoadingMore) {
-            isLoadingMore = true
             val adapter = adapter
             if (adapter != null && adapter is ListAdapter) {
+                isLoadingMore = true
                 adapter.loading(true)
+                mLoadMoreView.onLoading()
+                mLoadMoreListener?.onLoadMore()
             }
-            mLoadMoreView.onLoading()
-            mLoadMoreListener?.onLoadMore()
         }
     }
 
@@ -108,29 +109,6 @@ class ListRecyclerView : RecyclerView {
 
     fun getLoadMoreView(): LoadMoreView {
         return mLoadMoreView
-    }
-
-    interface LoadMoreView {
-
-        /**
-         * Show progress.
-         */
-        fun onLoading()
-
-        /**
-         * Load finish, handle result.
-         */
-        fun onLoadFinish(dataEmpty: Boolean, hasMore: Boolean)
-
-        /**
-         * Non-auto-loading mode, you can to click on the item to load.
-         */
-        fun onWaitToLoadMore(loadMoreListener: LoadMoreListener)
-
-        /**
-         * Load error.
-         */
-        fun onLoadError(errorCode: Int, errorMsg: String?)
     }
 
     interface LoadMoreListener {
