@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
-import com.adazhdw.ktlib.R
 
 abstract class ListAdapter : RecyclerView.Adapter<ListViewHolder>() {
 
@@ -15,6 +14,7 @@ abstract class ListAdapter : RecyclerView.Adapter<ListViewHolder>() {
     private var isLoading = false
     private val mLayoutInflater by lazy { LayoutInflater.from(mContext) }
     private var mLoadMoreView: ListRecyclerView.LoadMoreView? = null
+    private var addDataEmpty = false
 
     @LayoutRes
     abstract fun layoutId(): Int
@@ -29,7 +29,7 @@ abstract class ListAdapter : RecyclerView.Adapter<ListViewHolder>() {
         return ListViewHolder(mLayoutInflater.inflate(viewType, parent, false))
     }
 
-    override fun getItemCount(): Int = mData.size + if (isLoading) 1 else 0
+    override fun getItemCount(): Int = mData.size + if (isLoading && !addDataEmpty) 1 else 0
 
     final override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         if (!isLastItem(position) && !isLoading) {
@@ -59,9 +59,12 @@ abstract class ListAdapter : RecyclerView.Adapter<ListViewHolder>() {
     }
 
     fun addData(list: List<Any>) {
-        val size = this.mData.size
-        this.mData.addAll(list)
-        notifyItemRangeChanged(size, this.mData.size)
+        if (list.isNotEmpty()) {
+            val size = this.mData.size
+            this.mData.addAll(list)
+            notifyItemRangeChanged(size, this.mData.size)
+        }
+        addDataEmpty = list.isEmpty()
     }
 
     fun clearData() {

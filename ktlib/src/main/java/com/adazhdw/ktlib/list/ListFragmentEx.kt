@@ -81,7 +81,7 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
                     swipe?.isRefreshing = false
                 } else {
                     mListAdapter.addData(list)
-                    listRV?.onLoadFinish(list.isEmpty(), true)
+                    listRV?.onLoadFinish(list.isEmpty(), list.isNotEmpty())
                 }
                 mHandler.post { mListAdapter.loading(false) }
             }

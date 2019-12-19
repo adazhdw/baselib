@@ -124,10 +124,10 @@ class WxChaptersFragment : ListFragmentEx<ChapterHistory, ChaptersAdapter>() {
 
     override fun nextPage(page: Int, callback: OnRequestCallback<ChapterHistory>) {
         launch {
-            val data = apiService.getWxArticleHistory2(408, page).await()
+            val data = apiService.getWxArticleHistory2(428, page).await().data?.datas
             mHandler.postDelayed({
-                callback.onSuccess(data.data?.datas ?: listOf())
-            },100)
+                callback.onSuccess(data ?: listOf())
+            }, 1000)
         }
     }
 
