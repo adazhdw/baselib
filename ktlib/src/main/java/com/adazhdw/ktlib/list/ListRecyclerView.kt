@@ -34,11 +34,12 @@ class ListRecyclerView : RecyclerView {
         val layoutManager = layoutManager
         val itemCount = layoutManager?.itemCount ?: 0
         if (itemCount <= 0) return
+        val isPullUp = (mScrollState == SCROLL_STATE_DRAGGING || mScrollState == SCROLL_STATE_SETTLING) && dy > 0//dy>0表示手指向上滑动时，才触发loadmore
         val lastVisiblePosition: Int
         when (layoutManager) {
             is GridLayoutManager -> {
                 lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
-                if (itemCount == lastVisiblePosition + 1 && (mScrollState == SCROLL_STATE_DRAGGING || mScrollState == SCROLL_STATE_SETTLING)) {
+                if (itemCount == lastVisiblePosition + 1 && isPullUp) {
                     dispatchLoadMore()
                 }
             }
@@ -46,13 +47,13 @@ class ListRecyclerView : RecyclerView {
                 val into = intArrayOf(layoutManager.spanCount)
                 layoutManager.findFirstVisibleItemPositions(into)
                 lastVisiblePosition = into.max() ?: 0
-                if (itemCount == lastVisiblePosition + 1 && (mScrollState == SCROLL_STATE_DRAGGING || mScrollState == SCROLL_STATE_SETTLING)) {
+                if (itemCount == lastVisiblePosition + 1 && isPullUp) {
                     dispatchLoadMore()
                 }
             }
             is LinearLayoutManager -> {
                 lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
-                if (itemCount == lastVisiblePosition + 1 && (mScrollState == SCROLL_STATE_DRAGGING || mScrollState == SCROLL_STATE_SETTLING)) {
+                if (itemCount == lastVisiblePosition + 1 && isPullUp) {
                     dispatchLoadMore()
                 }
             }

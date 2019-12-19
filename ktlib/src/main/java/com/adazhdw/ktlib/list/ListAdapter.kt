@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+
 
 abstract class ListAdapter : RecyclerView.Adapter<ListViewHolder>() {
 
@@ -83,6 +85,19 @@ abstract class ListAdapter : RecyclerView.Adapter<ListViewHolder>() {
 
     fun setLoadMoreView(loadMoreView: ListRecyclerView.LoadMoreView) {
         this.mLoadMoreView = loadMoreView
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        // 适配不同的LayoutManager
+        val manager = recyclerView.layoutManager
+        if (manager is GridLayoutManager) {
+            manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    return if (isLastItem(position)) manager.spanCount else 1
+                }
+            }
+        }
     }
 
 }

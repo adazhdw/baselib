@@ -30,7 +30,7 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
             refresh()
         }
         mListAdapter.mContext = view.context
-        listRV.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        listRV.layoutManager = onLayoutManager()
         listRV.addItemDecoration(onItemDecoration())
         listRV.setLoadMoreListener(object : ListRecyclerView.LoadMoreListener {
             override fun onLoadMore() {
@@ -110,6 +110,10 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
 
     open fun onLoadMoreView(rootView: View): ListRecyclerView.LoadMoreView {
         return DefaultLoadMoreView(rootView.context)
+    }
+
+    open fun onLayoutManager(): RecyclerView.LayoutManager {
+        return LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
 
     protected fun scrollToTop(smooth: Boolean = false) {
