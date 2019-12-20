@@ -1,6 +1,7 @@
 package com.grantgz.baseapp
 
 import android.Manifest
+import android.content.Context
 import com.adazhdw.ktlib.base.BaseActivityImpl
 import com.adazhdw.ktlib.core.delegate.SPDelegate
 import com.adazhdw.ktlib.core.network.KtNetCallback
@@ -131,10 +132,10 @@ class WxChaptersFragment : ListFragmentEx<ChapterHistory, ChaptersAdapter>() {
         }
     }
 
-    override fun onAdapter(): ChaptersAdapter = ChaptersAdapter()
+    override fun onAdapter(): ChaptersAdapter = ChaptersAdapter(mContext)
 }
 
-class ChaptersAdapter : ListAdapter() {
+class ChaptersAdapter(context: Context) : ListAdapter(context) {
 
     override fun bindHolder(holder: ListViewHolder, data: Any, position: Int) {
         holder.itemView.chapterName.text = (data as ChapterHistory).title

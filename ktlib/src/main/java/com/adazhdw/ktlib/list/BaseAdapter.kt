@@ -5,16 +5,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class BaseAdapter : RecyclerView.Adapter<ListViewHolder>() {
+abstract class BaseAdapter(private val mContext:Context) : RecyclerView.Adapter<ListViewHolder>() {
 
-    protected lateinit var mContext: Context
     protected val mLayoutInflater: LayoutInflater by lazy { LayoutInflater.from(mContext) }
     protected val mData: MutableList<Any> = mutableListOf()
     abstract val layoutId: Int
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        if (!this::mContext.isInitialized)
-            mContext = parent.context
         return ListViewHolder(mLayoutInflater.inflate(layoutId, parent, false))
     }
 

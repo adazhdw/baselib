@@ -1,12 +1,13 @@
 package com.adazhdw.ktlib.list
 
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class ListAdapter : BaseAdapter() {
+abstract class ListAdapter(context:Context) : BaseAdapter(context) {
 
     private val footerId :Int = 1024
     private var isLoading = false

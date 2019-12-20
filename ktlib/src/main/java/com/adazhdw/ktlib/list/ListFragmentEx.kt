@@ -1,5 +1,6 @@
 package com.adazhdw.ktlib.list
 
+import android.content.Context
 import android.os.Handler
 import android.view.View
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -18,6 +19,7 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
     private val mListAdapter: A by lazy { onAdapter() }
     private var mCurrentPage: Int = 1
     protected val mHandler: Handler = Handler()
+    protected lateinit var mContext:Context
 
     /**
      * 获取RecyclerView Adapter
@@ -25,6 +27,7 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
     abstract fun onAdapter(): A
 
     override fun initView(view: View) {
+        mContext = view.context
         swipe.setOnRefreshListener {
             refresh()
         }
