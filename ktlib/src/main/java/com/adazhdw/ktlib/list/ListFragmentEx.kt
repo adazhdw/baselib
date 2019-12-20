@@ -35,8 +35,9 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
         listRV.addItemDecoration(onItemDecoration())
         listRV.setLoadMoreListener(object : ListRecyclerView.LoadMoreListener {
             override fun onLoadMore() {
-                if (mLoadMoreEnable)
+                if (mLoadMoreEnable) {
                     requestData(false)
+                }
             }
         })
         listRV.loadMoreEnabled(mLoadMoreEnable)

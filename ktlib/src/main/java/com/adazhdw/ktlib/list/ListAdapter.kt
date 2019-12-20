@@ -41,7 +41,11 @@ abstract class ListAdapter(context: Context) : BaseAdapter(context), LoadMoreVie
     }
 
     override fun getItemCount(): Int {
-        return mData.size + if (loadMoreStatus != LoadMoreStatus.LOAD_FINISH) 1 else 0
+        return mData.size + if (needLoadMore()) 1 else 0
+    }
+
+    private fun needLoadMore(): Boolean {
+        return loadMoreStatus== LoadMoreStatus.LOADING && loadMoreStatus == LoadMoreStatus.LOAD_ERROR
     }
 
     /**
