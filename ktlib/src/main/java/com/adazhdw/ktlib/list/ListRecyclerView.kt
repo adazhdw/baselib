@@ -20,11 +20,10 @@ class ListRecyclerView : RecyclerView {
     private var mLoadMoreListener: LoadMoreListener? = null
     private var isLoadingMore: Boolean = false
     private var isLoadError: Boolean = false
-    private var isDateEmpty: Boolean = false
+    private var isDataEmpty: Boolean = false
     private var mHasMore: Boolean = true
     private var loadMoreEnabled = true
     private var mScrollState = -1
-    private var mLoadMoreView: LoadMoreView = DefaultLoadMoreView(context)
 
     override fun onScrollStateChanged(state: Int) {
         this.mScrollState = state
@@ -66,8 +65,7 @@ class ListRecyclerView : RecyclerView {
             val adapter = adapter
             if (adapter != null && adapter is ListAdapter) {
                 isLoadingMore = true
-                adapter.loading(true)
-                mLoadMoreView.onLoading()
+                adapter.loading()
                 mLoadMoreListener?.onLoadMore()
             }
         }
@@ -77,10 +75,13 @@ class ListRecyclerView : RecyclerView {
         isLoadingMore = false
         isLoadError = false
 
-        isDateEmpty = dataEmpty
+        isDataEmpty = dataEmpty
         mHasMore = hasMore
 
-        mLoadMoreView.onLoadFinish(dataEmpty, hasMore)
+        val adapter = adapter
+        if (adapter != null && adapter is ListAdapter) {
+            adapter.onLoadFinish(dataEmpty, hasMore)
+        }
 
     }
 
@@ -88,7 +89,11 @@ class ListRecyclerView : RecyclerView {
         isLoadingMore = false
         isLoadError = true
 
-        mLoadMoreView.onLoadError(errorCode, errorMsg)
+        val adapter = adapter
+        if (adapter != null && adapter is ListAdapter) {
+            adapter.onLoadError(errorCode, errorMsg)
+        }
+
     }
 
     fun loadMoreEnabled(isEnabled: Boolean) {
@@ -101,14 +106,6 @@ class ListRecyclerView : RecyclerView {
 
     fun setLoadMoreListener(listener: LoadMoreListener) {
         this.mLoadMoreListener = listener
-    }
-
-    fun setLoadMoreView(loadMoreView: LoadMoreView) {
-        mLoadMoreView = loadMoreView
-    }
-
-    fun getLoadMoreView(): LoadMoreView {
-        return mLoadMoreView
     }
 
     interface LoadMoreListener {

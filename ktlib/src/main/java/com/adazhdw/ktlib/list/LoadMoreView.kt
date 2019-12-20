@@ -6,17 +6,12 @@ interface LoadMoreView {
     /**
      * Show progress.
      */
-    fun onLoading()
+    fun loading()
 
     /**
      * Load finish, handle result.
      */
     fun onLoadFinish(dataEmpty: Boolean, hasMore: Boolean)
-
-    /**
-     * Non-auto-loading mode, you can to click on the item to load.
-     */
-    fun onWaitToLoadMore(loadMoreListener: ListRecyclerView.LoadMoreListener)
 
     /**
      * Load error.

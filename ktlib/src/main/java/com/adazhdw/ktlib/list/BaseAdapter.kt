@@ -49,7 +49,7 @@ abstract class BaseAdapter(private val mContext:Context) : RecyclerView.Adapter<
     }
 
     fun data(): List<Any> {
-        return mutableListOf(mData)
+        return mData
     }
 
 }

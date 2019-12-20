@@ -19,7 +19,7 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
     private val mListAdapter: A by lazy { onAdapter() }
     private var mCurrentPage: Int = 1
     protected val mHandler: Handler = Handler()
-    protected lateinit var mContext:Context
+    protected lateinit var mContext: Context
 
     /**
      * 获取RecyclerView Adapter
@@ -39,20 +39,7 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
                     requestData(false)
             }
         })
-        setLoadMoreView(view)
         listRV.adapter = mListAdapter
-    }
-
-    private fun setLoadMoreView(view: View) {
-        val onLoadMoreView = onLoadMoreView(view)
-        val loadMoreView: LoadMoreView =
-            if (onLoadMoreView is View) {
-                onLoadMoreView
-            } else {
-                DefaultLoadMoreView(view.context)
-            }
-        listRV.setLoadMoreView(loadMoreView)
-        mListAdapter.setLoadMoreView(loadMoreView)
     }
 
     override fun requestStart() {
@@ -74,7 +61,7 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
             swipe.isRefreshing = false
         }
         nextPage(mCurrentPage, object : OnRequestCallback<M> {
-            override fun onSuccess(list: List<M>) {
+            override fun onSuccess(list: List<M>, total: Int) {
                 mCurrentPage += 1
                 listRV?.loadMoreEnabled(true)
                 if (isRefresh) {
@@ -82,15 +69,16 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
                     swipe?.isRefreshing = false
                 } else {
                     mListAdapter.addData(list)
-                    listRV?.onLoadFinish(list.isEmpty(), list.isNotEmpty())
                 }
-                mHandler.post { mListAdapter.loading(false) }
+                val dataEmpty = list.isEmpty()
+                val size = mListAdapter.data().size
+                val hasMore = size < total
+                listRV?.onLoadFinish(dataEmpty, hasMore)
             }
 
             override fun onError(errorCode: Int, errorMsg: String) {
                 swipe?.isRefreshing = false
                 listRV?.onLoadError(errorCode, errorMsg)
-                mHandler.post { mListAdapter.loading(false) }
             }
         })
     }
@@ -109,10 +97,6 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
         return BottomItemDecoration(5)
     }
 
-    open fun onLoadMoreView(rootView: View): LoadMoreView {
-        return DefaultLoadMoreView(rootView.context)
-    }
-
     open fun onLayoutManager(): RecyclerView.LayoutManager {
         return LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
@@ -128,7 +112,7 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
     }
 
     interface OnRequestCallback<M> {
-        fun onSuccess(list: List<M>)
+        fun onSuccess(list: List<M>, total: Int)
         fun onError(errorCode: Int, errorMsg: String)
     }
 }

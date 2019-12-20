@@ -54,7 +54,11 @@ data class HistoryTag(
 )
 
 data class HistoryData(
-    val datas: List<ChapterHistory>? = null
+    val datas: List<ChapterHistory>? = null,
+    val pageCount: Int = 0,
+    val size: Int = 0,
+    val total: Int = 0,
+    val curPage: Int = 0
 )
 
 data class HotKey(

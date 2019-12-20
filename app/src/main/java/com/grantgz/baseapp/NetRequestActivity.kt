@@ -3,6 +3,7 @@ package com.grantgz.baseapp
 import android.Manifest
 import android.content.Context
 import com.adazhdw.ktlib.base.BaseActivityImpl
+import com.adazhdw.ktlib.base.mvvm.getViewModel
 import com.adazhdw.ktlib.core.delegate.SPDelegate
 import com.adazhdw.ktlib.core.network.KtNetCallback
 import com.adazhdw.ktlib.ext.addFragment
@@ -15,7 +16,6 @@ import com.adazhdw.ktlib.img.selectImageCoroutines
 import com.adazhdw.ktlib.list.ListAdapter
 import com.adazhdw.ktlib.list.ListFragmentEx
 import com.adazhdw.ktlib.list.ListViewHolder
-import com.adazhdw.ktlib.base.mvvm.getViewModel
 import com.adazhdw.ktlib.utils.permission.KtPermission
 import com.adazhdw.ktlib.utils.permission.PermissionCallback
 import com.grantgz.baseapp.http.ChapterHistory
@@ -120,15 +120,18 @@ class WxChaptersFragment : ListFragmentEx<ChapterHistory, ChaptersAdapter>() {
         get() = true
 
     override fun starAtPage(): Int {
-        return 0
+        return 1
     }
 
     override fun nextPage(page: Int, callback: OnRequestCallback<ChapterHistory>) {
         launch {
-            val data = apiService.getWxArticleHistory2(428, page).await().data?.datas
+            val data = apiService.getWxArticleHistory2(428, page).await().data
             mHandler.postDelayed({
-                callback.onSuccess(data ?: listOf())
-            }, 200)
+                if (data != null)
+                    callback.onSuccess(data.datas ?: listOf(), total = data.total)
+                else
+                    callback.onError(0,"数据为空")
+            }, 0)
         }
     }
 
@@ -137,10 +140,10 @@ class WxChaptersFragment : ListFragmentEx<ChapterHistory, ChaptersAdapter>() {
 
 class ChaptersAdapter(context: Context) : ListAdapter(context) {
 
+    override val layoutId: Int
+        get() = R.layout.net_chapter_item
+
     override fun bindHolder(holder: ListViewHolder, data: Any, position: Int) {
         holder.itemView.chapterName.text = (data as ChapterHistory).title
     }
-
-    override val layoutId: Int
-        get() = R.layout.net_chapter_item
 }

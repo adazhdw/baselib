@@ -1,61 +1,75 @@
 package com.adazhdw.ktlib.list
 
 import android.content.Context
-import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.adazhdw.ktlib.R
+import kotlinx.android.synthetic.main.fragment_list_footer.view.*
 
-abstract class ListAdapter(context:Context) : BaseAdapter(context) {
+abstract class ListAdapter(context: Context) : BaseAdapter(context), LoadMoreView {
 
-    private val footerId :Int = 1024
-    private var isLoading = false
-    private var mLoadMoreView: LoadMoreView? = null
-
+    open val footerId: Int = R.layout.fragment_list_footer
+    private var loadMoreStatus: Int = 0
+    private var dataEmpty = false
+    private var hasMore = true
+    private var errorMsg: String? = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        if (viewType == footerId && mLoadMoreView != null && mLoadMoreView is View)
-            return ListViewHolder(mLoadMoreView as View)
-        return ListViewHolder(mLayoutInflater.inflate(layoutId, parent, false))
+        return ListViewHolder(mLayoutInflater.inflate(viewType, parent, false))
     }
 
     final override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        if (!isLoadMoreView(position) && !isLoading) {
+        if (!isLoadMoreView(position)) {
             bindHolder(holder, mData[position], position)
+        } else {
+            bindLoadMore(holder, position, loadMoreStatus)
+        }
+    }
+
+    open fun bindLoadMore(holder: ListViewHolder, position: Int, loadMoreStatus: Int) {
+        holder.itemView.loadTv.text = when (loadMoreStatus) {
+            LoadMoreStatus.LOADING -> "加载中"
+            LoadMoreStatus.LOAD_FINISH -> "没有更多数据了"
+            LoadMoreStatus.LOAD_ERROR -> "加载出错 $errorMsg"
+            else -> ""
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (isLoadMoreView(position)) {
-            footerId
-        } else {
-            super.getItemViewType(position)
-        }
+        return if (isLoadMoreView(position)) footerId else layoutId
     }
 
     override fun getItemCount(): Int {
-        return mData.size + if (isLoading && mLoadMoreView != null) 1 else 0
+        return mData.size + if (loadMoreStatus != LoadMoreStatus.LOAD_FINISH) 1 else 0
     }
 
     /**
      * 判断是否是最后一个item
      */
-    private fun isLoadMoreView(position: Int): Boolean {
-        return position == mData.size
+    private fun isLoadMoreView(position: Int): Boolean = position == mData.size
+
+    override fun loading() {
+        loadMoreStatus = LoadMoreStatus.LOADING
+        notifyItemChanged(itemCount)
     }
 
-    fun loading(loading: Boolean) {
-        isLoading = loading
-        if (isLoading) {
-            notifyItemChanged(itemCount)
-        } else {
+    override fun onLoadFinish(dataEmpty: Boolean, hasMore: Boolean) {
+        this.dataEmpty = dataEmpty
+        this.hasMore = hasMore
+        if (!hasMore && dataEmpty) {
+            loadMoreStatus = LoadMoreStatus.LOAD_FINISH
             notifyItemRemoved(itemCount)
+        } else {
+            loadMoreStatus = LoadMoreStatus.LOADING
+            notifyItemChanged(itemCount)
         }
     }
 
-    fun setLoadMoreView(loadMoreView: LoadMoreView) {
-        this.mLoadMoreView = loadMoreView
+    override fun onLoadError(errorCode: Int, errorMsg: String?) {
+        this.errorMsg = errorMsg
+        loadMoreStatus = LoadMoreStatus.LOAD_ERROR
+        notifyItemChanged(itemCount)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
