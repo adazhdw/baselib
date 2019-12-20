@@ -39,6 +39,7 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
                     requestData(false)
             }
         })
+        listRV.loadMoreEnabled(mLoadMoreEnable)
         listRV.adapter = mListAdapter
     }
 
@@ -55,16 +56,17 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
 
     private fun requestData(isRefresh: Boolean) {
         if (isRefresh) {
-            mCurrentPage = starAtPage()
             listRV.loadMoreEnabled(false)
         } else {
             swipe.isRefreshing = false
         }
         nextPage(mCurrentPage, object : OnRequestCallback<M> {
             override fun onSuccess(list: List<M>, total: Int) {
-                mCurrentPage += 1
+                if (list.isNotEmpty())
+                    mCurrentPage += 1
                 listRV?.loadMoreEnabled(true)
                 if (isRefresh) {
+                    mCurrentPage = starAtPage()
                     mListAdapter.setData(list)
                     swipe?.isRefreshing = false
                 } else {

@@ -117,7 +117,7 @@ class NetRequestActivity : BaseActivityImpl() {
 class WxChaptersFragment : ListFragmentEx<ChapterHistory, ChaptersAdapter>() {
 
     override val mLoadMoreEnable: Boolean
-        get() = true
+        get() = false
 
     override fun starAtPage(): Int {
         return 1
