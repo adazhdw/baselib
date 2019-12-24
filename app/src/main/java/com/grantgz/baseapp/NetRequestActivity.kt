@@ -11,6 +11,9 @@ import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.ext.toast
 import com.adazhdw.ktlib.ext.view.invisible
 import com.adazhdw.ktlib.http.await
+import com.adazhdw.ktlib.http.hihttp.OkHttpCallback
+import com.adazhdw.ktlib.http.hihttp.Params
+import com.adazhdw.ktlib.http.hihttp.http
 import com.adazhdw.ktlib.img.captureImageCoroutines
 import com.adazhdw.ktlib.img.selectImageCoroutines
 import com.adazhdw.ktlib.list.ListAdapter
@@ -60,10 +63,22 @@ class NetRequestActivity : BaseActivityImpl() {
         requestBtn.setOnClickListener {
             /*launchOnUI {
                 apiService.getHotKey().await()
-            }*/
+            }
             launch {
                 apiService.getHotKey().await()
-            }
+            }*/
+            http.get(
+                url = "https://wanandroid.com/hotkey/json",
+                params = Params(),
+                callback = object : OkHttpCallback {
+                    override fun onSuccess(data: String) {
+                        data.logD(TAG)
+                    }
+
+                    override fun onError(e: Exception) {
+                        e.printStackTrace()
+                    }
+                })
         }
         permissionBtn.setOnClickListener {
             if (!KtPermission.isGranted(permissions, this)) {
@@ -94,7 +109,7 @@ class NetRequestActivity : BaseActivityImpl() {
             }
         }
 
-        addFragment(WxChaptersFragment(), R.id.chaptersFl)
+//        addFragment(WxChaptersFragment(), R.id.chaptersFl)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -130,7 +145,7 @@ class WxChaptersFragment : ListFragmentEx<ChapterHistory, ChaptersAdapter>() {
                 if (data != null)
                     callback.onSuccess(data.datas ?: listOf(), total = data.total)
                 else
-                    callback.onError(0,"数据为空")
+                    callback.onError(0, "数据为空")
             }, 0)
         }
     }
