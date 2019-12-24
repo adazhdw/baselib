@@ -13,6 +13,7 @@ import com.adazhdw.ktlib.ext.view.invisible
 import com.adazhdw.ktlib.http.await
 import com.adazhdw.ktlib.http.hihttp.OkHttpCallback
 import com.adazhdw.ktlib.http.hihttp.Params
+import com.adazhdw.ktlib.http.hihttp.gson
 import com.adazhdw.ktlib.http.hihttp.http
 import com.adazhdw.ktlib.img.captureImageCoroutines
 import com.adazhdw.ktlib.img.selectImageCoroutines
@@ -21,7 +22,10 @@ import com.adazhdw.ktlib.list.ListFragmentEx
 import com.adazhdw.ktlib.list.ListViewHolder
 import com.adazhdw.ktlib.utils.permission.KtPermission
 import com.adazhdw.ktlib.utils.permission.PermissionCallback
+import com.google.gson.reflect.TypeToken
 import com.grantgz.baseapp.http.ChapterHistory
+import com.grantgz.baseapp.http.HotKey
+import com.grantgz.baseapp.http.ListResponse
 import com.grantgz.baseapp.http.apiService
 import kotlinx.android.synthetic.main.net_chapter_item.view.*
 import kotlinx.android.synthetic.main.net_request_layout.*
@@ -63,8 +67,8 @@ class NetRequestActivity : BaseActivityImpl() {
         requestBtn.setOnClickListener {
             /*launchOnUI {
                 apiService.getHotKey().await()
-            }
-            launch {
+            }*/
+            /*launch {
                 apiService.getHotKey().await()
             }*/
             http.get(
@@ -72,6 +76,8 @@ class NetRequestActivity : BaseActivityImpl() {
                 params = Params(),
                 callback = object : OkHttpCallback {
                     override fun onSuccess(data: String) {
+                        val data2 = gson.fromJson<ListResponse<HotKey>>(data,
+                            object : TypeToken<ListResponse<HotKey>>() {}.type)
                         data.logD(TAG)
                     }
 

@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 import javax.net.ssl.HostnameVerifier
 
 val http by lazy { HiHttp.mHiHttp }
-private val gson: Gson = GsonBuilder().create()
+val gson: Gson = GsonBuilder().create()
 
 class HiHttp private constructor() {
 
