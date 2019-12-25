@@ -1,5 +1,9 @@
 package com.grantgz.baseapp
 
+import com.adazhdw.ktlib.http.hihttp.OkHttpCallback
+import com.adazhdw.ktlib.http.hihttp.Params
+import com.adazhdw.ktlib.http.hihttp.gson
+import com.adazhdw.ktlib.http.hihttp.http
 import android.Manifest
 import android.content.Context
 import com.adazhdw.ktlib.base.BaseActivityImpl
@@ -11,10 +15,6 @@ import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.ext.toast
 import com.adazhdw.ktlib.ext.view.invisible
 import com.adazhdw.ktlib.http.await
-import com.adazhdw.ktlib.http.hihttp.OkHttpCallback
-import com.adazhdw.ktlib.http.hihttp.Params
-import com.adazhdw.ktlib.http.hihttp.gson
-import com.adazhdw.ktlib.http.hihttp.http
 import com.adazhdw.ktlib.img.captureImageCoroutines
 import com.adazhdw.ktlib.img.selectImageCoroutines
 import com.adazhdw.ktlib.list.ListAdapter
@@ -29,7 +29,6 @@ import com.grantgz.baseapp.http.ListResponse
 import com.grantgz.baseapp.http.apiService
 import kotlinx.android.synthetic.main.net_chapter_item.view.*
 import kotlinx.android.synthetic.main.net_request_layout.*
-import kotlinx.coroutines.launch
 
 class NetRequestActivity : BaseActivityImpl() {
     override val layoutId: Int
@@ -72,8 +71,7 @@ class NetRequestActivity : BaseActivityImpl() {
                 apiService.getHotKey().await()
             }*/
             http.get(
-                url = "https://wanandroid.com/hotkey/json",
-                params = Params(),
+                params = Params(url = "https://wanandroid.com/hotkey/json"),
                 callback = object : OkHttpCallback {
                     override fun onSuccess(data: String) {
                         val data2 = gson.fromJson<ListResponse<HotKey>>(data,
@@ -103,19 +101,19 @@ class NetRequestActivity : BaseActivityImpl() {
         selectImgBtn.invisible()
         captureImgBtn.invisible()
         selectImgBtn.setOnClickListener {
-            launch {
+            launchOnUI {
                 val model = selectImageCoroutines()
                 selectImg.setImageURI(model.uri)
             }
         }
         captureImgBtn.setOnClickListener {
-            launch {
+            launchOnUI {
                 val model = captureImageCoroutines()
                 selectImg.setImageURI(model.uri)
             }
         }
 
-//        addFragment(WxChaptersFragment(), R.id.chaptersFl)
+        addFragment(WxChaptersFragment(), R.id.chaptersFl)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -145,14 +143,18 @@ class WxChaptersFragment : ListFragmentEx<ChapterHistory, ChaptersAdapter>() {
     }
 
     override fun nextPage(page: Int, callback: OnRequestCallback<ChapterHistory>) {
-        launch {
-            val data = apiService.getWxArticleHistory2(428, page).await().data
-            mHandler.postDelayed({
-                if (data != null)
-                    callback.onSuccess(data.datas ?: listOf(), total = data.total)
-                else
-                    callback.onError(0, "数据为空")
-            }, 0)
+        try {
+            launchOnUI {
+                val data = apiService.getWxArticleHistory2(428, page).await().data
+                mHandler.postDelayed({
+                    if (data != null)
+                        callback.onSuccess(data.datas ?: listOf(), total = data.total)
+                    else
+                        callback.onError(0, "数据为空")
+                }, 0)
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
         }
     }
 

@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 import javax.net.ssl.HostnameVerifier
 
 val http by lazy { HiHttp.mHiHttp }
-val gson: Gson = GsonBuilder().create()
+val gson: Gson by lazy { GsonBuilder().create() }
 
 class HiHttp private constructor() {
 
@@ -33,14 +33,15 @@ class HiHttp private constructor() {
         handler = Handler(Looper.getMainLooper())
     }
 
-
-    fun get(url: String, params: Params, callback: OkHttpCallback) {
-        val request = getRequestBuilder(params).url(url).get().build()
+    fun get(params: Params, callback: OkHttpCallback) {
+        if (params.url.isBlank()) return
+        val request = requestBuilder(params).url(params.url).get().build()
         request(request, callback)
     }
 
-    fun post(url: String, params: Params, callback: OkHttpCallback) {
-        val request = getRequestBuilder(params).url(url).post(params.postRequestBody()).build()
+    fun post(params: Params, callback: OkHttpCallback) {
+        if (params.url.isBlank()) return
+        val request = requestBuilder(params).url(params.url).post(params.postRequestBody()).build()
         request(request, callback)
     }
 
@@ -67,7 +68,7 @@ class HiHttp private constructor() {
         })
     }
 
-    private fun getRequestBuilder(params: Params): Request.Builder {
+    private fun requestBuilder(params: Params): Request.Builder {
         val builder = Request.Builder()
         if (params.needHeaders) {
             for ((key, value) in params.params)
@@ -79,13 +80,13 @@ class HiHttp private constructor() {
     private fun getClient(): OkHttpClient {
         val (key, value) = SSLUtils.initSSLSocketFactory()
         return OkHttpClient.Builder()
-                .connectTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                .callTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                .writeTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                .addNetworkInterceptor(getLoggingInterceptor())
-                .hostnameVerifier(HostnameVerifier { _, _ -> true })/*添加https支持*/
-                .sslSocketFactory(key, value)/*添加SSL证书信任*/
-                .build()
+            .connectTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+            .callTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+            .writeTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+            .addNetworkInterceptor(getLoggingInterceptor())
+            .hostnameVerifier(HostnameVerifier { _, _ -> true })/*添加https支持*/
+            .sslSocketFactory(key, value)/*添加SSL证书信任*/
+            .build()
     }
 
     private fun getLoggingInterceptor(): HttpLoggingInterceptor {
@@ -106,15 +107,21 @@ val CONTENT_TYPE_FILE = "application/octet-stream".toMediaTypeOrNull()
 class Params {
 
     companion object {
-        fun jsonParam(): Params = Params(CONTENT_TYPE_JSON, false)
+        fun jsonParam(url: String): Params = Params(url, CONTENT_TYPE_JSON, false)
     }
 
     val params: MutableMap<String, Any> = mutableMapOf()
     val needHeaders: Boolean
+    val url: String
     private val jsonParams: MutableMap<String, Any> = mutableMapOf()
     private val contentType: MediaType?
 
-    constructor(contentType: MediaType? = CONTENT_TYPE_FORM, needHeaders: Boolean = false) {
+    constructor(
+        url: String,
+        contentType: MediaType? = CONTENT_TYPE_FORM,
+        needHeaders: Boolean = false
+    ) {
+        this.url = url
         this.contentType = contentType
         this.needHeaders = needHeaders
     }
