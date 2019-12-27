@@ -65,5 +65,5 @@ fun Application.initLibrary(baseUrl: String, debug: Boolean = false) {
     isDebug = debug
 }
 
-internal var isDebug = BuildConfig.DEBUG
+internal var isDebug = true
 internal var mBaseUrl = ""

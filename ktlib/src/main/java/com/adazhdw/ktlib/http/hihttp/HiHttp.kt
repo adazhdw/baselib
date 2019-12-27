@@ -2,9 +2,9 @@ package com.adazhdw.ktlib.http.hihttp
 
 import android.os.Handler
 import android.os.Looper
-import com.adazhdw.ktlib.BuildConfig
 import com.adazhdw.ktlib.http.HttpConstant
 import com.adazhdw.ktlib.http.OkHttpLogger
+import com.adazhdw.ktlib.isDebug
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.*
@@ -91,7 +91,7 @@ class HiHttp private constructor() {
 
     private fun getLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor(OkHttpLogger()).apply {
-            level = if (BuildConfig.DEBUG) {
+            level = if (isDebug) {
                 HttpLoggingInterceptor.Level.BODY
             } else {
                 HttpLoggingInterceptor.Level.BASIC
