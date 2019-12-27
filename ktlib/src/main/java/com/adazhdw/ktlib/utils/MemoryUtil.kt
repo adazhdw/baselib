@@ -1,11 +1,11 @@
-package com.adazhdw.ktlib.http.hihttp
+package com.adazhdw.ktlib.utils
 
 import android.os.Environment
 import android.os.StatFs
 import android.util.Log
 import java.io.File
 
-object MemoryStatus {
+object MemoryUtil {
     private const val ERROR = -1
     // 判断SD卡是否存在?
     fun externalMemoryAvailable(): Boolean {
@@ -76,7 +76,9 @@ object MemoryStatus {
                 if (file.isFile) {
                     dirSize += file.length()
                 } else if (file.isDirectory) {
-                    dirSize += getFileSize(file) //如果是目标那就进行递归 来计算文件的大小
+                    dirSize += getFileSize(
+                        file
+                    ) //如果是目标那就进行递归 来计算文件的大小
                 }
             }
         }

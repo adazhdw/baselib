@@ -30,7 +30,7 @@ class LinearSpacingItemDecoration(
     }
 
     companion object {
-        val HORIZONTAL = RecyclerView.HORIZONTAL
-        val VERTICAL = RecyclerView.VERTICAL
+        const val HORIZONTAL = RecyclerView.HORIZONTAL
+        const val VERTICAL = RecyclerView.VERTICAL
     }
 }

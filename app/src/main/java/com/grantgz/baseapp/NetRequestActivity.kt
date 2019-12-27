@@ -1,9 +1,9 @@
 package com.grantgz.baseapp
 
-import com.adazhdw.ktlib.http.hihttp.OkHttpCallback
-import com.adazhdw.ktlib.http.hihttp.Params
-import com.adazhdw.ktlib.http.hihttp.gson
-import com.adazhdw.ktlib.http.hihttp.http
+import com.adazhdw.ktlib.hihttp.OkHttpCallback
+import com.adazhdw.ktlib.hihttp.Params
+import com.adazhdw.ktlib.hihttp.gson
+import com.adazhdw.ktlib.hihttp.http
 import android.Manifest
 import android.content.Context
 import com.adazhdw.ktlib.base.BaseActivityImpl

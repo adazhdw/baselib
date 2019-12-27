@@ -1,16 +1,20 @@
-package com.adazhdw.ktlib.http.hihttp
+package com.adazhdw.ktlib.hihttp
 
 import android.os.Handler
 import android.os.Looper
 import com.adazhdw.ktlib.http.HttpConstant
 import com.adazhdw.ktlib.http.OkHttpLogger
 import com.adazhdw.ktlib.isDebug
+import com.adazhdw.ktlib.utils.SSLUtil
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.http.Multipart
+import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.HostnameVerifier
@@ -42,6 +46,30 @@ class HiHttp private constructor() {
     fun post(params: Params, callback: OkHttpCallback) {
         if (params.url.isBlank()) return
         val request = requestBuilder(params).url(params.url).post(params.postRequestBody()).build()
+        request(request, callback)
+    }
+
+    fun postFile(params: Params, fileKey: String, file: File, callback: OkHttpCallback) {
+        if (params.url.isBlank() || !file.exists()) return
+        val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
+        for ((key, value) in params.params) {
+            builder.addFormDataPart(key, value)
+        }
+        builder.addFormDataPart(fileKey, file.name, file.asRequestBody(ContentType.getType(file).toMediaTypeOrNull()))
+        val request = requestBuilder(params).url(params.url).post(builder.build()).build()
+        request(request, callback)
+    }
+
+    fun postFiles(params: Params, fileKey: String, files: List<File>, callback: OkHttpCallback) {
+        if (params.url.isBlank() || files.isEmpty()) return
+        val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
+        for ((key, value) in params.params) {
+            builder.addFormDataPart(key, value)
+        }
+        for (file in files) {
+            builder.addFormDataPart(fileKey, file.name, file.asRequestBody(ContentType.getType(file).toMediaTypeOrNull()))
+        }
+        val request = requestBuilder(params).url(params.url).post(builder.build()).build()
         request(request, callback)
     }
 
@@ -78,15 +106,15 @@ class HiHttp private constructor() {
     }
 
     private fun getClient(): OkHttpClient {
-        val (key, value) = SSLUtils.initSSLSocketFactory()
+        val (key, value) = SSLUtil.initSSLSocketFactory()
         return OkHttpClient.Builder()
-            .connectTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-            .callTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-            .writeTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-            .addNetworkInterceptor(getLoggingInterceptor())
-            .hostnameVerifier(HostnameVerifier { _, _ -> true })/*添加https支持*/
-            .sslSocketFactory(key, value)/*添加SSL证书信任*/
-            .build()
+                .connectTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                .callTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                .addNetworkInterceptor(getLoggingInterceptor())
+                .hostnameVerifier(HostnameVerifier { _, _ -> true })/*添加https支持*/
+                .sslSocketFactory(key, value)/*添加SSL证书信任*/
+                .build()
     }
 
     private fun getLoggingInterceptor(): HttpLoggingInterceptor {
@@ -97,66 +125,5 @@ class HiHttp private constructor() {
                 HttpLoggingInterceptor.Level.BASIC
             }
         }
-    }
-}
-
-val CONTENT_TYPE_JSON = ("application/json; charset=utf-8").toMediaTypeOrNull()
-val CONTENT_TYPE_FORM = "application/x-www-form-urlencoded;charset=utf-8".toMediaTypeOrNull()
-val CONTENT_TYPE_FILE = "application/octet-stream".toMediaTypeOrNull()
-
-class Params {
-
-    companion object {
-        fun jsonParam(url: String): Params = Params(url, CONTENT_TYPE_JSON, false)
-    }
-
-    val params: MutableMap<String, Any> = mutableMapOf()
-    val needHeaders: Boolean
-    val url: String
-    private val jsonParams: MutableMap<String, Any> = mutableMapOf()
-    private val contentType: MediaType?
-
-    constructor(
-        url: String,
-        contentType: MediaType? = CONTENT_TYPE_FORM,
-        needHeaders: Boolean = false
-    ) {
-        this.url = url
-        this.contentType = contentType
-        this.needHeaders = needHeaders
-    }
-
-    fun put(key: String, value: Any) {
-        if (isFormContent()) {
-            params[key] = value
-        } else {
-            jsonParams[key] = value
-        }
-    }
-
-    fun put(map: Map<String, Any>) {
-        for ((key, value) in map) {
-            if (isFormContent()) {
-                params[key] = value
-            } else {
-                jsonParams[key] = value
-            }
-        }
-    }
-
-    fun postRequestBody(): RequestBody {
-        return if (isFormContent()) {
-            val builder = FormBody.Builder()
-            for ((key, value) in params) {
-                builder.add(key, value.toString())
-            }
-            builder.build()
-        } else {
-            gson.toJson(jsonParams).toRequestBody(CONTENT_TYPE_JSON)
-        }
-    }
-
-    private fun isFormContent(): Boolean {
-        return contentType == CONTENT_TYPE_FORM
     }
 }

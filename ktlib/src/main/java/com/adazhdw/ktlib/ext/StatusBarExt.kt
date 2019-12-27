@@ -3,15 +3,15 @@ package com.adazhdw.ktlib.ext
 import android.os.Build
 import android.view.View
 import androidx.fragment.app.FragmentActivity
-import com.adazhdw.ktlib.utils.StatusBarUtils
+import com.adazhdw.ktlib.utils.StatusBarUtil
 
 fun FragmentActivity.transparent(){
-    StatusBarUtils.setTranslucent(this)
+    StatusBarUtil.setTranslucent(this)
 }
 
 fun FragmentActivity.fullscreen(isLightMode: Boolean = true) {
     statusBarLightMode(isLightMode)
-    StatusBarUtils.setStatusBarVisibility(this,false)
+    StatusBarUtil.setStatusBarVisibility(this,false)
 }
 
 /**

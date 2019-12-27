@@ -59,8 +59,8 @@ object NetworkUtil {
     fun getNetworkType(context: Context?): String {
         val connectivityManager = getCm(context)
         val info = connectivityManager?.activeNetworkInfo
-        when {
-            info?.isConnected == true -> return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        when (info?.isConnected) {
+            true -> return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val network: Network? = connectivityManager.activeNetwork
                 val capabilities = connectivityManager.getNetworkCapabilities(network)
                 when {

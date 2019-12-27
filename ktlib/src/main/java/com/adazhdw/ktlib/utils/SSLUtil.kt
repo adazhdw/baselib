@@ -1,10 +1,10 @@
-package com.adazhdw.ktlib.http.hihttp
+package com.adazhdw.ktlib.utils
 
 import java.security.KeyStore
 import java.security.SecureRandom
 import javax.net.ssl.*
 
-object SSLUtils {
+object SSLUtil {
 
     fun initSSLSocketFactory(): Pair<SSLSocketFactory, X509TrustManager> {
         val trustManagerFactory: TrustManagerFactory =

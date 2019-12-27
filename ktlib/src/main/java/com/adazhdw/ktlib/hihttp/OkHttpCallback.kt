@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.http.hihttp
+package com.adazhdw.ktlib.hihttp
 
 interface OkHttpCallback {
     fun onSuccess(data:String)
