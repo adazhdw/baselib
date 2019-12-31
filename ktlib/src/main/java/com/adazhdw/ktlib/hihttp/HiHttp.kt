@@ -2,6 +2,10 @@ package com.adazhdw.ktlib.hihttp
 
 import android.os.Handler
 import android.os.Looper
+import com.adazhdw.ktlib.hihttp.callback.GsonHttpCallback
+import com.adazhdw.ktlib.hihttp.callback.JsonHttpCallback
+import com.adazhdw.ktlib.hihttp.callback.OkHttpCallback
+import com.adazhdw.ktlib.hihttp.callback.RawHttpCallback
 import com.adazhdw.ktlib.http.HttpConstant
 import com.adazhdw.ktlib.http.OkHttpLogger
 import com.adazhdw.ktlib.isDebug
@@ -11,9 +15,8 @@ import com.google.gson.GsonBuilder
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.http.Multipart
+import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -84,7 +87,11 @@ class HiHttp private constructor() {
                 if (body != null) {
                     try {
                         val result = String(body.bytes())
-                        mHandler.post { callback.onSuccess(result) }
+                        when (callback) {
+                            is RawHttpCallback -> mHandler.post { callback.onSuccess(result) }
+                            is JsonHttpCallback -> mHandler.post { callback.onSuccess(JSONObject(result)) }
+                            is GsonHttpCallback<*> -> mHandler.post { callback.onSuccess(gson.fromJson(result, callback.mType)) }
+                        }
                     } catch (e: Exception) {
                         mHandler.post { callback.onError(e) }
                     }

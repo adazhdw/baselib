@@ -1,6 +1,6 @@
 package com.grantgz.baseapp
 
-import com.adazhdw.ktlib.hihttp.OkHttpCallback
+import com.adazhdw.ktlib.hihttp.callback.OkHttpCallback
 import com.adazhdw.ktlib.hihttp.Params
 import com.adazhdw.ktlib.hihttp.gson
 import com.adazhdw.ktlib.hihttp.http
@@ -14,6 +14,8 @@ import com.adazhdw.ktlib.ext.addFragment
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.ext.toast
 import com.adazhdw.ktlib.ext.view.invisible
+import com.adazhdw.ktlib.hihttp.callback.GsonHttpCallback
+import com.adazhdw.ktlib.hihttp.callback.RawHttpCallback
 import com.adazhdw.ktlib.http.await
 import com.adazhdw.ktlib.img.captureImageCoroutines
 import com.adazhdw.ktlib.img.selectImageCoroutines
@@ -44,10 +46,10 @@ class NetRequestActivity : BaseActivityImpl() {
 
     private var isLogin by SPDelegate.preference("isLogin", false)
     private val permissions = arrayOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.RECORD_AUDIO,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.ACCESS_COARSE_LOCATION
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_COARSE_LOCATION
     )
 
     override fun initView() {
@@ -71,29 +73,27 @@ class NetRequestActivity : BaseActivityImpl() {
                 apiService.getHotKey().await()
             }*/
             http.get(
-                params = Params(url = "https://wanandroid.com/hotkey/json"),
-                callback = object : OkHttpCallback {
-                    override fun onSuccess(data: String) {
-                        val data2 = gson.fromJson<ListResponse<HotKey>>(data,
-                            object : TypeToken<ListResponse<HotKey>>() {}.type)
-                        data.logD(TAG)
-                    }
+                    params = Params(url = "https://wanandroid.com/hotkey/json"),
+                    callback = object : GsonHttpCallback<ListResponse<HotKey>>() {
+                        override fun onSuccess(data: ListResponse<HotKey>) {
+                            data.toString().logD(TAG)
+                        }
 
-                    override fun onError(e: Exception) {
-                        e.printStackTrace()
-                    }
-                })
+                        override fun onError(e: Exception) {
+                            e.printStackTrace()
+                        }
+                    })
         }
         permissionBtn.setOnClickListener {
             if (!KtPermission.isGranted(permissions, this)) {
                 KtPermission.request(
-                    this,
-                    permissions.toList(),
-                    callback = object : PermissionCallback {
-                        override fun invoke(p1: Boolean, p2: List<String>) {
+                        this,
+                        permissions.toList(),
+                        callback = object : PermissionCallback {
+                            override fun invoke(p1: Boolean, p2: List<String>) {
 
-                        }
-                    })
+                            }
+                        })
             } else {
                 toast("权限已授予")
             }
@@ -153,7 +153,7 @@ class WxChaptersFragment : ListFragmentEx<ChapterHistory, ChaptersAdapter>() {
                         callback.onError(0, "数据为空")
                 }, 0)
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
