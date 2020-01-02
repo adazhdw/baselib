@@ -107,7 +107,7 @@ class HiHttp private constructor() {
         val builder = Request.Builder()
         if (params.needHeaders) {
             for ((key, value) in params.params)
-                builder.addHeader(key, value.toString())
+                builder.addHeader(key, value)
         }
         return builder
     }

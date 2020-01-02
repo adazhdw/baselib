@@ -11,7 +11,7 @@ abstract class GsonHttpCallback<T> : OkHttpCallback {
 
     val mType: Type
 
-    constructor() {
+    init {
         val typeClass: Type? = javaClass.genericSuperclass
         if (typeClass is Class<*> || typeClass == null) {
             throw RuntimeException("missing type parameter")
