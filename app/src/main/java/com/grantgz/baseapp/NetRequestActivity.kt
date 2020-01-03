@@ -1,9 +1,5 @@
 package com.grantgz.baseapp
 
-import com.adazhdw.ktlib.hihttp.callback.OkHttpCallback
-import com.adazhdw.ktlib.hihttp.Params
-import com.adazhdw.ktlib.hihttp.gson
-import com.adazhdw.ktlib.hihttp.http
 import android.Manifest
 import android.content.Context
 import com.adazhdw.ktlib.base.BaseActivityImpl
@@ -14,8 +10,11 @@ import com.adazhdw.ktlib.ext.addFragment
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.ext.toast
 import com.adazhdw.ktlib.ext.view.invisible
-import com.adazhdw.ktlib.hihttp.callback.GsonHttpCallback
+import com.adazhdw.ktlib.hihttp.Params
 import com.adazhdw.ktlib.hihttp.callback.RawHttpCallback
+import com.adazhdw.ktlib.hihttp.get
+import com.adazhdw.ktlib.hihttp.getCoroutine
+import com.adazhdw.ktlib.hihttp.mHiHttp
 import com.adazhdw.ktlib.http.await
 import com.adazhdw.ktlib.img.captureImageCoroutines
 import com.adazhdw.ktlib.img.selectImageCoroutines
@@ -24,13 +23,13 @@ import com.adazhdw.ktlib.list.ListFragmentEx
 import com.adazhdw.ktlib.list.ListViewHolder
 import com.adazhdw.ktlib.utils.permission.KtPermission
 import com.adazhdw.ktlib.utils.permission.PermissionCallback
-import com.google.gson.reflect.TypeToken
 import com.grantgz.baseapp.http.ChapterHistory
 import com.grantgz.baseapp.http.HotKey
 import com.grantgz.baseapp.http.ListResponse
 import com.grantgz.baseapp.http.apiService
 import kotlinx.android.synthetic.main.net_chapter_item.view.*
 import kotlinx.android.synthetic.main.net_request_layout.*
+import kotlinx.coroutines.launch
 
 class NetRequestActivity : BaseActivityImpl() {
     override val layoutId: Int
@@ -69,19 +68,11 @@ class NetRequestActivity : BaseActivityImpl() {
             /*launchOnUI {
                 apiService.getHotKey().await()
             }*/
-            /*launch {
-                apiService.getHotKey().await()
-            }*/
-            http.get(params = Params(url = "https://wanandroid.com/hotkey/json"),
-                callback = object : GsonHttpCallback<ListResponse<HotKey>>() {
-                    override fun onSuccess(data: ListResponse<HotKey>) {
-                        data.toString().logD(TAG)
-                    }
-
-                    override fun onError(e: Exception) {
-                        e.printStackTrace()
-                    }
-                })
+            launch {
+                val data =
+                    getCoroutine<ListResponse<HotKey>>(Params(url = "https://wanandroid.com/hotkey/json")).data
+                data?.toString().logD(TAG)
+            }
         }
         permissionBtn.setOnClickListener {
             if (!KtPermission.isGranted(permissions, this)) {

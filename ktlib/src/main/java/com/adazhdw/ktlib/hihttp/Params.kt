@@ -1,5 +1,6 @@
 package com.adazhdw.ktlib.hihttp
 
+import com.alibaba.fastjson.JSONObject
 import okhttp3.FormBody
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -56,11 +57,11 @@ class Params {
         return if (isFormContent()) {
             val builder = FormBody.Builder()
             for ((key, value) in params) {
-                builder.add(key, value.toString())
+                builder.add(key, value)
             }
             builder.build()
         } else {
-            gson.toJson(jsonParams).toRequestBody(CONTENT_TYPE_JSON)
+            JSONObject.toJSONString(jsonParams).toRequestBody(CONTENT_TYPE_JSON)
         }
     }
 

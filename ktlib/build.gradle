@@ -57,11 +57,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:2.1.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0"
 
-    //网络相关
-    // Moshi
-    /*implementation 'com.squareup.moshi:moshi-kotlin:1.8.0'
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.8.0"
-    implementation "com.squareup.retrofit2:converter-moshi:2.6.0"*/
+    //fastJson
+    implementation 'com.alibaba:fastjson:1.1.71.android'
+    //use kotlin-reflect to avoid the JSON.parseObject “default constructor not found” error
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     //Gson
     implementation 'com.google.code.gson:gson:2.8.6'
