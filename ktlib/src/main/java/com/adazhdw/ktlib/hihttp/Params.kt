@@ -8,49 +8,44 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
 
-
 val CONTENT_TYPE_JSON = ("application/json; charset=utf-8").toMediaTypeOrNull()
 val CONTENT_TYPE_FORM = "application/x-www-form-urlencoded;charset=utf-8".toMediaTypeOrNull()
 val CONTENT_TYPE_FILE = "application/octet-stream".toMediaTypeOrNull()//（ 二进制流，不知道下载文件类型）
 
-class Params {
+class Params(
+    val url: String,
+    private val contentType: MediaType? = CONTENT_TYPE_FORM,
+    val needHeaders: Boolean = false
+) {
 
     companion object {
         fun jsonParam(url: String): Params = Params(url, CONTENT_TYPE_JSON, false)
     }
 
     val params: MutableMap<String, String> = mutableMapOf()
-    val needHeaders: Boolean
-    val url: String
     private val jsonParams: MutableMap<String, Any> = mutableMapOf()
-    private val contentType: MediaType?
-
-    constructor(
-        url: String,
-        contentType: MediaType? = CONTENT_TYPE_FORM,
-        needHeaders: Boolean = false
-    ) {
-        this.url = url
-        this.contentType = contentType
-        this.needHeaders = needHeaders
-    }
+    private val jsonBody: StringBuilder = StringBuilder()
 
     fun put(key: String, value: Any) {
         if (isFormContent()) {
-            params[key] = value.toString()
+            this.params[key] = value.toString()
         } else {
-            jsonParams[key] = value
+            this.jsonParams[key] = value
         }
     }
 
     fun put(map: Map<String, Any>) {
         for ((key, value) in map) {
             if (isFormContent()) {
-                params[key] = value.toString()
+                this.params[key] = value.toString()
             } else {
-                jsonParams[key] = value
+                this.jsonParams[key] = value
             }
         }
+    }
+
+    fun put(jsonBody: String) {
+        this.jsonBody.append(jsonBody)
     }
 
     fun postRequestBody(): RequestBody {
@@ -61,7 +56,11 @@ class Params {
             }
             builder.build()
         } else {
-            JSONObject.toJSONString(jsonParams).toRequestBody(CONTENT_TYPE_JSON)
+            if (this.jsonBody.toString().isNotBlank()){
+                this.jsonBody.toString().toRequestBody(CONTENT_TYPE_JSON)
+            }else{
+                JSONObject.toJSONString(jsonParams).toRequestBody(CONTENT_TYPE_JSON)
+            }
         }
     }
 

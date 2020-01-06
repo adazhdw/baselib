@@ -11,6 +11,7 @@ import kotlin.coroutines.resume
  */
 
 class HiHttpCoroutines
+
 val mHiHttp by lazy { HiHttp.mHiHttp }
 
 inline fun <reified T : Any> parseObject(json: String): T {
@@ -36,6 +37,38 @@ suspend inline fun <reified T : Any> getCoroutine(
 ): T {
     return suspendCancellableCoroutine { continuation ->
         get(params, object : FastJsonHttpCallback<T>() {
+            override fun onSuccess(data: T) {
+                onResponse?.invoke(data)
+                continuation.resume(data)
+            }
+
+            override fun onException(e: Exception) {
+                //错误处理
+                onError?.invoke(e)
+            }
+        })
+    }
+}
+
+inline fun <reified T : Any> post(params: Params, fastJsonHttpCallback: FastJsonHttpCallback<T>) {
+    mHiHttp.post(params, object : RawHttpCallback() {
+        override fun onSuccess(data: String) {
+            fastJsonHttpCallback.onSuccess(parseObject(data))
+        }
+
+        override fun onException(e: Exception) {
+            fastJsonHttpCallback.onException(e)
+        }
+    })
+}
+
+suspend inline fun <reified T : Any> postCoroutine(
+    params: Params,
+    noinline onResponse: ((data: T) -> Unit)? = null,
+    noinline onError: ((e: Exception) -> Unit)? = null
+): T {
+    return suspendCancellableCoroutine { continuation ->
+        post(params, object : FastJsonHttpCallback<T>() {
             override fun onSuccess(data: T) {
                 onResponse?.invoke(data)
                 continuation.resume(data)

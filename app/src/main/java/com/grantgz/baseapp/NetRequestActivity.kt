@@ -71,7 +71,13 @@ class NetRequestActivity : BaseActivityImpl() {
             launch {
                 val data =
                     getCoroutine<ListResponse<HotKey>>(Params(url = "https://wanandroid.com/hotkey/json")).data
-                data?.toString().logD(TAG)
+                try {
+                    data?.forEach {
+                        it.toString().logD(TAG)
+                    }
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
             }
         }
         permissionBtn.setOnClickListener {
