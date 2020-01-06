@@ -14,14 +14,17 @@ import com.alibaba.fastjson.serializer.SerializerFeature
 class FastJsonTest
 fun main() {
 
-    val dts = DataClassSimple(1, 2, listOf(DataClassSimple.Data2(3)))
-    val jsons = JSONObject.toJSONString(dts, SerializerFeature.WriteClassName)
+    val dts = DataClassSimple(1, 2, listOf(DataClassSimple.Data2(3),DataClassSimple.Data2(4)))
+    val jsons = JSONObject.toJSONString(dts)
     println(jsons)
     val clzs = DataClassSimple::class
     println(clzs.javaObjectType)
     val dt2 = parseObject<DataClassSimple>(jsons)
     println("-----------------------------")
     println(dt2)
+    dt2.data.forEach {
+        println(it.c)
+    }
 }
 
 inline fun <reified T : Any> parseObject(json: String): T {

@@ -11,6 +11,8 @@ import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.ext.toast
 import com.adazhdw.ktlib.ext.view.invisible
 import com.adazhdw.ktlib.hihttp.Params
+import com.adazhdw.ktlib.hihttp.callback.FastJsonHttpCallback
+import com.adazhdw.ktlib.hihttp.get
 import com.adazhdw.ktlib.hihttp.getCoroutine
 import com.adazhdw.ktlib.http.await
 import com.adazhdw.ktlib.img.captureImageCoroutines
@@ -66,15 +68,11 @@ class NetRequestActivity : BaseActivityImpl() {
                 apiService.getHotKey().await()
             }*/
             launch {
-                val data =
-                    getCoroutine<ListResponse<HotKey>>(Params(url = "https://wanandroid.com/hotkey/json")).data
-                try {
-                    data?.forEach {
-                        it.toString().logD(TAG)
+                get(Params(url = "https://wanandroid.com/hotkey/json"),object :FastJsonHttpCallback<ListResponse<HotKey>>(){
+                    override fun onSuccess(data: ListResponse<HotKey>) {
+
                     }
-                }catch (e:Exception){
-                    e.printStackTrace()
-                }
+                })
             }
         }
         permissionBtn.setOnClickListener {
