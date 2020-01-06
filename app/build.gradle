@@ -47,12 +47,10 @@ dependencies {
     //1.1.0 androidx 版本 下拉刷新，上拉加载第三方库
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-andx-3'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-andx-3'
-/*
 
     //fastJson
     implementation 'com.alibaba:fastjson:1.1.71.android'
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-*/
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
