@@ -11,10 +11,7 @@ import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.ext.toast
 import com.adazhdw.ktlib.ext.view.invisible
 import com.adazhdw.ktlib.hihttp.Params
-import com.adazhdw.ktlib.hihttp.callback.RawHttpCallback
-import com.adazhdw.ktlib.hihttp.get
 import com.adazhdw.ktlib.hihttp.getCoroutine
-import com.adazhdw.ktlib.hihttp.mHiHttp
 import com.adazhdw.ktlib.http.await
 import com.adazhdw.ktlib.img.captureImageCoroutines
 import com.adazhdw.ktlib.img.selectImageCoroutines
