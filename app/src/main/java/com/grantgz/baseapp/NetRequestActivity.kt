@@ -68,10 +68,8 @@ class NetRequestActivity : BaseActivityImpl() {
                 apiService.getHotKey().await()
             }*/
             launch {
-                get(Params(url = "https://wanandroid.com/hotkey/json"),object :FastJsonHttpCallback<ListResponse<HotKey>>(){
-                    override fun onSuccess(data: ListResponse<HotKey>) {
-
-                    }
+                getCoroutine<ListResponse<HotKey>>(Params(url = "https://wanandroid.com/hotkey/json"),onResponse = {data ->
+                    data.toString().logD(TAG)
                 })
             }
         }

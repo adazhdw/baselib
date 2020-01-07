@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.hihttp
 
-import com.adazhdw.ktlib.hihttp.callback.FastJsonHttpCallback
+import com.adazhdw.ktlib.hihttp.callback.GsonHttpCallback
 import com.adazhdw.ktlib.hihttp.callback.RawHttpCallback
 import com.alibaba.fastjson.JSONObject
 import com.google.gson.GsonBuilder
@@ -14,12 +14,13 @@ import kotlin.coroutines.resume
 class HiHttpCoroutines
 
 val mHiHttp by lazy { HiHttp.mHiHttp }
+val gson by lazy { GsonBuilder().create() }
 
-inline fun <reified T : Any> get(params: Params, callback: FastJsonHttpCallback<T>) {
+inline fun <reified T : Any> get(params: Params, callback: GsonHttpCallback<T>) {
     mHiHttp.get(params, object : RawHttpCallback() {
         override fun onSuccess(data: String) {
             try {
-                callback.onSuccess(JSONObject.parseObject(data,callback.typeReference))
+                callback.onSuccess(gson.fromJson(data,callback.mType))
             }catch (e:Exception){
                 callback.onException(e)
             }
@@ -37,7 +38,7 @@ suspend inline fun <reified T : Any> getCoroutine(
     noinline onError: ((e: Exception) -> Unit)? = null
 ): T {
     return suspendCancellableCoroutine { continuation ->
-        get(params, object : FastJsonHttpCallback<T>() {
+        get(params, object : GsonHttpCallback<T>() {
             override fun onSuccess(data: T) {
                 onResponse?.invoke(data)
                 continuation.resume(data)
@@ -51,10 +52,10 @@ suspend inline fun <reified T : Any> getCoroutine(
     }
 }
 
-inline fun <reified T : Any> post(params: Params,  callback: FastJsonHttpCallback<T>) {
+inline fun <reified T : Any> post(params: Params,  callback: GsonHttpCallback<T>) {
     mHiHttp.post(params, object : RawHttpCallback() {
         override fun onSuccess(data: String) {
-            callback.onSuccess(JSONObject.parseObject(data,callback.typeReference))
+            callback.onSuccess(gson.fromJson(data,callback.mType))
         }
 
         override fun onException(e: Exception) {
@@ -69,7 +70,7 @@ suspend inline fun <reified T : Any> postCoroutine(
     noinline onError: ((e: Exception) -> Unit)? = null
 ): T {
     return suspendCancellableCoroutine { continuation ->
-        post(params, object : FastJsonHttpCallback<T>() {
+        post(params, object : GsonHttpCallback<T>() {
             override fun onSuccess(data: T) {
                 onResponse?.invoke(data)
                 continuation.resume(data)
