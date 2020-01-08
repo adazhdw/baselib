@@ -1,5 +1,6 @@
 package com.adazhdw.ktlib.hihttp
 
+import android.content.Context
 import com.adazhdw.ktlib.hihttp.callback.FastJsonHttpCallback
 import com.adazhdw.ktlib.hihttp.callback.GsonHttpCallback
 import com.adazhdw.ktlib.hihttp.callback.RawHttpCallback
@@ -18,7 +19,7 @@ class HiHttpCoroutines
 val mHiHttp by lazy { HiHttp.mHiHttp }
 val gson by lazy { GsonBuilder().create() }
 
-inline fun <reified T : Any> get(params: Params, callback: FastJsonHttpCallback<T>) {
+inline fun <reified T : Any> Context?.get(params: Params, callback: FastJsonHttpCallback<T>) {
     mHiHttp.get(params, object : RawHttpCallback() {
         override fun onSuccess(data: String) {
             try {
@@ -32,10 +33,10 @@ inline fun <reified T : Any> get(params: Params, callback: FastJsonHttpCallback<
         override fun onException(e: Exception) {
             callback.onException(e)
         }
-    })
+    },this)
 }
 
-suspend inline fun <reified T : Any> getCoroutine(
+suspend inline fun <reified T : Any> Context?.getCoroutine(
     params: Params,
     noinline onResponse: ((data: T) -> Unit)? = null,
     noinline onError: ((e: Exception) -> Unit)? = null
@@ -55,7 +56,7 @@ suspend inline fun <reified T : Any> getCoroutine(
     }
 }
 
-inline fun <reified T : Any> post(params: Params,  callback: FastJsonHttpCallback<T>) {
+inline fun <reified T : Any> Context?.post(params: Params,  callback: FastJsonHttpCallback<T>) {
     mHiHttp.post(params, object : RawHttpCallback() {
         override fun onSuccess(data: String) {
             callback.onSuccess(JSONObject.parseObject(data, object : TypeReference<T>() {}))
@@ -64,10 +65,10 @@ inline fun <reified T : Any> post(params: Params,  callback: FastJsonHttpCallbac
         override fun onException(e: Exception) {
             callback.onException(e)
         }
-    })
+    },this)
 }
 
-suspend inline fun <reified T : Any> postCoroutine(
+suspend inline fun <reified T : Any> Context?.postCoroutine(
     params: Params,
     noinline onResponse: ((data: T) -> Unit)? = null,
     noinline onError: ((e: Exception) -> Unit)? = null
