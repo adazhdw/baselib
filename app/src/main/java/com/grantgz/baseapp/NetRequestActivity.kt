@@ -69,7 +69,9 @@ class NetRequestActivity : BaseActivityImpl() {
             }*/
             launch {
                 getCoroutine<ListResponse<HotKey>>(Params(url = "https://wanandroid.com/hotkey/json"),onResponse = {data ->
-                    data.toString().logD(TAG)
+                    data.data?.forEach {
+                        it.toString().logD(TAG)
+                    }
                 })
             }
         }
@@ -102,7 +104,7 @@ class NetRequestActivity : BaseActivityImpl() {
             }
         }
 
-        addFragment(WxChaptersFragment(), R.id.chaptersFl)
+//        addFragment(WxChaptersFragment(), R.id.chaptersFl)
     }
 
     override fun onSupportNavigateUp(): Boolean {
