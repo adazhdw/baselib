@@ -1,7 +1,7 @@
 package com.adazhdw.ktlib.hihttp
 
-import android.os.Handler
-import android.os.Looper
+import com.adazhdw.ktlib.core.mainThread
+import com.adazhdw.ktlib.core.networkIO
 import com.adazhdw.ktlib.hihttp.callback.RawHttpCallback
 import com.adazhdw.ktlib.http.HttpConstant
 import com.adazhdw.ktlib.http.OkHttpLogger
@@ -22,13 +22,10 @@ class HiHttp private constructor() {
         val mHiHttp: HiHttp by lazy { HiHttp() }
     }
 
-    private val handler: Handler
     private val okHttpClient: OkHttpClient
-    private val mHandler = Handler(Looper.getMainLooper())
 
     init {
         okHttpClient = getClient()
-        handler = Handler(Looper.getMainLooper())
     }
 
     fun get(params: Params, rawHttpCallback: RawHttpCallback) {
@@ -83,24 +80,26 @@ class HiHttp private constructor() {
     private fun request(request: Request, callback: RawHttpCallback) {
         okHttpClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                mHandler.post {
+                mainThread.execute {
                     callback.onException(e)
                 }
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val body = response.body
-                if (body != null) {
-                    try {
-                        val result = String(body.bytes())
-                        mHandler.post { callback.onSuccess(result) }
-                    } catch (e: Exception) {
-                        mHandler.post { callback.onException(e) }
-                    }
-                } else {
-                    val e = RuntimeException("body of response is null:${call.request().url}")
-                    mHandler.post {
-                        callback.onException(e)
+                networkIO.submit {
+                    val body = response.body
+                    if (body != null) {
+                        try {
+                            val result = String(body.bytes())
+                            mainThread.execute { callback.onSuccess(result) }
+                        } catch (e: Exception) {
+                            mainThread.execute { callback.onException(e) }
+                        }
+                    } else {
+                        val e = RuntimeException("body of response is null:${call.request().url}")
+                        mainThread.execute {
+                            callback.onException(e)
+                        }
                     }
                 }
             }
