@@ -5,8 +5,8 @@ apply plugin: 'kotlin-kapt'
 dependencies {
 
     //BaseLibrary
-    implementation project(path: ':ktlib')
-//    implementation 'com.adazhdw:ktlib:0.6.1'
+//    implementation project(path: ':ktlib')
+    implementation 'com.adazhdw:ktlib:0.6.2'
 
     //Base
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -24,13 +24,6 @@ dependencies {
     def lifecycle_version = "2.1.0"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-
-    //网络相关
-    // Moshi
-    /*def moshi_version = "1.8.0"
-    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
-    implementation "com.squareup.retrofit2:converter-moshi:2.6.0"*/
 
     //Gson
     implementation 'com.google.code.gson:gson:2.8.6'

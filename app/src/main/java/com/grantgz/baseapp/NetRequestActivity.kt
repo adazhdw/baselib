@@ -6,14 +6,9 @@ import com.adazhdw.ktlib.base.BaseActivityImpl
 import com.adazhdw.ktlib.base.mvvm.getViewModel
 import com.adazhdw.ktlib.core.delegate.SPDelegate
 import com.adazhdw.ktlib.core.network.KtNetCallback
-import com.adazhdw.ktlib.ext.addFragment
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.ext.toast
 import com.adazhdw.ktlib.ext.view.invisible
-import com.adazhdw.ktlib.hihttp.Params
-import com.adazhdw.ktlib.hihttp.callback.FastJsonHttpCallback
-import com.adazhdw.ktlib.hihttp.get
-import com.adazhdw.ktlib.hihttp.getCoroutine
 import com.adazhdw.ktlib.http.await
 import com.adazhdw.ktlib.img.captureImageCoroutines
 import com.adazhdw.ktlib.img.selectImageCoroutines
@@ -64,15 +59,8 @@ class NetRequestActivity : BaseActivityImpl() {
          ("isLogin-----$isLogin").logD()*/
 
         requestBtn.setOnClickListener {
-            /*launchOnUI {
+            launchOnUI {
                 apiService.getHotKey().await()
-            }*/
-            launch {
-                getCoroutine<ListResponse<HotKey>>(Params(url = "https://wanandroid.com/hotkey/json"),onResponse = {data ->
-                    data.data?.forEach {
-                        it.toString().logD(TAG)
-                    }
-                })
             }
         }
         permissionBtn.setOnClickListener {
