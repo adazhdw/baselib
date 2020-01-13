@@ -6,6 +6,7 @@ import com.adazhdw.ktlib.base.BaseActivityImpl
 import com.adazhdw.ktlib.base.mvvm.getViewModel
 import com.adazhdw.ktlib.core.delegate.SPDelegate
 import com.adazhdw.ktlib.core.network.KtNetCallback
+import com.adazhdw.ktlib.ext.addFragment
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.ext.toast
 import com.adazhdw.ktlib.ext.view.invisible
@@ -92,7 +93,7 @@ class NetRequestActivity : BaseActivityImpl() {
             }
         }
 
-//        addFragment(WxChaptersFragment(), R.id.chaptersFl)
+        addFragment(WxChaptersFragment(), R.id.chaptersFl)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -115,7 +116,7 @@ class NetRequestActivity : BaseActivityImpl() {
 class WxChaptersFragment : ListFragmentEx<ChapterHistory, ChaptersAdapter>() {
 
     override val mLoadMoreEnable: Boolean
-        get() = false
+        get() = true
 
     override fun starAtPage(): Int {
         return 1
@@ -127,7 +128,7 @@ class WxChaptersFragment : ListFragmentEx<ChapterHistory, ChaptersAdapter>() {
                 val data = apiService.getWxArticleHistory2(428, page).await().data
                 mHandler.postDelayed({
                     if (data != null)
-                        callback.onSuccess(data.datas ?: listOf(), total = data.total)
+                        callback.onSuccess(data.datas ?: listOf())
                     else
                         callback.onError(0, "数据为空")
                 }, 0)

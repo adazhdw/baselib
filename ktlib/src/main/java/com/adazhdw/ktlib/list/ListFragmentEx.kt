@@ -62,7 +62,7 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
             swipe.isRefreshing = false
         }
         nextPage(mCurrentPage, object : OnRequestCallback<M> {
-            override fun onSuccess(list: List<M>, total: Int) {
+            override fun onSuccess(list: List<M>, hasMore: Boolean) {
                 if (list.isNotEmpty())
                     mCurrentPage += 1
                 listRV?.loadMoreEnabled(true)
@@ -75,7 +75,6 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
                 }
                 val dataEmpty = list.isEmpty()
                 val size = mListAdapter.data().size
-                val hasMore = size < total
                 listRV?.onLoadFinish(dataEmpty, hasMore)
             }
 
@@ -115,7 +114,7 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
     }
 
     interface OnRequestCallback<M> {
-        fun onSuccess(list: List<M>, total: Int)
+        fun onSuccess(list: List<M>, hasMore: Boolean = true)
         fun onError(errorCode: Int, errorMsg: String)
     }
 }
