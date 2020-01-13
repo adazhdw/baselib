@@ -28,6 +28,7 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
 
     override fun initView(view: View) {
         mContext = view.context
+        mCurrentPage = starAtPage()
         swipe.setOnRefreshListener {
             refresh()
         }
@@ -57,6 +58,7 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
 
     private fun requestData(isRefresh: Boolean) {
         if (isRefresh) {
+            mCurrentPage = starAtPage()
             listRV.loadMoreEnabled(false)
         } else {
             swipe.isRefreshing = false
