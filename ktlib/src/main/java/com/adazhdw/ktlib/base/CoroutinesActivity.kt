@@ -7,14 +7,10 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 // version 1.0
-abstract class CoroutinesActivity : AppCompatActivity(), CoroutineScope {
+abstract class CoroutinesActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     protected val TAG = javaClass.simpleName + "------"
     protected val mHandler: Handler by lazy { Handler() }
-
-    private val myJob = SupervisorJob()
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + myJob
 
     protected fun launchOnUI(
         error: ((Exception) -> Unit)? = null,
@@ -51,17 +47,6 @@ abstract class CoroutinesActivity : AppCompatActivity(), CoroutineScope {
 
     override fun onDestroy() {
         super.onDestroy()
-        myJob.cancel()
-    }
-}
-
-
-/*//version 2.0
-abstract class CoroutinesActivity : AppCompatActivity(), CoroutineScope by MainScope(){
-
-
-    override fun onDestroy() {
-        super.onDestroy()
         cancel()
     }
-}*/
+}

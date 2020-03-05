@@ -32,10 +32,7 @@ object RetrofitClient {
         mRetrofit = Retrofit.Builder()
             .baseUrl(mBaseUrl)
             .client(getClient())
-            .addConverterFactory(
-               /* MoshiConverterFactory.create(Moshi.Builder().add(KotlinJsonAdapterFactory()).build())*/
-                GsonConverterFactory.create()
-            )
+            .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
     }

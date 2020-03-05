@@ -5,16 +5,13 @@ import com.adazhdw.ktlib.ext.logE
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-abstract class CoroutinesFragment : Fragment(), CoroutineScope {
+abstract class CoroutinesFragment : Fragment(), CoroutineScope by MainScope() {
 
     protected val TAG = this.javaClass.simpleName + "------"
-    private val myJob = SupervisorJob()
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + myJob
 
     override fun onDestroyView() {
         super.onDestroyView()
-        myJob.cancel()
+        cancel()
     }
 
     protected fun launchOnUI(

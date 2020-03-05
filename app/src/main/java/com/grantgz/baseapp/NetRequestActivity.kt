@@ -78,8 +78,6 @@ class NetRequestActivity : BaseActivityImpl() {
                 toast("权限已授予")
             }
         }
-        selectImgBtn.invisible()
-        captureImgBtn.invisible()
         selectImgBtn.setOnClickListener {
             launchOnUI {
                 val model = selectImageCoroutines()
