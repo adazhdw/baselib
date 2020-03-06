@@ -1,9 +1,11 @@
 @file:Suppress("NOTHING_TO_INLINE", "unused")
 
-package com.adazhdw.ktlib.ext
+package com.adazhdw.ktlib.utils
 
 import android.content.SharedPreferences
 import com.adazhdw.ktlib.LibUtil
+import com.adazhdw.ktlib.ext.edit
+import com.adazhdw.ktlib.ext.sp
 
 /**
  * author: daguozhu

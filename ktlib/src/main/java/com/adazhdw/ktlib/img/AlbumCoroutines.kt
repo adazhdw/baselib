@@ -14,7 +14,7 @@ suspend fun ForResultActivity.selectImageCoroutines(
     onCancel: (() -> Unit)? = null
 ): DocumentModel =
     try {
-        suspendCancellableCoroutine { continuation ->
+        suspendCancellableCoroutine<DocumentModel> { continuation ->
             selectImage(
                 onResult = {
                     continuation.resume(it)
@@ -40,7 +40,7 @@ suspend fun ForResultActivity.captureImageCoroutines(
     onCancel: (() -> Unit)? = null
 ): DocumentModel =
     try {
-        suspendCancellableCoroutine { continuation ->
+        suspendCancellableCoroutine<DocumentModel> { continuation ->
             captureImage(
                 onResult = {
                     continuation.resume(it)

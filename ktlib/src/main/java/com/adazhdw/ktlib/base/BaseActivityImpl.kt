@@ -4,18 +4,6 @@ import com.adazhdw.ktlib.core.network.KtNetCallback
 
 abstract class BaseActivityImpl :BaseActivity() {
 
-    override fun initView() {
-
-    }
-
-    override fun initData() {
-
-    }
-
-    override fun requestStart() {
-
-    }
-
     override fun onNetAvailable(netType: KtNetCallback.NetType, fromReceiver: Boolean) {
 
     }

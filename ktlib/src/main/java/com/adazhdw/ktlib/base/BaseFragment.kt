@@ -11,32 +11,7 @@ import org.greenrobot.eventbus.EventBus
  * 2、界面是否可见后，才能加载数据
  * 3、是否加载过数据，如果加载过，就不重复加载
  */
-abstract class BaseFragment : CoroutinesFragment() {
-
-    /**
-     * 返回布局Id
-     */
-    protected abstract val layoutId: Int
-
-    /**
-     * 初始化数据
-     */
-    protected abstract fun initData()
-
-    /**
-     * 初始化View
-     */
-    protected abstract fun initView(view: View)
-
-    /**
-     * 是否需要EventBus
-     */
-    protected open fun needEventBus(): Boolean = false
-
-    /**
-     * 网络请求开始
-     */
-    abstract fun requestStart()
+abstract class BaseFragment : CoroutinesFragment(),IFragment {
 
     /**
      * 是否初始化过布局

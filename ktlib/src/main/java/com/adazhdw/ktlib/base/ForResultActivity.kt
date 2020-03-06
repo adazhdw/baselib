@@ -18,12 +18,19 @@ abstract class ForResultActivity : NetCallbackActivity() {
         startActivityForResult(intent, currentCode)
     }
 
-    suspend fun startActivityForResultCoroutines(intent: Intent, onFailure: (() -> Unit)? = null, onCancel: (() -> Unit)? = null): Intent? =
+    suspend fun startActivityForResultCoroutines(
+        intent: Intent,
+        onFailure: (() -> Unit)? = null,
+        onCancel: (() -> Unit)? = null
+    ): Intent? =
         try {
-            suspendCancellableCoroutine { continuation ->
+            suspendCancellableCoroutine<Intent> { continuation ->
                 startActivityForResultCompact(intent) { resultCode, data ->
                     when (resultCode) {
-                        RESULT_OK -> continuation.resume(data)
+                        RESULT_OK -> {
+                            if (data != null) continuation.resume(data)
+                            else onFailure?.invoke()
+                        }
                         RESULT_CANCELED -> onCancel?.invoke()
                         else -> continuation.resumeWithException(CancellationException())
                     }
