@@ -9,6 +9,5 @@ import com.bumptech.glide.module.AppGlideModule
 class BaseGlideModule : AppGlideModule() {
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         super.applyOptions(context, builder)
-
     }
 }

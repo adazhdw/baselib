@@ -14,6 +14,7 @@ import java.io.File
 object UriUtil {
 
     fun getFileByUri(context: Context, uri: Uri?): File? {
+        if (uri == null) return null
         if (DocumentsContract.isDocumentUri(context, uri)) {
             when {
                 isExternalStorageDocument(uri) -> {
@@ -51,7 +52,7 @@ object UriUtil {
                     val selectionArgs: Array<String> = arrayOf(split[1])
                     return getFileFromUri(contentUri, selection, selectionArgs, 4)
                 }
-                ContentResolver.SCHEME_CONTENT == uri?.scheme -> {
+                ContentResolver.SCHEME_CONTENT == uri.scheme -> {
                     return getFileFromUri(uri, 5)
                 }
                 else -> {

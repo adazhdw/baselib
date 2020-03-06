@@ -7,7 +7,7 @@ object TimeUtil {
 
     private val mFormatBuilder: StringBuilder by lazy { StringBuilder() }
     private val mFormatter: Formatter by lazy { Formatter(mFormatBuilder, Locale.CHINA) }
-    fun stringForTime(timeMs: Int): String {
+    fun timeMsToFormat(timeMs: Int): String {
         val totalSeconds = timeMs / 1000
 
         val seconds = totalSeconds % 60
