@@ -1,8 +1,7 @@
 package com.adazhdw.ktlib.img
 
 import com.adazhdw.ktlib.base.ForResultActivity
-import com.adazhdw.ktlib.ext.loge
-
+import com.adazhdw.ktlib.ext.logE
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -23,7 +22,7 @@ suspend fun ForResultActivity.selectImageCoroutines(
                     onError?.invoke("permission denied")
                 }, onError = {
                     onError?.invoke(it)
-                    loge(content = it)
+                    it.logE()
                     continuation.resumeWithException(CancellationException(it))
                 }, onCancel = {
                     onCancel?.invoke()
@@ -31,7 +30,7 @@ suspend fun ForResultActivity.selectImageCoroutines(
             )
         }
     } catch (ex: CancellationException) {
-        loge(content = ex.message)
+        ex.message.logE()
         throw ex
     }
 
@@ -57,6 +56,6 @@ suspend fun ForResultActivity.captureImageCoroutines(
             )
         }
     } catch (ex: CancellationException) {
-        loge(content = ex.message ?: "")
+        ex.message.logE()
         throw ex
     }

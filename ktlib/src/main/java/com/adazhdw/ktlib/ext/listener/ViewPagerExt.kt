@@ -23,7 +23,7 @@ fun ViewPager.onPageSelected(
     }
 
     override fun onPageSelected(position: Int) {
-
+        action.invoke(position)
     }
 })
 
@@ -41,10 +41,11 @@ fun ViewPager.onPageChange(
         positionOffset: Float,
         positionOffsetPixels: Int
     ) {
+        onPageScrolled?.invoke(position,positionOffset,positionOffsetPixels)
     }
 
     override fun onPageSelected(position: Int) {
-
+        onPageSelected.invoke(position)
     }
 })
 

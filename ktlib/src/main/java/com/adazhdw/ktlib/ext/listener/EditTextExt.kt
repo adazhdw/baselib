@@ -9,8 +9,8 @@ import android.widget.EditText
 
 inline fun EditText.addTextWatcher(
     crossinline after: (text: Editable?) -> Unit,
-    crossinline before: () -> Unit,
-    crossinline on: () -> Unit
+    crossinline before: (s: CharSequence?, start: Int, count: Int, after: Int) -> Unit,
+    crossinline on: (s: CharSequence?, start: Int, before: Int, count: Int) -> Unit
 ) {
     addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
@@ -18,11 +18,11 @@ inline fun EditText.addTextWatcher(
         }
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
+            before.invoke(s, start, count, after)
         }
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
+            on.invoke(s, start, before, count)
         }
     })
 }

@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.core.delegate
+package com.adazhdw.ktlib.core
 
 import android.content.Context
 import com.adazhdw.ktlib.LibUtil
@@ -6,13 +6,10 @@ import java.lang.IllegalArgumentException
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
+fun <T> preference(paramName: String, default: T, spName: String = LibUtil.getApp().packageName + "_sharePreference"): Preference<T> =
+    Preference(spName, paramName, default)
 
-object SPDelegate {
-    fun <T> preference(paramName: String, default: T, spName: String = LibUtil.getApp().packageName + "_sharePreference"): SPPreference<T> =
-            SPPreference(spName, paramName, default)
-}
-
-class SPPreference<T>(private val spName: String, private val paramName: String, private val default: T) : ReadWriteProperty<Any, T> {
+class Preference<T>(private val spName: String, private val paramName: String, private val default: T) : ReadWriteProperty<Any, T> {
 
     private val pref by lazy { LibUtil.getApp().applicationContext.getSharedPreferences(spName, Context.MODE_PRIVATE) }
 

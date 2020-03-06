@@ -23,25 +23,6 @@ val Context.versionCode: Long
 
 
 /**
- * 获取应用程序下所有Activity
- *
- **/
-fun Context.getAllActivities(): List<String> {
-    return packageManager.queryIntentActivities(Intent(Intent.ACTION_MAIN, null).apply {
-        setPackage(packageName)
-    }, 0).map { it.activityInfo.name }
-}
-
-/**
- * 获取设备上已安装并且可启动的应用列表
- */
-fun Context.getLaunchApps(): List<ResolveInfo> {
-    return packageManager.queryIntentActivities(Intent(Intent.ACTION_MAIN, null).apply {
-        addCategory(Intent.CATEGORY_LAUNCHER)
-    }, 0)
-}
-
-/**
  * 主动回到home
  */
 fun Context.goHome() {
