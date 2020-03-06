@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.http
+package com.adazhdw.ktlib.utils
 
 import org.json.JSONArray
 import org.json.JSONException
