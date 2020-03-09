@@ -3,10 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-//upload to bintray
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.dcendents.android-maven'
-
 repositories {
     mavenCentral()
     google()
@@ -57,11 +53,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
 
-    //fastJson
-//    implementation 'com.alibaba:fastjson:1.1.71.android'
-//    //use kotlin-reflect to avoid the JSON.parseObject “default constructor not found” error
-//    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-
     //Gson
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
@@ -78,13 +69,6 @@ dependencies {
     //图片
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
-
-    //RecyclerViewAdapter
-//    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50'
-
-    //useful library
-//    implementation 'com.blankj:utilcode:1.23.7'
-
 }
 
 //发布jcenter    gradlew clean build install bintrayUpload
@@ -95,7 +79,7 @@ ext {
 
     publishedGroupId = 'com.adazhdw' // the id you want to add in "implement" line
     artifact = 'ktlib' // = libraryName  the id you want to add in "implement" line--must be the module name in android project
-    libraryVersion = '0.6.6'
+    libraryVersion = '0.6.7'
 
     libraryDescription = 'optimize libraries'
     siteUrl = 'https://github.com/adazhdw/KtLibTest'
@@ -115,7 +99,6 @@ ext {
 if (project.rootProject.file('local.properties').exists()) {
 //    apply from: 'https://raw.githubusercontent.com/numetriclabz/jcenter/master/installv.gradle'
 //    apply from: 'https://raw.githubusercontent.com/numetriclabz/jcenter/master/bintrayv.gradle'
-    apply from: 'installv.gradle'
-    apply from: 'bintrayv.gradle'
+    apply from: 'bintray.gradle'
 }
 

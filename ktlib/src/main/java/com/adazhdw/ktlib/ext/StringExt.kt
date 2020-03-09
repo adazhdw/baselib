@@ -75,10 +75,3 @@ inline fun String.startWidth(prefix: String, ignoreCase: Boolean = true): Boolea
     return startsWith(prefix, ignoreCase)
 }
 
-
-/**
- * Html-encode the string.
- *
- * @see TextUtils.htmlEncode
- */
-inline fun String.htmlEncode(): String = TextUtils.htmlEncode(this)
