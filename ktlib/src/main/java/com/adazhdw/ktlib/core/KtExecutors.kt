@@ -22,7 +22,3 @@ object KtExecutors {
         }
     }
 }
-
-val mainThread by lazy { KtExecutors.mainThread }
-val diskIO by lazy { KtExecutors.diskIO }
-val networkIO by lazy { KtExecutors.networkIO }
