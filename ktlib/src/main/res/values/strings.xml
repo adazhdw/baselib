@@ -5,4 +5,7 @@
     <string name="cancel" >取消</string>
     <string name="confirm_text" >确认</string>
     <string name="no_more_data_text" >没有更多的数据了</string>
+
+    <string name="no_more">No more~</string>
+    <string name="retry">click to retry</string>
 </resources>
