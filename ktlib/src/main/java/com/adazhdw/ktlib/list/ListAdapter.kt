@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.adazhdw.ktlib.R
 import kotlinx.android.synthetic.main.fragment_list_footer.view.*
 
+@Deprecated("")
 abstract class ListAdapter(context: Context) : BaseAdapter(context), LoadMoreView {
 
     open val footerId: Int = R.layout.fragment_list_footer

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 
 
+@Deprecated("")
 class ListRecyclerView : RecyclerView {
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)

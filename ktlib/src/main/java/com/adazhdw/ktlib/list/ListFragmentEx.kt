@@ -10,6 +10,7 @@ import com.adazhdw.ktlib.R
 import com.adazhdw.ktlib.base.BaseFragmentImpl
 import kotlinx.android.synthetic.main.fragment_list_layout_ex.*
 
+@Deprecated("")
 abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
     override val layoutId: Int
         get() = R.layout.fragment_list_layout_ex
