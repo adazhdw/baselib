@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.img
 
-import com.adazhdw.ktlib.base.ForResultActivity
+import com.adazhdw.ktlib.base.activity.ForResultActivity
 import com.adazhdw.ktlib.ext.logE
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.suspendCancellableCoroutine

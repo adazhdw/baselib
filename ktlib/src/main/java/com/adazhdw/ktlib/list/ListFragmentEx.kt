@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adazhdw.ktlib.R
-import com.adazhdw.ktlib.base.BaseFragmentImpl
+import com.adazhdw.ktlib.base.fragment.BaseFragmentImpl
 import kotlinx.android.synthetic.main.fragment_list_layout_ex.*
 
 @Deprecated("")

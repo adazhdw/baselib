@@ -1,9 +1,9 @@
-package com.adazhdw.ktlib.base
+package com.adazhdw.ktlib.base.activity
 
 import com.adazhdw.ktlib.core.network.KtNetCallback
 
 @Deprecated("use BaseActivity")
-abstract class BaseActivityImpl :BaseActivity() {
+abstract class BaseActivityImpl : BaseActivity() {
 
     override fun onNetAvailable(netType: KtNetCallback.NetType, fromReceiver: Boolean) {
 

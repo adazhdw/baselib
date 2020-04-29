@@ -1,14 +1,18 @@
-package com.adazhdw.ktlib.base
+package com.adazhdw.ktlib.base.activity
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import com.adazhdw.ktlib.base.IActivity
+import com.adazhdw.ktlib.core.lifecycle.KtManager
 import org.greenrobot.eventbus.EventBus
 
-abstract class BaseActivity : ForResultActivity(), IActivity {
+abstract class BaseActivity : ForResultActivity(),
+    IActivity {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layoutId)
+
+        KtManager.pushActivity(this)
+
         window.setBackgroundDrawable(null)
         initView()
         initData()
@@ -27,6 +31,11 @@ abstract class BaseActivity : ForResultActivity(), IActivity {
         if (needEventBus()) {
             EventBus.getDefault().unregister(this)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        KtManager.popActivity(this)
     }
 
 }

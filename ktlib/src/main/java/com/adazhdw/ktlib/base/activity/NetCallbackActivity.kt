@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.base
+package com.adazhdw.ktlib.base.activity
 
 import android.content.Context
 import android.content.IntentFilter

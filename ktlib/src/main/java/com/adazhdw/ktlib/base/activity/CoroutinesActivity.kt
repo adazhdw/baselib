@@ -1,18 +1,16 @@
-package com.adazhdw.ktlib.base
+package com.adazhdw.ktlib.base.activity
 
-import androidx.fragment.app.Fragment
+import android.os.Handler
+import android.os.Looper
+import androidx.appcompat.app.AppCompatActivity
 import com.adazhdw.ktlib.ext.logE
 import kotlinx.coroutines.*
-import kotlin.coroutines.CoroutineContext
 
-abstract class CoroutinesFragment : Fragment(), CoroutineScope by MainScope() {
+// version 1.0
+abstract class CoroutinesActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
-    protected val TAG = this.javaClass.simpleName + "------"
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        cancel()
-    }
+    protected val TAG = javaClass.name + "------"
+    protected val mHandler: Handler by lazy { Handler(Looper.getMainLooper()) }
 
     protected fun launchOnUI(
         error: ((Exception) -> Unit)? = null,
@@ -47,4 +45,8 @@ abstract class CoroutinesFragment : Fragment(), CoroutineScope by MainScope() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        cancel()
+    }
 }

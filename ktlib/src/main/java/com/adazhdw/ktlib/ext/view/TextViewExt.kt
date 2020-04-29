@@ -2,10 +2,7 @@
 
 package com.adazhdw.ktlib.ext.view
 
-import android.content.Context
 import android.graphics.Typeface
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.TypedValue
 import android.widget.TextView
 import androidx.annotation.DrawableRes
@@ -38,25 +35,25 @@ inline fun TextView.textDefault() {
 }
 
 
-inline fun TextView.drawableLeft(context: Context, @DrawableRes id: Int) {
+inline fun TextView.drawableLeft(@DrawableRes id: Int) {
     val d = context.getDrawableEx(id) ?: return
     d.setBounds(0, 0, d.minimumWidth, d.minimumHeight)
     this.setCompoundDrawables(d, null, null, null)
 }
 
-inline fun TextView.drawableBottom(context: Context, @DrawableRes id: Int) {
+inline fun TextView.drawableBottom(@DrawableRes id: Int) {
     val d = context.getDrawableEx(id) ?: return
     d.setBounds(0, 0, d.minimumWidth, d.minimumHeight)
     this.setCompoundDrawables(null, null, null, d)
 }
 
-inline fun TextView.drawableRight(context: Context, @DrawableRes id: Int) {
+inline fun TextView.drawableRight(@DrawableRes id: Int) {
     val d = context.getDrawableEx(id) ?: return
     d.setBounds(0, 0, d.minimumWidth, d.minimumHeight)
     this.setCompoundDrawables(null, null, d, null)
 }
 
-inline fun TextView.drawableTop(context: Context, @DrawableRes id: Int) {
+inline fun TextView.drawableTop(@DrawableRes id: Int) {
     val d = context.getDrawableEx(id) ?: return
     d.setBounds(0, 0, d.minimumWidth, d.minimumHeight)
     this.setCompoundDrawables(null, d, null, null)

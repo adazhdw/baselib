@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
 import androidx.core.content.FileProvider
@@ -39,7 +38,7 @@ private fun Context.installApk(file: File) {
     val uri: Uri = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
         Uri.fromFile(file)
     } else {
-        FileProvider.getUriForFile(this, "packageName.fileprovider", file)
+        FileProvider.getUriForFile(this, "$packageName.fileprovider", file)
     }
     startActivity(Intent().apply {
         action = "android.intent.action.VIEW"

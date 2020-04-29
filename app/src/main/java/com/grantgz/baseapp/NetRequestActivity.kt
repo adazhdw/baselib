@@ -2,14 +2,13 @@ package com.grantgz.baseapp
 
 import android.Manifest
 import android.content.Context
-import com.adazhdw.ktlib.base.BaseActivityImpl
+import com.adazhdw.ktlib.base.activity.BaseActivity
 import com.adazhdw.ktlib.base.mvvm.getViewModel
-import com.adazhdw.ktlib.core.delegate.SPDelegate
 import com.adazhdw.ktlib.core.network.KtNetCallback
+import com.adazhdw.ktlib.core.preference
 import com.adazhdw.ktlib.ext.addFragment
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.ext.toast
-import com.adazhdw.ktlib.ext.view.invisible
 import com.adazhdw.ktlib.http.await
 import com.adazhdw.ktlib.img.captureImageCoroutines
 import com.adazhdw.ktlib.img.selectImageCoroutines
@@ -19,14 +18,11 @@ import com.adazhdw.ktlib.list.ListViewHolder
 import com.adazhdw.ktlib.utils.permission.KtPermission
 import com.adazhdw.ktlib.utils.permission.PermissionCallback
 import com.grantgz.baseapp.http.ChapterHistory
-import com.grantgz.baseapp.http.HotKey
-import com.grantgz.baseapp.http.ListResponse
 import com.grantgz.baseapp.http.apiService
 import kotlinx.android.synthetic.main.net_chapter_item.view.*
 import kotlinx.android.synthetic.main.net_request_layout.*
-import kotlinx.coroutines.launch
 
-class NetRequestActivity : BaseActivityImpl() {
+class NetRequestActivity : BaseActivity() {
     override val layoutId: Int
         get() = R.layout.net_request_layout
 
@@ -38,7 +34,7 @@ class NetRequestActivity : BaseActivityImpl() {
         getViewModel { NetViewModel() }
     }
 
-    private var isLogin by SPDelegate.preference("isLogin", false)
+    private var isLogin by preference("isLogin", false)
     private val permissions = arrayOf(
         Manifest.permission.CAMERA,
         Manifest.permission.RECORD_AUDIO,

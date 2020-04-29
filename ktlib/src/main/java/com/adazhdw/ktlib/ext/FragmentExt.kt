@@ -66,6 +66,24 @@ inline fun Fragment.replaceFragment(
     }
 }
 
+inline fun FragmentActivity.hideFragment(
+    fragment: Fragment,
+    isAllowingStateLose: Boolean = false
+) {
+    supportFragmentManager.transact(isAllowingStateLose) {
+        hide(fragment)
+    }
+}
+
+inline fun Fragment.hideFragment(
+    fragment: Fragment,
+    isAllowingStateLose: Boolean = false
+) {
+    childFragmentManager.transact(isAllowingStateLose) {
+        hide(fragment)
+    }
+}
+
 inline fun FragmentManager.transact(
     isAllowingStateLose: Boolean = false,
     action: (FragmentTransaction.() -> Unit)
