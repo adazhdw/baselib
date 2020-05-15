@@ -2,7 +2,8 @@ package com.grantgz.baseapp
 
 import android.Manifest
 import android.content.Context
-import com.adazhdw.ktlib.base.activity.BaseActivity
+import com.adazhdw.ktlib.base.mvvm.BaseVMActivity
+import com.adazhdw.ktlib.base.mvvm.NetError
 import com.adazhdw.ktlib.base.mvvm.getViewModel
 import com.adazhdw.ktlib.core.network.KtNetCallback
 import com.adazhdw.ktlib.core.preference
@@ -22,17 +23,12 @@ import com.grantgz.baseapp.http.apiService
 import kotlinx.android.synthetic.main.net_chapter_item.view.*
 import kotlinx.android.synthetic.main.net_request_layout.*
 
-class NetRequestActivity : BaseActivity() {
+class NetRequestActivity : BaseVMActivity<NetRepository, NetViewModel>() {
     override val layoutId: Int
         get() = R.layout.net_request_layout
 
-    private val mNetViewModel: NetViewModel by lazy {
-        // @Deprecated---ViewModelProviders.of
-//         ViewModelProviders.of(this, InjectorUtil.getNetModelFactory()).get(NetViewModel::class.java)
-//         ViewModelProvider(this, InjectorUtil.getNetModelFactory()).get(NetViewModel::class.java)
-        // 自己的扩展方法
-        getViewModel { NetViewModel() }
-    }
+    override val viewModel: NetViewModel
+        get() = getViewModel { NetViewModel() }
 
     private var isLogin by preference("isLogin", false)
     private val permissions = arrayOf(
@@ -44,21 +40,11 @@ class NetRequestActivity : BaseActivity() {
 
     override fun initView() {
 
-        /* //设置actionbar
-         setActionbarCompact(R.id.toolbar)
-
-         spPutValue("", "")
-         //login值输出
-         ("isLogin-----$isLogin").logD()
-         isLogin = true
-         ("isLogin-----$isLogin").logD()
-         isLogin = false
-         ("isLogin-----$isLogin").logD()*/
-
         requestBtn.setOnClickListener {
-            launchOnUI {
+            /*launchOnUI {
                 apiService.getHotKey().await()
-            }
+            }*/
+            viewModel.getHotKey()
         }
         permissionBtn.setOnClickListener {
             if (!KtPermission.isGranted(permissions, this)) {
@@ -103,6 +89,18 @@ class NetRequestActivity : BaseActivity() {
 
     override fun onNetUnAvailable(netType: KtNetCallback.NetType, fromReceiver: Boolean) {
         ("netType----onNetUnAvailable:$netType---fromReceiver:$fromReceiver").logD(TAG)
+    }
+
+    override fun showLoading() {
+        toast("loading")
+    }
+
+    override fun hideLoading() {
+        toast("hide_loading")
+    }
+
+    override fun showError(netError: NetError) {
+        toast(netError.msg)
     }
 
 }

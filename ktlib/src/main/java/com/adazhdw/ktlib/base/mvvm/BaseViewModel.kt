@@ -1,5 +1,6 @@
 package com.adazhdw.ktlib.base.mvvm
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.adazhdw.ktlib.ext.logE
@@ -7,26 +8,36 @@ import kotlinx.coroutines.*
 
 abstract class BaseViewModel<R : BaseRepository> : ViewModel() {
 
-    protected val TAG = this.javaClass.simpleName
+    protected val TAG = this.javaClass.name
     protected val mRepository: R by lazy { obtainRepository() }
-
     abstract fun obtainRepository(): R
 
-    fun launch(block: suspend CoroutineScope.() -> Unit): Job {
+    val netState: MutableLiveData<VMNetState> = MutableLiveData()
+
+    protected fun launch(block: suspend CoroutineScope.() -> Unit): Job {
+        netState.postValue(NetLoading)
         return launchOnUI(block)
     }
 
-    private fun launchOnUI(block: suspend CoroutineScope.() -> Unit): Job {
+    protected fun launchOnUI(block: suspend CoroutineScope.() -> Unit): Job {
         return viewModelScope.launch {
-            tryCatch(block, { "error:${it.message}".logE(TAG) }, {}, true)
+            tryCatch({
+                block()
+            }, {
+                netState.postValue(NetError(error = it))
+                "error:${it.message}".logE(TAG)
+            }, {
+                netState.postValue(NetSuccess)
+            }, true)
         }
     }
 
     private suspend fun tryCatch(
-            tryBlock: suspend CoroutineScope.() -> Unit,
-            catchBlock: suspend CoroutineScope.(Throwable) -> Unit,
-            finallyBlock: suspend CoroutineScope.() -> Unit,
-            handleCancellationExceptionManually: Boolean = false) {
+        tryBlock: suspend CoroutineScope.() -> Unit,
+        catchBlock: suspend CoroutineScope.(Throwable) -> Unit,
+        finallyBlock: suspend CoroutineScope.() -> Unit,
+        handleCancellationExceptionManually: Boolean = false
+    ) {
         coroutineScope {
             try {
                 tryBlock()
