@@ -8,4 +8,5 @@
 
     <string name="no_more">No more~</string>
     <string name="retry">click to retry</string>
+    <string name="load_complete_text">load complete</string>
 </resources>

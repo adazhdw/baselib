@@ -2,7 +2,6 @@ package com.adazhdw.ktlib.core
 
 import android.content.Context
 import com.adazhdw.ktlib.LibUtil
-import java.lang.IllegalArgumentException
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -11,7 +10,7 @@ fun <T> preference(paramName: String, default: T, spName: String = LibUtil.getAp
 
 class Preference<T>(private val spName: String, private val paramName: String, private val default: T) : ReadWriteProperty<Any, T> {
 
-    private val pref by lazy { LibUtil.getApp().applicationContext.getSharedPreferences(spName, Context.MODE_PRIVATE) }
+    private val pref by lazy { LibUtil.getApp().getSharedPreferences(spName, Context.MODE_PRIVATE) }
 
     override fun getValue(thisRef: Any, property: KProperty<*>): T {
         return getParam(paramName, default)

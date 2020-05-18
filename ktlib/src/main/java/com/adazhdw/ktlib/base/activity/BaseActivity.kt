@@ -5,8 +5,7 @@ import com.adazhdw.ktlib.base.IActivity
 import com.adazhdw.ktlib.core.lifecycle.KtManager
 import org.greenrobot.eventbus.EventBus
 
-abstract class BaseActivity : ForResultActivity(),
-    IActivity {
+abstract class BaseActivity : ForResultActivity(), IActivity {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layoutId)
