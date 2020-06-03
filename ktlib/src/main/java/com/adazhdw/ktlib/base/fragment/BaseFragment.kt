@@ -25,7 +25,7 @@ abstract class BaseFragment : CoroutinesFragment(),
      */
     protected var isDataInitiated = false
 
-    protected var mContentView:View?=null
+    protected var mContentView: View? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,

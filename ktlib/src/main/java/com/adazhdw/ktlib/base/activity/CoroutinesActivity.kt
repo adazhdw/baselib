@@ -3,24 +3,50 @@ package com.adazhdw.ktlib.base.activity
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.adazhdw.ktlib.ext.logE
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 // version 1.0
-abstract class CoroutinesActivity : AppCompatActivity(), CoroutineScope by MainScope() {
+abstract class CoroutinesActivity : AppCompatActivity() {
 
     protected val TAG = javaClass.name + "------"
     protected val mHandler: Handler by lazy { Handler(Looper.getMainLooper()) }
+
+    protected fun launchWhenResumed(block: suspend CoroutineScope.() -> Unit) {
+        lifecycleScope.launchWhenResumed(block)
+    }
+
+    protected fun launchWhenCreated(block: suspend CoroutineScope.() -> Unit) {
+        lifecycleScope.launchWhenCreated(block)
+    }
+
+    protected fun launchWhenStarted(block: suspend CoroutineScope.() -> Unit) {
+        lifecycleScope.launchWhenStarted(block)
+    }
+
+    protected fun launch(
+        error: ((Exception) -> Unit)? = null,
+        block: suspend CoroutineScope.() -> Unit
+    ) = launchOnUI(error, block)
 
     protected fun launchOnUI(
         error: ((Exception) -> Unit)? = null,
         block: suspend CoroutineScope.() -> Unit
     ) {
-        launch {
-            tryCatch(block, {
-                error?.invoke(it)
-                "error:${it.message}".logE(TAG)
-            }, {}, true)
+        lifecycleScope.launch {
+            tryCatch(
+                tryBlock = block,
+                catchBlock = {
+                    error?.invoke(it)
+                    "error:${it.message}".logE(TAG)
+                },
+                finallyBlock = {},
+                handleCancellationExceptionManually = true
+            )
         }
     }
 
@@ -43,10 +69,5 @@ abstract class CoroutinesActivity : AppCompatActivity(), CoroutineScope by MainS
                 finallyBlock()
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        cancel()
     }
 }
