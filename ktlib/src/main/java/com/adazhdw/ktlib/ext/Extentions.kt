@@ -23,31 +23,31 @@ inline fun <reified T : Activity> FragmentActivity.startActivity(vararg extras: 
 }
 
 
-inline fun Fragment.toast(msg: CharSequence): Toast =
+fun Fragment.toast(msg: CharSequence): Toast =
     Toast.makeText(context, msg, Toast.LENGTH_SHORT).apply { show() }
 
-inline fun FragmentActivity.toast(msg: CharSequence): Toast =
+fun FragmentActivity.toast(msg: CharSequence): Toast =
     Toast.makeText(this, msg, Toast.LENGTH_SHORT).apply { show() }
 
-inline fun Context.toast(msg: CharSequence): Toast =
+fun Context.toast(msg: CharSequence): Toast =
     Toast.makeText(this, msg, Toast.LENGTH_SHORT).apply { show() }
 
-inline fun toast(msg: CharSequence): Toast =
+fun toast(msg: CharSequence): Toast =
     Toast.makeText(LibUtil.getApp(), msg, Toast.LENGTH_SHORT).apply { show() }
 
 
-inline fun Fragment.getColorEx(@ColorRes res:Int): Int {
+fun Fragment.getColorEx(@ColorRes res: Int): Int {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        resources.getColor(res,context?.theme)
-    }else{
+        resources.getColor(res, context?.theme)
+    } else {
         resources.getColor(res)
     }
 }
 
-inline fun FragmentActivity.getColorEx(@ColorRes res:Int): Int {
-    return ContextCompat.getColor(this,res)
+fun FragmentActivity.getColorEx(@ColorRes res: Int): Int {
+    return ContextCompat.getColor(this, res)
 }
 
-inline fun Context.getColorEx(@ColorRes res:Int): Int {
-    return ContextCompat.getColor(this,res)
+fun Context.getColorEx(@ColorRes res: Int): Int {
+    return ContextCompat.getColor(this, res)
 }

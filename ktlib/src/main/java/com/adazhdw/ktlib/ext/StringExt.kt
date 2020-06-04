@@ -5,7 +5,6 @@ package com.adazhdw.ktlib.ext
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.text.TextUtils
 import java.util.regex.Pattern
 
 /**
@@ -71,7 +70,7 @@ fun Context.pasteText(): String? {
 /**
  * startWith
  */
-inline fun String.startWidth(prefix: String, ignoreCase: Boolean = true): Boolean {
+fun String.startWidth(prefix: String, ignoreCase: Boolean = true): Boolean {
     return startsWith(prefix, ignoreCase)
 }
 
