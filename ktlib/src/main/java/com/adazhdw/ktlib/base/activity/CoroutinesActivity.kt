@@ -28,7 +28,7 @@ abstract class CoroutinesActivity : AppCompatActivity() {
         lifecycleScope.launchWhenStarted(block)
     }
 
-    protected fun launch(
+    fun launch(
         error: ((Exception) -> Unit)? = null,
         block: suspend CoroutineScope.() -> Unit
     ) = launchOnUI(error, block)
