@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.WindowManager
 import androidx.annotation.DrawableRes
+import com.adazhdw.ktlib.KtLib
 
 /**
  * author: daguozhu
@@ -48,10 +49,18 @@ val Context.screenHeight: Int
         return point.y
     }
 
-fun Context.getDrawableEx(@DrawableRes res:Int): Drawable? {
+fun Context.getDrawableEx(@DrawableRes res: Int): Drawable? {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        resources.getDrawable(res,null)
+        resources.getDrawable(res, null)
     } else {
         resources.getDrawable(res)
+    }
+}
+
+fun getDrawableEx(@DrawableRes res: Int): Drawable? {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        KtLib.context.resources.getDrawable(res, null)
+    } else {
+        KtLib.context.resources.getDrawable(res)
     }
 }

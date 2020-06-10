@@ -26,10 +26,12 @@ import androidx.annotation.RequiresPermission;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.adazhdw.ktlib.LibUtil;
+import com.adazhdw.ktlib.KtLib;
 import com.adazhdw.ktlib.R;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
 import static android.Manifest.permission.EXPAND_STATUS_BAR;
 
 public class StatusBarUtil {
@@ -1035,9 +1037,9 @@ public class StatusBarUtil {
      */
     public static int getActionBarHeight() {
         TypedValue tv = new TypedValue();
-        if (LibUtil.INSTANCE.getContext().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+        if (KtLib.INSTANCE.getContext().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
             return TypedValue.complexToDimensionPixelSize(
-                    tv.data, LibUtil.INSTANCE.getContext().getResources().getDisplayMetrics()
+                    tv.data, KtLib.INSTANCE.getContext().getResources().getDisplayMetrics()
             );
         }
         return 0;
@@ -1067,7 +1069,7 @@ public class StatusBarUtil {
     private static void invokePanels(final String methodName) {
         try {
             @SuppressLint("WrongConstant")
-            Object service = LibUtil.INSTANCE.getContext().getSystemService("statusbar");
+            Object service = KtLib.INSTANCE.getContext().getSystemService("statusbar");
             @SuppressLint("PrivateApi")
             Class<?> statusBarManager = Class.forName("android.app.StatusBarManager");
             Method expand = statusBarManager.getMethod(methodName);
@@ -1120,7 +1122,7 @@ public class StatusBarUtil {
             final View child = decorView.getChildAt(i);
             final int id = child.getId();
             if (id != View.NO_ID) {
-                String resourceEntryName = LibUtil.INSTANCE.getContext()
+                String resourceEntryName = KtLib.INSTANCE.getContext()
                         .getResources()
                         .getResourceEntryName(id);
                 if ("navigationBarBackground".equals(resourceEntryName)) {
@@ -1163,7 +1165,7 @@ public class StatusBarUtil {
             final View child = decorView.getChildAt(i);
             final int id = child.getId();
             if (id != View.NO_ID) {
-                String resourceEntryName = LibUtil.INSTANCE.getContext()
+                String resourceEntryName = KtLib.INSTANCE.getContext()
                         .getResources()
                         .getResourceEntryName(id);
                 if ("navigationBarBackground".equals(resourceEntryName)
@@ -1230,7 +1232,7 @@ public class StatusBarUtil {
      * @return {@code true}: yes<br>{@code false}: no
      */
     public static boolean isSupportNavBar() {
-        WindowManager wm = (WindowManager) LibUtil.INSTANCE.getContext().getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) KtLib.INSTANCE.getContext().getSystemService(Context.WINDOW_SERVICE);
         if (wm == null) return false;
         Display display = wm.getDefaultDisplay();
         Point size = new Point();

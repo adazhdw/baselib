@@ -6,7 +6,7 @@ import android.content.Context
 import com.adazhdw.ktlib.core.lifecycle.KtLifecycleCallback
 import java.lang.reflect.InvocationTargetException
 
-object LibUtil {
+object KtLib {
 
     private var currentApplication: Application? = null
     private val mKtLifecycleCallback = KtLifecycleCallback()
@@ -60,7 +60,7 @@ object LibUtil {
  * 初始化 Utils工具包 和 BaseUrl
  */
 fun Application.initLibrary(baseUrl: String, debug: Boolean = false) {
-    LibUtil.init(this)
+    KtLib.init(this)
     mBaseUrl = baseUrl
     isDebug = debug
 }

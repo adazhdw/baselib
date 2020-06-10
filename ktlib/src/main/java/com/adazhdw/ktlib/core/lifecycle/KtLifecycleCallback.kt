@@ -3,7 +3,7 @@ package com.adazhdw.ktlib.core.lifecycle
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import com.adazhdw.ktlib.LibUtil
+import com.adazhdw.ktlib.KtLib
 import com.adazhdw.ktlib.ext.logD
 
 
@@ -14,7 +14,7 @@ import com.adazhdw.ktlib.ext.logD
  */
 
 class KtLifecycleCallback : Application.ActivityLifecycleCallbacks {
-    private val TAG by lazy { LibUtil.getApp().packageName }
+    private val TAG by lazy { KtLib.getApp().packageName }
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         ("onCreated: " + activity.componentName.className).logD(TAG)
     }

@@ -9,7 +9,7 @@ import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 import android.os.Build
 import androidx.annotation.RequiresPermission
-import com.adazhdw.ktlib.LibUtil
+import com.adazhdw.ktlib.KtLib
 
 object NetworkUtil {
 
@@ -108,7 +108,7 @@ object NetworkUtil {
         return if (context != null) {
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
         } else {
-            LibUtil.getApp().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+            KtLib.getApp().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
         }
     }
 

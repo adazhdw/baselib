@@ -1,27 +1,48 @@
 package com.adazhdw.ktlib.base.fragment
 
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.adazhdw.ktlib.ext.logE
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
-abstract class CoroutinesFragment : Fragment(), CoroutineScope by MainScope() {
+abstract class CoroutinesFragment : Fragment() {
 
-    protected val TAG = this.javaClass.simpleName + "------"
+    protected val TAG = this.javaClass.name + "------"
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        cancel()
+    protected fun launchWhenResumed(block: suspend CoroutineScope.() -> Unit) {
+        lifecycleScope.launchWhenResumed(block)
     }
+
+    protected fun launchWhenCreated(block: suspend CoroutineScope.() -> Unit) {
+        lifecycleScope.launchWhenCreated(block)
+    }
+
+    protected fun launchWhenStarted(block: suspend CoroutineScope.() -> Unit) {
+        lifecycleScope.launchWhenStarted(block)
+    }
+
+    protected fun launch(
+        error: ((Exception) -> Unit)? = null,
+        block: suspend CoroutineScope.() -> Unit
+    ) = launchOnUI(error, block)
 
     protected fun launchOnUI(
         error: ((Exception) -> Unit)? = null,
         block: suspend CoroutineScope.() -> Unit
     ) {
-        launch {
-            tryCatch(block, {
-                error?.invoke(it)
-                "error:${it.message}".logE(TAG)
-            }, {}, true)
+        lifecycleScope.launch {
+            tryCatch(
+                tryBlock = block,
+                catchBlock = {
+                    error?.invoke(it)
+                    "error:${it.message}".logE(TAG)
+                },
+                finallyBlock = {},
+                handleCancellationExceptionManually = true
+            )
         }
     }
 
