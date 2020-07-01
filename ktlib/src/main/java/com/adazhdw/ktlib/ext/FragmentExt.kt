@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentTransaction
  */
 
 
-inline fun FragmentActivity.addFragment(
+fun FragmentActivity.addFragment(
     fragment: Fragment,
     frameId: Int,
     isAllowingStateLose: Boolean = false
@@ -24,7 +24,7 @@ inline fun FragmentActivity.addFragment(
     }
 }
 
-inline fun Fragment.addFragment(
+fun Fragment.addFragment(
     fragment: Fragment,
     frameId: Int,
     isAllowingStateLose: Boolean = false
@@ -34,19 +34,19 @@ inline fun Fragment.addFragment(
     }
 }
 
-inline fun FragmentActivity.showFragment(fragment: Fragment, isAllowingStateLose: Boolean = false) {
+fun FragmentActivity.showFragment(fragment: Fragment, isAllowingStateLose: Boolean = false) {
     supportFragmentManager.transact(isAllowingStateLose) {
         show(fragment)
     }
 }
 
-inline fun Fragment.showFragment(fragment: Fragment, isAllowingStateLose: Boolean = false) {
+fun Fragment.showFragment(fragment: Fragment, isAllowingStateLose: Boolean = false) {
     childFragmentManager.transact(isAllowingStateLose) {
         show(fragment)
     }
 }
 
-inline fun FragmentActivity.replaceFragment(
+fun FragmentActivity.replaceFragment(
     fragment: Fragment,
     frameId: Int,
     isAllowingStateLose: Boolean = false
@@ -56,7 +56,7 @@ inline fun FragmentActivity.replaceFragment(
     }
 }
 
-inline fun Fragment.replaceFragment(
+fun Fragment.replaceFragment(
     fragment: Fragment,
     frameId: Int,
     isAllowingStateLose: Boolean = false
@@ -66,7 +66,7 @@ inline fun Fragment.replaceFragment(
     }
 }
 
-inline fun FragmentActivity.hideFragment(
+fun FragmentActivity.hideFragment(
     fragment: Fragment,
     isAllowingStateLose: Boolean = false
 ) {
@@ -75,7 +75,7 @@ inline fun FragmentActivity.hideFragment(
     }
 }
 
-inline fun Fragment.hideFragment(
+fun Fragment.hideFragment(
     fragment: Fragment,
     isAllowingStateLose: Boolean = false
 ) {
@@ -84,7 +84,7 @@ inline fun Fragment.hideFragment(
     }
 }
 
-inline fun FragmentManager.transact(
+fun FragmentManager.transact(
     isAllowingStateLose: Boolean = false,
     action: (FragmentTransaction.() -> Unit)
 ) {

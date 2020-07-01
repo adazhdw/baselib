@@ -14,46 +14,46 @@ import com.adazhdw.ktlib.ext.getDrawableEx
  * description:
  */
 
-inline fun TextView.setTextSizeDp(size: Float) {
+fun TextView.setTextSizeDp(size: Float) {
     setTextSize(TypedValue.COMPLEX_UNIT_DIP, size)
 }
 
-inline fun TextView.setTextSizeSp(size: Float) {
+fun TextView.setTextSizeSp(size: Float) {
     setTextSize(TypedValue.COMPLEX_UNIT_SP, size)
 }
 
-inline fun TextView.setTextSizePx(size: Float) {
+fun TextView.setTextSizePx(size: Float) {
     setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
 }
 
-inline fun TextView.textBold() {
+fun TextView.textBold() {
     typeface = Typeface.DEFAULT_BOLD
 }
 
-inline fun TextView.textDefault() {
+fun TextView.textDefault() {
     typeface = Typeface.DEFAULT
 }
 
 
-inline fun TextView.drawableLeft(@DrawableRes id: Int) {
+fun TextView.drawableLeft(@DrawableRes id: Int) {
     val d = context.getDrawableEx(id) ?: return
     d.setBounds(0, 0, d.minimumWidth, d.minimumHeight)
     this.setCompoundDrawables(d, null, null, null)
 }
 
-inline fun TextView.drawableBottom(@DrawableRes id: Int) {
+fun TextView.drawableBottom(@DrawableRes id: Int) {
     val d = context.getDrawableEx(id) ?: return
     d.setBounds(0, 0, d.minimumWidth, d.minimumHeight)
     this.setCompoundDrawables(null, null, null, d)
 }
 
-inline fun TextView.drawableRight(@DrawableRes id: Int) {
+fun TextView.drawableRight(@DrawableRes id: Int) {
     val d = context.getDrawableEx(id) ?: return
     d.setBounds(0, 0, d.minimumWidth, d.minimumHeight)
     this.setCompoundDrawables(null, null, d, null)
 }
 
-inline fun TextView.drawableTop(@DrawableRes id: Int) {
+fun TextView.drawableTop(@DrawableRes id: Int) {
     val d = context.getDrawableEx(id) ?: return
     d.setBounds(0, 0, d.minimumWidth, d.minimumHeight)
     this.setCompoundDrawables(null, d, null, null)
