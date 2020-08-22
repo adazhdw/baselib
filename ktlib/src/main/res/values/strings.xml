@@ -1,8 +1,12 @@
 <resources>
     <string name="app_name">baselibrary</string>
-    <string name="net_work_unavailable" >网络不可用，请检查网络</string>
-    <string name="permission_need_grant_title" >权限提示</string>
-    <string name="cancel" >取消</string>
-    <string name="confirm_text" >确认</string>
-    <string name="no_more_data_text" >没有更多的数据了</string>
+    <string name="net_work_unavailable" >Network is not available,check</string>
+    <string name="permission_need_grant_title" >Permission tips</string>
+    <string name="cancel" >Cancel</string>
+    <string name="confirm_text" >Confirm</string>
+    <string name="no_more_data_text" >No More Data</string>
+
+    <string name="no_more">No more~</string>
+    <string name="retry">click to retry</string>
+    <string name="load_complete_text">load complete</string>
 </resources>

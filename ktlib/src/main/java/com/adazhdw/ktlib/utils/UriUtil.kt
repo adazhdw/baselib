@@ -7,13 +7,14 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
-import com.adazhdw.ktlib.LibUtil
-import com.adazhdw.ktlib.ext.loge
+import com.adazhdw.ktlib.KtLib
+import com.adazhdw.ktlib.ext.logE
 import java.io.File
 
 object UriUtil {
 
     fun getFileByUri(context: Context, uri: Uri?): File? {
+        if (uri == null) return null
         if (DocumentsContract.isDocumentUri(context, uri)) {
             when {
                 isExternalStorageDocument(uri) -> {
@@ -43,7 +44,7 @@ object UriUtil {
                             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
                         }
                         else -> {
-                            loge(content = "$uri parse failed. -> 3")
+                            "$uri parse failed. -> 3".logE()
                             return null
                         }
                     }
@@ -51,11 +52,11 @@ object UriUtil {
                     val selectionArgs: Array<String> = arrayOf(split[1])
                     return getFileFromUri(contentUri, selection, selectionArgs, 4)
                 }
-                ContentResolver.SCHEME_CONTENT == uri?.scheme -> {
+                ContentResolver.SCHEME_CONTENT == uri.scheme -> {
                     return getFileFromUri(uri, 5)
                 }
                 else -> {
-                    loge(content = "$uri parse failed. -> 6")
+                    "$uri parse failed. -> 6".logE()
                     return null
                 }
             }
@@ -99,11 +100,11 @@ object UriUtil {
         selectionArgs: Array<String>?,
         code: Int
     ): File? {
-        val cursor = LibUtil.getApp().contentResolver.query(
+        val cursor = KtLib.getApp().contentResolver.query(
             uri, arrayOf("_data"), selection, selectionArgs, null
         )
         if (cursor == null) {
-            loge(content = "$uri parse failed(cursor is null). -> $code")
+            "$uri parse failed(cursor is null). -> $code".logE()
             return null
         }
         try {
@@ -112,15 +113,15 @@ object UriUtil {
                 if (columnIndex > -1) {
                     File(cursor.getString(columnIndex))
                 } else {
-                    loge(content = "$uri parse failed(columnIndex: $columnIndex is wrong). -> $code")
+                    "$uri parse failed(columnIndex: $columnIndex is wrong). -> $code".logE()
                     null
                 }
             } else {
-                loge(content = "$uri parse failed(moveToFirst return false). -> $code")
+                "$uri parse failed(moveToFirst return false). -> $code".logE()
                 null
             }
         } catch (e: Exception) {
-            loge(content = "$uri parse failed. -> $code")
+            "$uri parse failed. -> $code".logE()
             return null
         } finally {
             cursor.close()

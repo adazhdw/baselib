@@ -5,7 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import com.adazhdw.ktlib.LibUtil
+import com.adazhdw.ktlib.KtLib
 
 object KtPermission {
     private const val TAG = "InvisibleFragment"
@@ -45,7 +45,7 @@ object KtPermission {
 
     fun isGranted(permission: String, context: Context? = null): Boolean {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(
-            context ?: LibUtil.getApp().applicationContext,
+            context ?: KtLib.getApp().applicationContext,
             permission
         )
     }

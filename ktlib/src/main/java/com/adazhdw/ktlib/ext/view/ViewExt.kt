@@ -18,33 +18,33 @@ import androidx.annotation.RequiresApi
 /**
  * Set visibility Visible
  */
-inline fun View.visible() {
+fun View.visible() {
     visibility = View.VISIBLE
 }
 
 /**
  * Set visibility invisible
  */
-inline fun View.invisible() {
+fun View.invisible() {
     visibility = View.INVISIBLE
 }
 
 /**
  * Set visibility gone
  */
-inline fun View.gone() {
+fun View.gone() {
     visibility = View.GONE
 }
 
-inline var View.isVisible
+var View.isVisible
     get() = visibility == View.VISIBLE
     set(value) = if (value) visible() else invisible()
 
-inline var View.isInvisible
+var View.isInvisible
     get() = visibility == View.INVISIBLE
     set(value) = if (value) invisible() else visible()
 
-inline var View.isGone
+var View.isGone
     get() = visibility == View.GONE
     set(value) = if (value) gone() else visible()
 

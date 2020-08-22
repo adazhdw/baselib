@@ -20,10 +20,10 @@ fun RecyclerView.isScrollToTop(): Boolean {
     return canScrollVertically(-1)//的值表示是否能向下滚动，false表示已经滚动到顶部
 }
 
-inline fun Context.gridLayoutManager(spanCount: Int) =
+fun Context.gridLayoutManager(spanCount: Int) =
     GridLayoutManager(this, spanCount, GridLayoutManager.VERTICAL, false)
 
-inline fun Context.linearLayoutManager() = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+fun Context.linearLayoutManager() = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-inline fun Context.staggeredGridLayoutManager(spanCount: Int) =
+fun Context.staggeredGridLayoutManager(spanCount: Int) =
     StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)

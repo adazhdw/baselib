@@ -10,7 +10,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.provider.MediaStore.ACTION_IMAGE_CAPTURE
 import androidx.core.content.FileProvider
-import com.adazhdw.ktlib.base.ForResultActivity
+import com.adazhdw.ktlib.base.activity.ForResultActivity
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.utils.UriUtil
 import com.adazhdw.ktlib.utils.permission.KtPermission

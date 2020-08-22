@@ -20,7 +20,6 @@ object KeyboardUtil {
     fun showKeyboard(context: Context, target: EditText) {
 
         val imm = getInputMethodManager(context)
-
         imm.showSoftInput(target, InputMethodManager.SHOW_IMPLICIT)
     }
 
@@ -33,7 +32,6 @@ object KeyboardUtil {
      */
     @JvmStatic
     fun showKeyboardInDialog(dialog: Dialog, target: EditText) {
-
         dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         target.requestFocus()
     }
@@ -58,7 +56,6 @@ object KeyboardUtil {
     @JvmStatic
     fun hideKeyboard(activity: Activity) {
         val view = activity.window.decorView
-
         hideKeyboard(activity, view)
     }
 

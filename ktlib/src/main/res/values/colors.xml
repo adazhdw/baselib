@@ -6,5 +6,6 @@
     <color name="text_hint_color">#B3B2b2</color>
     <color name="white">#FFFFFF</color>
     <color name="background">#FAFAFA</color>
+    <color name="color_333333">#333333</color>
 
 </resources>

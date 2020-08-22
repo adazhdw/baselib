@@ -7,9 +7,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adazhdw.ktlib.R
-import com.adazhdw.ktlib.base.BaseFragmentImpl
+import com.adazhdw.ktlib.base.fragment.BaseFragmentImpl
 import kotlinx.android.synthetic.main.fragment_list_layout_ex.*
 
+@Deprecated("")
 abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
     override val layoutId: Int
         get() = R.layout.fragment_list_layout_ex
@@ -28,6 +29,7 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
 
     override fun initView(view: View) {
         mContext = view.context
+        mCurrentPage = starAtPage()
         swipe.setOnRefreshListener {
             refresh()
         }
@@ -57,12 +59,13 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
 
     private fun requestData(isRefresh: Boolean) {
         if (isRefresh) {
+            mCurrentPage = starAtPage()
             listRV.loadMoreEnabled(false)
         } else {
             swipe.isRefreshing = false
         }
         nextPage(mCurrentPage, object : OnRequestCallback<M> {
-            override fun onSuccess(list: List<M>, total: Int) {
+            override fun onSuccess(list: List<M>, hasMore: Boolean) {
                 if (list.isNotEmpty())
                     mCurrentPage += 1
                 listRV?.loadMoreEnabled(true)
@@ -75,7 +78,6 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
                 }
                 val dataEmpty = list.isEmpty()
                 val size = mListAdapter.data().size
-                val hasMore = size < total
                 listRV?.onLoadFinish(dataEmpty, hasMore)
             }
 
@@ -115,7 +117,7 @@ abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
     }
 
     interface OnRequestCallback<M> {
-        fun onSuccess(list: List<M>, total: Int)
+        fun onSuccess(list: List<M>, hasMore: Boolean = true)
         fun onError(errorCode: Int, errorMsg: String)
     }
 }

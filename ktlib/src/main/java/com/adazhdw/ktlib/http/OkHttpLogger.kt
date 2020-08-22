@@ -1,14 +1,15 @@
 package com.adazhdw.ktlib.http
 
 
-import com.adazhdw.ktlib.LibUtil
+import com.adazhdw.ktlib.KtLib
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.ext.logE
 import com.adazhdw.ktlib.ext.startWidth
+import com.adazhdw.ktlib.utils.JsonUtil
 import okhttp3.logging.HttpLoggingInterceptor
 
 class OkHttpLogger : HttpLoggingInterceptor.Logger {
-    private val TAG = "${LibUtil.getApp().packageName}---OkHttpLogger---"
+    private val TAG = "${KtLib.getApp().packageName}---OkHttpLogger---"
     private val msgBuilder = StringBuilder()
     override fun log(message: String) {
         formatMessage(message)

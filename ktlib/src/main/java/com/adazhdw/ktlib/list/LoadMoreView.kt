@@ -1,6 +1,7 @@
 package com.adazhdw.ktlib.list
 
 
+@Deprecated("")
 interface LoadMoreView {
 
     /**

@@ -9,7 +9,7 @@ import com.google.gson.reflect.TypeToken
 fun Context.sp(spName: String = packageName, mode: Int = Context.MODE_PRIVATE): SharedPreferences =
     getSharedPreferences(spName, mode)
 
-inline fun SharedPreferences.edit(
+fun SharedPreferences.edit(
     commit: Boolean = false,
     action: SharedPreferences.Editor.() -> Unit
 ) {
