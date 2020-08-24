@@ -6,6 +6,7 @@ import com.adazhdw.ktlib.BuildConfig
 import com.adazhdw.ktlib.http.HttpConstant
 import com.adazhdw.ktlib.http.OkHttpLogger
 import okhttp3.*
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.IOException
@@ -34,9 +35,8 @@ class KHttp private constructor() {
     private val mHandler = Handler(Looper.getMainLooper())
 
     fun get(url: String, param: KParams? = null, callback: KCallback? = null) {
-        val requestBuilder = Request.Builder().url(url).get()
-        builderParams(requestBuilder, param)
-        val request = requestBuilder.build()
+        val requestUrl = obtainGetUrl(url, param)
+        val request = Request.Builder().url(requestUrl).get().build()
         okHttpClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 handleError(e, callback)
@@ -67,6 +67,20 @@ class KHttp private constructor() {
     fun cancel(tag: String?) {
         if (tag.isNullOrBlank()) return
         okHttpClient
+    }
+
+    private fun obtainGetUrl(
+        url: String,
+        param: KParams?
+    ): String {
+        if (param != null) {
+            val httpUrlBuilder = url.toHttpUrlOrNull()?.newBuilder() ?: return ""
+            for ((name, value) in param.headers) {
+                httpUrlBuilder.addQueryParameter(name, value)
+            }
+            return httpUrlBuilder.build().toString()
+        }
+        return ""
     }
 
     private fun builderParams(requestBuilder: Request.Builder, param: KParams?) {

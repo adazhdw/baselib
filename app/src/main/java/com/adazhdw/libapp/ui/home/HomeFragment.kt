@@ -37,8 +37,8 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val textView: TextView = view.findViewById(R.id.text_home)
         KHttp.instance.get(
-            url = "https://wanandroid.com/wxarticle/chapters/json",
-            param = KParams(),
+            url = "https://wanandroid.com/wxarticle/list/408/1/json",
+            param = KParams.Builder().setHeaders(mapOf("k" to "Android")).build(),
             callback = object : KCallback {
                 override fun onSuccess(result: String) {
                     result.logD("HomeFragment")
