@@ -64,17 +64,6 @@ class KHttp private constructor() {
         })
     }
 
-    fun postFile(url: String, param: KParams, callback: KCallback? = null) {
-        val fileBodies = param.getFileRequestBody()
-        val multipartBody = MultipartBody.Builder().apply {
-            for ((name, value) in param.headers) {
-                addFormDataPart(name, value)
-            }
-            for ((key, body) in fileBodies) {
-            }
-        }.build()
-    }
-
     fun cancel(tag: String?) {
         if (tag.isNullOrBlank()) return
         okHttpClient

@@ -50,12 +50,11 @@ class KParams(val tag: String = "") {
         return map
     }
 
-    class Builder {
+    class Builder constructor(private val formBody: Boolean = false) {
         private var mTag: String = ""
         private var jsonBody: String = ""
         private var mHeaders: Map<String, String> = mapOf()
         private var files: Map<String, File> = mapOf()
-        private var formBody: Boolean = false
         fun setTag(mTag: String): Builder {
             this.mTag = mTag
             return this
