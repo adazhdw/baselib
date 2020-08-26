@@ -5,6 +5,11 @@ import android.os.Looper
 import com.adazhdw.ktlib.BuildConfig
 import com.adazhdw.ktlib.http.HttpConstant
 import com.adazhdw.ktlib.http.OkHttpLogger
+import com.adazhdw.ktlib.http.kthttp.callback.RequestCallback
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonParseException
+import com.google.gson.reflect.TypeToken
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaType
@@ -17,6 +22,8 @@ import java.util.concurrent.TimeUnit
  * Date: 2020/8/21 14:43
  * Description: http请求类
  */
+val khttp = KHttp.instance
+
 class KHttp private constructor() {
 
     companion object {
@@ -33,8 +40,57 @@ class KHttp private constructor() {
             .build()
     }
     private val mHandler = Handler(Looper.getMainLooper())
+    val gson: Gson by lazy { GsonBuilder().create() }
 
-    fun get(url: String, param: KParams? = null, callback: KCallback? = null) {
+    inline fun <reified T> get(
+        url: String,
+        param: KParams? = null,
+        crossinline onSuccess: (T) -> Unit,
+        crossinline onFail: (e: Exception) -> Unit = {}
+    ) {
+        get(url, param, object : RequestCallback {
+            override fun onSuccess(result: String) {
+                try {
+                    val data = gson.fromJson<T>(result, object : TypeToken<T>() {}.type)
+                    onSuccess.invoke(data)
+                } catch (e: JsonParseException) {
+                    onError(e)
+                } catch (e: Exception) {
+                    onError(e)
+                }
+            }
+
+            override fun onError(e: Exception) {
+                onFail.invoke(e)
+            }
+        })
+    }
+
+    inline fun <reified T> post(
+        url: String,
+        param: KParams,
+        crossinline onSuccess: (T) -> Unit,
+        crossinline onFail: (e: Exception) -> Unit = {}
+    ) {
+        post(url, param, object : RequestCallback {
+            override fun onSuccess(result: String) {
+                try {
+                    val data = gson.fromJson<T>(result, object : TypeToken<T>() {}.type)
+                    onSuccess.invoke(data)
+                } catch (e: JsonParseException) {
+                    onError(e)
+                } catch (e: Exception) {
+                    onError(e)
+                }
+            }
+
+            override fun onError(e: Exception) {
+                onFail.invoke(e)
+            }
+        })
+    }
+
+    fun get(url: String, param: KParams? = null, callback: RequestCallback? = null) {
         val requestUrl = obtainGetUrl(url, param)
         val request = Request.Builder().url(requestUrl).get().build()
         okHttpClient.newCall(request).enqueue(object : Callback {
@@ -48,7 +104,7 @@ class KHttp private constructor() {
         })
     }
 
-    fun post(url: String, param: KParams, callback: KCallback? = null) {
+    fun post(url: String, param: KParams, callback: RequestCallback? = null) {
         val requestBody = param.getRequestBody()
         val requestBuilder = Request.Builder().url(url).post(requestBody)
         builderParams(requestBuilder, param)
@@ -100,7 +156,7 @@ class KHttp private constructor() {
         }
     }
 
-    private fun handleSuccess(response: Response, callback: KCallback?) {
+    private fun handleSuccess(response: Response, callback: RequestCallback?) {
         val result = response.body?.string()
         if (result != null) {
             mHandler.post { callback?.onSuccess(result) }
@@ -109,7 +165,7 @@ class KHttp private constructor() {
         }
     }
 
-    private fun handleError(e: Exception, callback: KCallback?) {
+    private fun handleError(e: Exception, callback: RequestCallback?) {
         mHandler.post { callback?.onError(e) }
     }
 

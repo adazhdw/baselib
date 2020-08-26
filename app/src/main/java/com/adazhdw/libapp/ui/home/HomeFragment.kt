@@ -9,9 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.ktlib.ext.logD
-import com.adazhdw.ktlib.http.kthttp.KCallback
-import com.adazhdw.ktlib.http.kthttp.KHttp
 import com.adazhdw.ktlib.http.kthttp.KParams
+import com.adazhdw.ktlib.http.kthttp.khttp
 import com.adazhdw.libapp.R
 
 class HomeFragment : Fragment() {
@@ -36,18 +35,13 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val textView: TextView = view.findViewById(R.id.text_home)
-        KHttp.instance.get(
+        khttp.get<String>(
             url = "https://wanandroid.com/wxarticle/list/408/1/json",
             param = KParams.Builder().setHeaders(mapOf("k" to "Android")).build(),
-            callback = object : KCallback {
-                override fun onSuccess(result: String) {
-                    result.logD("HomeFragment")
-                    textView.text = result
-                }
-
-                override fun onError(e: Exception) {
-                    e.message.logD("HomeFragment")
-                }
-            })
+            onSuccess = { result ->
+                result.logD("HomeFragment")
+                textView.text = result
+            }
+        )
     }
 }
