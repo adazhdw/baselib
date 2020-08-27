@@ -45,7 +45,7 @@ class KHttp private constructor() {
     inline fun <reified T> get(
         url: String,
         param: KParams? = null,
-        crossinline onSuccess: (T) -> Unit,
+        crossinline onSuccess: (data: T) -> Unit,
         crossinline onFail: (e: Exception) -> Unit = {}
     ) {
         get(url, param, object : RequestCallback {
@@ -69,7 +69,7 @@ class KHttp private constructor() {
     inline fun <reified T> post(
         url: String,
         param: KParams,
-        crossinline onSuccess: (T) -> Unit,
+        crossinline onSuccess: (data: T) -> Unit,
         crossinline onFail: (e: Exception) -> Unit = {}
     ) {
         post(url, param, object : RequestCallback {

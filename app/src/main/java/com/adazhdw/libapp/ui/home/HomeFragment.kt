@@ -12,6 +12,8 @@ import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.http.kthttp.KParams
 import com.adazhdw.ktlib.http.kthttp.khttp
 import com.adazhdw.libapp.R
+import com.adazhdw.libapp.bean.DataFeed
+import com.adazhdw.libapp.bean.NetResponse
 
 class HomeFragment : Fragment() {
 
@@ -35,12 +37,12 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val textView: TextView = view.findViewById(R.id.text_home)
-        khttp.get<String>(
+        khttp.get<NetResponse<DataFeed>>(
             url = "https://wanandroid.com/wxarticle/list/408/1/json",
             param = KParams.Builder().setHeaders(mapOf("k" to "Android")).build(),
             onSuccess = { result ->
-                result.logD("HomeFragment")
-                textView.text = result
+                result.toString().logD("HomeFragment")
+                textView.text = result.toString()
             }
         )
     }

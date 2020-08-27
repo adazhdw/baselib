@@ -35,7 +35,7 @@ class KParams(val tag: String = "") {
         }.build()
     }
 
-    class Builder constructor(private val formBody: Boolean = false) {
+    class Builder constructor(private val formBody: Boolean = true) {
         private var mTag: String = ""
         private var jsonBody: String = ""
         private var mHeaders: Map<String, String> = mapOf()
