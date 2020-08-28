@@ -19,4 +19,11 @@ object MimeUtil {
                 .getMimeTypeFromExtension(fileExtension.toLowerCase(Locale.CHINA))
         }
     }
+
+    fun getMimeType(url: String?): String {
+        val uri = Uri.parse(url)
+        val fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
+        return MimeTypeMap.getSingleton()
+            .getMimeTypeFromExtension(fileExtension.toLowerCase(Locale.CHINA)) ?: ""
+    }
 }
