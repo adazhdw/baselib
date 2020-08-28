@@ -19,8 +19,8 @@ object KtHttp {
     fun get(
         url: String,
         params: KParams? = null,
-        timeout: Long = HttpConstant.DEFAULT_TIMEOUT,
-        callback: BaseRequestCallback? = null
+        callback: BaseRequestCallback? = null,
+        timeout: Long = HttpConstant.DEFAULT_TIMEOUT
     ) {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
         executeRequest(GET, url, params ?: KParams(), builder, callback)
@@ -36,8 +36,8 @@ object KtHttp {
     fun post(
         url: String,
         params: KParams? = null,
-        timeout: Long = HttpConstant.DEFAULT_TIMEOUT,
-        callback: BaseRequestCallback? = null
+        callback: BaseRequestCallback? = null,
+        timeout: Long = HttpConstant.DEFAULT_TIMEOUT
     ) {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
         executeRequest(POST, url, params ?: KParams(), builder, callback)
@@ -53,8 +53,8 @@ object KtHttp {
     fun put(
         url: String,
         params: KParams? = null,
-        timeout: Long = HttpConstant.DEFAULT_TIMEOUT,
-        callback: BaseRequestCallback? = null
+        callback: BaseRequestCallback? = null,
+        timeout: Long = HttpConstant.DEFAULT_TIMEOUT
     ) {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
         executeRequest(PUT, url, params ?: KParams(), builder, callback)
@@ -70,8 +70,8 @@ object KtHttp {
     fun delete(
         url: String,
         params: KParams? = null,
-        timeout: Long = HttpConstant.DEFAULT_TIMEOUT,
-        callback: BaseRequestCallback? = null
+        callback: BaseRequestCallback? = null,
+        timeout: Long = HttpConstant.DEFAULT_TIMEOUT
     ) {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
         executeRequest(DELETE, url, params ?: KParams(), builder, callback)
@@ -87,8 +87,8 @@ object KtHttp {
     fun head(
         url: String,
         params: KParams? = null,
-        timeout: Long = HttpConstant.DEFAULT_TIMEOUT,
-        callback: BaseRequestCallback? = null
+        callback: BaseRequestCallback? = null,
+        timeout: Long = HttpConstant.DEFAULT_TIMEOUT
     ) {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
         executeRequest(HEAD, url, params ?: KParams(), builder, callback)
@@ -104,8 +104,8 @@ object KtHttp {
     fun patch(
         url: String,
         params: KParams? = null,
-        timeout: Long = HttpConstant.DEFAULT_TIMEOUT,
-        callback: BaseRequestCallback? = null
+        callback: BaseRequestCallback? = null,
+        timeout: Long = HttpConstant.DEFAULT_TIMEOUT
     ) {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
         executeRequest(PATCH, url, params ?: KParams(), builder, callback)
@@ -117,7 +117,7 @@ object KtHttp {
         params: KParams,
         builder: OkHttpClient.Builder,
         callback: BaseRequestCallback? = null
-    ) {
+    ): Call {
         if (params.tag.isEmpty()) params.tag = url
         val request = KtHttpRequest(
             method = method,
@@ -126,7 +126,7 @@ object KtHttp {
             builder = builder,
             callback = callback
         )
-        request.execute()
+        return request.execute()
     }
 
     fun cancel(url: String) {
