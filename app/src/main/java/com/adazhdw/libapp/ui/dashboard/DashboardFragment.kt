@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.adazhdw.ktlib.http.kthttp.KParams
-import com.adazhdw.ktlib.http.kthttp.khttp
+import com.adazhdw.ktlib.http.khttp
+import com.adazhdw.ktlib.kthttp.param.KParams
 import com.adazhdw.libapp.R
 
 class DashboardFragment : Fragment() {
@@ -35,7 +35,7 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val textView: TextView = view.findViewById(R.id.text_dashboard)
         khttp.post<String>(url = "https://www.wanandroid.com/article/query/0/json",
-            param = KParams.Builder(true).setHeaders(mapOf("k" to "ViewModel")).build(),
+            param = KParams.Builder(true).addHeaders(mapOf("k" to "ViewModel")).build(),
             onSuccess = { result ->
                 textView.text = result
             })

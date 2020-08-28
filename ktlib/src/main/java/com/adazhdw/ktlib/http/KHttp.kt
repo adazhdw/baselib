@@ -1,11 +1,10 @@
-package com.adazhdw.ktlib.http.kthttp
+package com.adazhdw.ktlib.http
 
 import android.os.Handler
 import android.os.Looper
 import com.adazhdw.ktlib.BuildConfig
-import com.adazhdw.ktlib.http.HttpConstant
-import com.adazhdw.ktlib.http.OkHttpLogger
-import com.adazhdw.ktlib.http.kthttp.callback.RequestCallback
+import com.adazhdw.ktlib.kthttp.callback.RequestCallback
+import com.adazhdw.ktlib.kthttp.param.KParams
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParseException

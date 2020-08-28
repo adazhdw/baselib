@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.http.kthttp.callback
+package com.adazhdw.ktlib.kthttp.callback
 
 /**
  * Author: dgz

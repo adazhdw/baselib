@@ -34,6 +34,33 @@ fun TextView.textDefault() {
     typeface = Typeface.DEFAULT
 }
 
+/**
+ * 获取文本
+ */
+fun TextView.textString(): String {
+    return this.text.toString()
+}
+
+/**
+ * 获取去除空字符串的文本
+ */
+fun TextView.textStringTrim(): String {
+    return this.textString().trim()
+}
+
+/**
+ * 文本是否为空
+ */
+fun TextView.isEmpty(): Boolean {
+    return this.textString().isEmpty()
+}
+
+/**
+ * 去空字符串后文本是否为空
+ */
+fun TextView.isTrimEmpty(): Boolean {
+    return this.textStringTrim().isEmpty()
+}
 
 fun TextView.drawableLeft(@DrawableRes id: Int) {
     val d = context.getDrawableEx(id) ?: return
