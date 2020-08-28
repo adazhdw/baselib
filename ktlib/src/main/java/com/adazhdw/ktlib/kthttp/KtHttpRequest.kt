@@ -3,12 +3,15 @@ package com.adazhdw.ktlib.kthttp
 import android.os.Handler
 import android.os.Looper
 import com.adazhdw.ktlib.ext.logD
+import com.adazhdw.ktlib.kthttp.bean.ResponseData
 import com.adazhdw.ktlib.kthttp.callback.BaseRequestCallback
 import com.adazhdw.ktlib.kthttp.constant.*
 import com.adazhdw.ktlib.kthttp.param.KParams
 import com.adazhdw.ktlib.kthttp.util.UrlUtil
 import okhttp3.*
 import java.io.IOException
+import java.io.InterruptedIOException
+import java.net.SocketTimeoutException
 
 class KtHttpRequest(
     val method: Method,
@@ -74,18 +77,65 @@ class KtHttpRequest(
     }
 
     override fun onResponse(call: Call, response: Response) {
-        handleSuccess(response, callback)
+        handleResponse(ResponseData(), response)
     }
 
     override fun onFailure(call: Call, e: IOException) {
-        handleError(e, callback)
+        val responseData = ResponseData()
+        if (e is SocketTimeoutException) {
+            responseData.timeout = true
+        } else if (e is InterruptedIOException && e.message == "timeout") {
+            responseData.timeout = true
+        }
+        responseData.msg = e.message ?: ""
+        handleResponse(responseData, null)
+    }
+
+    private fun handleResponse(responseData: ResponseData, response: Response?) {
+        if (response != null) {
+            responseData.responseNull = false
+            responseData.code = response.code
+            responseData.msg = response.message
+            responseData.successful = response.isSuccessful
+            var responseBody: String? = null
+            try {
+                responseBody = response.body?.string()
+            } catch (e: IOException) {
+                responseData.code = HttpConstant.ERROR_RESPONSE_BODY_ISNULL
+                responseData.msg = "response'body is null"
+            }
+            if (!responseBody.isNullOrBlank()) {
+                responseData.result = responseBody
+            } else {
+                responseData.code = HttpConstant.ERROR_RESPONSE_BODY_ISNULL
+                responseData.msg = "response'body is null"
+            }
+            responseData.headers = response.headers
+            responseData.httpResponse = response
+        } else {
+            responseData.responseNull = true
+            responseData.code = HttpConstant.ERROR_RESPONSE_ON_FAILURE
+            if (responseData.timeout) {
+                responseData.msg = "request timeout"
+            }
+        }
+        //回调跳转主线程
+        mHandler.post {
+            executeResponse(responseData)
+        }
+    }
+
+    private fun executeResponse(responseData: ResponseData) {
+
     }
 
     private fun handleSuccess(response: Response, callback: BaseRequestCallback?) {
         val result = response.body?.string()
-        if (result != null) {
+        callback?.onResponse(response, result, response.headers)
+        if (result != null) {//请求得到响应
             mHandler.post {
                 callback?.onSuccess(result)
+                callback?.onFinish()
                 KtHttpCallManager.instance.removeCall(url)
             }
         } else {
@@ -96,6 +146,7 @@ class KtHttpRequest(
     private fun handleError(e: Exception, callback: BaseRequestCallback?) {
         mHandler.post {
             callback?.onError(e)
+            callback?.onFinish()
             KtHttpCallManager.instance.removeCall(url)
         }
     }

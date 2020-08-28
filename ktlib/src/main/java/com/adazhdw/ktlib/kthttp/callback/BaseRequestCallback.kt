@@ -10,8 +10,8 @@ import okhttp3.Response
  */
 interface BaseRequestCallback {
     fun onStart()
-    fun onResponse(httpResponse: Response, response: String, headers: Headers)
+    fun onResponse(httpResponse: Response, response: String?, headers: Headers)
     fun onSuccess(result: String)
-    fun onError(e: Exception)
+    fun onError(code: Int, msg: String)
     fun onFinish()
 }
