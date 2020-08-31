@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.text.parseAsHtml
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.adazhdw.ktlib.http.khttp
+import com.adazhdw.ktlib.kthttp.KtHttp
+import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.param.KParams
 import com.adazhdw.libapp.R
 
@@ -34,10 +36,14 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val textView: TextView = view.findViewById(R.id.text_dashboard)
-        khttp.post<String>(url = "https://www.wanandroid.com/article/query/0/json",
-            param = KParams.Builder(true).addHeaders(mapOf("k" to "ViewModel")).build(),
-            onSuccess = { result ->
-                textView.text = result
+        KtHttp.post(
+            url = "https://www.wanandroid.com/article/query/0/json",
+            params = KParams.Builder().addHeaders(mapOf("k" to "ViewModel")).build(),
+            callback = object :
+                RequestCallback() {
+                override fun onSuccess(result: String) {
+                    textView.text = result.parseAsHtml()
+                }
             })
     }
 }

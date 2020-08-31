@@ -5,9 +5,12 @@ import com.adazhdw.ktlib.kthttp.constant.*
 import com.adazhdw.ktlib.kthttp.httpbuilder.KtHttpBuilder
 import com.adazhdw.ktlib.kthttp.param.KParams
 import okhttp3.Call
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 
 object KtHttp {
+
+    val JSON = "application/json; charset=utf-8".toMediaType()
 
     /**
      * Get请求

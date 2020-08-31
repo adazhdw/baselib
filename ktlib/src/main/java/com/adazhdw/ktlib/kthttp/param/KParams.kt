@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.kthttp.param
 
-import com.adazhdw.ktlib.http.KHttp.Companion.JSON
+import com.adazhdw.ktlib.kthttp.KtHttp.JSON
 import okhttp3.FormBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
