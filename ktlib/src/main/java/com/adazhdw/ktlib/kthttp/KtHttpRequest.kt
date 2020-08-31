@@ -121,34 +121,33 @@ class KtHttpRequest(
         }
         //回调跳转主线程
         mHandler.post {
-            executeResponse(responseData)
+            executeResponse(responseData, callback)
         }
     }
 
-    private fun executeResponse(responseData: ResponseData) {
-
-    }
-
-    private fun handleSuccess(response: Response, callback: BaseRequestCallback?) {
-        val result = response.body?.string()
-        callback?.onResponse(response, result, response.headers)
-        if (result != null) {//请求得到响应
-            mHandler.post {
-                callback?.onSuccess(result)
-                callback?.onFinish()
-                KtHttpCallManager.instance.removeCall(url)
+    private fun executeResponse(responseData: ResponseData, callback: BaseRequestCallback?) {
+        KtHttpCallManager.instance.removeCall(url)
+        callback?.onResponse(responseData.httpResponse, responseData.result, responseData.headers)
+        val response = responseData.httpResponse
+        if (!responseData.responseNull && response != null) {//请求得到响应
+            if (responseData.successful && responseData.bodyNotNull) {
+                handleSuccess(responseData, callback)
+            } else {
+                handleError(responseData, callback)
             }
         } else {
-            handleError(Exception("response'body is null"), callback)
+            handleError(responseData, callback)
         }
     }
 
-    private fun handleError(e: Exception, callback: BaseRequestCallback?) {
-        mHandler.post {
-            callback?.onError(e)
-            callback?.onFinish()
-            KtHttpCallManager.instance.removeCall(url)
-        }
+    private fun handleSuccess(responseData: ResponseData, callback: BaseRequestCallback?) {
+        callback?.onSuccess(responseData.result)
+        callback?.onFinish()
+    }
+
+    private fun handleError(responseData: ResponseData, callback: BaseRequestCallback?) {
+        callback?.onError(responseData.code, responseData.msg)
+        callback?.onFinish()
     }
 
 }

@@ -23,7 +23,7 @@ object KtHttp {
         timeout: Long = HttpConstant.DEFAULT_TIMEOUT
     ) {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
-        executeRequest(GET, url, params ?: KParams(), builder, callback)
+        return executeRequest(GET, url, params ?: KParams(), builder, callback)
     }
 
     /**
@@ -40,7 +40,7 @@ object KtHttp {
         timeout: Long = HttpConstant.DEFAULT_TIMEOUT
     ) {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
-        executeRequest(POST, url, params ?: KParams(), builder, callback)
+        return executeRequest(POST, url, params ?: KParams(), builder, callback)
     }
 
     /**
@@ -57,7 +57,7 @@ object KtHttp {
         timeout: Long = HttpConstant.DEFAULT_TIMEOUT
     ) {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
-        executeRequest(PUT, url, params ?: KParams(), builder, callback)
+        return executeRequest(PUT, url, params ?: KParams(), builder, callback)
     }
 
     /**
@@ -74,7 +74,7 @@ object KtHttp {
         timeout: Long = HttpConstant.DEFAULT_TIMEOUT
     ) {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
-        executeRequest(DELETE, url, params ?: KParams(), builder, callback)
+        return executeRequest(DELETE, url, params ?: KParams(), builder, callback)
     }
 
     /**
@@ -91,7 +91,7 @@ object KtHttp {
         timeout: Long = HttpConstant.DEFAULT_TIMEOUT
     ) {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
-        executeRequest(HEAD, url, params ?: KParams(), builder, callback)
+        return executeRequest(HEAD, url, params ?: KParams(), builder, callback)
     }
 
     /**
@@ -108,16 +108,17 @@ object KtHttp {
         timeout: Long = HttpConstant.DEFAULT_TIMEOUT
     ) {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
-        executeRequest(PATCH, url, params ?: KParams(), builder, callback)
+        return executeRequest(PATCH, url, params ?: KParams(), builder, callback)
     }
 
     private fun executeRequest(
         method: Method,
-        url: String,
+        url: String?,
         params: KParams,
         builder: OkHttpClient.Builder,
         callback: BaseRequestCallback? = null
-    ): Call {
+    ) {
+        if (url.isNullOrBlank()) return
         if (params.tag.isEmpty()) params.tag = url
         val request = KtHttpRequest(
             method = method,
@@ -126,7 +127,7 @@ object KtHttp {
             builder = builder,
             callback = callback
         )
-        return request.execute()
+        request.execute()
     }
 
     fun cancel(url: String) {

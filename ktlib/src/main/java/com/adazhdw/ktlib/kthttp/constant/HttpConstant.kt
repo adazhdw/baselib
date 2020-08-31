@@ -8,4 +8,5 @@ object HttpConstant {
 
     const val ERROR_RESPONSE_ON_FAILURE = 1001
     const val ERROR_RESPONSE_BODY_ISNULL = 1002
+    const val ERROR_JSON_PARSE_EXCEPTION = 1003
 }

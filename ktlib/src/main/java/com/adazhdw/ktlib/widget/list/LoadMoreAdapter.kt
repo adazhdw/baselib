@@ -30,19 +30,19 @@ abstract class LoadMoreAdapter<T> : BaseVBAdapter<T>() {
 
     override fun convert(helper: BaseVBViewHolder, item: T) {
         val position = helper.adapterPosition
-        if (mData.isEmpty() || position == RecyclerView.NO_POSITION) return
+        if (data.isEmpty() || position == RecyclerView.NO_POSITION) return
         when {
             isFooter(position) -> bindFooter(helper)
             isHeader(position) -> bindHeader(helper)
             else -> {
-                if (mData.isEmpty()) return
-                bindHolder(helper, mData[position - headerCount()], position - headerCount())
+                if (data.isEmpty()) return
+                bindHolder(helper, data[position - headerCount()], position - headerCount())
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return if (mData.isNotEmpty()) {
+        return if (data.isNotEmpty()) {
             data.size + if (needFooter()) 1 else 0 + headerCount()/*header和footer数量*/
         } else 0
     }
