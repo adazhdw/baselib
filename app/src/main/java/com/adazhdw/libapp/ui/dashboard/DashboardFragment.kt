@@ -5,16 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.adazhdw.ktlib.base.fragment.BaseFragment
 import com.adazhdw.ktlib.kthttp.param.KParams
-import com.adazhdw.ktlib.kthttp.postRequest
+import com.adazhdw.ktlib.kthttp.postCoroutines
 import com.adazhdw.libapp.R
 import com.adazhdw.libapp.bean.DataFeed
 import com.adazhdw.libapp.bean.NetResponse
 
-class DashboardFragment : Fragment() {
+class DashboardFragment(override val layoutId: Int = R.layout.fragment_dashboard) : BaseFragment() {
 
     private lateinit var dashboardViewModel: DashboardViewModel
 
@@ -37,7 +37,20 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val textView: TextView = view.findViewById(R.id.text_dashboard)
 
-        postRequest<NetResponse<DataFeed>>(
+        launch {
+            /*val data = requestCoroutines<NetResponse<DataFeed>>(
+                method = POST,
+                url = "https://www.wanandroid.com/article/query/0/json",
+                params = KParams.Builder().addHeaders(mapOf("k" to "ViewModel")).build()
+            )*/
+            val data = postCoroutines<NetResponse<DataFeed>>(
+                url = "https://www.wanandroid.com/article/query/0/json",
+                params = KParams.Builder().addHeaders(mapOf("k" to "ViewModel")).build()
+            )
+            textView.text = data.toString()
+        }
+
+        /*postRequest<NetResponse<DataFeed>>(
             url = "https://www.wanandroid.com/article/query/0/json",
             params = KParams.Builder().addHeaders(mapOf("k" to "ViewModel")).build(),
             success = {
@@ -45,6 +58,6 @@ class DashboardFragment : Fragment() {
             }, error = { code, msg ->
 
             }
-        )
+        )*/
     }
 }

@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.ktlib.base.fragment.BaseFragment
+import com.adazhdw.ktlib.kthttp.getCoroutines
 import com.adazhdw.ktlib.kthttp.param.KParams
-import com.adazhdw.ktlib.kthttp.requestCoroutines
 import com.adazhdw.libapp.R
 import com.adazhdw.libapp.bean.DataFeed
 import com.adazhdw.libapp.bean.NetResponse
@@ -36,15 +36,19 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val textView: TextView = view.findViewById(R.id.text_home)
-        launch(error = {
 
-        }) {
-            val data = requestCoroutines<NetResponse<DataFeed>>(
+        launch {
+            /*val data = requestCoroutines<NetResponse<DataFeed>>(
+                url = "https://wanandroid.com/wxarticle/list/408/1/json",
+                params = KParams.Builder().addHeaders(mapOf("k" to "Android")).build()
+            )*/
+            val data = getCoroutines<NetResponse<DataFeed>>(
                 url = "https://wanandroid.com/wxarticle/list/408/1/json",
                 params = KParams.Builder().addHeaders(mapOf("k" to "Android")).build()
             )
             textView.text = data.toString()
         }
+
         /*getRequest<NetResponse<DataFeed>>(
             url = "https://wanandroid.com/wxarticle/list/408/1/json",
             params = KParams.Builder().addHeaders(mapOf("k" to "Android")).build(),

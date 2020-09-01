@@ -3,6 +3,7 @@ package com.adazhdw.ktlib.kthttp
 import com.adazhdw.ktlib.kthttp.callback.RequestGsonCallback
 import com.adazhdw.ktlib.kthttp.constant.GET
 import com.adazhdw.ktlib.kthttp.constant.Method
+import com.adazhdw.ktlib.kthttp.constant.POST
 import com.adazhdw.ktlib.kthttp.param.KParams
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.Call
@@ -15,6 +16,29 @@ import kotlin.coroutines.resumeWithException
  * Description: 网络请求协程类
  */
 
+/**
+ * get 网络请求协程方法
+ */
+suspend inline fun <reified T : Any> getCoroutines(
+    url: String,
+    params: KParams? = null
+): T {
+    return requestCoroutines(method = GET, url, params)
+}
+
+/**
+ * post 网络请求协程方法
+ */
+suspend inline fun <reified T : Any> postCoroutines(
+    url: String,
+    params: KParams? = null
+): T {
+    return requestCoroutines(method = POST, url, params)
+}
+
+/**
+ * 未分类 网络请求协程方法
+ */
 suspend inline fun <reified T : Any> requestCoroutines(
     method: Method = GET,
     url: String,
