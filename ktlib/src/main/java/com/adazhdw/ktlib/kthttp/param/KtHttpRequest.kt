@@ -2,6 +2,7 @@ package com.adazhdw.ktlib.kthttp.param
 
 import android.os.Handler
 import android.os.Looper
+import com.adazhdw.ktlib.core.KtExecutors
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.constant.*
@@ -21,8 +22,11 @@ class KtHttpRequest(
     val callback: RequestCallback?
 ) : Callback {
 
+    companion object {
+        private val mHandler: Handler = Handler(Looper.getMainLooper())
+    }
+
     private val okHttpClient: OkHttpClient = builder.build()
-    private val mHandler: Handler = Handler(Looper.getMainLooper())
 
     fun execute(): Call {
         callback?.onStart()
@@ -97,30 +101,34 @@ class KtHttpRequest(
 
     private fun handleResponse(call: Call, response: Response, callback: RequestCallback?) {
         KtHttpCallManager.instance.removeCall(url)
-        var result: String? = null
-        try {
-            result = response.body?.string()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        callback?.onResponse(response, result, response.headers)
-        if (!result.isNullOrBlank()) {
-            //回调跳转主线程
-            mHandler.post {
-                callback?.onSuccess(result)
-                callback?.onFinish()
+        KtExecutors.networkIO.submit {
+            var result: String? = null
+            try {
+                result = response.body?.string()
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
-        } else {
-            val invocation = call.request().tag(Invocation::class.java)
-            val method = invocation?.method()
-            val errorMsg =
-                "Response from ${method?.declaringClass?.name}.${method?.name} was null but response body type was declared as non-null"
-            handleError(
-                KotlinNullPointerException(errorMsg),
-                HttpConstant.ERROR_RESPONSE_BODY_ISNULL,
-                "response'body is null",
-                callback
-            )
+            mHandler.post { callback?.onResponse(response, result, response.headers) }
+            if (!result.isNullOrBlank()) {
+                //回调跳转主线程
+                mHandler.post {
+                    callback?.onSuccess(result)
+                    callback?.onFinish()
+                }
+            } else {
+                val invocation = call.request().tag(Invocation::class.java)
+                val method = invocation?.method()
+                val errorMsg =
+                    "Response from ${method?.declaringClass?.name}.${method?.name} was null but response body type was declared as non-null"
+                mHandler.post {
+                    handleError(
+                        KotlinNullPointerException(errorMsg),
+                        HttpConstant.ERROR_RESPONSE_BODY_ISNULL,
+                        "response'body is null",
+                        callback
+                    )
+                }
+            }
         }
     }
 
