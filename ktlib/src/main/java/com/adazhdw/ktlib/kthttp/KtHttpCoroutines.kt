@@ -10,7 +10,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 /**
- * 协程方法
+ * Author: dgz
+ * Date: 2020/8/21 14:50
+ * Description: 网络请求协程类
  */
 
 suspend inline fun <reified T : Any> requestCoroutines(

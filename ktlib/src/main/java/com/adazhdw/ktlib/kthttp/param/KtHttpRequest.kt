@@ -18,6 +18,11 @@ import java.io.IOException
 import java.io.InterruptedIOException
 import java.net.SocketTimeoutException
 
+/**
+ * author：daguozhu
+ * date-time：2020/08/29 17:02
+ * description：
+ **/
 class KtHttpRequest(
     val method: Method,
     val url: String,

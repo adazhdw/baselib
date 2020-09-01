@@ -3,6 +3,12 @@ package com.adazhdw.ktlib.kthttp.util
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 
+/**
+ * author：daguozhu
+ * date-time：2020/9/1 17:02
+ * description：
+ **/
+
 object KtUrlUtil {
     fun getFullUrl(url: String, params: Map<String, String>, urlEncoder: Boolean): String {
         val urlBuilder = StringBuilder()

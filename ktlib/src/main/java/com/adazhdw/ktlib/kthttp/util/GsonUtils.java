@@ -1,6 +1,5 @@
 package com.adazhdw.ktlib.kthttp.util;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -18,11 +17,11 @@ import com.google.gson.JsonSyntaxException;
 import java.lang.reflect.Type;
 
 /**
- * User: dgz
- * Date: 2020/09/01
- * Time: 16:33
- */
-public class GsonUtil {
+ * author：daguozhu
+ * date-time：2020/9/1 17:02
+ * description：
+ **/
+public class GsonUtils {
 
     private static Gson gson;
 

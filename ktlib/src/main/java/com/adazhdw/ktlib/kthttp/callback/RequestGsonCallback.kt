@@ -1,7 +1,7 @@
 package com.adazhdw.ktlib.kthttp.callback
 
 import com.adazhdw.ktlib.kthttp.constant.HttpConstant
-import com.adazhdw.ktlib.kthttp.util.GsonUtil
+import com.adazhdw.ktlib.kthttp.util.GsonUtils
 import com.google.gson.JsonParseException
 import com.google.gson.internal.`$Gson$Types`
 import okhttp3.Headers
@@ -9,6 +9,11 @@ import okhttp3.Response
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
+/**
+ * Author: dgz
+ * Date: 2020/8/21 14:50
+ * Description: Gson回调转换泛型类 T
+ */
 abstract class RequestGsonCallback<T : Any> : RequestCallback {
     private val mType: Type?
 
@@ -26,7 +31,7 @@ abstract class RequestGsonCallback<T : Any> : RequestCallback {
 
     override fun onSuccess(result: String) {
         try {
-            val data = GsonUtil.fromJson<T>(result, mType)
+            val data = GsonUtils.fromJson<T>(result, mType)
             onSuccess(data)
         } catch (e: JsonParseException) {
             onError(e, HttpConstant.ERROR_JSON_PARSE_EXCEPTION, "data parse error${e.message}")

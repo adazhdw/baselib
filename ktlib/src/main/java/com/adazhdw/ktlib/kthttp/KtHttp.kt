@@ -8,6 +8,12 @@ import com.adazhdw.ktlib.kthttp.util.KtHttpCallManager
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
 
+/**
+ * Author: dgz
+ * Date: 2020/8/21 14:50
+ * Description: 请求类
+ */
+
 object KtHttp {
 
     val JSON = "application/json; charset=utf-8".toMediaType()

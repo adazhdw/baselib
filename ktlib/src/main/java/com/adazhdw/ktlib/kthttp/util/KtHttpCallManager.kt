@@ -5,10 +5,10 @@ import okhttp3.Call
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * Desction:
- * Author:pengjianbo
- * Date:16/1/3 下午1:27
- */
+ * author：daguozhu
+ * date-time：2020/9/1 17:02
+ * description：
+ **/
 internal class KtHttpCallManager private constructor() {
     private val callMap: ConcurrentHashMap<String, Call> = ConcurrentHashMap()
     fun addCall(url: String, call: Call?) {

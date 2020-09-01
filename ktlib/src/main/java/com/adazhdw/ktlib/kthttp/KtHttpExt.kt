@@ -4,7 +4,9 @@ import com.adazhdw.ktlib.kthttp.callback.RequestGsonCallback
 import com.adazhdw.ktlib.kthttp.param.KParams
 
 /**
- * 扩展方法
+ * Author: dgz
+ * Date: 2020/8/21 14:50
+ * Description: 网络请求扩展类
  */
 
 inline fun <reified T : Any> getRequest(

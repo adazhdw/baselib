@@ -1,6 +1,12 @@
 package com.adazhdw.ktlib.kthttp.constant
 
 
+/**
+ * Author: dgz
+ * Date: 2020/8/21 14:50
+ * Description:
+ */
+
 sealed class Method(val name: String)
 object GET : Method("GET")
 object POST : Method("POST")
