@@ -3,28 +3,15 @@ package com.adazhdw.ktlib.kthttp.callback
 import okhttp3.Headers
 import okhttp3.Response
 
-abstract class RequestCallback : BaseRequestCallback {
-
-
-    override fun onStart() {
-
-    }
-
-    override fun onResponse(httpResponse: Response?, response: String?, headers: Headers) {
-
-    }
-
-    override fun onSuccess(result: String) {
-
-    }
-
-    override fun onError(code: Int, msg: String?) {
-
-    }
-
-    override fun onFinish() {
-
-    }
-
-
+/**
+ * Author: dgz
+ * Date: 2020/8/21 15:28
+ * Description: 网络请求自定义回调
+ */
+interface RequestCallback {
+    fun onStart() {}
+    fun onResponse(httpResponse: Response?, response: String?, headers: Headers) {}
+    fun onSuccess(result: String) {}
+    fun onError(e: Exception, code: Int, msg: String?) {}
+    fun onFinish() {}
 }

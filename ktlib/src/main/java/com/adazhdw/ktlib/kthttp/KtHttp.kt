@@ -1,9 +1,13 @@
 package com.adazhdw.ktlib.kthttp
 
-import com.adazhdw.ktlib.kthttp.callback.BaseRequestCallback
+import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.constant.*
 import com.adazhdw.ktlib.kthttp.httpbuilder.KtHttpBuilder
 import com.adazhdw.ktlib.kthttp.param.KParams
+import com.adazhdw.ktlib.kthttp.param.KtHttpRequest
+import com.adazhdw.ktlib.kthttp.util.KtHttpCallManager
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -11,6 +15,25 @@ import okhttp3.OkHttpClient
 object KtHttp {
 
     val JSON = "application/json; charset=utf-8".toMediaType()
+    val gson: Gson = GsonBuilder().create()
+
+    /**
+     * 请求
+     * @param url url
+     * @param params 请求参数
+     * @param callback 请求回调
+     */
+    @JvmOverloads
+    fun request(
+        method: Method,
+        url: String,
+        params: KParams? = null,
+        callback: RequestCallback? = null,
+        timeout: Long = HttpConstant.DEFAULT_TIMEOUT
+    ): Call {
+        val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
+        return executeRequest(method, url, params ?: KParams(), builder, callback)
+    }
 
     /**
      * Get请求
@@ -22,9 +45,9 @@ object KtHttp {
     fun get(
         url: String,
         params: KParams? = null,
-        callback: BaseRequestCallback? = null,
+        callback: RequestCallback? = null,
         timeout: Long = HttpConstant.DEFAULT_TIMEOUT
-    ) {
+    ): Call {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
         return executeRequest(GET, url, params ?: KParams(), builder, callback)
     }
@@ -39,9 +62,9 @@ object KtHttp {
     fun post(
         url: String,
         params: KParams? = null,
-        callback: BaseRequestCallback? = null,
+        callback: RequestCallback? = null,
         timeout: Long = HttpConstant.DEFAULT_TIMEOUT
-    ) {
+    ): Call {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
         return executeRequest(POST, url, params ?: KParams(), builder, callback)
     }
@@ -56,9 +79,9 @@ object KtHttp {
     fun put(
         url: String,
         params: KParams? = null,
-        callback: BaseRequestCallback? = null,
+        callback: RequestCallback? = null,
         timeout: Long = HttpConstant.DEFAULT_TIMEOUT
-    ) {
+    ): Call {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
         return executeRequest(PUT, url, params ?: KParams(), builder, callback)
     }
@@ -73,9 +96,9 @@ object KtHttp {
     fun delete(
         url: String,
         params: KParams? = null,
-        callback: BaseRequestCallback? = null,
+        callback: RequestCallback? = null,
         timeout: Long = HttpConstant.DEFAULT_TIMEOUT
-    ) {
+    ): Call {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
         return executeRequest(DELETE, url, params ?: KParams(), builder, callback)
     }
@@ -90,9 +113,9 @@ object KtHttp {
     fun head(
         url: String,
         params: KParams? = null,
-        callback: BaseRequestCallback? = null,
+        callback: RequestCallback? = null,
         timeout: Long = HttpConstant.DEFAULT_TIMEOUT
-    ) {
+    ): Call {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
         return executeRequest(HEAD, url, params ?: KParams(), builder, callback)
     }
@@ -107,21 +130,20 @@ object KtHttp {
     fun patch(
         url: String,
         params: KParams? = null,
-        callback: BaseRequestCallback? = null,
+        callback: RequestCallback? = null,
         timeout: Long = HttpConstant.DEFAULT_TIMEOUT
-    ) {
+    ): Call {
         val builder: OkHttpClient.Builder = KtHttpBuilder.obtainBuilder(timeout)
         return executeRequest(PATCH, url, params ?: KParams(), builder, callback)
     }
 
     private fun executeRequest(
         method: Method,
-        url: String?,
+        url: String,
         params: KParams,
         builder: OkHttpClient.Builder,
-        callback: BaseRequestCallback? = null
-    ) {
-        if (url.isNullOrBlank()) return
+        callback: RequestCallback? = null
+    ): Call {
         if (params.tag.isEmpty()) params.tag = url
         val request = KtHttpRequest(
             method = method,
@@ -130,7 +152,7 @@ object KtHttp {
             builder = builder,
             callback = callback
         )
-        request.execute()
+        return request.execute()
     }
 
     fun cancel(url: String) {

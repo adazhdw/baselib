@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.kthttp
+package com.adazhdw.ktlib.kthttp.util
 
 import android.text.TextUtils.isEmpty
 import okhttp3.Call

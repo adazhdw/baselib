@@ -70,7 +70,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
 
     //Gson
-    implementation 'com.google.code.gson:gson:2.8.6'
+    api 'com.google.code.gson:gson:2.8.6'
 
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

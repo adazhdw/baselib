@@ -3,7 +3,7 @@ package com.adazhdw.ktlib.kthttp.util
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 
-object UrlUtil {
+object KtUrlUtil {
     fun getFullUrl(url: String, params: Map<String, String>, urlEncoder: Boolean): String {
         val urlBuilder = StringBuilder()
         urlBuilder.append(url)

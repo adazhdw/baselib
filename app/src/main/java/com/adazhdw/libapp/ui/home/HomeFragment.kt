@@ -5,17 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.text.parseAsHtml
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.adazhdw.ktlib.ext.logD
-import com.adazhdw.ktlib.kthttp.KtHttp
-import com.adazhdw.ktlib.kthttp.callback.RequestCallback
+import com.adazhdw.ktlib.base.fragment.BaseFragment
 import com.adazhdw.ktlib.kthttp.param.KParams
+import com.adazhdw.ktlib.kthttp.requestCoroutines
 import com.adazhdw.libapp.R
+import com.adazhdw.libapp.bean.DataFeed
+import com.adazhdw.libapp.bean.NetResponse
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment() {
 
     private lateinit var homeViewModel: HomeViewModel
 
@@ -37,14 +36,25 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val textView: TextView = view.findViewById(R.id.text_home)
-        KtHttp.get(
+        launch(error = {
+
+        }) {
+            val data = requestCoroutines<NetResponse<DataFeed>>(
+                url = "https://wanandroid.com/wxarticle/list/408/1/json",
+                params = KParams.Builder().addHeaders(mapOf("k" to "Android")).build()
+            )
+            textView.text = data.toString()
+        }
+        /*getRequest<NetResponse<DataFeed>>(
             url = "https://wanandroid.com/wxarticle/list/408/1/json",
             params = KParams.Builder().addHeaders(mapOf("k" to "Android")).build(),
-            callback = object : RequestCallback() {
-                override fun onSuccess(result: String) {
-                    result.logD("HomeFragment")
-                    textView.text = result.parseAsHtml()
-                }
-            })
+            success = {
+                textView.text = it.toString()
+            }, error = { code, msg ->
+                "code:$code,msg:$msg-error-happened".logD("HomeFragment")
+            })*/
     }
+
+    override val layoutId: Int
+        get() = R.layout.fragment_home
 }
