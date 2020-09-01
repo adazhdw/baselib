@@ -6,9 +6,13 @@ import com.adazhdw.ktlib.core.KtExecutors
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.constant.*
+import com.adazhdw.ktlib.kthttp.httpbuilder.KtHttpBuilder
 import com.adazhdw.ktlib.kthttp.util.KtHttpCallManager
 import com.adazhdw.ktlib.kthttp.util.KtUrlUtil
-import okhttp3.*
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.Request
+import okhttp3.Response
 import retrofit2.Invocation
 import java.io.IOException
 import java.io.InterruptedIOException
@@ -18,15 +22,12 @@ class KtHttpRequest(
     val method: Method,
     val url: String,
     val params: KParams,
-    val builder: OkHttpClient.Builder,
     val callback: RequestCallback?
 ) : Callback {
 
     companion object {
         private val mHandler: Handler = Handler(Looper.getMainLooper())
     }
-
-    private val okHttpClient: OkHttpClient = builder.build()
 
     fun execute(): Call {
         callback?.onStart()
@@ -64,7 +65,7 @@ class KtHttpRequest(
         if (HttpConstant.debug) {
             "url:$requestUrl,params:${params.params},headers:${params.headers}".logD(url)
         }
-        val call = okHttpClient.newCall(request = request)
+        val call = KtHttpBuilder.okHttpClient.newCall(request = request)
         call.enqueue(this)
         KtHttpCallManager.instance.addCall(url, call)
         return call

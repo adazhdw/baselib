@@ -2,18 +2,24 @@ package com.adazhdw.ktlib.kthttp.httpbuilder
 
 import com.adazhdw.ktlib.BuildConfig
 import com.adazhdw.ktlib.http.OkHttpLogger
+import com.adazhdw.ktlib.kthttp.constant.HttpConstant
+import com.adazhdw.ktlib.kthttp.ssl.HttpsUtils
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
 object KtHttpBuilder {
 
-    fun obtainBuilder(timeout: Long): OkHttpClient.Builder {
+    val okHttpClient: OkHttpClient by lazy { obtainBuilder().build() }
+
+    private fun obtainBuilder(timeout: Long = HttpConstant.DEFAULT_TIMEOUT): OkHttpClient.Builder {
+        val sslParams = HttpsUtils.getSslSocketFactory()
         return OkHttpClient.Builder()
             .connectTimeout(timeout, TimeUnit.SECONDS)
             .callTimeout(timeout, TimeUnit.SECONDS)
             .writeTimeout(timeout, TimeUnit.SECONDS)
             .addNetworkInterceptor(getLoggingInterceptor())
+            .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)
     }
 
 
