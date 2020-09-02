@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.ktlib.base.fragment.BaseFragment
-import com.adazhdw.ktlib.kthttp.param.KParams
+import com.adazhdw.ktlib.kthttp.param.Param
 import com.adazhdw.ktlib.kthttp.postCoroutines
 import com.adazhdw.libapp.R
 import com.adazhdw.libapp.bean.DataFeed
@@ -45,7 +45,7 @@ class DashboardFragment(override val layoutId: Int = R.layout.fragment_dashboard
             )*/
             val data = postCoroutines<NetResponse<DataFeed>>(
                 url = "https://www.wanandroid.com/article/query/0/json",
-                params = KParams.Builder().addHeaders(mapOf("k" to "ViewModel")).build()
+                param = Param.Builder().addParams(mapOf("k" to "ViewModel")).build()
             )
             textView.text = data.toString()
         }

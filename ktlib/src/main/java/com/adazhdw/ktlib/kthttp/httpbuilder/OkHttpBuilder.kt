@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
  * Description:
  */
 
-object KtHttpBuilder {
+object OkHttpBuilder {
 
     val okHttpClient: OkHttpClient by lazy { obtainBuilder().build() }
 

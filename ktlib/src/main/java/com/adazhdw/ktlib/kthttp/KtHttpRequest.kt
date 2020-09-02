@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.kthttp.param
+package com.adazhdw.ktlib.kthttp
 
 import android.os.Handler
 import android.os.Looper
@@ -6,9 +6,10 @@ import com.adazhdw.ktlib.core.KtExecutors
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.constant.*
-import com.adazhdw.ktlib.kthttp.httpbuilder.KtHttpBuilder
-import com.adazhdw.ktlib.kthttp.util.KtHttpCallManager
-import com.adazhdw.ktlib.kthttp.util.KtUrlUtil
+import com.adazhdw.ktlib.kthttp.httpbuilder.OkHttpBuilder
+import com.adazhdw.ktlib.kthttp.param.Param
+import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager
+import com.adazhdw.ktlib.kthttp.util.RequestUrlUtil
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Request
@@ -26,7 +27,7 @@ import java.net.SocketTimeoutException
 class KtHttpRequest(
     val method: Method,
     val url: String,
-    val params: KParams,
+    val param: Param,
     val callback: RequestCallback?
 ) : Callback {
 
@@ -40,39 +41,39 @@ class KtHttpRequest(
         val requestBuilder = Request.Builder()
         when (method) {
             GET -> {
-                requestUrl = KtUrlUtil.getFullUrl(url, params.params, params.urlEncoder)
+                requestUrl = RequestUrlUtil.getFullUrl(url, param.params, param.urlEncoder)
                 requestBuilder.get()
             }
             DELETE -> {
-                requestUrl = KtUrlUtil.getFullUrl(url, params.params, params.urlEncoder)
+                requestUrl = RequestUrlUtil.getFullUrl(url, param.params, param.urlEncoder)
                 requestBuilder.delete()
             }
             HEAD -> {
-                requestUrl = KtUrlUtil.getFullUrl(url, params.params, params.urlEncoder)
+                requestUrl = RequestUrlUtil.getFullUrl(url, param.params, param.urlEncoder)
                 requestBuilder.head()
             }
             POST -> {
-                val body = params.getRequestBody()
+                val body = param.getRequestBody()
                 requestBuilder.post(body)
             }
             PUT -> {
-                val body = params.getRequestBody()
+                val body = param.getRequestBody()
                 requestBuilder.post(body)
             }
             PATCH -> {
-                val body = params.getRequestBody()
+                val body = param.getRequestBody()
                 requestBuilder.post(body)
             }
         }
-        addHeaders(requestBuilder, params.headers)
-        requestBuilder.url(requestUrl).tag(params.tag)
+        addHeaders(requestBuilder, param.headers)
+        requestBuilder.url(requestUrl).tag(param.tag)
         val request = requestBuilder.build()
         if (HttpConstant.debug) {
-            "url:$requestUrl,params:${params.params},headers:${params.headers}".logD(url)
+            "url:$requestUrl,params:${param.params},headers:${param.headers}".logD(url)
         }
-        val call = KtHttpBuilder.okHttpClient.newCall(request = request)
+        val call = OkHttpBuilder.okHttpClient.newCall(request = request)
         call.enqueue(this)
-        KtHttpCallManager.instance.addCall(url, call)
+        OkHttpCallManager.instance.addCall(url, call)
         return call
     }
 
@@ -91,7 +92,7 @@ class KtHttpRequest(
     }
 
     override fun onFailure(call: Call, e: IOException) {
-        KtHttpCallManager.instance.removeCall(url)
+        OkHttpCallManager.instance.removeCall(url)
         var timeout = e.message ?: ""
         if (e is SocketTimeoutException) {
             timeout = "request timeout"
@@ -106,7 +107,7 @@ class KtHttpRequest(
     }
 
     private fun handleResponse(call: Call, response: Response, callback: RequestCallback?) {
-        KtHttpCallManager.instance.removeCall(url)
+        OkHttpCallManager.instance.removeCall(url)
         KtExecutors.networkIO.submit {
             var result: String? = null
             try {

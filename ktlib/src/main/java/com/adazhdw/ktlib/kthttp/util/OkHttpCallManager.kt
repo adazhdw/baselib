@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap
  * date-time：2020/9/1 17:02
  * description：
  **/
-internal class KtHttpCallManager private constructor() {
+internal class OkHttpCallManager private constructor() {
     private val callMap: ConcurrentHashMap<String, Call> = ConcurrentHashMap()
     fun addCall(url: String, call: Call?) {
         if (call != null && !isEmpty(url)) {
@@ -30,7 +30,7 @@ internal class KtHttpCallManager private constructor() {
     }
 
     companion object {
-        val instance: KtHttpCallManager by lazy { KtHttpCallManager() }
+        val instance: OkHttpCallManager by lazy { OkHttpCallManager() }
     }
 
 }

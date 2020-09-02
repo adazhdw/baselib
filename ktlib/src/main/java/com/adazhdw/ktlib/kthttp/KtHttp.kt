@@ -2,9 +2,8 @@ package com.adazhdw.ktlib.kthttp
 
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.constant.*
-import com.adazhdw.ktlib.kthttp.param.KParams
-import com.adazhdw.ktlib.kthttp.param.KtHttpRequest
-import com.adazhdw.ktlib.kthttp.util.KtHttpCallManager
+import com.adazhdw.ktlib.kthttp.param.Param
+import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
 
@@ -17,124 +16,126 @@ import okhttp3.MediaType.Companion.toMediaType
 object KtHttp {
 
     val JSON = "application/json; charset=utf-8".toMediaType()
+    val PNG = "image/png; charset=UTF-8".toMediaType()
+    val JPG = "image/jpeg; charset=UTF-8".toMediaType()
 
     /**
      * 请求
      * @param url url
-     * @param params 请求参数
+     * @param param 请求参数
      * @param callback 请求回调
      */
     @JvmOverloads
     fun request(
         method: Method,
         url: String,
-        params: KParams? = null,
+        param: Param? = null,
         callback: RequestCallback? = null
     ): Call {
-        return executeRequest(method, url, params ?: KParams(), callback)
+        return executeRequest(method, url, param ?: Param(), callback)
     }
 
     /**
      * Get请求
      * @param url url
-     * @param params 请求参数
+     * @param param 请求参数
      * @param callback 请求回调
      */
     @JvmOverloads
     fun get(
         url: String,
-        params: KParams? = null,
+        param: Param? = null,
         callback: RequestCallback? = null
     ): Call {
-        return executeRequest(GET, url, params ?: KParams(), callback)
+        return executeRequest(GET, url, param ?: Param(), callback)
     }
 
     /**
      * Post请求
      * @param url url
-     * @param params 请求参数
+     * @param param 请求参数
      * @param callback 请求回调
      */
     @JvmOverloads
     fun post(
         url: String,
-        params: KParams? = null,
+        param: Param? = null,
         callback: RequestCallback? = null
     ): Call {
-        return executeRequest(POST, url, params ?: KParams(), callback)
+        return executeRequest(POST, url, param ?: Param(), callback)
     }
 
     /**
      * put请求
      * @param url url
-     * @param params 请求参数
+     * @param param 请求参数
      * @param callback 请求回调
      */
     @JvmOverloads
     fun put(
         url: String,
-        params: KParams? = null,
+        param: Param? = null,
         callback: RequestCallback? = null
     ): Call {
-        return executeRequest(PUT, url, params ?: KParams(), callback)
+        return executeRequest(PUT, url, param ?: Param(), callback)
     }
 
     /**
      * delete请求
      * @param url url
-     * @param params 请求参数
+     * @param param 请求参数
      * @param callback 请求回调
      */
     @JvmOverloads
     fun delete(
         url: String,
-        params: KParams? = null,
+        param: Param? = null,
         callback: RequestCallback? = null
     ): Call {
-        return executeRequest(DELETE, url, params ?: KParams(), callback)
+        return executeRequest(DELETE, url, param ?: Param(), callback)
     }
 
     /**
      * head请求
      * @param url url
-     * @param params 请求参数
+     * @param param 请求参数
      * @param callback 请求回调
      */
     @JvmOverloads
     fun head(
         url: String,
-        params: KParams? = null,
+        param: Param? = null,
         callback: RequestCallback? = null
     ): Call {
-        return executeRequest(HEAD, url, params ?: KParams(), callback)
+        return executeRequest(HEAD, url, param ?: Param(), callback)
     }
 
     /**
      * patch请求
      * @param url url
-     * @param params 请求参数
+     * @param param 请求参数
      * @param callback 请求回调
      */
     @JvmOverloads
     fun patch(
         url: String,
-        params: KParams? = null,
+        param: Param? = null,
         callback: RequestCallback? = null
     ): Call {
-        return executeRequest(PATCH, url, params ?: KParams(), callback)
+        return executeRequest(PATCH, url, param ?: Param(), callback)
     }
 
     private fun executeRequest(
         method: Method,
         url: String,
-        params: KParams,
+        param: Param,
         callback: RequestCallback? = null
     ): Call {
-        if (params.tag.isEmpty()) params.tag = url
+        if (param.tag.isEmpty()) param.tag = url
         val request = KtHttpRequest(
             method = method,
             url = url,
-            params = params,
+            param = param,
             callback = callback
         )
         return request.execute()
@@ -142,9 +143,9 @@ object KtHttp {
 
     fun cancel(url: String) {
         if (url.isNotBlank()) {
-            val call: Call? = KtHttpCallManager.instance.getCall(url)
+            val call: Call? = OkHttpCallManager.instance.getCall(url)
             call?.cancel()
-            KtHttpCallManager.instance.removeCall(url)
+            OkHttpCallManager.instance.removeCall(url)
         }
     }
 }

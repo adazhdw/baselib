@@ -4,6 +4,8 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.webkit.MimeTypeMap
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import java.util.*
 
 
@@ -25,5 +27,13 @@ object MimeUtil {
         val fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
         return MimeTypeMap.getSingleton()
             .getMimeTypeFromExtension(fileExtension.toLowerCase(Locale.CHINA)) ?: ""
+    }
+
+    fun getMediaType(url: String?): MediaType? {
+        val uri = Uri.parse(url)
+        val fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
+        return (MimeTypeMap.getSingleton()
+            .getMimeTypeFromExtension(fileExtension.toLowerCase(Locale.CHINA))
+            ?: "").toMediaTypeOrNull()
     }
 }
