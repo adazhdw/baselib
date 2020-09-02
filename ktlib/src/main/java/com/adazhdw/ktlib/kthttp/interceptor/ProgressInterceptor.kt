@@ -1,12 +1,10 @@
-package com.adazhdw.ktlib.kthttp.interceptor;
+package com.adazhdw.ktlib.kthttp.interceptor
 
-import com.adazhdw.ktlib.kthttp.body.ProgressResponseBody;
-import com.adazhdw.ktlib.kthttp.callback.ProgressCallback;
-
-import java.io.IOException;
-
-import okhttp3.Interceptor;
-import okhttp3.Response;
+import com.adazhdw.ktlib.kthttp.body.ProgressResponseBody
+import com.adazhdw.ktlib.kthttp.callback.ProgressCallback
+import okhttp3.Interceptor
+import okhttp3.Response
+import java.io.IOException
 
 /**
  * 下载进度拦截器
@@ -14,21 +12,14 @@ import okhttp3.Response;
  * Date: 2019/1/20
  * Time: 14:19
  */
-public class ProgressInterceptor implements Interceptor {
-
-    private ProgressCallback progressCallback;
-
-    public ProgressInterceptor(ProgressCallback progressCallback) {
-        this.progressCallback = progressCallback;
-    }
-
-    @Override
-    public Response intercept(Chain chain) throws IOException {
+class ProgressInterceptor(private val progressCallback: ProgressCallback) : Interceptor {
+    @Throws(IOException::class)
+    override fun intercept(chain: Interceptor.Chain): Response {
         //拦截
-        Response originalResponse = chain.proceed(chain.request());
+        val originalResponse = chain.proceed(chain.request())
         //包装响应体并返回
         return originalResponse.newBuilder()
-                .body(new ProgressResponseBody(originalResponse, progressCallback))
-                .build();
+            .body(ProgressResponseBody(originalResponse, progressCallback))
+            .build()
     }
 }
