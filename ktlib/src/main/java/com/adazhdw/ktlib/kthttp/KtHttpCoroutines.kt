@@ -6,7 +6,6 @@ import com.adazhdw.ktlib.kthttp.constant.Method
 import com.adazhdw.ktlib.kthttp.constant.POST
 import com.adazhdw.ktlib.kthttp.param.Param
 import kotlinx.coroutines.suspendCancellableCoroutine
-import okhttp3.Call
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -45,11 +44,10 @@ suspend inline fun <reified T : Any> requestCoroutines(
     param: Param? = null
 ): T {
     return suspendCancellableCoroutine { continuation ->
-        var call: Call? = null
         continuation.invokeOnCancellation {
-            call?.cancel()
+            KtHttp.cancel(url)
         }
-        call = KtHttp.request(method, url, param, object : RequestGsonCallback<T>() {
+        KtHttp.request(method, url, param, object : RequestGsonCallback<T>() {
 
             override fun onError(e: Exception, code: Int, msg: String?) {
                 super.onError(e, code, msg)
