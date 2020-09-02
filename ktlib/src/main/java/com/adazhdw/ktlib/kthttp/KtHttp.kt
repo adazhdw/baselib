@@ -1,11 +1,18 @@
 package com.adazhdw.ktlib.kthttp
 
+import com.adazhdw.ktlib.BuildConfig
+import com.adazhdw.ktlib.http.OkHttpLogger
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.constant.*
+import com.adazhdw.ktlib.kthttp.interceptor.RetryInterceptor
 import com.adazhdw.ktlib.kthttp.param.Param
+import com.adazhdw.ktlib.kthttp.ssl.HttpsUtils
 import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import java.util.concurrent.TimeUnit
 
 /**
  * Author: dgz
@@ -18,6 +25,29 @@ object KtHttp {
     val JSON = "application/json; charset=utf-8".toMediaType()
     val PNG = "image/png; charset=UTF-8".toMediaType()
     val JPG = "image/jpeg; charset=UTF-8".toMediaType()
+
+    val okHttpClient: OkHttpClient by lazy { obtainBuilder().build() }
+
+    private fun obtainBuilder(timeout: Long = HttpConstant.DEFAULT_TIMEOUT): OkHttpClient.Builder {
+        val sslParams = HttpsUtils.getSslSocketFactory()
+        return OkHttpClient.Builder()
+            .connectTimeout(timeout, TimeUnit.SECONDS)
+            .callTimeout(timeout, TimeUnit.SECONDS)
+            .writeTimeout(timeout, TimeUnit.SECONDS)
+            .addInterceptor(getLoggingInterceptor())
+            .addInterceptor(RetryInterceptor())
+            .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)
+    }
+
+    private fun getLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor(OkHttpLogger()).apply {
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.BASIC
+            }
+        }
+    }
 
     /**
      * 请求

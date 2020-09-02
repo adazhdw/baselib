@@ -8,11 +8,13 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.ktlib.base.fragment.BaseFragment
+import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.kthttp.param.Param
 import com.adazhdw.ktlib.kthttp.postCoroutines
 import com.adazhdw.libapp.R
 import com.adazhdw.libapp.bean.DataFeed
 import com.adazhdw.libapp.bean.NetResponse
+import kotlin.system.measureTimeMillis
 
 class DashboardFragment(override val layoutId: Int = R.layout.fragment_dashboard) : BaseFragment() {
 
@@ -43,11 +45,14 @@ class DashboardFragment(override val layoutId: Int = R.layout.fragment_dashboard
                 url = "https://www.wanandroid.com/article/query/0/json",
                 params = KParams.Builder().addHeaders(mapOf("k" to "ViewModel")).build()
             )*/
-            val data = postCoroutines<NetResponse<DataFeed>>(
-                url = "https://www.wanandroid.com/article/query/0/json",
-                param = Param.Builder().addParams(mapOf("k" to "ViewModel")).build()
-            )
-            textView.text = data.toString()
+            val time = measureTimeMillis {
+                val data = postCoroutines<NetResponse<DataFeed>>(
+                    url = "https://www.wanandroid.com/article/query/0/json",
+                    param = Param.Builder().addParams(mapOf("k" to "ViewModel")).build()
+                )
+                textView.text = data.toString()
+            }
+            "$time".logD(TAG)
         }
 
         /*postRequest<NetResponse<DataFeed>>(

@@ -6,10 +6,11 @@ import com.adazhdw.ktlib.core.KtExecutors
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.constant.*
-import com.adazhdw.ktlib.kthttp.httpbuilder.OkHttpBuilder
+import com.adazhdw.ktlib.kthttp.exception.NetWorkUnAvailableException
 import com.adazhdw.ktlib.kthttp.param.Param
 import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager
 import com.adazhdw.ktlib.kthttp.util.RequestUrlUtil
+import com.adazhdw.ktlib.utils.NetworkUtils
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Request
@@ -18,6 +19,7 @@ import retrofit2.Invocation
 import java.io.IOException
 import java.io.InterruptedIOException
 import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 /**
  * author：daguozhu
@@ -71,7 +73,7 @@ class KtHttpRequest(
         if (HttpConstant.debug) {
             "url:$requestUrl,params:${param.params},headers:${param.headers}".logD(url)
         }
-        val call = OkHttpBuilder.okHttpClient.newCall(request = request)
+        val call = KtHttp.okHttpClient.newCall(request = request)
         call.enqueue(this)
         OkHttpCallManager.instance.addCall(url, call)
         return call
@@ -93,16 +95,21 @@ class KtHttpRequest(
 
     override fun onFailure(call: Call, e: IOException) {
         OkHttpCallManager.instance.removeCall(url)
-        var timeout = e.message ?: ""
+        var ex: Exception = e
+        var message = e.message ?: ""
+        var code = HttpConstant.ERROR_RESPONSE_ON_FAILURE
         if (e is SocketTimeoutException) {
-            timeout = "request timeout"
+            message = "request timeout"
         } else if (e is InterruptedIOException && e.message == "timeout") {
-            timeout = "request timeout"
+            message = "request timeout"
+        } else if (e is UnknownHostException && !NetworkUtils.isConnected()) {
+            message = "network unavailable"
+            code = HttpConstant.ERROR_NETWORK_UNAVAILABLE
+            ex = NetWorkUnAvailableException()
         }
-        val code = HttpConstant.ERROR_RESPONSE_ON_FAILURE
         //回调跳转主线程
         mHandler.post {
-            handleError(e, code, timeout, callback)
+            handleError(ex, code, message, callback)
         }
     }
 

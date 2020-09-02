@@ -2,11 +2,10 @@ package com.adazhdw.ktlib.kthttp.callback
 
 import com.adazhdw.ktlib.kthttp.constant.HttpConstant
 import com.adazhdw.ktlib.kthttp.util.GsonUtils
+import com.adazhdw.ktlib.kthttp.util.TypeUtil
 import com.google.gson.JsonParseException
-import com.google.gson.internal.`$Gson$Types`
 import okhttp3.Headers
 import okhttp3.Response
-import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
 /**
@@ -50,14 +49,7 @@ abstract class RequestGsonCallback<T : Any> : RequestCallback {
     }
 
     private fun getSuperclassTypeParameter(subclass: Class<*>): Type? {
-        val superclass = subclass.genericSuperclass
-        if (superclass is Class<*>) {
-            throw RuntimeException("Missing type parameter.")
-        }
-        val parameterized = superclass as ParameterizedType?
-        return if (parameterized != null) {
-            `$Gson$Types`.canonicalize(parameterized.actualTypeArguments[0])
-        } else null
+        return TypeUtil.getClassType(subclass)
     }
 
 }

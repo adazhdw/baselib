@@ -4,7 +4,10 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import com.adazhdw.ktlib.core.lifecycle.KtLifecycleCallback
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
 import java.lang.reflect.InvocationTargetException
+
 
 object KtLib {
 
@@ -61,6 +64,7 @@ object KtLib {
  */
 fun Application.initLibrary(baseUrl: String, debug: Boolean = false) {
     KtLib.init(this)
+    Logger.addLogAdapter(AndroidLogAdapter())
     mBaseUrl = baseUrl
     isDebug = debug
 }
