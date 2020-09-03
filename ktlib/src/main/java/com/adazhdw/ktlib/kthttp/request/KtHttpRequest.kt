@@ -1,11 +1,13 @@
-package com.adazhdw.ktlib.kthttp
+package com.adazhdw.ktlib.kthttp.request
 
 import android.os.Handler
 import android.os.Looper
 import com.adazhdw.ktlib.core.KtExecutors
 import com.adazhdw.ktlib.ext.logD
+import com.adazhdw.ktlib.kthttp.KtHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
-import com.adazhdw.ktlib.kthttp.constant.*
+import com.adazhdw.ktlib.kthttp.constant.HttpConstant
+import com.adazhdw.ktlib.kthttp.constant.Method
 import com.adazhdw.ktlib.kthttp.exception.NetWorkUnAvailableException
 import com.adazhdw.ktlib.kthttp.param.Param
 import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager
@@ -42,27 +44,27 @@ class KtHttpRequest(
         var requestUrl: String = url
         val requestBuilder = Request.Builder()
         when (method) {
-            GET -> {
+            Method.GET -> {
                 requestUrl = RequestUrlUtil.getFullUrl(url, param.params, param.urlEncoder)
                 requestBuilder.get()
             }
-            DELETE -> {
+            Method.DELETE -> {
                 requestUrl = RequestUrlUtil.getFullUrl(url, param.params, param.urlEncoder)
                 requestBuilder.delete()
             }
-            HEAD -> {
+            Method.HEAD -> {
                 requestUrl = RequestUrlUtil.getFullUrl(url, param.params, param.urlEncoder)
                 requestBuilder.head()
             }
-            POST -> {
+            Method.POST -> {
                 val body = param.getRequestBody()
                 requestBuilder.post(body)
             }
-            PUT -> {
+            Method.PUT -> {
                 val body = param.getRequestBody()
                 requestBuilder.post(body)
             }
-            PATCH -> {
+            Method.PATCH -> {
                 val body = param.getRequestBody()
                 requestBuilder.post(body)
             }

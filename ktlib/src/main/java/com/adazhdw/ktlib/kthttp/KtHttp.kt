@@ -3,9 +3,13 @@ package com.adazhdw.ktlib.kthttp
 import com.adazhdw.ktlib.BuildConfig
 import com.adazhdw.ktlib.http.OkHttpLogger
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
-import com.adazhdw.ktlib.kthttp.constant.*
+import com.adazhdw.ktlib.kthttp.constant.HttpConstant
+import com.adazhdw.ktlib.kthttp.constant.Method
 import com.adazhdw.ktlib.kthttp.interceptor.RetryInterceptor
 import com.adazhdw.ktlib.kthttp.param.Param
+import com.adazhdw.ktlib.kthttp.request.GetRequest
+import com.adazhdw.ktlib.kthttp.request.KtHttpRequest
+import com.adazhdw.ktlib.kthttp.request.PostRequest
 import com.adazhdw.ktlib.kthttp.ssl.HttpsUtils
 import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager
 import okhttp3.Call
@@ -62,7 +66,14 @@ object KtHttp {
         param: Param? = null,
         callback: RequestCallback? = null
     ): Call {
-        return executeRequest(method, url, param ?: Param(), callback)
+        return when (method) {
+            Method.GET -> get(url, param, callback)
+            Method.DELETE -> delete(url, param, callback)
+            Method.HEAD -> head(url, param, callback)
+            Method.POST -> post(url, param, callback)
+            Method.PUT -> put(url, param, callback)
+            Method.PATCH -> patch(url, param, callback)
+        }
     }
 
     /**
@@ -77,7 +88,7 @@ object KtHttp {
         param: Param? = null,
         callback: RequestCallback? = null
     ): Call {
-        return executeRequest(GET, url, param ?: Param(), callback)
+        return GetRequest(url, param ?: Param(), callback).execute()
     }
 
     /**
@@ -92,7 +103,7 @@ object KtHttp {
         param: Param? = null,
         callback: RequestCallback? = null
     ): Call {
-        return executeRequest(POST, url, param ?: Param(), callback)
+        return PostRequest(url, param ?: Param(), callback).execute()
     }
 
     /**
@@ -107,7 +118,7 @@ object KtHttp {
         param: Param? = null,
         callback: RequestCallback? = null
     ): Call {
-        return executeRequest(PUT, url, param ?: Param(), callback)
+        return executeRequest(Method.PUT, url, param ?: Param(), callback)
     }
 
     /**
@@ -122,7 +133,7 @@ object KtHttp {
         param: Param? = null,
         callback: RequestCallback? = null
     ): Call {
-        return executeRequest(DELETE, url, param ?: Param(), callback)
+        return executeRequest(Method.DELETE, url, param ?: Param(), callback)
     }
 
     /**
@@ -137,7 +148,7 @@ object KtHttp {
         param: Param? = null,
         callback: RequestCallback? = null
     ): Call {
-        return executeRequest(HEAD, url, param ?: Param(), callback)
+        return executeRequest(Method.HEAD, url, param ?: Param(), callback)
     }
 
     /**
@@ -152,7 +163,7 @@ object KtHttp {
         param: Param? = null,
         callback: RequestCallback? = null
     ): Call {
-        return executeRequest(PATCH, url, param ?: Param(), callback)
+        return executeRequest(Method.PATCH, url, param ?: Param(), callback)
     }
 
     private fun executeRequest(

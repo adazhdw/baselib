@@ -7,10 +7,12 @@ package com.adazhdw.ktlib.kthttp.constant
  * Description:
  */
 
-sealed class Method(val name: String)
-object GET : Method("GET")
-object POST : Method("POST")
-object DELETE : Method("DELETE")
-object HEAD : Method("HEAD")
-object PUT : Method("PUT")
-object PATCH : Method("PATCH")
+sealed class Method(val name: String) {
+
+    object GET : Method("GET")
+    object POST : Method("POST")
+    object DELETE : Method("DELETE")
+    object HEAD : Method("HEAD")
+    object PUT : Method("PUT")
+    object PATCH : Method("PATCH")
+}

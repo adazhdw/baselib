@@ -1,9 +1,7 @@
 package com.adazhdw.ktlib.kthttp
 
 import com.adazhdw.ktlib.kthttp.callback.RequestGsonCallback
-import com.adazhdw.ktlib.kthttp.constant.GET
 import com.adazhdw.ktlib.kthttp.constant.Method
-import com.adazhdw.ktlib.kthttp.constant.POST
 import com.adazhdw.ktlib.kthttp.param.Param
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -22,7 +20,7 @@ suspend inline fun <reified T : Any> getCoroutines(
     url: String,
     param: Param? = null
 ): T {
-    return requestCoroutines(method = GET, url, param)
+    return requestCoroutines(method = Method.GET, url, param)
 }
 
 /**
@@ -32,14 +30,14 @@ suspend inline fun <reified T : Any> postCoroutines(
     url: String,
     param: Param? = null
 ): T {
-    return requestCoroutines(method = POST, url, param)
+    return requestCoroutines(method = Method.POST, url, param)
 }
 
 /**
  * 未分类 网络请求协程方法
  */
 suspend inline fun <reified T : Any> requestCoroutines(
-    method: Method = GET,
+    method: Method = Method.GET,
     url: String,
     param: Param? = null
 ): T {
