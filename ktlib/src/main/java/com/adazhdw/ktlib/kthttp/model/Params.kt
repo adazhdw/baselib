@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.kthttp.param
+package com.adazhdw.ktlib.kthttp.model
 
 import com.adazhdw.ktlib.kthttp.constant.HttpConstant
 import com.adazhdw.ktlib.utils.MimeUtil
@@ -16,7 +16,7 @@ import java.io.File
  * Date: 2020/8/21 14:50
  * Description:
  */
-class Param internal constructor(var tag: String = "") {
+class Params internal constructor(var tag: String = "") {
     internal var headers: Map<String, String> = mapOf()
         private set
     internal var params: Map<String, String> = mapOf()
@@ -137,8 +137,8 @@ class Param internal constructor(var tag: String = "") {
 
         private fun mediaType(file: File): MediaType? = MimeUtil.getMediaType(file.path)
 
-        fun build(): Param {
-            val option = Param(mTag)
+        fun build(): Params {
+            val option = Params(mTag)
             option.headers = this.mHeaders
             option.params = this.params
             option.files = this.files

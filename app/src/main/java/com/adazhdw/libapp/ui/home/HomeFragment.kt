@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.ktlib.base.fragment.BaseFragment
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.kthttp.getCoroutines
-import com.adazhdw.ktlib.kthttp.param.Param
+import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.libapp.R
 import com.adazhdw.libapp.bean.DataFeed
 import com.adazhdw.libapp.bean.NetResponse
@@ -47,7 +47,7 @@ class HomeFragment : BaseFragment() {
             val time = measureTimeMillis {
                 val data = getCoroutines<NetResponse<DataFeed>>(
                     url = "https://wanandroid.com/wxarticle/list/408/1/json",
-                    param = Param.Builder().addHeaders(mapOf("k" to "Android")).build()
+                    params = Params.Builder().addHeaders(mapOf("k" to "Android")).build()
                 )
                 textView.text = data.toString()
             }

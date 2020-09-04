@@ -2,11 +2,12 @@ package com.adazhdw.ktlib.kthttp.request.base
 
 import com.adazhdw.ktlib.core.KtExecutors
 import com.adazhdw.ktlib.kthttp.KtHttp
+import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.constant.HttpConstant
-import com.adazhdw.ktlib.kthttp.constant.Method
 import com.adazhdw.ktlib.kthttp.exception.NetWorkUnAvailableException
-import com.adazhdw.ktlib.kthttp.param.Param
+import com.adazhdw.ktlib.kthttp.model.Method
+import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager
 import com.adazhdw.ktlib.utils.NetworkUtils
 import okhttp3.*
@@ -24,10 +25,10 @@ import java.net.UnknownHostException
 abstract class BaseRequest<R : BaseRequest<R>>(
     val method: Method,
     val url: String,
-    val param: Param,
+    val params: Params,
     val callback: RequestCallback?
 ) : Callback {
-    abstract val okHttpClient: OkHttpClient
+    private val okHttpClient: OkHttpClient = ktHttp.mOkHttpClient
 
     abstract fun getRequestBody(): RequestBody
 

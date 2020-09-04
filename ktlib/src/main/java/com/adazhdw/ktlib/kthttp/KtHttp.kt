@@ -6,13 +6,14 @@ import com.adazhdw.ktlib.BuildConfig
 import com.adazhdw.ktlib.http.OkHttpLogger
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.constant.HttpConstant
-import com.adazhdw.ktlib.kthttp.constant.Method
 import com.adazhdw.ktlib.kthttp.interceptor.RetryInterceptor
-import com.adazhdw.ktlib.kthttp.param.Param
+import com.adazhdw.ktlib.kthttp.model.Method
+import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.request.*
 import com.adazhdw.ktlib.kthttp.ssl.HttpsUtils
 import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager
 import okhttp3.Call
+import okhttp3.Headers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
@@ -25,12 +26,10 @@ import java.util.concurrent.TimeUnit
 
 class KtHttp private constructor() {
 
-    var mOkHttpClient: OkHttpClient
+    var mOkHttpClient: OkHttpClient = obtainBuilder().build()
     internal val mHandler: Handler = Handler(Looper.getMainLooper())
-
-    init {
-        mOkHttpClient = obtainBuilder().build()
-    }
+    private val commonParamBuilder = Params.Builder()
+    private var commonParams: Params? = null
 
     companion object {
         val ktHttp by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { KtHttp() }
@@ -38,120 +37,120 @@ class KtHttp private constructor() {
         /**
          * 请求
          * @param url url
-         * @param param 请求参数
+         * @param params 请求参数
          * @param callback 请求回调
          */
         @JvmOverloads
         fun request(
             method: Method,
             url: String,
-            param: Param = Param(url),
+            params: Params = Params(url),
             callback: RequestCallback? = null
         ): Call {
             return when (method) {
-                Method.GET -> get(url, param, callback)
-                Method.DELETE -> delete(url, param, callback)
-                Method.HEAD -> head(url, param, callback)
-                Method.POST -> post(url, param, callback)
-                Method.PUT -> put(url, param, callback)
-                Method.PATCH -> patch(url, param, callback)
+                Method.GET -> get(url, params, callback)
+                Method.DELETE -> delete(url, params, callback)
+                Method.HEAD -> head(url, params, callback)
+                Method.POST -> post(url, params, callback)
+                Method.PUT -> put(url, params, callback)
+                Method.PATCH -> patch(url, params, callback)
             }
         }
 
         /**
          * Get请求
          * @param url url
-         * @param param 请求参数
+         * @param params 请求参数
          * @param callback 请求回调
          */
         @JvmOverloads
         fun get(
             url: String,
-            param: Param = Param(url),
+            params: Params = Params(url),
             callback: RequestCallback? = null
         ): Call {
-            if (param.tag.isEmpty()) param.tag = url
-            return GetRequest(url, param, callback).execute()
+            if (params.tag.isEmpty()) params.tag = url
+            return GetRequest(url, params, callback).execute()
         }
 
         /**
          * Post请求
          * @param url url
-         * @param param 请求参数
+         * @param params 请求参数
          * @param callback 请求回调
          */
         @JvmOverloads
         fun post(
             url: String,
-            param: Param = Param(url),
+            params: Params = Params(url),
             callback: RequestCallback? = null
         ): Call {
-            if (param.tag.isEmpty()) param.tag = url
-            return PostRequest(url, param, callback).execute()
+            if (params.tag.isEmpty()) params.tag = url
+            return PostRequest(url, params, callback).execute()
         }
 
         /**
          * put请求
          * @param url url
-         * @param param 请求参数
+         * @param params 请求参数
          * @param callback 请求回调
          */
         @JvmOverloads
         fun put(
             url: String,
-            param: Param = Param(url),
+            params: Params = Params(url),
             callback: RequestCallback? = null
         ): Call {
-            if (param.tag.isEmpty()) param.tag = url
-            return PutRequest(url, param, callback).execute()
+            if (params.tag.isEmpty()) params.tag = url
+            return PutRequest(url, params, callback).execute()
         }
 
         /**
          * delete请求
          * @param url url
-         * @param param 请求参数
+         * @param params 请求参数
          * @param callback 请求回调
          */
         @JvmOverloads
         fun delete(
             url: String,
-            param: Param = Param(url),
+            params: Params = Params(url),
             callback: RequestCallback? = null
         ): Call {
-            if (param.tag.isEmpty()) param.tag = url
-            return DeleteRequest(url, param, callback).execute()
+            if (params.tag.isEmpty()) params.tag = url
+            return DeleteRequest(url, params, callback).execute()
         }
 
         /**
          * head请求
          * @param url url
-         * @param param 请求参数
+         * @param params 请求参数
          * @param callback 请求回调
          */
         @JvmOverloads
         fun head(
             url: String,
-            param: Param = Param(url),
+            params: Params = Params(url),
             callback: RequestCallback? = null
         ): Call {
-            if (param.tag.isEmpty()) param.tag = url
-            return HeadRequest(url, param, callback).execute()
+            if (params.tag.isEmpty()) params.tag = url
+            return HeadRequest(url, params, callback).execute()
         }
 
         /**
          * patch请求
          * @param url url
-         * @param param 请求参数
+         * @param params 请求参数
          * @param callback 请求回调
          */
         @JvmOverloads
         fun patch(
             url: String,
-            param: Param = Param(url),
+            params: Params = Params(url),
             callback: RequestCallback? = null
         ): Call {
-            if (param.tag.isEmpty()) param.tag = url
-            return PatchRequest(url, param, callback).execute()
+            if (params.tag.isEmpty()) params.tag = url
+            return PatchRequest(url, params, callback).execute()
         }
 
         fun cancel(url: String) {
@@ -162,6 +161,41 @@ class KtHttp private constructor() {
             }
         }
 
+    }
+
+    fun setCommonHeaders(headers: Map<String, String>): KtHttp {
+        commonParamBuilder.addHeaders(headers)
+        return this
+    }
+
+    fun getCommonHeaders(): Map<String, String> {
+        if (commonParams == null) {
+            commonParams = commonParamBuilder.build()
+        }
+        return commonParams?.headers ?: mapOf()
+    }
+
+    fun getHttpHeaders(): Headers {
+        if (commonParams == null) {
+            commonParams = commonParamBuilder.build()
+        }
+        val headers = Headers.Builder()
+        for ((name, value) in commonParams!!.headers) {
+            headers.add(name, value)
+        }
+        return headers.build()
+    }
+
+    fun setCommonParams(params: Map<String, String>): KtHttp {
+        commonParamBuilder.addParams(params)
+        return this
+    }
+
+    fun getCommonParams(): Map<String, String> {
+        if (commonParams == null) {
+            commonParams = commonParamBuilder.build()
+        }
+        return commonParams?.params ?: mapOf()
     }
 
     private fun obtainBuilder(timeout: Long = HttpConstant.DEFAULT_TIMEOUT): OkHttpClient.Builder {

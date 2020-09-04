@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.ktlib.base.fragment.BaseFragment
 import com.adazhdw.ktlib.ext.logD
-import com.adazhdw.ktlib.kthttp.param.Param
+import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.postCoroutines
 import com.adazhdw.libapp.R
 import com.adazhdw.libapp.bean.DataFeed
@@ -48,7 +48,7 @@ class DashboardFragment(override val layoutId: Int = R.layout.fragment_dashboard
             val time = measureTimeMillis {
                 val data = postCoroutines<NetResponse<DataFeed>>(
                     url = "https://www.wanandroid.com/article/query/0/json",
-                    param = Param.Builder().addParams(mapOf("k" to "ViewModel")).build()
+                    params = Params.Builder().addParams(mapOf("k" to "ViewModel")).build()
                 )
                 textView.text = data.toString()
             }
