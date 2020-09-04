@@ -21,7 +21,7 @@ class PostRequest(
 ) :
     BodyRequest<PostRequest>(Method.POST, url, param, callback) {
     override val okHttpClient: OkHttpClient
-        get() = KtHttp.okHttpClient
+        get() = KtHttp.ktHttp.mOkHttpClient
 
     override fun obtainRequest(requestBody: RequestBody): Request {
         return obtainRequestBuilder().post(requestBody).url(url).tag(param.tag).build()

@@ -1,8 +1,7 @@
 package com.adazhdw.ktlib.kthttp.request.base
 
-import android.os.Handler
-import android.os.Looper
 import com.adazhdw.ktlib.core.KtExecutors
+import com.adazhdw.ktlib.kthttp.KtHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.constant.HttpConstant
 import com.adazhdw.ktlib.kthttp.constant.Method
@@ -29,10 +28,6 @@ abstract class BaseRequest<R : BaseRequest<R>>(
     val callback: RequestCallback?
 ) : Callback {
     abstract val okHttpClient: OkHttpClient
-
-    companion object {
-        private val mHandler: Handler = Handler(Looper.getMainLooper())
-    }
 
     abstract fun getRequestBody(): RequestBody
 
@@ -77,7 +72,7 @@ abstract class BaseRequest<R : BaseRequest<R>>(
             ex = NetWorkUnAvailableException()
         }
         //回调跳转主线程
-        mHandler.post {
+        KtHttp.ktHttp.mHandler.post {
             handleFailure(ex, code, message, callback)
         }
     }
@@ -91,10 +86,10 @@ abstract class BaseRequest<R : BaseRequest<R>>(
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-            mHandler.post { callback?.onResponse(response, result, response.headers) }
+            KtHttp.ktHttp.mHandler.post { callback?.onResponse(response, result, response.headers) }
             if (!result.isNullOrBlank()) {
                 //回调跳转主线程
-                mHandler.post {
+                KtHttp.ktHttp.mHandler.post {
                     callback?.onSuccess(result)
                     callback?.onFinish()
                 }
@@ -103,7 +98,7 @@ abstract class BaseRequest<R : BaseRequest<R>>(
                 val method = invocation?.method()
                 val errorMsg =
                     "Response from ${method?.declaringClass?.name}.${method?.name} was null but response body type was declared as non-null"
-                mHandler.post {
+                KtHttp.ktHttp.mHandler.post {
                     handleFailure(
                         KotlinNullPointerException(errorMsg),
                         HttpConstant.ERROR_RESPONSE_BODY_ISNULL,

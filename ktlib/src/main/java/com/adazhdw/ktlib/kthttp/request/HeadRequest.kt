@@ -21,7 +21,7 @@ class HeadRequest(
 ) :
     EmptyRequest<HeadRequest>(Method.HEAD, url, param, callback) {
     override val okHttpClient: OkHttpClient
-        get() = KtHttp.okHttpClient
+        get() = KtHttp.ktHttp.mOkHttpClient
 
     override fun obtainRequest(requestBody: RequestBody): Request {
         return obtainRequestBuilder().url(mUrl).head().tag(param.tag).build()

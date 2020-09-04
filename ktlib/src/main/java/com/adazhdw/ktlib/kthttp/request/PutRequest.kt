@@ -21,7 +21,7 @@ class PutRequest(
 ) :
     BodyRequest<PutRequest>(Method.PUT, url, param, callback) {
     override val okHttpClient: OkHttpClient
-        get() = KtHttp.okHttpClient
+        get() = KtHttp.ktHttp.mOkHttpClient
 
     override fun obtainRequest(requestBody: RequestBody): Request {
         return obtainRequestBuilder().put(requestBody).url(url).tag(param.tag).build()

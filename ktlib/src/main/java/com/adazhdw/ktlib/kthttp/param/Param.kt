@@ -1,7 +1,6 @@
 package com.adazhdw.ktlib.kthttp.param
 
-import com.adazhdw.ktlib.kthttp.KtHttp
-import com.adazhdw.ktlib.kthttp.KtHttp.JSON
+import com.adazhdw.ktlib.kthttp.constant.HttpConstant
 import com.adazhdw.ktlib.utils.MimeUtil
 import okhttp3.FormBody
 import okhttp3.MediaType
@@ -41,9 +40,9 @@ class Param internal constructor(var tag: String = "") {
     }
 
     private fun getJsonRequestBody(): RequestBody {
-        return if (jsonParam.isNotBlank()) jsonParam.toRequestBody(JSON)
+        return if (jsonParam.isNotBlank()) jsonParam.toRequestBody(HttpConstant.JSON)
         else JSONObject().apply { for ((key, value) in params) put(key, value) }.toString()
-            .toRequestBody(JSON)
+            .toRequestBody(HttpConstant.JSON)
     }
 
     private fun getParamFormBody(): RequestBody {
@@ -116,13 +115,13 @@ class Param internal constructor(var tag: String = "") {
             if (!file.exists() || file.length() == 0L) return this
             val isPng = file.name.indexOf("png") > 0 || file.name.indexOf("PNG") > 0
             if (isPng) {
-                this.files.add(Part(key, Part.FileWrapper(file, KtHttp.PNG)))
+                this.files.add(Part(key, Part.FileWrapper(file, HttpConstant.PNG)))
                 return this
             }
             val isJpg = file.name.indexOf("jpg") > 0 || file.name.indexOf("JPG") > 0
                     || file.name.indexOf("jpeg") > 0 || file.name.indexOf("JPEG") > 0
             if (isJpg) {
-                this.files.add(Part(key, Part.FileWrapper(file, KtHttp.JPG)))
+                this.files.add(Part(key, Part.FileWrapper(file, HttpConstant.JPG)))
                 return this
             }
             if (!isPng && !isJpg) {

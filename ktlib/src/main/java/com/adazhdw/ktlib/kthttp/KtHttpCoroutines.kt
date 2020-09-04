@@ -18,7 +18,7 @@ import kotlin.coroutines.resumeWithException
  */
 suspend inline fun <reified T : Any> getCoroutines(
     url: String,
-    param: Param? = null
+    param: Param
 ): T {
     return requestCoroutines(method = Method.GET, url, param)
 }
@@ -28,7 +28,7 @@ suspend inline fun <reified T : Any> getCoroutines(
  */
 suspend inline fun <reified T : Any> postCoroutines(
     url: String,
-    param: Param? = null
+    param: Param
 ): T {
     return requestCoroutines(method = Method.POST, url, param)
 }
@@ -39,7 +39,7 @@ suspend inline fun <reified T : Any> postCoroutines(
 suspend inline fun <reified T : Any> requestCoroutines(
     method: Method = Method.GET,
     url: String,
-    param: Param? = null
+    param: Param
 ): T {
     return suspendCancellableCoroutine { continuation ->
         continuation.invokeOnCancellation {

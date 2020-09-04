@@ -11,7 +11,7 @@ import com.adazhdw.ktlib.kthttp.param.Param
 
 inline fun <reified T : Any> getRequest(
     url: String,
-    param: Param? = null,
+    param: Param,
     crossinline success: ((data: T) -> Unit),
     crossinline error: ((code: Int, msg: String?) -> Unit)
 ) {
@@ -29,7 +29,7 @@ inline fun <reified T : Any> getRequest(
 
 inline fun <reified T : Any> postRequest(
     url: String,
-    param: Param? = null,
+    param: Param,
     crossinline success: ((data: T) -> Unit),
     crossinline error: ((code: Int, msg: String?) -> Unit)
 ) {

@@ -21,7 +21,7 @@ class PatchRequest(
 ) :
     BodyRequest<PatchRequest>(Method.PATCH, url, param, callback) {
     override val okHttpClient: OkHttpClient
-        get() = KtHttp.okHttpClient
+        get() = KtHttp.ktHttp.mOkHttpClient
 
     override fun obtainRequest(requestBody: RequestBody): Request {
         return obtainRequestBuilder().patch(requestBody).url(url).tag(param.tag).build()
