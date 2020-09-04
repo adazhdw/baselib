@@ -7,9 +7,7 @@ import com.adazhdw.ktlib.kthttp.constant.HttpConstant
 import com.adazhdw.ktlib.kthttp.constant.Method
 import com.adazhdw.ktlib.kthttp.interceptor.RetryInterceptor
 import com.adazhdw.ktlib.kthttp.param.Param
-import com.adazhdw.ktlib.kthttp.request.GetRequest
-import com.adazhdw.ktlib.kthttp.request.KtHttpRequest
-import com.adazhdw.ktlib.kthttp.request.PostRequest
+import com.adazhdw.ktlib.kthttp.request.*
 import com.adazhdw.ktlib.kthttp.ssl.HttpsUtils
 import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager
 import okhttp3.Call
@@ -63,7 +61,7 @@ object KtHttp {
     fun request(
         method: Method,
         url: String,
-        param: Param? = null,
+        param: Param,
         callback: RequestCallback? = null
     ): Call {
         return when (method) {
@@ -85,10 +83,11 @@ object KtHttp {
     @JvmOverloads
     fun get(
         url: String,
-        param: Param? = null,
+        param: Param,
         callback: RequestCallback? = null
     ): Call {
-        return GetRequest(url, param ?: Param(), callback).execute()
+        if (param.tag.isEmpty()) param.tag = url
+        return GetRequest(url, param, callback).execute()
     }
 
     /**
@@ -100,10 +99,11 @@ object KtHttp {
     @JvmOverloads
     fun post(
         url: String,
-        param: Param? = null,
+        param: Param,
         callback: RequestCallback? = null
     ): Call {
-        return PostRequest(url, param ?: Param(), callback).execute()
+        if (param.tag.isEmpty()) param.tag = url
+        return PostRequest(url, param, callback).execute()
     }
 
     /**
@@ -115,10 +115,11 @@ object KtHttp {
     @JvmOverloads
     fun put(
         url: String,
-        param: Param? = null,
+        param: Param,
         callback: RequestCallback? = null
     ): Call {
-        return executeRequest(Method.PUT, url, param ?: Param(), callback)
+        if (param.tag.isEmpty()) param.tag = url
+        return PutRequest(url, param, callback).execute()
     }
 
     /**
@@ -130,10 +131,11 @@ object KtHttp {
     @JvmOverloads
     fun delete(
         url: String,
-        param: Param? = null,
+        param: Param,
         callback: RequestCallback? = null
     ): Call {
-        return executeRequest(Method.DELETE, url, param ?: Param(), callback)
+        if (param.tag.isEmpty()) param.tag = url
+        return DeleteRequest(url, param, callback).execute()
     }
 
     /**
@@ -145,10 +147,11 @@ object KtHttp {
     @JvmOverloads
     fun head(
         url: String,
-        param: Param? = null,
+        param: Param,
         callback: RequestCallback? = null
     ): Call {
-        return executeRequest(Method.HEAD, url, param ?: Param(), callback)
+        if (param.tag.isEmpty()) param.tag = url
+        return HeadRequest(url, param, callback).execute()
     }
 
     /**
@@ -160,26 +163,11 @@ object KtHttp {
     @JvmOverloads
     fun patch(
         url: String,
-        param: Param? = null,
-        callback: RequestCallback? = null
-    ): Call {
-        return executeRequest(Method.PATCH, url, param ?: Param(), callback)
-    }
-
-    private fun executeRequest(
-        method: Method,
-        url: String,
         param: Param,
         callback: RequestCallback? = null
     ): Call {
         if (param.tag.isEmpty()) param.tag = url
-        val request = KtHttpRequest(
-            method = method,
-            url = url,
-            param = param,
-            callback = callback
-        )
-        return request.execute()
+        return PatchRequest(url, param, callback).execute()
     }
 
     fun cancel(url: String) {
