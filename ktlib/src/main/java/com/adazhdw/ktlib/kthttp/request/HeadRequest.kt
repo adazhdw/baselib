@@ -1,6 +1,5 @@
 package com.adazhdw.ktlib.kthttp.request
 
-import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.request.base.EmptyRequest
@@ -14,10 +13,9 @@ import okhttp3.RequestBody
  **/
 class HeadRequest(
     url: String,
-    params: Params,
-    callback: RequestCallback?
+    params: Params
 ) :
-    EmptyRequest<HeadRequest>(Method.HEAD, url, params, callback) {
+    EmptyRequest<HeadRequest>(Method.HEAD, url, params) {
 
     override fun obtainRequest(requestBody: RequestBody): Request {
         return obtainRequestBuilder().url(mUrl).head().tag(params.tag).build()

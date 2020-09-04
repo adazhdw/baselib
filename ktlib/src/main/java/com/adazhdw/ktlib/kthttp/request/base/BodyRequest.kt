@@ -1,6 +1,5 @@
 package com.adazhdw.ktlib.kthttp.request.base
 
-import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
 import okhttp3.Request
@@ -14,9 +13,8 @@ import okhttp3.RequestBody
 abstract class BodyRequest<R : BodyRequest<R>>(
     method: Method,
     url: String,
-    params: Params,
-    callback: RequestCallback?
-) : BaseRequest<R>(method, url, params, callback) {
+    params: Params
+) : BaseRequest<R>(method, url, params) {
 
     override fun getRequestBody(): RequestBody = params.getRequestBody()
 

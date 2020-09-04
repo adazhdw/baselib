@@ -1,6 +1,5 @@
 package com.adazhdw.ktlib.kthttp.request
 
-import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.request.base.BodyRequest
@@ -14,10 +13,9 @@ import okhttp3.RequestBody
  **/
 class PatchRequest(
     url: String,
-    params: Params,
-    callback: RequestCallback?
+    params: Params
 ) :
-    BodyRequest<PatchRequest>(Method.PATCH, url, params, callback) {
+    BodyRequest<PatchRequest>(Method.PATCH, url, params) {
 
     override fun obtainRequest(requestBody: RequestBody): Request {
         return obtainRequestBuilder().patch(requestBody).url(url).tag(params.tag).build()

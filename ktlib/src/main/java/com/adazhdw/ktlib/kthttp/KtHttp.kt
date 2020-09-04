@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit
 
 class KtHttp private constructor() {
 
-    var mOkHttpClient: OkHttpClient = obtainBuilder().build()
+    internal var mOkHttpClient: OkHttpClient = obtainBuilder().build()
     internal val mHandler: Handler = Handler(Looper.getMainLooper())
     private val commonParamBuilder = Params.Builder()
     private var commonParams: Params? = null
@@ -70,7 +70,7 @@ class KtHttp private constructor() {
             callback: RequestCallback? = null
         ): Call {
             if (params.tag.isEmpty()) params.tag = url
-            return GetRequest(url, params, callback).execute()
+            return GetRequest(url, params).execute(callback)
         }
 
         /**
@@ -86,7 +86,7 @@ class KtHttp private constructor() {
             callback: RequestCallback? = null
         ): Call {
             if (params.tag.isEmpty()) params.tag = url
-            return PostRequest(url, params, callback).execute()
+            return PostRequest(url, params).execute(callback)
         }
 
         /**
@@ -102,7 +102,7 @@ class KtHttp private constructor() {
             callback: RequestCallback? = null
         ): Call {
             if (params.tag.isEmpty()) params.tag = url
-            return PutRequest(url, params, callback).execute()
+            return PutRequest(url, params).execute(callback)
         }
 
         /**
@@ -118,7 +118,7 @@ class KtHttp private constructor() {
             callback: RequestCallback? = null
         ): Call {
             if (params.tag.isEmpty()) params.tag = url
-            return DeleteRequest(url, params, callback).execute()
+            return DeleteRequest(url, params).execute(callback)
         }
 
         /**
@@ -134,7 +134,7 @@ class KtHttp private constructor() {
             callback: RequestCallback? = null
         ): Call {
             if (params.tag.isEmpty()) params.tag = url
-            return HeadRequest(url, params, callback).execute()
+            return HeadRequest(url, params).execute(callback)
         }
 
         /**
@@ -150,7 +150,7 @@ class KtHttp private constructor() {
             callback: RequestCallback? = null
         ): Call {
             if (params.tag.isEmpty()) params.tag = url
-            return PatchRequest(url, params, callback).execute()
+            return PatchRequest(url, params).execute(callback)
         }
 
         fun cancel(url: String) {
@@ -163,11 +163,25 @@ class KtHttp private constructor() {
 
     }
 
+    /**
+     * 设置 OkHttpClient
+     */
+    fun setOkHttpClient(client: OkHttpClient): KtHttp {
+        this.mOkHttpClient = client
+        return this
+    }
+
+    /**
+     * 设置 公共 header 参数
+     */
     fun setCommonHeaders(headers: Map<String, String>): KtHttp {
         commonParamBuilder.addHeaders(headers)
         return this
     }
 
+    /**
+     * 获取 公共 header 参数
+     */
     fun getCommonHeaders(): Map<String, String> {
         if (commonParams == null) {
             commonParams = commonParamBuilder.build()
@@ -175,6 +189,9 @@ class KtHttp private constructor() {
         return commonParams?.headers ?: mapOf()
     }
 
+    /**
+     * 获取 公共 header 参数
+     */
     fun getHttpHeaders(): Headers {
         if (commonParams == null) {
             commonParams = commonParamBuilder.build()
@@ -186,11 +203,17 @@ class KtHttp private constructor() {
         return headers.build()
     }
 
+    /**
+     * 设置 公共参数
+     */
     fun setCommonParams(params: Map<String, String>): KtHttp {
         commonParamBuilder.addParams(params)
         return this
     }
 
+    /**
+     * 获取 公共参数
+     */
     fun getCommonParams(): Map<String, String> {
         if (commonParams == null) {
             commonParams = commonParamBuilder.build()

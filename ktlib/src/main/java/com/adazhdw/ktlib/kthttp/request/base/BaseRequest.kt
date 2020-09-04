@@ -1,7 +1,6 @@
 package com.adazhdw.ktlib.kthttp.request.base
 
 import com.adazhdw.ktlib.core.KtExecutors
-import com.adazhdw.ktlib.kthttp.KtHttp
 import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.constant.HttpConstant
@@ -25,10 +24,11 @@ import java.net.UnknownHostException
 abstract class BaseRequest<R : BaseRequest<R>>(
     val method: Method,
     val url: String,
-    val params: Params,
-    val callback: RequestCallback?
+    val params: Params
 ) : Callback {
     private val okHttpClient: OkHttpClient = ktHttp.mOkHttpClient
+    private val commonHeaders = ktHttp.getCommonHeaders()
+    private var callback: RequestCallback? = null
 
     abstract fun getRequestBody(): RequestBody
 
@@ -40,14 +40,17 @@ abstract class BaseRequest<R : BaseRequest<R>>(
         return okHttpClient.newCall(mRequest)
     }
 
-    fun addHeaders(builder: Request.Builder, headers: Map<String, String>): Request.Builder {
-        for ((key, value) in headers) {
-            builder.addHeader(key, value)
-        }
+    protected fun addHeaders(
+        builder: Request.Builder,
+        headers: Map<String, String>
+    ): Request.Builder {
+        if (commonHeaders.isNotEmpty()) builder.headers(ktHttp.getHttpHeaders())
+        for ((key, value) in headers) builder.addHeader(key, value)
         return builder
     }
 
-    fun execute(): Call {
+    fun execute(callback: RequestCallback?): Call {
+        this.callback = callback
         val call = getRawCall()
         call.enqueue(this)
         OkHttpCallManager.instance.addCall(url, call)
@@ -55,7 +58,7 @@ abstract class BaseRequest<R : BaseRequest<R>>(
     }
 
     override fun onResponse(call: Call, response: Response) {
-        handleResponse(call, response, callback)
+        handleResponse(call, response)
     }
 
     override fun onFailure(call: Call, e: IOException) {
@@ -73,12 +76,12 @@ abstract class BaseRequest<R : BaseRequest<R>>(
             ex = NetWorkUnAvailableException()
         }
         //回调跳转主线程
-        KtHttp.ktHttp.mHandler.post {
-            handleFailure(ex, code, message, callback)
+        ktHttp.mHandler.post {
+            handleFailure(ex, code, message)
         }
     }
 
-    private fun handleResponse(call: Call, response: Response, callback: RequestCallback?) {
+    private fun handleResponse(call: Call, response: Response) {
         OkHttpCallManager.instance.removeCall(url)
         KtExecutors.networkIO.submit {
             var result: String? = null
@@ -87,10 +90,10 @@ abstract class BaseRequest<R : BaseRequest<R>>(
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-            KtHttp.ktHttp.mHandler.post { callback?.onResponse(response, result, response.headers) }
+            ktHttp.mHandler.post { callback?.onResponse(response, result, response.headers) }
             if (!result.isNullOrBlank()) {
                 //回调跳转主线程
-                KtHttp.ktHttp.mHandler.post {
+                ktHttp.mHandler.post {
                     callback?.onSuccess(result)
                     callback?.onFinish()
                 }
@@ -99,19 +102,18 @@ abstract class BaseRequest<R : BaseRequest<R>>(
                 val method = invocation?.method()
                 val errorMsg =
                     "Response from ${method?.declaringClass?.name}.${method?.name} was null but response body type was declared as non-null"
-                KtHttp.ktHttp.mHandler.post {
+                ktHttp.mHandler.post {
                     handleFailure(
                         KotlinNullPointerException(errorMsg),
                         HttpConstant.ERROR_RESPONSE_BODY_ISNULL,
-                        "response'body is null",
-                        callback
+                        "response'body is null"
                     )
                 }
             }
         }
     }
 
-    private fun handleFailure(e: Exception, code: Int, msg: String?, callback: RequestCallback?) {
+    private fun handleFailure(e: Exception, code: Int, msg: String?) {
         callback?.onError(e, code, msg)
         callback?.onFinish()
     }

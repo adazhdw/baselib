@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.kthttp.request.base
 
-import com.adazhdw.ktlib.kthttp.callback.RequestCallback
+import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.util.RequestUrlUtil
@@ -16,12 +16,18 @@ import okhttp3.RequestBody
 abstract class EmptyRequest<R : EmptyRequest<R>>(
     method: Method,
     url: String,
-    params: Params,
-    callback: RequestCallback?
+    params: Params
 ) :
-    BaseRequest<R>(method, url, params, callback) {
+    BaseRequest<R>(method, url, params) {
     protected val mUrl: String
-        get() = RequestUrlUtil.getFullUrl(url, params.params, params.urlEncoder)
+
+    init {
+        val commonParams = mutableMapOf<String, String>().apply {
+            putAll(ktHttp.getCommonParams())
+            putAll(params.params)
+        }
+        mUrl = RequestUrlUtil.getFullUrl(url, commonParams, params.urlEncoder)
+    }
 
     final override fun getRequestBody(): RequestBody = FormBody.Builder().build()
 
