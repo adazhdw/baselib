@@ -25,7 +25,7 @@ abstract class BaseRequest<R : BaseRequest<R>>(
     val method: Method,
     val url: String,
     val params: Params
-) : Callback {
+) {
     private val okHttpClient: OkHttpClient = ktHttp.mOkHttpClient
     private val commonHeaders = ktHttp.getCommonHeaders()
     private var callback: RequestCallback? = null
@@ -52,33 +52,33 @@ abstract class BaseRequest<R : BaseRequest<R>>(
     fun execute(callback: RequestCallback?): Call {
         this.callback = callback
         val call = getRawCall()
-        call.enqueue(this)
+        call.enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                handleResponse(call, response)
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                OkHttpCallManager.instance.removeCall(url)
+                var ex: Exception = e
+                var message = e.message ?: ""
+                var code = HttpConstant.ERROR_RESPONSE_ON_FAILURE
+                if (e is SocketTimeoutException) {
+                    message = "request timeout"
+                } else if (e is InterruptedIOException && e.message == "timeout") {
+                    message = "request timeout"
+                } else if (e is UnknownHostException && !NetworkUtils.isConnected()) {
+                    message = "network unavailable"
+                    code = HttpConstant.ERROR_NETWORK_UNAVAILABLE
+                    ex = NetWorkUnAvailableException()
+                }
+                //回调跳转主线程
+                ktHttp.mHandler.post {
+                    handleFailure(ex, code, message)
+                }
+            }
+        })
         OkHttpCallManager.instance.addCall(url, call)
         return call
-    }
-
-    override fun onResponse(call: Call, response: Response) {
-        handleResponse(call, response)
-    }
-
-    override fun onFailure(call: Call, e: IOException) {
-        OkHttpCallManager.instance.removeCall(url)
-        var ex: Exception = e
-        var message = e.message ?: ""
-        var code = HttpConstant.ERROR_RESPONSE_ON_FAILURE
-        if (e is SocketTimeoutException) {
-            message = "request timeout"
-        } else if (e is InterruptedIOException && e.message == "timeout") {
-            message = "request timeout"
-        } else if (e is UnknownHostException && !NetworkUtils.isConnected()) {
-            message = "network unavailable"
-            code = HttpConstant.ERROR_NETWORK_UNAVAILABLE
-            ex = NetWorkUnAvailableException()
-        }
-        //回调跳转主线程
-        ktHttp.mHandler.post {
-            handleFailure(ex, code, message)
-        }
     }
 
     private fun handleResponse(call: Call, response: Response) {
