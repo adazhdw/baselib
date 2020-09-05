@@ -56,6 +56,8 @@ abstract class BaseRequest<R : BaseRequest<R>>(
     fun execute(callback: RequestCallback?): Call {
         this.callback = callback
         val call = getRawCall()
+        this.callback?.onStart(call)
+        OkHttpCallManager.instance.addCall(url, call)
         call.enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 handleResponse(call, response)
@@ -81,8 +83,6 @@ abstract class BaseRequest<R : BaseRequest<R>>(
                 }
             }
         })
-        this.callback?.onStart(call)
-        OkHttpCallManager.instance.addCall(url, call)
         return call
     }
 
