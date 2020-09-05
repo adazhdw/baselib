@@ -1,6 +1,5 @@
 package com.adazhdw.ktlib.kthttp.model
 
-import com.adazhdw.ktlib.kthttp.constant.HttpConstant
 import com.adazhdw.ktlib.utils.MimeUtil
 import okhttp3.FormBody
 import okhttp3.MediaType

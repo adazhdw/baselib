@@ -5,8 +5,8 @@ import android.os.Looper
 import com.adazhdw.ktlib.BuildConfig
 import com.adazhdw.ktlib.http.OkHttpLogger
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
-import com.adazhdw.ktlib.kthttp.constant.HttpConstant
 import com.adazhdw.ktlib.kthttp.interceptor.RetryInterceptor
+import com.adazhdw.ktlib.kthttp.model.HttpConstant
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.request.*

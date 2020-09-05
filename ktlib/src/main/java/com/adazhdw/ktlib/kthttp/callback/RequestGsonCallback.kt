@@ -1,10 +1,10 @@
 package com.adazhdw.ktlib.kthttp.callback
 
-import com.adazhdw.ktlib.kthttp.constant.HttpConstant
+import com.adazhdw.ktlib.kthttp.model.HttpConstant
 import com.adazhdw.ktlib.kthttp.util.GsonUtils
 import com.adazhdw.ktlib.kthttp.util.TypeUtil
 import com.google.gson.JsonParseException
-import okhttp3.Headers
+import okhttp3.Call
 import okhttp3.Response
 import java.lang.reflect.Type
 
@@ -20,27 +20,27 @@ abstract class RequestGsonCallback<T : Any> : RequestCallback {
         mType = getSuperclassTypeParameter(javaClass)
     }
 
-    override fun onStart() {
+    override fun onStart(call: Call) {
 
     }
 
-    override fun onResponse(httpResponse: Response?, response: String?, headers: Headers) {
+    override fun onResponse(httpResponse: Response, response: String?) {
 
     }
 
-    override fun onSuccess(result: String) {
+    override fun onResponse(result: String) {
         try {
             val data = GsonUtils.fromJson<T>(result, mType)
             onSuccess(data)
         } catch (e: JsonParseException) {
-            onError(e, HttpConstant.ERROR_JSON_PARSE_EXCEPTION, "data parse error${e.message}")
+            onFailure(e, HttpConstant.ERROR_JSON_PARSE_EXCEPTION, "data parse error${e.message}")
         }
     }
 
     abstract fun onSuccess(data: T)
     abstract fun onError(code: Int, msg: String?)
 
-    override fun onError(e: Exception, code: Int, msg: String?) {
+    override fun onFailure(e: Exception, code: Int, msg: String?) {
         onError(code, msg)
     }
 

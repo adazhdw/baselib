@@ -47,8 +47,8 @@ suspend inline fun <reified T : Any> requestCoroutines(
         }
         KtHttp.request(method, url, params, object : RequestGsonCallback<T>() {
 
-            override fun onError(e: Exception, code: Int, msg: String?) {
-                super.onError(e, code, msg)
+            override fun onFailure(e: Exception, code: Int, msg: String?) {
+                super.onFailure(e, code, msg)
                 if (continuation.isCancelled) return
                 continuation.resumeWithException(e)
             }

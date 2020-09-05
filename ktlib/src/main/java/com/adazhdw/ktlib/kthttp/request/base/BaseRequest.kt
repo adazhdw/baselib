@@ -3,8 +3,8 @@ package com.adazhdw.ktlib.kthttp.request.base
 import com.adazhdw.ktlib.core.KtExecutors
 import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
-import com.adazhdw.ktlib.kthttp.constant.HttpConstant
 import com.adazhdw.ktlib.kthttp.exception.NetWorkUnAvailableException
+import com.adazhdw.ktlib.kthttp.model.HttpConstant
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager
@@ -81,6 +81,7 @@ abstract class BaseRequest<R : BaseRequest<R>>(
                 }
             }
         })
+        this.callback?.onStart(call)
         OkHttpCallManager.instance.addCall(url, call)
         return call
     }
@@ -94,12 +95,12 @@ abstract class BaseRequest<R : BaseRequest<R>>(
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-            ktHttp.mHandler.post { callback?.onResponse(response, result, response.headers) }
+            ktHttp.mHandler.post { this.callback?.onResponse(response, result) }
             if (!result.isNullOrBlank()) {
                 //回调跳转主线程
                 ktHttp.mHandler.post {
-                    callback?.onSuccess(result)
-                    callback?.onFinish()
+                    this.callback?.onResponse(result)
+                    this.callback?.onFinish()
                 }
             } else {
                 val invocation = call.request().tag(Invocation::class.java)
@@ -118,8 +119,8 @@ abstract class BaseRequest<R : BaseRequest<R>>(
     }
 
     private fun handleFailure(e: Exception, code: Int, msg: String?) {
-        callback?.onError(e, code, msg)
-        callback?.onFinish()
+        this.callback?.onFailure(e, code, msg)
+        this.callback?.onFinish()
     }
 
 }
