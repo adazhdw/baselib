@@ -17,7 +17,7 @@ class HeadRequest(
 ) : EmptyRequest<HeadRequest>(Method.HEAD, url, params) {
 
     override fun obtainRequest(requestBody: RequestBody): Request {
-        return obtainRequestBuilder().url(mUrl).head().tag(params.tag).build()
+        return requestBuilder().url(mUrl).head().tag(params.tag).build()
     }
 
 

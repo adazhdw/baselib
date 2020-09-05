@@ -34,18 +34,22 @@ abstract class BaseRequest<R : BaseRequest<R>>(
 
     abstract fun obtainRequest(requestBody: RequestBody): Request
 
+    /**
+     * 获取当前请求的 okhttp.Call
+     */
     private fun getRawCall(): Call {
         val requestBody = getRequestBody()
         val mRequest = obtainRequest(requestBody)
         return okHttpClient.newCall(mRequest)
     }
 
-    protected fun addHeaders(
-        builder: Request.Builder,
-        headers: Map<String, String>
-    ): Request.Builder {
+    /**
+     * 生成一个 Request.Builder，并且给当前请求 Request 添加 headers
+     */
+    protected fun requestBuilder(): Request.Builder {
+        val builder = Request.Builder()
         if (commonHeaders.isNotEmpty()) builder.headers(ktHttp.getHttpHeaders())
-        for ((key, value) in headers) builder.addHeader(key, value)
+        for ((key, value) in params.headers) builder.addHeader(key, value)
         return builder
     }
 

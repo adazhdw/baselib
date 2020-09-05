@@ -17,7 +17,7 @@ class PutRequest(
 ) : BodyRequest<PutRequest>(Method.PUT, url, params) {
 
     override fun obtainRequest(requestBody: RequestBody): Request {
-        return obtainRequestBuilder().put(requestBody).url(url).tag(params.tag).build()
+        return requestBuilder().put(requestBody).url(url).tag(params.tag).build()
     }
 
 }

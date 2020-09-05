@@ -4,7 +4,6 @@ import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.util.RequestUrlUtil
-import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.internal.EMPTY_REQUEST
 
@@ -30,9 +29,5 @@ abstract class EmptyRequest<R : EmptyRequest<R>>(
     }
 
     final override fun getRequestBody(): RequestBody = EMPTY_REQUEST
-
-    protected fun obtainRequestBuilder(): Request.Builder {
-        return addHeaders(Request.Builder(), params.headers)
-    }
 
 }
