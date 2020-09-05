@@ -10,7 +10,8 @@ import java.io.IOException
  * date-time：2020/9/2 13:37
  * description：
  **/
-class RetryInterceptor(private val maxCount: Int = 3) : Interceptor {
+class RetryInterceptor(private val maxCount: Int = 3, private val sleepMillis: Long = 2000L) :
+    Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         var response: Response?
@@ -20,7 +21,7 @@ class RetryInterceptor(private val maxCount: Int = 3) : Interceptor {
         while (response == null && tryCount < maxCount) {
             tryCount++
             try {
-                Thread.sleep(1000L)
+                Thread.sleep(sleepMillis)
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }

@@ -14,8 +14,7 @@ import okhttp3.RequestBody
 class PostRequest(
     url: String,
     params: Params
-) :
-    BodyRequest<PostRequest>(Method.POST, url, params) {
+) : BodyRequest<PostRequest>(Method.POST, url, params) {
 
     override fun obtainRequest(requestBody: RequestBody): Request {
         return obtainRequestBuilder().post(requestBody).url(url).tag(params.tag).build()

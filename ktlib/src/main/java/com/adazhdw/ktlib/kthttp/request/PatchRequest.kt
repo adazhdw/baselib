@@ -14,8 +14,7 @@ import okhttp3.RequestBody
 class PatchRequest(
     url: String,
     params: Params
-) :
-    BodyRequest<PatchRequest>(Method.PATCH, url, params) {
+) : BodyRequest<PatchRequest>(Method.PATCH, url, params) {
 
     override fun obtainRequest(requestBody: RequestBody): Request {
         return obtainRequestBuilder().patch(requestBody).url(url).tag(params.tag).build()

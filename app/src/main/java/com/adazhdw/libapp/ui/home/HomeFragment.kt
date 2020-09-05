@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.text.parseAsHtml
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.ktlib.base.fragment.BaseFragment
@@ -42,21 +43,25 @@ class HomeFragment : BaseFragment() {
         launch {
             /*val data = requestCoroutines<NetResponse<DataFeed>>(
                 url = "https://wanandroid.com/wxarticle/list/408/1/json",
-                params = KParams.Builder().addHeaders(mapOf("k" to "Android")).build()
+                params = KParams.Builder().addParams(mapOf("k" to "Android")).build()
             )*/
             val time = measureTimeMillis {
                 val data = getCoroutines<NetResponse<DataFeed>>(
                     url = "https://wanandroid.com/wxarticle/list/408/1/json",
-                    params = Params.Builder().addHeaders(mapOf("k" to "Android")).build()
+                    params = Params.Builder().addParams(mapOf("k" to "Android")).build()
                 )
-                textView.text = data.toString()
+                val stringBuilder = StringBuilder()
+                for (item in data.data.datas) {
+                    stringBuilder.append("标题：${item.title}".parseAsHtml()).append("\n\n")
+                }
+                textView.text = stringBuilder.toString()
             }
             "$time".logD(TAG)
         }
 
         /*getRequest<NetResponse<DataFeed>>(
             url = "https://wanandroid.com/wxarticle/list/408/1/json",
-            params = KParams.Builder().addHeaders(mapOf("k" to "Android")).build(),
+            params = KParams.Builder().addParams(mapOf("k" to "Android")).build(),
             success = {
                 textView.text = it.toString()
             }, error = { code, msg ->

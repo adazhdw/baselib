@@ -14,8 +14,7 @@ import okhttp3.RequestBody
 class HeadRequest(
     url: String,
     params: Params
-) :
-    EmptyRequest<HeadRequest>(Method.HEAD, url, params) {
+) : EmptyRequest<HeadRequest>(Method.HEAD, url, params) {
 
     override fun obtainRequest(requestBody: RequestBody): Request {
         return obtainRequestBuilder().url(mUrl).head().tag(params.tag).build()

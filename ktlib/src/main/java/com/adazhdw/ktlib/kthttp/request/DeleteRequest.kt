@@ -14,8 +14,7 @@ import okhttp3.RequestBody
 class DeleteRequest(
     url: String,
     params: Params
-) :
-    EmptyRequest<DeleteRequest>(Method.DELETE, url, params) {
+) : EmptyRequest<DeleteRequest>(Method.DELETE, url, params) {
 
     override fun obtainRequest(requestBody: RequestBody): Request {
         return obtainRequestBuilder().url(mUrl).delete().tag(params.tag).build()

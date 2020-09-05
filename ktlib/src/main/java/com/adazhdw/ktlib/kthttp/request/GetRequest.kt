@@ -14,8 +14,7 @@ import okhttp3.RequestBody
 class GetRequest(
     url: String,
     params: Params
-) :
-    EmptyRequest<GetRequest>(Method.GET, url, params) {
+) : EmptyRequest<GetRequest>(Method.GET, url, params) {
 
     override fun obtainRequest(requestBody: RequestBody): Request {
         return obtainRequestBuilder().url(mUrl).get().tag(params.tag).build()

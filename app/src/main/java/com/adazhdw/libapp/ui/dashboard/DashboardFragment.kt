@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.text.parseAsHtml
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.ktlib.base.fragment.BaseFragment
@@ -43,21 +44,26 @@ class DashboardFragment(override val layoutId: Int = R.layout.fragment_dashboard
             /*val data = requestCoroutines<NetResponse<DataFeed>>(
                 method = POST,
                 url = "https://www.wanandroid.com/article/query/0/json",
-                params = KParams.Builder().addHeaders(mapOf("k" to "ViewModel")).build()
+                params = KParams.Builder().addParams(mapOf("k" to "ViewModel")).build()
             )*/
             val time = measureTimeMillis {
                 val data = postCoroutines<NetResponse<DataFeed>>(
                     url = "https://www.wanandroid.com/article/query/0/json",
                     params = Params.Builder().addParams(mapOf("k" to "ViewModel")).build()
                 )
-                textView.text = data.toString()
+
+                val stringBuilder = StringBuilder()
+                for (item in data.data.datas) {
+                    stringBuilder.append("标题：${item.title}".parseAsHtml()).append("\n\n")
+                }
+                textView.text = stringBuilder.toString()
             }
             "$time".logD(TAG)
         }
 
         /*postRequest<NetResponse<DataFeed>>(
             url = "https://www.wanandroid.com/article/query/0/json",
-            params = KParams.Builder().addHeaders(mapOf("k" to "ViewModel")).build(),
+            params = KParams.Builder().addParams(mapOf("k" to "ViewModel")).build(),
             success = {
                 textView.text = it.toString()
             }, error = { code, msg ->

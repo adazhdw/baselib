@@ -14,8 +14,7 @@ import okhttp3.RequestBody
 class PutRequest(
     url: String,
     params: Params
-) :
-    BodyRequest<PutRequest>(Method.PUT, url, params) {
+) : BodyRequest<PutRequest>(Method.PUT, url, params) {
 
     override fun obtainRequest(requestBody: RequestBody): Request {
         return obtainRequestBuilder().put(requestBody).url(url).tag(params.tag).build()
