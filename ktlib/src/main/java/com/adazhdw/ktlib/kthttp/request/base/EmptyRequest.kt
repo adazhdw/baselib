@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.kthttp.request.base
 
-import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
+import com.adazhdw.ktlib.kthttp.KtHttp
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.util.RequestUrlUtil
@@ -22,7 +22,7 @@ abstract class EmptyRequest<R : EmptyRequest<R>>(
 
     init {
         val commonParams = mutableMapOf<String, String>().apply {
-            putAll(ktHttp.getCommonParams())
+            putAll(KtHttp.getInstance().getCommonParams())
             putAll(params.params)
         }
         mUrl = RequestUrlUtil.getFullUrl2(url, commonParams, params.urlEncoder)

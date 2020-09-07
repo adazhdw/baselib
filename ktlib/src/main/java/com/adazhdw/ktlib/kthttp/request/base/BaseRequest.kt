@@ -1,7 +1,7 @@
 package com.adazhdw.ktlib.kthttp.request.base
 
 import com.adazhdw.ktlib.core.KtExecutors
-import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
+import com.adazhdw.ktlib.kthttp.KtHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.exception.NetWorkUnAvailableException
 import com.adazhdw.ktlib.kthttp.model.HttpConstant
@@ -26,8 +26,8 @@ abstract class BaseRequest<R : BaseRequest<R>>(
     val url: String,
     val params: Params
 ) {
-    private val okHttpClient: OkHttpClient = ktHttp.mOkHttpClient
-    private val commonHeaders = ktHttp.getCommonHeaders()
+    private val okHttpClient: OkHttpClient = KtHttp.getInstance().mOkHttpClient
+    private val commonHeaders = KtHttp.getInstance().getCommonHeaders()
     private var callback: RequestCallback? = null
 
     abstract fun getRequestBody(): RequestBody
@@ -48,7 +48,7 @@ abstract class BaseRequest<R : BaseRequest<R>>(
      */
     protected fun requestBuilder(): Request.Builder {
         val builder = Request.Builder()
-        if (commonHeaders.isNotEmpty()) builder.headers(ktHttp.getHttpHeaders())
+        if (commonHeaders.isNotEmpty()) builder.headers(KtHttp.getInstance().getHttpHeaders())
         for ((key, value) in params.headers) builder.addHeader(key, value)
         return builder
     }
@@ -78,7 +78,7 @@ abstract class BaseRequest<R : BaseRequest<R>>(
                     ex = NetWorkUnAvailableException()
                 }
                 //回调跳转主线程
-                ktHttp.mHandler.post {
+                KtHttp.getInstance().mHandler.post {
                     handleFailure(ex, code, message)
                 }
             }
@@ -95,10 +95,10 @@ abstract class BaseRequest<R : BaseRequest<R>>(
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-            ktHttp.mHandler.post { this.callback?.onResponse(response, result) }
+            KtHttp.getInstance().mHandler.post { this.callback?.onResponse(response, result) }
             if (!result.isNullOrBlank()) {
                 //回调跳转主线程
-                ktHttp.mHandler.post {
+                KtHttp.getInstance().mHandler.post {
                     this.callback?.onResponse(result)
                     this.callback?.onFinish()
                 }
@@ -107,7 +107,7 @@ abstract class BaseRequest<R : BaseRequest<R>>(
                 val method = invocation?.method()
                 val errorMsg =
                     "Response from ${method?.declaringClass?.name}.${method?.name} was null but response body type was declared as non-null"
-                ktHttp.mHandler.post {
+                KtHttp.getInstance().mHandler.post {
                     handleFailure(
                         KotlinNullPointerException(errorMsg),
                         HttpConstant.ERROR_RESPONSE_BODY_ISNULL,

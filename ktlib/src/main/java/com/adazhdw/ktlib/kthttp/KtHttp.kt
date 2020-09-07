@@ -3,7 +3,6 @@ package com.adazhdw.ktlib.kthttp
 import android.os.Handler
 import android.os.Looper
 import com.adazhdw.ktlib.BuildConfig
-import com.adazhdw.ktlib.http.OkHttpLogger
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.interceptor.RetryInterceptor
 import com.adazhdw.ktlib.kthttp.model.HttpConstant
@@ -12,6 +11,7 @@ import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.request.*
 import com.adazhdw.ktlib.kthttp.ssl.HttpsUtils
 import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager
+import com.adazhdw.ktlib.kthttp.util.OkHttpLogger
 import okhttp3.Call
 import okhttp3.Headers
 import okhttp3.OkHttpClient
@@ -32,7 +32,9 @@ class KtHttp private constructor() {
     private var commonParams: Params? = null
 
     companion object {
-        val ktHttp by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { KtHttp() }
+        fun getInstance() = ktHttp
+
+        private val ktHttp by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { KtHttp() }
 
         /**
          * 请求

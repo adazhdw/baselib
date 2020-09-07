@@ -1,6 +1,7 @@
 package com.adazhdw.ktlib.http
 
 import com.adazhdw.ktlib.BuildConfig
+import com.adazhdw.ktlib.kthttp.util.OkHttpLogger
 import com.adazhdw.ktlib.mBaseUrl
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
@@ -49,9 +50,9 @@ object RetrofitClient {
 
     private fun getClient(): OkHttpClient {
         return OkHttpClient.Builder()
-            .connectTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-            .callTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-            .writeTimeout(HttpConstant.DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+            .connectTimeout(15L, TimeUnit.SECONDS)
+            .callTimeout(15L, TimeUnit.SECONDS)
+            .writeTimeout(15L, TimeUnit.SECONDS)
             .addNetworkInterceptor(getLoggingInterceptor())
             .build()
     }

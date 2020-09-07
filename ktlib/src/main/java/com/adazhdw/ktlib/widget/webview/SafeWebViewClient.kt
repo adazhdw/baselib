@@ -16,7 +16,7 @@ open class SafeWebViewClient : WebViewClient() {
     /**
      * 是否在webView内加载页面
      */
-    override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+    override fun shouldOverrideUrlLoading(view: WebView?, url: String): Boolean {
         view?.loadUrl(url)
         return true
     }
