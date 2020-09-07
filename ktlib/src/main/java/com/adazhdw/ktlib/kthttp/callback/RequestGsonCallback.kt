@@ -21,7 +21,7 @@ abstract class RequestGsonCallback<T : Any> : RequestCallbackImpl() {
     override fun onResponse(result: String) {
         try {
             val data = GsonUtils.fromJson<T>(result, mType)
-            onSuccess(data)
+            this.onSuccess(data)
         } catch (e: JsonParseException) {
             onFailure(e, HttpConstant.ERROR_JSON_PARSE_EXCEPTION, "data parse error${e.message}")
         }
@@ -31,7 +31,7 @@ abstract class RequestGsonCallback<T : Any> : RequestCallbackImpl() {
     abstract fun onError(code: Int, msg: String?)
 
     override fun onFailure(e: Exception, code: Int, msg: String?) {
-        onError(code, msg)
+        this.onError(code, msg)
     }
 
     private fun getSuperclassTypeParameter(subclass: Class<*>): Type? {
