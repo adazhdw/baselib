@@ -12,7 +12,7 @@ import com.adazhdw.ktlib.kthttp.model.Params
 
 inline fun <reified T : Any> getRequest(
     url: String,
-    params: Params,
+    params: Params = Params.Builder().setTag(url).build(),
     crossinline success: ((data: T) -> Unit),
     crossinline error: ((code: Int, msg: String?) -> Unit)
 ) {
@@ -30,7 +30,7 @@ inline fun <reified T : Any> getRequest(
 
 inline fun <reified T : Any> postRequest(
     url: String,
-    params: Params,
+    params: Params = Params.Builder().setTag(url).build(),
     crossinline success: ((data: T) -> Unit),
     crossinline error: ((code: Int, msg: String?) -> Unit)
 ) {

@@ -19,7 +19,7 @@ import kotlin.coroutines.resumeWithException
  */
 suspend inline fun <reified T : Any> getCoroutines(
     url: String,
-    params: Params
+    params: Params = Params.Builder().setTag(url).build()
 ): T {
     return requestCoroutines(method = Method.GET, url, params)
 }
@@ -29,7 +29,7 @@ suspend inline fun <reified T : Any> getCoroutines(
  */
 suspend inline fun <reified T : Any> postCoroutines(
     url: String,
-    params: Params
+    params: Params = Params.Builder().setTag(url).build()
 ): T {
     return requestCoroutines(method = Method.POST, url, params)
 }
@@ -40,7 +40,7 @@ suspend inline fun <reified T : Any> postCoroutines(
 suspend inline fun <reified T : Any> requestCoroutines(
     method: Method = Method.GET,
     url: String,
-    params: Params
+    params: Params = Params.Builder().setTag(url).build()
 ): T {
     return suspendCancellableCoroutine { continuation ->
         var request: BaseRequest<*>? = null

@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit
 
 class KtHttp private constructor() {
 
-    internal var mOkHttpClient: OkHttpClient = obtainBuilder()
+    internal var mOkHttpClient: OkHttpClient = obtainClient()
     internal val mHandler: Handler = Handler(Looper.getMainLooper())
     private val commonParamBuilder = Params.Builder()
     private var commonParams: Params? = null
@@ -222,7 +222,7 @@ class KtHttp private constructor() {
     /**
      * 获取内置 okHttpClient
      */
-    private fun obtainBuilder(timeout: Long = HttpConstant.DEFAULT_TIMEOUT): OkHttpClient {
+    private fun obtainClient(timeout: Long = HttpConstant.DEFAULT_TIMEOUT): OkHttpClient {
         val sslParams = HttpsUtils.getSslSocketFactory()
         return OkHttpClient.Builder()
             .connectTimeout(timeout, TimeUnit.SECONDS)
