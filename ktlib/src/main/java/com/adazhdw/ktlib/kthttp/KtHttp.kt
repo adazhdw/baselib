@@ -9,6 +9,7 @@ import com.adazhdw.ktlib.kthttp.model.HttpConstant
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.request.*
+import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
 import com.adazhdw.ktlib.kthttp.ssl.HttpsUtils
 import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager
 import com.adazhdw.ktlib.kthttp.util.OkHttpLogger
@@ -48,15 +49,16 @@ class KtHttp private constructor() {
             url: String,
             params: Params = Params(url),
             callback: RequestCallback? = null
-        ): Call {
-            return when (method) {
-                Method.GET -> get(url, params, callback)
-                Method.DELETE -> delete(url, params, callback)
-                Method.HEAD -> head(url, params, callback)
-                Method.POST -> post(url, params, callback)
-                Method.PUT -> put(url, params, callback)
-                Method.PATCH -> patch(url, params, callback)
+        ): BaseRequest<*> {
+            val request = when (method) {
+                Method.GET -> get(url, params)
+                Method.DELETE -> delete(url, params)
+                Method.HEAD -> head(url, params)
+                Method.POST -> post(url, params)
+                Method.PUT -> put(url, params)
+                Method.PATCH -> patch(url, params)
             }
+            return request.execute(callback)
         }
 
         /**
@@ -68,11 +70,10 @@ class KtHttp private constructor() {
         @JvmOverloads
         fun get(
             url: String,
-            params: Params = Params(url),
-            callback: RequestCallback? = null
-        ): Call {
+            params: Params = Params(url)
+        ): GetRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return GetRequest(url, params).execute(callback)
+            return GetRequest(url, params)
         }
 
         /**
@@ -84,11 +85,10 @@ class KtHttp private constructor() {
         @JvmOverloads
         fun post(
             url: String,
-            params: Params = Params(url),
-            callback: RequestCallback? = null
-        ): Call {
+            params: Params = Params(url)
+        ): PostRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return PostRequest(url, params).execute(callback)
+            return PostRequest(url, params)
         }
 
         /**
@@ -100,11 +100,10 @@ class KtHttp private constructor() {
         @JvmOverloads
         fun put(
             url: String,
-            params: Params = Params(url),
-            callback: RequestCallback? = null
-        ): Call {
+            params: Params = Params(url)
+        ): PutRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return PutRequest(url, params).execute(callback)
+            return PutRequest(url, params)
         }
 
         /**
@@ -116,11 +115,10 @@ class KtHttp private constructor() {
         @JvmOverloads
         fun delete(
             url: String,
-            params: Params = Params(url),
-            callback: RequestCallback? = null
-        ): Call {
+            params: Params = Params(url)
+        ): DeleteRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return DeleteRequest(url, params).execute(callback)
+            return DeleteRequest(url, params)
         }
 
         /**
@@ -132,11 +130,10 @@ class KtHttp private constructor() {
         @JvmOverloads
         fun head(
             url: String,
-            params: Params = Params(url),
-            callback: RequestCallback? = null
-        ): Call {
+            params: Params = Params(url)
+        ): HeadRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return HeadRequest(url, params).execute(callback)
+            return HeadRequest(url, params)
         }
 
         /**
@@ -148,11 +145,10 @@ class KtHttp private constructor() {
         @JvmOverloads
         fun patch(
             url: String,
-            params: Params = Params(url),
-            callback: RequestCallback? = null
-        ): Call {
+            params: Params = Params(url)
+        ): PatchRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return PatchRequest(url, params).execute(callback)
+            return PatchRequest(url, params)
         }
 
         fun cancel(url: String) {

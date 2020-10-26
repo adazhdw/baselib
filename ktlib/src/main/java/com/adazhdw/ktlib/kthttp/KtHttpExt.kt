@@ -1,6 +1,7 @@
 package com.adazhdw.ktlib.kthttp
 
 import com.adazhdw.ktlib.kthttp.callback.RequestGsonCallback
+import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
 
 /**
@@ -15,7 +16,7 @@ inline fun <reified T : Any> getRequest(
     crossinline success: ((data: T) -> Unit),
     crossinline error: ((code: Int, msg: String?) -> Unit)
 ) {
-    KtHttp.get(url, params, object : RequestGsonCallback<T>() {
+    KtHttp.request(Method.GET, url, params, object : RequestGsonCallback<T>() {
 
         override fun onError(code: Int, msg: String?) {
             error.invoke(code, msg)
@@ -33,7 +34,7 @@ inline fun <reified T : Any> postRequest(
     crossinline success: ((data: T) -> Unit),
     crossinline error: ((code: Int, msg: String?) -> Unit)
 ) {
-    KtHttp.post(url, params, object : RequestGsonCallback<T>() {
+    KtHttp.request(Method.POST, url, params, object : RequestGsonCallback<T>() {
 
         override fun onError(code: Int, msg: String?) {
             error.invoke(code, msg)

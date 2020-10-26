@@ -16,8 +16,7 @@ abstract class EmptyRequest<R : EmptyRequest<R>>(
     method: Method,
     url: String,
     params: Params
-) :
-    BaseRequest<R>(method, url, params) {
+) : BaseRequest<R>(method, url, params) {
     protected val mUrl: String
 
     init {

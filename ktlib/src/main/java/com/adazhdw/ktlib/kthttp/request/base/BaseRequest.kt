@@ -28,7 +28,8 @@ abstract class BaseRequest<R : BaseRequest<R>>(
 ) {
     private val okHttpClient: OkHttpClient = KtHttp.getInstance().mOkHttpClient
     private val commonHeaders = KtHttp.getInstance().getCommonHeaders()
-    private var callback: RequestCallback? = null
+    var mCall: Call? = null
+        private set
 
     abstract fun getRequestBody(): RequestBody
 
@@ -53,14 +54,17 @@ abstract class BaseRequest<R : BaseRequest<R>>(
         return builder
     }
 
-    fun execute(callback: RequestCallback?): Call {
-        this.callback = callback
+    /**
+     * 执行网络请求
+     */
+    @Suppress("UNCHECKED_CAST")
+    fun execute(callback: RequestCallback?): R {
         val call = getRawCall()
-        this.callback?.onStart(call)
+        callback?.onStart(call)
         OkHttpCallManager.instance.addCall(url, call)
         call.enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                handleResponse(call, response)
+                handleResponse(call, response, callback)
             }
 
             override fun onFailure(call: Call, e: IOException) {
@@ -79,14 +83,22 @@ abstract class BaseRequest<R : BaseRequest<R>>(
                 }
                 //回调跳转主线程
                 KtHttp.getInstance().mHandler.post {
-                    handleFailure(ex, code, message)
+                    handleFailure(ex, code, message, callback)
                 }
             }
         })
-        return call
+        mCall = call
+        return this as R
     }
 
-    private fun handleResponse(call: Call, response: Response) {
+    /**
+     * 取消网络请求
+     */
+    fun cancel() {
+        if (mCall?.isCanceled() == false) mCall?.cancel()
+    }
+
+    private fun handleResponse(call: Call, response: Response, callback: RequestCallback?) {
         OkHttpCallManager.instance.removeCall(url)
         KtExecutors.networkIO.submit {
             var result: String? = null
@@ -95,12 +107,12 @@ abstract class BaseRequest<R : BaseRequest<R>>(
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-            KtHttp.getInstance().mHandler.post { this.callback?.onResponse(response, result) }
+            KtHttp.getInstance().mHandler.post { callback?.onResponse(response, result) }
             if (!result.isNullOrBlank()) {
                 //回调跳转主线程
                 KtHttp.getInstance().mHandler.post {
-                    this.callback?.onResponse(result)
-                    this.callback?.onFinish()
+                    callback?.onResponse(result)
+                    callback?.onFinish()
                 }
             } else {
                 val invocation = call.request().tag(Invocation::class.java)
@@ -111,16 +123,16 @@ abstract class BaseRequest<R : BaseRequest<R>>(
                     handleFailure(
                         KotlinNullPointerException(errorMsg),
                         HttpConstant.ERROR_RESPONSE_BODY_ISNULL,
-                        "response'body is null"
+                        "response'body is null", callback
                     )
                 }
             }
         }
     }
 
-    private fun handleFailure(e: Exception, code: Int, msg: String?) {
-        this.callback?.onFailure(e, code, msg)
-        this.callback?.onFinish()
+    private fun handleFailure(e: Exception, code: Int, msg: String?, callback: RequestCallback?) {
+        callback?.onFailure(e, code, msg)
+        callback?.onFinish()
     }
 
 }
