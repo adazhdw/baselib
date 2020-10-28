@@ -5,7 +5,6 @@ import android.annotation.TargetApi
 import android.os.Build
 import android.webkit.WebSettings
 import android.webkit.WebView
-import com.adazhdw.ktlib.BuildConfig
 
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -36,7 +35,7 @@ fun WebView.initSetting() {
     settings.savePassword = false
     //设置UA
     settings.userAgentString =
-        (settings.userAgentString + context.applicationInfo.name + "/" + BuildConfig.VERSION_NAME)
+        (settings.userAgentString + context.applicationInfo.name)
     //自动加载图片
     settings.loadsImagesAutomatically = true
     removeJavascriptInterfaces()
