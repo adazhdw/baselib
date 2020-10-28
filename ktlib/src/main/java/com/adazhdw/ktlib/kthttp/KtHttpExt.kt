@@ -1,8 +1,11 @@
 package com.adazhdw.ktlib.kthttp
 
+import androidx.lifecycle.LifecycleOwner
+import com.adazhdw.ktlib.core.lifecycle.addOnDestroy
 import com.adazhdw.ktlib.kthttp.callback.RequestGsonCallback
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
+import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
 
 /**
  * Author: dgz
@@ -10,31 +13,34 @@ import com.adazhdw.ktlib.kthttp.model.Params
  * Description: 网络请求扩展类
  */
 
-inline fun <reified T : Any> getRequest(
+inline fun <reified T : Any> LifecycleOwner.getRequest(
     url: String,
     params: Params = Params.Builder().setTag(url).build(),
     crossinline success: ((data: T) -> Unit),
     crossinline error: ((code: Int, msg: String?) -> Unit)
 ) {
-    KtHttp.request(Method.GET, url, params, object : RequestGsonCallback<T>() {
-
-        override fun onError(code: Int, msg: String?) {
-            error.invoke(code, msg)
-        }
-
-        override fun onSuccess(data: T) {
-            success.invoke(data)
-        }
-    })
+    val request = netRequest(url, params, Method.GET, success, error)
+    addOnDestroy { request.cancel() }
 }
 
-inline fun <reified T : Any> postRequest(
+inline fun <reified T : Any> LifecycleOwner.postRequest(
     url: String,
     params: Params = Params.Builder().setTag(url).build(),
     crossinline success: ((data: T) -> Unit),
     crossinline error: ((code: Int, msg: String?) -> Unit)
 ) {
-    KtHttp.request(Method.POST, url, params, object : RequestGsonCallback<T>() {
+    val request = netRequest(url, params, Method.POST, success, error)
+    addOnDestroy { request.cancel() }
+}
+
+inline fun <reified T : Any> netRequest(
+    url: String,
+    params: Params = Params.Builder().setTag(url).build(),
+    method: Method = Method.GET,
+    crossinline success: ((data: T) -> Unit),
+    crossinline error: ((code: Int, msg: String?) -> Unit)
+): BaseRequest<*> {
+    return KtHttp.request(method, url, params, object : RequestGsonCallback<T>() {
 
         override fun onError(code: Int, msg: String?) {
             error.invoke(code, msg)
