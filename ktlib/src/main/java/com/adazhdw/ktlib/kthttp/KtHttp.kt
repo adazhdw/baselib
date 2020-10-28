@@ -50,105 +50,104 @@ class KtHttp private constructor() {
             params: Params = Params(url),
             callback: RequestCallback? = null
         ): BaseRequest<*> {
-            val request = when (method) {
-                Method.GET -> get(url, params)
-                Method.DELETE -> delete(url, params)
-                Method.HEAD -> head(url, params)
-                Method.POST -> post(url, params)
-                Method.PUT -> put(url, params)
-                Method.PATCH -> patch(url, params)
+            return when (method) {
+                Method.GET -> get(url, params, callback)
+                Method.DELETE -> delete(url, params, callback)
+                Method.HEAD -> head(url, params, callback)
+                Method.POST -> post(url, params, callback)
+                Method.PUT -> put(url, params, callback)
+                Method.PATCH -> patch(url, params, callback)
             }
-            return request.execute(callback)
         }
 
         /**
          * Get请求
          * @param url url
          * @param params 请求参数
-         * @param callback 请求回调
          */
         @JvmOverloads
         fun get(
             url: String,
-            params: Params = Params(url)
+            params: Params = Params(url),
+            callback: RequestCallback? = null
         ): GetRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return GetRequest(url, params)
+            return GetRequest(url, params).execute(callback)
         }
 
         /**
          * Post请求
          * @param url url
          * @param params 请求参数
-         * @param callback 请求回调
          */
         @JvmOverloads
         fun post(
             url: String,
-            params: Params = Params(url)
+            params: Params = Params(url),
+            callback: RequestCallback? = null
         ): PostRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return PostRequest(url, params)
+            return PostRequest(url, params).execute(callback)
         }
 
         /**
          * put请求
          * @param url url
          * @param params 请求参数
-         * @param callback 请求回调
          */
         @JvmOverloads
         fun put(
             url: String,
-            params: Params = Params(url)
+            params: Params = Params(url),
+            callback: RequestCallback? = null
         ): PutRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return PutRequest(url, params)
+            return PutRequest(url, params).execute(callback)
         }
 
         /**
          * delete请求
          * @param url url
          * @param params 请求参数
-         * @param callback 请求回调
          */
         @JvmOverloads
         fun delete(
             url: String,
-            params: Params = Params(url)
+            params: Params = Params(url),
+            callback: RequestCallback? = null
         ): DeleteRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return DeleteRequest(url, params)
+            return DeleteRequest(url, params).execute(callback)
         }
 
         /**
          * head请求
          * @param url url
          * @param params 请求参数
-         * @param callback 请求回调
          */
         @JvmOverloads
         fun head(
             url: String,
-            params: Params = Params(url)
+            params: Params = Params(url),
+            callback: RequestCallback? = null
         ): HeadRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return HeadRequest(url, params)
+            return HeadRequest(url, params).execute(callback)
         }
 
         /**
          * patch请求
          * @param url url
          * @param params 请求参数
-         * @param callback 请求回调
          */
         @JvmOverloads
         fun patch(
             url: String,
-            params: Params = Params(url)
+            params: Params = Params(url),
+            callback: RequestCallback? = null
         ): PatchRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return PatchRequest(url, params)
+            return PatchRequest(url, params).execute(callback)
         }
 
         fun cancel(url: String) {
