@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.kthttp.converter
 
-import com.adazhdw.ktlib.kthttp.util.CodingUtil
+import com.adazhdw.ktlib.kthttp.KtConfig
 import com.adazhdw.ktlib.kthttp.util.GsonUtils
 import com.google.gson.Gson
 import okhttp3.ResponseBody
@@ -24,7 +24,7 @@ class GsonConverter private constructor(private val gson: Gson) : IConverter {
         body.use {
             var result = body.string()
             if (needDecodeResult) {
-                result = CodingUtil.decode(result)
+                result = KtConfig.coder.decode(result)
             }
             if (type === String::class.java) return result as T
             return gson.fromJson(result, type)
