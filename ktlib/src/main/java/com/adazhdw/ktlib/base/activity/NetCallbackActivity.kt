@@ -10,7 +10,7 @@ import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
-import com.adazhdw.ktlib.core.network.KtNetCallback
+import com.adazhdw.ktlib.core.network.NetStateCallback
 import com.adazhdw.ktlib.core.network.NetworkReceiver
 
 
@@ -20,7 +20,7 @@ import com.adazhdw.ktlib.core.network.NetworkReceiver
  * description:
  */
 
-abstract class NetCallbackActivity : CoroutinesActivity(), KtNetCallback {
+abstract class NetCallbackActivity : CoroutinesActivity(), NetStateCallback {
 
     /**
      * 是否需要网络监听callback
@@ -43,12 +43,13 @@ abstract class NetCallbackActivity : CoroutinesActivity(), KtNetCallback {
     }
 
     private fun registerNetReceiver() {
-        mNetworkReceiver = NetworkReceiver(mNetworkListener = object : NetworkReceiver.NetworkListener {
-            override fun onNetAvailable(isConnected: Boolean, netType: KtNetCallback.NetType) {
+        mNetworkReceiver = NetworkReceiver(mNetworkListener = object :
+            NetworkReceiver.NetworkListener {
+            override fun onNetAvailable(isConnected: Boolean, netType: NetStateCallback.NetType) {
                 if (isConnected) {
-                    onNetAvailable(netType,true)
+                    onNetAvailable(netType, true)
                 } else {
-                    onNetUnAvailable(netType,true)
+                    onNetUnAvailable(netType, true)
                 }
             }
         })
@@ -67,12 +68,12 @@ abstract class NetCallbackActivity : CoroutinesActivity(), KtNetCallback {
                 val capabilities: NetworkCapabilities? = mConnectivityManager.getNetworkCapabilities(network)
                 if (capabilities != null) {
                     if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                        onNetAvailable(KtNetCallback.NetType.WIFI)
+                        onNetAvailable(NetStateCallback.NetType.WIFI)
                     } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                        onNetAvailable(KtNetCallback.NetType.MOBILE)
+                        onNetAvailable(NetStateCallback.NetType.MOBILE)
                     }
                 } else {
-                    onNetAvailable(KtNetCallback.NetType.UN_KNOW)
+                    onNetAvailable(NetStateCallback.NetType.UN_KNOW)
                 }
             }
 
@@ -81,12 +82,12 @@ abstract class NetCallbackActivity : CoroutinesActivity(), KtNetCallback {
                 val capabilities: NetworkCapabilities? = mConnectivityManager.getNetworkCapabilities(network)
                 if (capabilities != null) {
                     if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                        onNetUnAvailable(KtNetCallback.NetType.WIFI)
+                        onNetUnAvailable(NetStateCallback.NetType.WIFI)
                     } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                        onNetUnAvailable(KtNetCallback.NetType.MOBILE)
+                        onNetUnAvailable(NetStateCallback.NetType.MOBILE)
                     }
                 } else {
-                    onNetUnAvailable(KtNetCallback.NetType.UN_KNOW)
+                    onNetUnAvailable(NetStateCallback.NetType.UN_KNOW)
                 }
             }
 

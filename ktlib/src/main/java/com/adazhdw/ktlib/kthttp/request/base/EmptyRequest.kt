@@ -21,7 +21,7 @@ abstract class EmptyRequest<R : EmptyRequest<R>>(
 
     init {
         val commonParams = mutableMapOf<String, String>().apply {
-            putAll(KtHttp.getInstance().getCommonParams())
+            putAll(KtHttp.ktHttp.getCommonParams())
             putAll(params.params)
         }
         mUrl = RequestUrlUtil.getFullUrl2(url, commonParams, params.urlEncoder)

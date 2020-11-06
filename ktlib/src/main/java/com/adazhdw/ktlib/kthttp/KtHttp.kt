@@ -33,9 +33,8 @@ class KtHttp private constructor() {
     private var commonParams: Params? = null
 
     companion object {
-        fun getInstance() = ktHttp
 
-        private val ktHttp by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { KtHttp() }
+        val ktHttp by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { KtHttp() }
 
         /**
          * 请求

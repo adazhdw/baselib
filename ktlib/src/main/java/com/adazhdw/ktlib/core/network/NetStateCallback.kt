@@ -7,9 +7,9 @@ package com.adazhdw.ktlib.core.network
  */
 
 
-interface KtNetCallback {
-    fun onNetAvailable(netType: NetType, fromReceiver: Boolean = false){}
-    fun onNetUnAvailable(netType: NetType, fromReceiver: Boolean = false){}
+interface NetStateCallback {
+    fun onNetAvailable(netType: NetType, fromReceiver: Boolean = false) {}
+    fun onNetUnAvailable(netType: NetType, fromReceiver: Boolean = false) {}
 
     enum class NetType {
         WIFI, MOBILE, UN_KNOW

@@ -36,15 +36,33 @@ open class NetworkReceiver(private val mNetworkListener: NetworkListener? = null
             if (info != null) {
                 if (NetworkInfo.State.CONNECTED == info.state && info.isAvailable) {
                     when (info.type) {
-                        ConnectivityManager.TYPE_WIFI -> mNetworkListener?.onNetAvailable(true, KtNetCallback.NetType.WIFI)
-                        ConnectivityManager.TYPE_MOBILE -> mNetworkListener?.onNetAvailable(true, KtNetCallback.NetType.MOBILE)
-                        else -> mNetworkListener?.onNetAvailable(true, KtNetCallback.NetType.UN_KNOW)
+                        ConnectivityManager.TYPE_WIFI -> mNetworkListener?.onNetAvailable(
+                            true,
+                            NetStateCallback.NetType.WIFI
+                        )
+                        ConnectivityManager.TYPE_MOBILE -> mNetworkListener?.onNetAvailable(
+                            true,
+                            NetStateCallback.NetType.MOBILE
+                        )
+                        else -> mNetworkListener?.onNetAvailable(
+                            true,
+                            NetStateCallback.NetType.UN_KNOW
+                        )
                     }
                 } else {
                     when (info.type) {
-                        ConnectivityManager.TYPE_WIFI -> mNetworkListener?.onNetAvailable(false, KtNetCallback.NetType.WIFI)
-                        ConnectivityManager.TYPE_MOBILE -> mNetworkListener?.onNetAvailable(false, KtNetCallback.NetType.MOBILE)
-                        else -> mNetworkListener?.onNetAvailable(false, KtNetCallback.NetType.UN_KNOW)
+                        ConnectivityManager.TYPE_WIFI -> mNetworkListener?.onNetAvailable(
+                            false,
+                            NetStateCallback.NetType.WIFI
+                        )
+                        ConnectivityManager.TYPE_MOBILE -> mNetworkListener?.onNetAvailable(
+                            false,
+                            NetStateCallback.NetType.MOBILE
+                        )
+                        else -> mNetworkListener?.onNetAvailable(
+                            false,
+                            NetStateCallback.NetType.UN_KNOW
+                        )
                     }
                 }
             }
@@ -53,6 +71,6 @@ open class NetworkReceiver(private val mNetworkListener: NetworkListener? = null
 
 
     interface NetworkListener {
-        fun onNetAvailable(isConnected: Boolean, netType: KtNetCallback.NetType)
+        fun onNetAvailable(isConnected: Boolean, netType: NetStateCallback.NetType)
     }
 }
