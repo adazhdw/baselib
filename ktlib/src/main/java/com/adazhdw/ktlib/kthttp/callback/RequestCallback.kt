@@ -14,10 +14,7 @@ interface RequestCallback {
     fun onStart(call: Call)
 
     /** 对返回数据进行操作的回调， UI线程 */
-    fun onHttpResponse(httpResponse: Response, result: String?)
-
-    /** 对返回数据进行操作的回调， UI线程 */
-    fun onResponse(result: String)
+    fun onHttpResponse(httpResponse: Response, result: String)
 
     /** 请求失败，响应错误，数据解析错误等，都会回调该方法， UI线程 */
     fun onFailure(e: Exception, code: Int, msg: String?)
@@ -32,11 +29,7 @@ abstract class RequestCallbackImpl : RequestCallback {
 
     }
 
-    override fun onHttpResponse(httpResponse: Response, result: String?) {
-
-    }
-
-    override fun onResponse(result: String) {
+    override fun onHttpResponse(httpResponse: Response, result: String) {
 
     }
 

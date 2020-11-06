@@ -16,7 +16,7 @@ class PostRequest(
     params: Params
 ) : BodyRequest<PostRequest>(Method.POST, url, params) {
 
-    override fun obtainRequest(requestBody: RequestBody): Request {
+    override fun getRequest(requestBody: RequestBody): Request {
         return requestBuilder().post(requestBody).url(url).tag(params.tag).build()
     }
 

@@ -16,7 +16,7 @@ class HeadRequest(
     params: Params
 ) : EmptyRequest<HeadRequest>(Method.HEAD, url, params) {
 
-    override fun obtainRequest(requestBody: RequestBody): Request {
+    override fun getRequest(requestBody: RequestBody): Request {
         return requestBuilder().url(mUrl).head().tag(params.tag).build()
     }
 

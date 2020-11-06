@@ -16,7 +16,7 @@ class PatchRequest(
     params: Params
 ) : BodyRequest<PatchRequest>(Method.PATCH, url, params) {
 
-    override fun obtainRequest(requestBody: RequestBody): Request {
+    override fun getRequest(requestBody: RequestBody): Request {
         return requestBuilder().patch(requestBody).url(url).tag(params.tag).build()
     }
 

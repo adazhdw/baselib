@@ -1,16 +1,18 @@
 package com.adazhdw.ktlib.kthttp.request.base
 
 import com.adazhdw.ktlib.core.KtExecutors
-import com.adazhdw.ktlib.kthttp.KtHttp
+import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
+import com.adazhdw.ktlib.kthttp.exception.ExceptionHelper
+import com.adazhdw.ktlib.kthttp.exception.HttpStatusException
 import com.adazhdw.ktlib.kthttp.exception.NetWorkUnAvailableException
 import com.adazhdw.ktlib.kthttp.model.HttpConstant
+import com.adazhdw.ktlib.kthttp.model.HttpConstant.ERROR_RESPONSE_NORMAL_ERROR
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager
 import com.adazhdw.ktlib.utils.NetworkUtils
 import okhttp3.*
-import retrofit2.Invocation
 import java.io.IOException
 import java.io.InterruptedIOException
 import java.net.SocketTimeoutException
@@ -26,21 +28,21 @@ abstract class BaseRequest<R : BaseRequest<R>>(
     val url: String,
     val params: Params
 ) {
-    private val okHttpClient: OkHttpClient = KtHttp.ktHttp.mOkHttpClient
-    private val commonHeaders = KtHttp.ktHttp.getCommonHeaders()
+    private val okHttpClient: OkHttpClient = ktHttp.mOkHttpClient
+    private val commonHeaders = ktHttp.getCommonHeaders()
     var mCall: Call? = null
         private set
 
     abstract fun getRequestBody(): RequestBody
 
-    abstract fun obtainRequest(requestBody: RequestBody): Request
+    abstract fun getRequest(requestBody: RequestBody): Request
 
     /**
      * 获取当前请求的 okhttp.Call
      */
     private fun getRawCall(): Call {
         val requestBody = getRequestBody()
-        val mRequest = obtainRequest(requestBody)
+        val mRequest = getRequest(requestBody)
         return okHttpClient.newCall(mRequest)
     }
 
@@ -49,7 +51,7 @@ abstract class BaseRequest<R : BaseRequest<R>>(
      */
     protected fun requestBuilder(): Request.Builder {
         val builder = Request.Builder()
-        if (commonHeaders.isNotEmpty()) builder.headers(KtHttp.ktHttp.getHttpHeaders())
+        if (commonHeaders.isNotEmpty()) builder.headers(ktHttp.getCommonHttpHeaders())
         for ((key, value) in params.headers) builder.addHeader(key, value)
         return builder
     }
@@ -60,15 +62,16 @@ abstract class BaseRequest<R : BaseRequest<R>>(
     @Suppress("UNCHECKED_CAST")
     fun execute(callback: RequestCallback?): R {
         val call = getRawCall()
-        callback?.onStart(call)
         OkHttpCallManager.instance.addCall(url, call)
+        callback?.onStart(call)
         call.enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                handleResponse(call, response, callback)
+                handleResponse(response, callback)
             }
 
             override fun onFailure(call: Call, e: IOException) {
                 OkHttpCallManager.instance.removeCall(url)
+                e.printStackTrace()
                 var ex: Exception = e
                 var message = e.message ?: ""
                 var code = HttpConstant.ERROR_RESPONSE_ON_FAILURE
@@ -82,9 +85,7 @@ abstract class BaseRequest<R : BaseRequest<R>>(
                     ex = NetWorkUnAvailableException()
                 }
                 //回调跳转主线程
-                KtHttp.ktHttp.mHandler.post {
-                    handleFailure(ex, code, message, callback)
-                }
+                ktHttp.mHandler.post { handleFailure(ex, code, message, callback) }
             }
         })
         mCall = call
@@ -98,31 +99,24 @@ abstract class BaseRequest<R : BaseRequest<R>>(
         if (mCall?.isCanceled() == false) mCall?.cancel()
     }
 
-    private fun handleResponse(call: Call, response: Response, callback: RequestCallback?) {
+    private fun handleResponse(response: Response, callback: RequestCallback?) {
         OkHttpCallManager.instance.removeCall(url)
         KtExecutors.networkIO.submit {
-            var result: String? = null
             try {
-                result = response.body?.string()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-            KtHttp.ktHttp.mHandler.post { callback?.onHttpResponse(response, result) }
-            if (!result.isNullOrBlank()) {
+                val result = ExceptionHelper.getNotNullResult(response).string()
                 //回调跳转主线程
-                KtHttp.ktHttp.mHandler.post {
-                    callback?.onResponse(result)
+                ktHttp.mHandler.post {
+                    callback?.onHttpResponse(response, result)
                     callback?.onFinish()
                 }
-            } else {
-                val invocation = call.request().tag(Invocation::class.java)
-                val method = invocation?.method()
-                KtHttp.ktHttp.mHandler.post {
-                    handleFailure(
-                        Exception("Response body from ${method?.declaringClass?.name}.${method?.name} is null"),
-                        HttpConstant.ERROR_RESPONSE_BODY_ISNULL,
-                        "response'body is null", callback
-                    )
+            } catch (e: Exception) {
+                e.printStackTrace()
+                ktHttp.mHandler.post {
+                    if (e is HttpStatusException) {
+                        handleFailure(e, e.statusCode, e.message, callback)
+                    } else {
+                        handleFailure(e, ERROR_RESPONSE_NORMAL_ERROR, e.message, callback)
+                    }
                 }
             }
         }

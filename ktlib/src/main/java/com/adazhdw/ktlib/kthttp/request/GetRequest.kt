@@ -16,7 +16,7 @@ class GetRequest(
     params: Params
 ) : EmptyRequest<GetRequest>(Method.GET, url, params) {
 
-    override fun obtainRequest(requestBody: RequestBody): Request {
+    override fun getRequest(requestBody: RequestBody): Request {
         return requestBuilder().url(mUrl).get().tag(params.tag).build()
     }
 

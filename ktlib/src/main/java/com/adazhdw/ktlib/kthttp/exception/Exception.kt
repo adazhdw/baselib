@@ -6,5 +6,3 @@ package com.adazhdw.ktlib.kthttp.exception
  * description：
  **/
 class NetWorkUnAvailableException : Exception("network unavailable")
-
-class OkHttpResponseNullException : Exception("okhttp's response is null")

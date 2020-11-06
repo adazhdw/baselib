@@ -1,5 +1,7 @@
 package com.adazhdw.ktlib.kthttp.callback
 
+import okhttp3.Response
+
 /**
  * Author: dgz
  * Date: 2020/8/21 14:50
@@ -7,7 +9,7 @@ package com.adazhdw.ktlib.kthttp.callback
  */
 abstract class RequestStringCallback : RequestCallbackImpl() {
 
-    override fun onResponse(result: String) {
+    override fun onHttpResponse(httpResponse: Response, result: String) {
         onSuccess(result)
     }
 

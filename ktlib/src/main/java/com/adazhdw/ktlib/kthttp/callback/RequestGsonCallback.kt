@@ -4,6 +4,7 @@ import com.adazhdw.ktlib.kthttp.model.HttpConstant
 import com.adazhdw.ktlib.kthttp.util.GsonUtils
 import com.adazhdw.ktlib.kthttp.util.TypeUtil
 import com.google.gson.JsonParseException
+import okhttp3.Response
 import java.lang.reflect.Type
 
 /**
@@ -18,12 +19,12 @@ abstract class RequestGsonCallback<T : Any> : RequestCallbackImpl() {
         mType = getSuperclassTypeParameter(javaClass)
     }
 
-    override fun onResponse(result: String) {
+    override fun onHttpResponse(httpResponse: Response, result: String) {
         try {
             val data = GsonUtils.fromJson<T>(result, mType)
             this.onSuccess(data)
         } catch (e: JsonParseException) {
-            onFailure(e, HttpConstant.ERROR_JSON_PARSE_EXCEPTION, "data parse error${e.message}")
+            onFailure(e, HttpConstant.ERROR_JSON_PARSE_EXCEPTION, "Data parse error${e.message}")
         }
     }
 

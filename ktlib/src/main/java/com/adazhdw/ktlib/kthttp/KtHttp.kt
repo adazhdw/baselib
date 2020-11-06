@@ -188,7 +188,7 @@ class KtHttp private constructor() {
     /**
      * 获取 公共 header 参数
      */
-    fun getHttpHeaders(): Headers {
+    fun getCommonHttpHeaders(): Headers {
         if (commonParams == null) {
             commonParams = commonParamBuilder.build()
         }
