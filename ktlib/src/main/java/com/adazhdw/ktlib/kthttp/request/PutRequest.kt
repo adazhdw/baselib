@@ -3,6 +3,8 @@ package com.adazhdw.ktlib.kthttp.request
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.request.base.BodyRequest
+import okhttp3.Request
+import okhttp3.RequestBody
 
 /**
  * author：daguozhu
@@ -12,4 +14,10 @@ import com.adazhdw.ktlib.kthttp.request.base.BodyRequest
 class PutRequest(
     url: String,
     params: Params
-) : BodyRequest<PutRequest>(Method.PUT, url, params)
+) : BodyRequest<PutRequest>(Method.PUT, url, params) {
+
+    override fun getRequest(requestBody: RequestBody): Request {
+        return requestBuilder().put(requestBody).url(url).tag(params.tag).build()
+    }
+
+}
