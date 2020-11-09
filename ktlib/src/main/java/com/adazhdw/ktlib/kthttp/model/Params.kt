@@ -22,9 +22,9 @@ class Params internal constructor(var tag: String = "") {
         private set
     internal var files: List<Part> = listOf()
         private set
-    internal var jsonParam: String = ""
+    internal var jsonBody: String = ""
         private set
-    internal var jsonBody: Boolean = true
+    internal var isJsonType: Boolean = true
         private set
 
     /**
@@ -32,14 +32,16 @@ class Params internal constructor(var tag: String = "") {
      */
     internal var urlEncoder: Boolean = false
         private set
+    internal var needHeaders: Boolean = false
+        private set
 
     internal fun getRequestBody(): RequestBody {
-        return if (jsonBody) getJsonRequestBody()
+        return if (isJsonType) getJsonRequestBody()
         else getParamFormBody()
     }
 
     private fun getJsonRequestBody(): RequestBody {
-        return if (jsonParam.isNotBlank()) jsonParam.toRequestBody(HttpConstant.JSON)
+        return if (jsonBody.isNotBlank()) jsonBody.toRequestBody(HttpConstant.JSON)
         else JSONObject().apply { for ((key, value) in params) put(key, value) }.toString()
             .toRequestBody(HttpConstant.JSON)
     }
@@ -67,10 +69,11 @@ class Params internal constructor(var tag: String = "") {
         }
     }
 
-    class Builder constructor(private val jsonBody: Boolean = false) {
+    class Builder constructor(private val isJsonType: Boolean = false) {
         private var mTag: String = ""
         private var urlEncoder: Boolean = false
-        private var jsonParam: String = ""
+        private var needHeaders: Boolean = false
+        private var jsonBody: String = ""
         private val mHeaders: MutableMap<String, String> = mutableMapOf()
         private val params: MutableMap<String, String> = mutableMapOf()
         private val files: MutableList<Part> = mutableListOf()
@@ -85,8 +88,13 @@ class Params internal constructor(var tag: String = "") {
             return this
         }
 
+        fun setIsNeedHeaders(needHeaders: Boolean): Builder {
+            this.needHeaders = needHeaders
+            return this
+        }
+
         fun setJsonBody(jsonBody: String): Builder {
-            if (jsonBody.isNotBlank()) this.jsonParam = jsonBody
+            if (jsonBody.isNotBlank()) this.jsonBody = jsonBody
             return this
         }
 
@@ -142,8 +150,9 @@ class Params internal constructor(var tag: String = "") {
             option.params = this.params
             option.files = this.files
             option.urlEncoder = this.urlEncoder
-            option.jsonParam = this.jsonParam
+            option.needHeaders = this.needHeaders
             option.jsonBody = this.jsonBody
+            option.isJsonType = this.isJsonType
             return option
         }
     }

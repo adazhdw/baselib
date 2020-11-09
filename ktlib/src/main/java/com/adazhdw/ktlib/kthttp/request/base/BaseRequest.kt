@@ -51,8 +51,10 @@ abstract class BaseRequest<R : BaseRequest<R>>(
      */
     protected fun requestBuilder(): Request.Builder {
         val builder = Request.Builder()
-        if (commonHeaders.isNotEmpty()) builder.headers(ktHttp.getCommonHttpHeaders())
-        for ((key, value) in params.headers) builder.addHeader(key, value)
+        if (params.needHeaders) {
+            if (commonHeaders.isNotEmpty()) builder.headers(ktHttp.getCommonHttpHeaders())
+            for ((key, value) in params.headers) builder.addHeader(key, value)
+        }
         return builder
     }
 
