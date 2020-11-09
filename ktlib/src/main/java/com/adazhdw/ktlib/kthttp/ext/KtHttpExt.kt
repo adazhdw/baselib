@@ -1,7 +1,8 @@
-package com.adazhdw.ktlib.kthttp
+package com.adazhdw.ktlib.kthttp.ext
 
 import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.core.lifecycle.addOnDestroy
+import com.adazhdw.ktlib.kthttp.KtHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestGsonCallback
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params

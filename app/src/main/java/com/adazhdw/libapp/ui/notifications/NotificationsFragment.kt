@@ -9,8 +9,8 @@ import androidx.core.text.parseAsHtml
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.adazhdw.ktlib.base.mvvm.viewModel
+import com.adazhdw.ktlib.kthttp.ext.postRequest
 import com.adazhdw.ktlib.kthttp.model.Params
-import com.adazhdw.ktlib.kthttp.postRequest
 import com.adazhdw.libapp.R
 import com.adazhdw.libapp.bean.DataFeed
 import com.adazhdw.libapp.bean.NetResponse

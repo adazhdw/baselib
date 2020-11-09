@@ -1,5 +1,6 @@
-package com.adazhdw.ktlib.kthttp
+package com.adazhdw.ktlib.kthttp.ext
 
+import com.adazhdw.ktlib.kthttp.KtHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestGsonCallback
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params

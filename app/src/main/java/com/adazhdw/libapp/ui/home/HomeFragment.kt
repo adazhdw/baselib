@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import com.adazhdw.ktlib.base.fragment.BaseFragment
 import com.adazhdw.ktlib.base.mvvm.viewModel
 import com.adazhdw.ktlib.ext.logD
-import com.adazhdw.ktlib.kthttp.getCoroutines
+import com.adazhdw.ktlib.kthttp.ext.getCoroutines
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.libapp.R
 import com.adazhdw.libapp.bean.DataFeed
