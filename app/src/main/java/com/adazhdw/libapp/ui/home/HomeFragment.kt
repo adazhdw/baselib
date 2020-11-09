@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.text.parseAsHtml
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.ktlib.base.fragment.BaseFragment
+import com.adazhdw.ktlib.base.mvvm.viewModel
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.kthttp.getCoroutines
 import com.adazhdw.ktlib.kthttp.model.Params
@@ -26,8 +26,7 @@ class HomeFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        homeViewModel =
-            ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        homeViewModel = viewModel<HomeViewModel>()
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val textView: TextView = root.findViewById(R.id.text_home)
         homeViewModel.text.observe(viewLifecycleOwner, Observer {

@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.text.parseAsHtml
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.adazhdw.ktlib.base.fragment.BaseFragment
+import com.adazhdw.ktlib.base.mvvm.viewModel
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.postCoroutines
@@ -26,8 +26,7 @@ class DashboardFragment(override val layoutId: Int = R.layout.fragment_dashboard
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        dashboardViewModel =
-            ViewModelProviders.of(this).get(DashboardViewModel::class.java)
+        dashboardViewModel = viewModel<DashboardViewModel>()
         val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
         val textView: TextView = root.findViewById(R.id.text_dashboard)
         dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
