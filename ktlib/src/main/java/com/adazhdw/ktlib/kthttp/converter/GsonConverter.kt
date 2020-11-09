@@ -3,7 +3,6 @@ package com.adazhdw.ktlib.kthttp.converter
 import com.adazhdw.ktlib.kthttp.KtConfig
 import com.adazhdw.ktlib.kthttp.util.GsonUtils
 import com.google.gson.Gson
-import okhttp3.ResponseBody
 import java.lang.reflect.Type
 
 /**
@@ -20,15 +19,13 @@ class GsonConverter private constructor(private val gson: Gson) : IConverter {
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> convertResponse(body: ResponseBody, type: Type, needDecodeResult: Boolean): T {
-        body.use {
-            var result = body.string()
-            if (needDecodeResult) {
-                result = KtConfig.coder.decode(result)
-            }
-            if (type === String::class.java) return result as T
-            return gson.fromJson(result, type)
+    override fun <T> convert(result: String, type: Type?, needDecodeResult: Boolean): T {
+        var result2 = result
+        if (needDecodeResult) {
+            result2 = KtConfig.getCoder().decode(result2)
         }
+        if (type === String::class.java) return result2 as T
+        return gson.fromJson(result, type)
     }
 
 }

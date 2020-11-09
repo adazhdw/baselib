@@ -1,5 +1,6 @@
 package com.adazhdw.ktlib.kthttp.util
 
+import com.google.gson.internal.`$Gson$Types`
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
@@ -18,5 +19,16 @@ object TypeUtil {
         return if (parameterized != null) {
             parameterized.actualTypeArguments[0] as ParameterizedType
         } else null
+    }
+
+    fun getGsonParameterizedType(subclass: Class<*>): Type? {
+        val superClass = subclass.genericSuperclass
+        if (superClass is Class<*>) {
+            println("superClass=$superClass")
+            throw RuntimeException("Missing type parameter.")
+        }
+        val parameterized: ParameterizedType = superClass as ParameterizedType
+        return `$Gson$Types`
+            .canonicalize(parameterized.actualTypeArguments[0])
     }
 }
