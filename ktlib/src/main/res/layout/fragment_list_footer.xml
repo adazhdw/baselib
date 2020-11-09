@@ -13,6 +13,6 @@
         android:layout_gravity="center"
         android:textColor="@android:color/darker_gray"
         android:textSize="15sp"
-        tools:text="@string/app_name" />
+        tools:text="@string/lib_app_name" />
 
 </FrameLayout>
