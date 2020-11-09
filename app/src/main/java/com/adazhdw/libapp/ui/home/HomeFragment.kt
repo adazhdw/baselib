@@ -48,7 +48,7 @@ class HomeFragment : BaseFragment() {
             val time = measureTimeMillis {
                 val data = getCoroutines<NetResponse<DataFeed>>(
                     url = "https://wanandroid.com/wxarticle/list/408/1/json",
-                    params = Params.Builder().addParams(mapOf("k" to "Android")).build()
+                    params = Params.Builder().addParam("k", "Android").build()
                 )
                 val stringBuilder = StringBuilder()
                 for (item in data.data.datas) {

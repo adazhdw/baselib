@@ -40,7 +40,7 @@ class NotificationsFragment : Fragment() {
 
         postRequest<NetResponse<DataFeed>>(
             url = "https://www.wanandroid.com/article/query/0/json",
-            params = Params.Builder().addParams(mapOf("k" to "ViewModel")).build(),
+            params = Params.Builder().addParam("k", "ViewModel").build(),
             success = { data ->
                 val stringBuilder = StringBuilder()
                 for (item in data.data.datas) {

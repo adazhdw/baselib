@@ -49,7 +49,7 @@ class DashboardFragment(override val layoutId: Int = R.layout.fragment_dashboard
             val time = measureTimeMillis {
                 val data = postCoroutines<NetResponse<DataFeed>>(
                     url = "https://www.wanandroid.com/article/query/0/json",
-                    params = Params.Builder().addParams(mapOf("k" to "ViewModel")).build()
+                    params = Params.Builder().addParam("k", "ViewModel").build()
                 )
 
                 val stringBuilder = StringBuilder()
