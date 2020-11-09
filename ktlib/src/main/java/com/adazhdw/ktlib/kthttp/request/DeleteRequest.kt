@@ -3,8 +3,6 @@ package com.adazhdw.ktlib.kthttp.request
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.request.base.EmptyRequest
-import okhttp3.Request
-import okhttp3.RequestBody
 
 /**
  * author：daguozhu
@@ -14,11 +12,4 @@ import okhttp3.RequestBody
 class DeleteRequest(
     url: String,
     params: Params
-) : EmptyRequest<DeleteRequest>(Method.DELETE, url, params) {
-
-    override fun getRequest(requestBody: RequestBody): Request {
-        return requestBuilder().url(mUrl).delete().tag(params.tag).build()
-    }
-
-
-}
+) : EmptyRequest<DeleteRequest>(Method.DELETE, url, params)

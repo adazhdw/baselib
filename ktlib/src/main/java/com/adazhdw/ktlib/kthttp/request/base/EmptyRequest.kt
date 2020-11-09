@@ -4,6 +4,7 @@ import com.adazhdw.ktlib.kthttp.KtHttp
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.util.RequestUrlUtil
+import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.internal.EMPTY_REQUEST
 
@@ -25,6 +26,10 @@ abstract class EmptyRequest<R : EmptyRequest<R>>(
             putAll(params.params)
         }
         mUrl = RequestUrlUtil.getFullUrl2(url, commonParams, params.urlEncoder)
+    }
+
+    override fun getRequest(requestBody: RequestBody): Request {
+        return requestBuilder().url(mUrl).delete().tag(params.tag).build()
     }
 
     final override fun getRequestBody(): RequestBody = EMPTY_REQUEST

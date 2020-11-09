@@ -2,6 +2,7 @@ package com.adazhdw.ktlib.kthttp.request.base
 
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
+import okhttp3.Request
 import okhttp3.RequestBody
 
 /**
@@ -16,5 +17,9 @@ abstract class BodyRequest<R : BodyRequest<R>>(
 ) : BaseRequest<R>(method, url, params) {
 
     override fun getRequestBody(): RequestBody = params.getRequestBody()
+
+    override fun getRequest(requestBody: RequestBody): Request {
+        return requestBuilder().put(requestBody).url(url).tag(params.tag).build()
+    }
 
 }
