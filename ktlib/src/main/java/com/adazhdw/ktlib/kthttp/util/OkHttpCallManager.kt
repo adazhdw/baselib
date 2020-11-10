@@ -30,7 +30,7 @@ internal class OkHttpCallManager private constructor() {
     }
 
     companion object {
-        val instance: OkHttpCallManager by lazy { OkHttpCallManager() }
+        val callManager: OkHttpCallManager by lazy { OkHttpCallManager() }
     }
 
 }

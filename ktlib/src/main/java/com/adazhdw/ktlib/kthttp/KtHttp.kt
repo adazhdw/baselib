@@ -154,9 +154,9 @@ class KtHttp private constructor() {
 
         fun cancel(url: String) {
             if (url.isNotBlank()) {
-                val call: Call? = OkHttpCallManager.instance.getCall(url)
+                val call: Call? = OkHttpCallManager.callManager.getCall(url)
                 call?.cancel()
-                OkHttpCallManager.instance.removeCall(url)
+                OkHttpCallManager.callManager.removeCall(url)
             }
         }
 

@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.kthttp.request.base
 
-import com.adazhdw.ktlib.core.KtExecutors
+import com.adazhdw.ktlib.core.KtExecutors.networkIO
 import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.exception.ExceptionHelper
@@ -10,7 +10,7 @@ import com.adazhdw.ktlib.kthttp.model.HttpConstant
 import com.adazhdw.ktlib.kthttp.model.HttpConstant.ERROR_RESPONSE_NORMAL_ERROR
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
-import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager
+import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager.Companion.callManager
 import com.adazhdw.ktlib.utils.NetworkUtils
 import okhttp3.*
 import java.io.IOException
@@ -64,7 +64,7 @@ abstract class BaseRequest<R : BaseRequest<R>>(
     @Suppress("UNCHECKED_CAST")
     fun execute(callback: RequestCallback?): R {
         val call = getRawCall()
-        OkHttpCallManager.instance.addCall(url, call)
+        callManager.addCall(url, call)
         callback?.onStart(call)
         call.enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
@@ -72,7 +72,7 @@ abstract class BaseRequest<R : BaseRequest<R>>(
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                OkHttpCallManager.instance.removeCall(url)
+                callManager.removeCall(url)
                 e.printStackTrace()
                 var ex: Exception = e
                 var message = e.message ?: ""
@@ -102,8 +102,8 @@ abstract class BaseRequest<R : BaseRequest<R>>(
     }
 
     private fun handleResponse(response: Response, callback: RequestCallback?) {
-        OkHttpCallManager.instance.removeCall(url)
-        KtExecutors.networkIO.submit {
+        callManager.removeCall(url)
+        networkIO.submit {
             try {
                 val result = ExceptionHelper.getNotNullResult(response).string()
                 //回调跳转主线程
