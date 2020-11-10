@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.text.parseAsHtml
 import androidx.lifecycle.Observer
 import com.adazhdw.ktlib.base.fragment.BaseFragment
 import com.adazhdw.ktlib.base.mvvm.viewModel
@@ -51,7 +50,7 @@ class HomeFragment : BaseFragment() {
                 )
                 val stringBuilder = StringBuilder()
                 for (item in data.data.datas) {
-                    stringBuilder.append("标题：${item.title}".parseAsHtml()).append("\n\n")
+                    stringBuilder.append("标题：${item.title}").append("\n\n")
                 }
                 textView.text = stringBuilder.toString()
             }

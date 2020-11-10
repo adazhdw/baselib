@@ -13,8 +13,11 @@ import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
 import com.adazhdw.ktlib.kthttp.ssl.HttpsUtils
 import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager
 import com.adazhdw.ktlib.kthttp.util.OkHttpLogger
+import com.adazhdw.ktlib.kthttp.util.logging.Level
+import com.adazhdw.ktlib.kthttp.util.logging.LoggingInterceptor
 import okhttp3.Call
 import okhttp3.Headers
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
@@ -170,7 +173,7 @@ class KtHttp private constructor() {
     /**
      * 设置 公共 header 参数
      */
-    fun setCommonHeaders(headers: Map<String, String>): KtHttp {
+    fun addCommonHeaders(headers: Map<String, String>): KtHttp {
         commonParamBuilder.addHeaders(headers)
         return this
     }
@@ -226,12 +229,12 @@ class KtHttp private constructor() {
             .connectTimeout(timeout, TimeUnit.SECONDS)
             .callTimeout(timeout, TimeUnit.SECONDS)
             .writeTimeout(timeout, TimeUnit.SECONDS)
-            .addInterceptor(getLoggingInterceptor())
+            .addInterceptor(getLoggingInterceptor2())
             .addInterceptor(RetryInterceptor())
             .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager).build()
     }
 
-    private fun getLoggingInterceptor(): HttpLoggingInterceptor {
+    private fun getLoggingInterceptor2(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor(OkHttpLogger()).apply {
             level = if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor.Level.BODY
@@ -239,6 +242,11 @@ class KtHttp private constructor() {
                 HttpLoggingInterceptor.Level.BASIC
             }
         }
+    }
+
+    private fun getLoggingInterceptor(): Interceptor {
+        return LoggingInterceptor.Builder()
+            .setLevel(if (BuildConfig.DEBUG) Level.BODY else Level.BASIC).build()
     }
 
 }
