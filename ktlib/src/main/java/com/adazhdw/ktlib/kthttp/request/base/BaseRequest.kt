@@ -62,47 +62,48 @@ abstract class BaseRequest<R : BaseRequest<R>>(
      * 执行网络请求
      */
     @Suppress("UNCHECKED_CAST")
-    fun execute(callback: RequestCallback?): R {
+    fun execute(callback: RequestCallback?) {
         val call = getRawCall()
-        callManager.addCall(url, call)
-        callback?.onStart(call)
-        call.enqueue(object : Callback {
-            override fun onResponse(call: Call, response: Response) {
-                handleResponse(response, callback)
-            }
-
-            override fun onFailure(call: Call, e: IOException) {
-                callManager.removeCall(url)
-                e.printStackTrace()
-                var ex: Exception = e
-                var message = e.message ?: ""
-                var code = HttpConstant.ERROR_RESPONSE_ON_FAILURE
-                if (e is SocketTimeoutException) {
-                    message = "request timeout"
-                } else if (e is InterruptedIOException && e.message == "timeout") {
-                    message = "request timeout"
-                } else if (e is UnknownHostException && !NetworkUtils.isConnected()) {
-                    message = "network unavailable"
-                    code = HttpConstant.ERROR_NETWORK_UNAVAILABLE
-                    ex = NetWorkUnAvailableException()
+        if (callManager.addCall(url, params, call)) {//添加成功说明没有重复请求
+            callback?.onStart(call)
+            call.enqueue(object : Callback {
+                override fun onResponse(call: Call, response: Response) {
+                    callManager.removeCall(url, params)
+                    handleResponse(response, callback)
                 }
-                //回调跳转主线程
-                ktHttp.mHandler.post { handleFailure(ex, code, message, callback) }
-            }
-        })
-        mCall = call
-        return this as R
+
+                override fun onFailure(call: Call, e: IOException) {
+                    callManager.removeCall(url, params)
+                    e.printStackTrace()
+                    var ex: Exception = e
+                    var message = e.message ?: ""
+                    var code = HttpConstant.ERROR_RESPONSE_ON_FAILURE
+                    if (e is SocketTimeoutException) {
+                        message = "request timeout"
+                    } else if (e is InterruptedIOException && e.message == "timeout") {
+                        message = "request timeout"
+                    } else if (e is UnknownHostException && !NetworkUtils.isConnected()) {
+                        message = "network unavailable"
+                        code = HttpConstant.ERROR_NETWORK_UNAVAILABLE
+                        ex = NetWorkUnAvailableException()
+                    }
+                    //回调跳转主线程
+                    ktHttp.mHandler.post { handleFailure(ex, code, message, callback) }
+                }
+            })
+            mCall = call
+        }
     }
 
     /**
      * 取消网络请求
      */
     fun cancel() {
-        if (mCall?.isCanceled() == false) mCall?.cancel()
+        mCall?.cancel()
+        callManager.removeCall(url, params)
     }
 
     private fun handleResponse(response: Response, callback: RequestCallback?) {
-        callManager.removeCall(url)
         networkIO.submit {
             try {
                 val result = ExceptionHelper.getNotNullResult(response).string()

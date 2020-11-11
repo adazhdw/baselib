@@ -11,11 +11,9 @@ import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.request.*
 import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
 import com.adazhdw.ktlib.kthttp.ssl.HttpsUtils
-import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager
 import com.adazhdw.ktlib.kthttp.util.OkHttpLogger
 import com.adazhdw.ktlib.kthttp.util.logging.Level
 import com.adazhdw.ktlib.kthttp.util.logging.LoggingInterceptor
-import okhttp3.Call
 import okhttp3.Headers
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -74,7 +72,9 @@ class KtHttp private constructor() {
             callback: RequestCallback? = null
         ): GetRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return GetRequest(url, params).execute(callback)
+            val request = GetRequest(url, params)
+            request.execute(callback)
+            return request
         }
 
         /**
@@ -89,7 +89,9 @@ class KtHttp private constructor() {
             callback: RequestCallback? = null
         ): PostRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return PostRequest(url, params).execute(callback)
+            val request = PostRequest(url, params)
+            request.execute(callback)
+            return request
         }
 
         /**
@@ -104,7 +106,9 @@ class KtHttp private constructor() {
             callback: RequestCallback? = null
         ): PutRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return PutRequest(url, params).execute(callback)
+            val request = PutRequest(url, params)
+            request.execute(callback)
+            return request
         }
 
         /**
@@ -119,7 +123,9 @@ class KtHttp private constructor() {
             callback: RequestCallback? = null
         ): DeleteRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return DeleteRequest(url, params).execute(callback)
+            val request = DeleteRequest(url, params)
+            request.execute(callback)
+            return request
         }
 
         /**
@@ -134,7 +140,9 @@ class KtHttp private constructor() {
             callback: RequestCallback? = null
         ): HeadRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return HeadRequest(url, params).execute(callback)
+            val request = HeadRequest(url, params)
+            request.execute(callback)
+            return request
         }
 
         /**
@@ -149,17 +157,10 @@ class KtHttp private constructor() {
             callback: RequestCallback? = null
         ): PatchRequest {
             if (params.tag.isEmpty()) params.tag = url
-            return PatchRequest(url, params).execute(callback)
+            val request = PatchRequest(url, params)
+            request.execute(callback)
+            return request
         }
-
-        fun cancel(url: String) {
-            if (url.isNotBlank()) {
-                val call: Call? = OkHttpCallManager.callManager.getCall(url)
-                call?.cancel()
-                OkHttpCallManager.callManager.removeCall(url)
-            }
-        }
-
     }
 
     /**

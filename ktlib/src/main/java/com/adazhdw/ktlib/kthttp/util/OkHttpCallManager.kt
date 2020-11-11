@@ -1,6 +1,7 @@
 package com.adazhdw.ktlib.kthttp.util
 
 import android.text.TextUtils.isEmpty
+import com.adazhdw.ktlib.kthttp.model.Params
 import okhttp3.Call
 import java.util.concurrent.ConcurrentHashMap
 
@@ -11,21 +12,26 @@ import java.util.concurrent.ConcurrentHashMap
  **/
 internal class OkHttpCallManager private constructor() {
     private val callMap: ConcurrentHashMap<String, Call> = ConcurrentHashMap()
-    fun addCall(url: String, call: Call?) {
-        if (call != null && !isEmpty(url)) {
-            callMap[url] = call
+    fun addCall(url: String, params: Params, call: Call?): Boolean {//如果isCalling,返回 false 取消重复请求
+        val key = url + listOf(params.headers, params.params).toString()
+        if (call != null && !isEmpty(key) && !callMap.containsKey(key)) {
+            callMap[key] = call
+            return true//添加成功说明没有重复请求
         }
+        return false
     }
 
-    fun getCall(url: String): Call? {
-        return if (!isEmpty(url)) {
-            callMap[url]
+    fun getCall(url: String, params: Params): Call? {
+        val key = url + listOf(params.headers, params.params).toString()
+        return if (!isEmpty(key)) {
+            callMap[key]
         } else null
     }
 
-    fun removeCall(url: String) {
-        if (!isEmpty(url)) {
-            callMap.remove(url)
+    fun removeCall(url: String, params: Params) {
+        val key = url + listOf(params.headers, params.params).toString()
+        if (!isEmpty(key)) {
+            callMap.remove(key)
         }
     }
 
