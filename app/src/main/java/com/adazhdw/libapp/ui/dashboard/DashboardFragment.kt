@@ -39,7 +39,7 @@ class DashboardFragment(override val layoutId: Int = R.layout.fragment_dashboard
         super.onViewCreated(view, savedInstanceState)
         val textView: TextView = view.findViewById(R.id.text_dashboard)
 
-        launch {
+        launchOnUI {
             /*val data = requestCoroutines<NetResponse<DataFeed>>(
                 method = POST,
                 url = "https://www.wanandroid.com/article/query/0/json",

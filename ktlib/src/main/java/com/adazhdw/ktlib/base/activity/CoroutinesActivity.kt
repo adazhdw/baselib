@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 // version 1.0
 abstract class CoroutinesActivity : AppCompatActivity() {
 
-    protected val TAG = javaClass.name + "------"
+    protected val TAG = javaClass.simpleName + "-${this.hashCode()}-"
     protected val mHandler: Handler by lazy { Handler(Looper.getMainLooper()) }
 
     protected fun launchWhenResumed(block: suspend CoroutineScope.() -> Unit) {

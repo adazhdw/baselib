@@ -1,8 +1,8 @@
 package com.adazhdw.ktlib.http
 
 import com.adazhdw.ktlib.BuildConfig
+import com.adazhdw.ktlib.KtLib
 import com.adazhdw.ktlib.kthttp.util.OkHttpLogger
-import com.adazhdw.ktlib.mBaseUrl
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -27,11 +27,11 @@ object RetrofitClient {
     }
 
     init {
-        if (mBaseUrl.isBlank()) {
+        if (KtLib.mBaseUrl.isBlank()) {
             error("base url is null ")
         }
         mRetrofit = Retrofit.Builder()
-            .baseUrl(mBaseUrl)
+            .baseUrl(KtLib.mBaseUrl)
             .client(getClient())
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(CoroutineCallAdapterFactory())

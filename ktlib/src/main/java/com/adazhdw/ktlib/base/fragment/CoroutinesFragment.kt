@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 abstract class CoroutinesFragment : Fragment() {
 
-    protected val TAG = this.javaClass.name + "------"
+    protected val TAG = this.javaClass.simpleName + "-${this.hashCode()}-"
 
     protected fun launchWhenResumed(block: suspend CoroutineScope.() -> Unit) {
         lifecycleScope.launchWhenResumed(block)
@@ -23,11 +23,6 @@ abstract class CoroutinesFragment : Fragment() {
     protected fun launchWhenStarted(block: suspend CoroutineScope.() -> Unit) {
         lifecycleScope.launchWhenStarted(block)
     }
-
-    protected fun launch(
-        error: ((Exception) -> Unit)? = null,
-        block: suspend CoroutineScope.() -> Unit
-    ) = launchOnUI(error, block)
 
     protected fun launchOnUI(
         error: ((Exception) -> Unit)? = null,

@@ -38,7 +38,7 @@ class HomeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         val textView: TextView = view.findViewById(R.id.text_home)
 
-        launch {
+        launchOnUI {
             /*val data = requestCoroutines<NetResponse<DataFeed>>(
                 url = "https://wanandroid.com/wxarticle/list/408/1/json",
                 params = KParams.Builder().addParams(mapOf("k" to "Android")).build()
