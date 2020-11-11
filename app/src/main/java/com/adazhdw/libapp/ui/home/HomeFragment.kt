@@ -39,10 +39,6 @@ class HomeFragment : BaseFragment() {
         val textView: TextView = view.findViewById(R.id.text_home)
 
         launchOnUI {
-            /*val data = requestCoroutines<NetResponse<DataFeed>>(
-                url = "https://wanandroid.com/wxarticle/list/408/1/json",
-                params = KParams.Builder().addParams(mapOf("k" to "Android")).build()
-            )*/
             val time = measureTimeMillis {
                 val data = getCoroutines<NetResponse<DataFeed>>(
                     url = "https://wanandroid.com/wxarticle/list/408/1/json",
@@ -56,15 +52,6 @@ class HomeFragment : BaseFragment() {
             }
             "$time".logD(TAG)
         }
-
-        /*getRequest<NetResponse<DataFeed>>(
-            url = "https://wanandroid.com/wxarticle/list/408/1/json",
-            params = KParams.Builder().addParams(mapOf("k" to "Android")).build(),
-            success = {
-                textView.text = it.toString()
-            }, error = { code, msg ->
-                "code:$code,msg:$msg-error-happened".logD("HomeFragment")
-            })*/
     }
 
     override val layoutId: Int

@@ -40,11 +40,6 @@ class DashboardFragment(override val layoutId: Int = R.layout.fragment_dashboard
         val textView: TextView = view.findViewById(R.id.text_dashboard)
 
         launchOnUI {
-            /*val data = requestCoroutines<NetResponse<DataFeed>>(
-                method = POST,
-                url = "https://www.wanandroid.com/article/query/0/json",
-                params = KParams.Builder().addParams(mapOf("k" to "ViewModel")).build()
-            )*/
             val time = measureTimeMillis {
                 val data = postCoroutines<NetResponse<DataFeed>>(
                     url = "https://www.wanandroid.com/article/query/0/json",
@@ -59,15 +54,5 @@ class DashboardFragment(override val layoutId: Int = R.layout.fragment_dashboard
             }
             "$time".logD(TAG)
         }
-
-        /*postRequest<NetResponse<DataFeed>>(
-            url = "https://www.wanandroid.com/article/query/0/json",
-            params = KParams.Builder().addParams(mapOf("k" to "ViewModel")).build(),
-            success = {
-                textView.text = it.toString()
-            }, error = { code, msg ->
-
-            }
-        )*/
     }
 }
