@@ -2,7 +2,7 @@ package com.adazhdw.ktlib.kthttp.ext
 
 import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.core.lifecycle.addOnDestroy
-import com.adazhdw.ktlib.kthttp.KtHttp
+import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestGsonCallback
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
@@ -41,7 +41,7 @@ inline fun <reified T : Any> netRequest(
     crossinline success: ((data: T) -> Unit),
     crossinline error: ((code: Int, msg: String?) -> Unit)
 ): BaseRequest<*> {
-    return KtHttp.request(method, url, params, object : RequestGsonCallback<T>() {
+    return ktHttp.request(method, url, params, object : RequestGsonCallback<T>() {
 
         override fun onError(code: Int, msg: String?) {
             error.invoke(code, msg)

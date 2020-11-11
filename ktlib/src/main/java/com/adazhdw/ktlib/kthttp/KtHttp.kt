@@ -34,133 +34,125 @@ class KtHttp private constructor() {
     private var commonParams: Params? = null
 
     companion object {
-
         val ktHttp by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { KtHttp() }
+    }
 
-        /**
-         * 请求
-         * @param url url
-         * @param params 请求参数
-         * @param callback 请求回调
-         */
-        @JvmOverloads
-        fun request(
-            method: Method,
-            url: String,
-            params: Params = Params(url),
-            callback: RequestCallback? = null
-        ): BaseRequest<*> {
-            return when (method) {
-                Method.GET -> get(url, params, callback)
-                Method.DELETE -> delete(url, params, callback)
-                Method.HEAD -> head(url, params, callback)
-                Method.POST -> post(url, params, callback)
-                Method.PUT -> put(url, params, callback)
-                Method.PATCH -> patch(url, params, callback)
-            }
+    /**
+     * 请求
+     * @param url url
+     * @param params 请求参数
+     * @param callback 请求回调
+     */
+    fun request(
+        method: Method,
+        url: String,
+        params: Params = Params(url),
+        callback: RequestCallback? = null
+    ): BaseRequest<*> {
+        return when (method) {
+            Method.GET -> get(url, params, callback)
+            Method.DELETE -> delete(url, params, callback)
+            Method.HEAD -> head(url, params, callback)
+            Method.POST -> post(url, params, callback)
+            Method.PUT -> put(url, params, callback)
+            Method.PATCH -> patch(url, params, callback)
         }
+    }
 
-        /**
-         * Get请求
-         * @param url url
-         * @param params 请求参数
-         */
-        @JvmOverloads
-        fun get(
-            url: String,
-            params: Params = Params(url),
-            callback: RequestCallback? = null
-        ): GetRequest {
-            if (params.tag.isEmpty()) params.tag = url
-            val request = GetRequest(url, params)
-            request.execute(callback)
-            return request
-        }
+    /**
+     * Get请求
+     * @param url url
+     * @param params 请求参数
+     */
+    fun get(
+        url: String,
+        params: Params = Params(url),
+        callback: RequestCallback? = null
+    ): GetRequest {
+        if (params.tag.isEmpty()) params.tag = url
+        val request = GetRequest(url, params)
+        request.execute(callback)
+        return request
+    }
 
-        /**
-         * Post请求
-         * @param url url
-         * @param params 请求参数
-         */
-        @JvmOverloads
-        fun post(
-            url: String,
-            params: Params = Params(url),
-            callback: RequestCallback? = null
-        ): PostRequest {
-            if (params.tag.isEmpty()) params.tag = url
-            val request = PostRequest(url, params)
-            request.execute(callback)
-            return request
-        }
+    /**
+     * Post请求
+     * @param url url
+     * @param params 请求参数
+     */
+    fun post(
+        url: String,
+        params: Params = Params(url),
+        callback: RequestCallback? = null
+    ): PostRequest {
+        if (params.tag.isEmpty()) params.tag = url
+        val request = PostRequest(url, params)
+        request.execute(callback)
+        return request
+    }
 
-        /**
-         * put请求
-         * @param url url
-         * @param params 请求参数
-         */
-        @JvmOverloads
-        fun put(
-            url: String,
-            params: Params = Params(url),
-            callback: RequestCallback? = null
-        ): PutRequest {
-            if (params.tag.isEmpty()) params.tag = url
-            val request = PutRequest(url, params)
-            request.execute(callback)
-            return request
-        }
+    /**
+     * put请求
+     * @param url url
+     * @param params 请求参数
+     */
+    fun put(
+        url: String,
+        params: Params = Params(url),
+        callback: RequestCallback? = null
+    ): PutRequest {
+        if (params.tag.isEmpty()) params.tag = url
+        val request = PutRequest(url, params)
+        request.execute(callback)
+        return request
+    }
 
-        /**
-         * delete请求
-         * @param url url
-         * @param params 请求参数
-         */
-        @JvmOverloads
-        fun delete(
-            url: String,
-            params: Params = Params(url),
-            callback: RequestCallback? = null
-        ): DeleteRequest {
-            if (params.tag.isEmpty()) params.tag = url
-            val request = DeleteRequest(url, params)
-            request.execute(callback)
-            return request
-        }
+    /**
+     * delete请求
+     * @param url url
+     * @param params 请求参数
+     */
+    fun delete(
+        url: String,
+        params: Params = Params(url),
+        callback: RequestCallback? = null
+    ): DeleteRequest {
+        if (params.tag.isEmpty()) params.tag = url
+        val request = DeleteRequest(url, params)
+        request.execute(callback)
+        return request
+    }
 
-        /**
-         * head请求
-         * @param url url
-         * @param params 请求参数
-         */
-        @JvmOverloads
-        fun head(
-            url: String,
-            params: Params = Params(url),
-            callback: RequestCallback? = null
-        ): HeadRequest {
-            if (params.tag.isEmpty()) params.tag = url
-            val request = HeadRequest(url, params)
-            request.execute(callback)
-            return request
-        }
+    /**
+     * head请求
+     * @param url url
+     * @param params 请求参数
+     */
+    fun head(
+        url: String,
+        params: Params = Params(url),
+        callback: RequestCallback? = null
+    ): HeadRequest {
+        if (params.tag.isEmpty()) params.tag = url
+        val request = HeadRequest(url, params)
+        request.execute(callback)
+        return request
+    }
 
-        /**
-         * patch请求
-         * @param url url
-         * @param params 请求参数
-         */
-        @JvmOverloads
-        fun patch(
-            url: String,
-            params: Params = Params(url),
-            callback: RequestCallback? = null
-        ): PatchRequest {
-            if (params.tag.isEmpty()) params.tag = url
-            val request = PatchRequest(url, params)
-            request.execute(callback)
-            return request
-        }
+    /**
+     * patch请求
+     * @param url url
+     * @param params 请求参数
+     */
+    fun patch(
+        url: String,
+        params: Params = Params(url),
+        callback: RequestCallback? = null
+    ): PatchRequest {
+        if (params.tag.isEmpty()) params.tag = url
+        val request = PatchRequest(url, params)
+        request.execute(callback)
+        return request
     }
 
     /**

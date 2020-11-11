@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.kthttp.ext
 
-import com.adazhdw.ktlib.kthttp.KtHttp
+import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestGsonCallback
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
@@ -48,7 +48,7 @@ suspend inline fun <reified T : Any> requestCoroutines(
         continuation.invokeOnCancellation {
             request?.cancel()
         }
-        request = KtHttp.request(method, url, params, object : RequestGsonCallback<T>() {
+        request = ktHttp.request(method, url, params, object : RequestGsonCallback<T>() {
 
             override fun onFailure(e: Exception, code: Int, msg: String?) {
                 super.onFailure(e, code, msg)

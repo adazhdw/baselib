@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adazhdw.ktlib.R
-import com.adazhdw.ktlib.base.fragment.BaseFragmentImpl
+import com.adazhdw.ktlib.base.fragment.BaseFragment
 import kotlinx.android.synthetic.main.fragment_list_layout_ex.*
 
 @Deprecated("")
-abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragmentImpl() {
+abstract class ListFragmentEx<M : Any, A : ListAdapter> : BaseFragment() {
     override val layoutId: Int
         get() = R.layout.fragment_list_layout_ex
     open val mLoadMoreEnable: Boolean
