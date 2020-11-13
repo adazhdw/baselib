@@ -1,13 +1,10 @@
 package com.adazhdw.ktlib.kthttp
 
-import android.os.Handler
-import android.os.Looper
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.request.*
 import okhttp3.Headers
-import okhttp3.OkHttpClient
 
 /**
  * Author: dgz
@@ -21,8 +18,6 @@ class KtHttp private constructor() {
         val ktHttp by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { KtHttp() }
     }
 
-    internal var mOkHttpClient: OkHttpClient = obtainClient()
-    internal val mHandler: Handler = Handler(Looper.getMainLooper())
     private val commonParamBuilder = Params.Builder()
     private var commonParams: Params? = null
 
@@ -152,14 +147,6 @@ class KtHttp private constructor() {
     }
 
     /**
-     * 设置 OkHttpClient
-     */
-    fun setOkHttpClient(client: OkHttpClient): KtHttp {
-        this.mOkHttpClient = client
-        return this
-    }
-
-    /**
      * 设置 公共 header 参数
      */
     fun addCommonHeaders(headers: Map<String, String>): KtHttp {
@@ -208,10 +195,4 @@ class KtHttp private constructor() {
         }
         return commonParams?.params ?: mapOf()
     }
-
-    /**
-     * 获取内置 okHttpClient
-     */
-    private fun obtainClient(): OkHttpClient = KtConfig.getOkHttpClient()
-
 }

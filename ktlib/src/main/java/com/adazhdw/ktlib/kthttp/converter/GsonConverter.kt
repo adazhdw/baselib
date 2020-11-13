@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.kthttp.converter
 
-import com.adazhdw.ktlib.kthttp.KtConfig
+import com.adazhdw.ktlib.kthttp.model.KtConfig
 import com.adazhdw.ktlib.kthttp.util.GsonUtils
 import com.google.gson.Gson
 import java.lang.reflect.Type

@@ -1,6 +1,5 @@
 package com.adazhdw.ktlib.kthttp.progress
 
-import com.adazhdw.ktlib.kthttp.callback.ProgressCallback
 import com.adazhdw.ktlib.kthttp.progress.body.ProgressResponseBody
 import okhttp3.Interceptor
 import okhttp3.Response

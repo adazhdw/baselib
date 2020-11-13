@@ -1,12 +1,12 @@
 package com.adazhdw.ktlib.kthttp.request
 
 import com.adazhdw.ktlib.core.KtExecutors
-import com.adazhdw.ktlib.kthttp.KtHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.exception.ExceptionHelper
 import com.adazhdw.ktlib.kthttp.exception.HttpStatusException
 import com.adazhdw.ktlib.kthttp.exception.NetWorkUnAvailableException
 import com.adazhdw.ktlib.kthttp.model.HttpConstant
+import com.adazhdw.ktlib.kthttp.model.KtConfig
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
 import com.adazhdw.ktlib.kthttp.util.OkHttpCallManager
@@ -31,7 +31,7 @@ class RequestCall(
     private val params: Params = baseRequest.params
 ) {
 
-    private val okHttpClient: OkHttpClient = KtHttp.ktHttp.mOkHttpClient
+    private val okHttpClient: OkHttpClient = KtConfig.getOkHttpClient()
     var mCall: Call? = null
         private set
 
@@ -74,7 +74,7 @@ class RequestCall(
                         ex = NetWorkUnAvailableException()
                     }
                     //回调跳转主线程
-                    KtHttp.ktHttp.mHandler.post { handleFailure(ex, code, message, callback) }
+                    KtExecutors.mainThread.execute { handleFailure(ex, code, message, callback) }
                 }
             })
             mCall = call
@@ -94,13 +94,13 @@ class RequestCall(
             try {
                 val result = ExceptionHelper.getNotNullResult(response).string()
                 //回调跳转主线程
-                KtHttp.ktHttp.mHandler.post {
+                KtExecutors.mainThread.execute {
                     callback?.onHttpResponse(response, result)
                     callback?.onFinish()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                KtHttp.ktHttp.mHandler.post {
+                KtExecutors.mainThread.execute {
                     if (e is HttpStatusException) {
                         handleFailure(e, e.statusCode, e.message, callback)
                     } else {

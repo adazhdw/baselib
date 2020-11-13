@@ -1,7 +1,7 @@
 package com.adazhdw.ktlib.kthttp.callback
 
-import com.adazhdw.ktlib.kthttp.KtConfig
 import com.adazhdw.ktlib.kthttp.model.HttpConstant
+import com.adazhdw.ktlib.kthttp.model.KtConfig
 import com.adazhdw.ktlib.kthttp.util.TypeUtil
 import com.google.gson.JsonParseException
 import okhttp3.Response

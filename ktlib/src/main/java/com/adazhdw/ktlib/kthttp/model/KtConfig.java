@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.kthttp;
+package com.adazhdw.ktlib.kthttp.model;
 
 import androidx.annotation.NonNull;
 
@@ -8,7 +8,6 @@ import com.adazhdw.ktlib.kthttp.coder.UrlCoder;
 import com.adazhdw.ktlib.kthttp.converter.GsonConverter;
 import com.adazhdw.ktlib.kthttp.converter.IConverter;
 import com.adazhdw.ktlib.kthttp.interceptor.RetryInterceptor;
-import com.adazhdw.ktlib.kthttp.model.HttpConstant;
 import com.adazhdw.ktlib.kthttp.ssl.HttpsUtils;
 import com.adazhdw.ktlib.kthttp.util.OkHttpLogger;
 import com.adazhdw.ktlib.kthttp.util.logging.Level;
@@ -31,6 +30,7 @@ public class KtConfig {
     private static IConverter converter = GsonConverter.Companion.create();
     private static boolean needDecodeResult = false;
     private static OkHttpClient mOkHttpClient = getOkHttpClient(HttpConstant.DEFAULT_TIMEOUT);
+    private static boolean debug = true;
 
     public static IConverter getConverter() {
         return converter;
@@ -94,5 +94,13 @@ public class KtConfig {
         }
         return new LoggingInterceptor.Builder()
                 .setLevel(level).build();
+    }
+
+    public static boolean isDebug() {
+        return debug;
+    }
+
+    public static void setDebug(boolean debug) {
+        KtConfig.debug = debug;
     }
 }
