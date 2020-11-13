@@ -6,7 +6,7 @@ import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestGsonCallback
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
-import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
+import com.adazhdw.ktlib.kthttp.request.RequestCall
 
 /**
  * Author: dgz
@@ -40,7 +40,7 @@ inline fun <reified T : Any> netRequest(
     method: Method = Method.GET,
     crossinline success: ((data: T) -> Unit),
     crossinline error: ((code: Int, msg: String?) -> Unit)
-): BaseRequest<*> {
+): RequestCall {
     return ktHttp.request(method, url, params, object : RequestGsonCallback<T>() {
 
         override fun onError(code: Int, msg: String?) {

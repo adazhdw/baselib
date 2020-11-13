@@ -1,7 +1,6 @@
 package com.adazhdw.ktlib.kthttp.request.base
 
 import com.adazhdw.ktlib.kthttp.KtHttp
-import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.util.RequestUrlUtil
 import okhttp3.RequestBody
@@ -12,11 +11,10 @@ import okhttp3.internal.EMPTY_REQUEST
  * date-time：2020/9/3 16:25
  * description：
  **/
-abstract class EmptyRequest<R : EmptyRequest<R>>(
-    method: Method,
+abstract class EmptyRequest(
     url: String,
     params: Params
-) : BaseRequest<R>(method, url, params) {
+) : BaseRequest(url, params) {
     protected val mUrl: String
 
     init {
