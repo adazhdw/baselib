@@ -12,8 +12,6 @@ import com.adazhdw.ktlib.base.mvvm.viewModel
 import com.adazhdw.ktlib.kthttp.ext.postRequest
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.libapp.R
-import com.adazhdw.libapp.bean.DataFeed
-import com.adazhdw.libapp.bean.NetResponse
 
 class NotificationsFragment : Fragment() {
 
@@ -37,15 +35,11 @@ class NotificationsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val textView: TextView = view.findViewById(R.id.text_notifications)
 
-        postRequest<NetResponse<DataFeed>>(
+        postRequest<String>(
             url = "https://www.wanandroid.com/article/query/0/json",
             params = Params.Builder().addParam("k", "ViewModel").build(),
             success = { data ->
-                val stringBuilder = StringBuilder()
-                for (item in data.data.datas) {
-                    stringBuilder.append("标题：${item.title}".parseAsHtml()).append("\n\n")
-                }
-                textView.text = stringBuilder.toString()
+                textView.text = data.parseAsHtml()
             }, error = { code, msg ->
                 textView.text = ("code:$code,msg:$msg")
             }
