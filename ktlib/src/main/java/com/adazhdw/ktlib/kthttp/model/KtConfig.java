@@ -2,7 +2,7 @@ package com.adazhdw.ktlib.kthttp.model;
 
 import androidx.annotation.NonNull;
 
-import com.adazhdw.ktlib.BuildConfig;
+import com.adazhdw.ktlib.KtLib;
 import com.adazhdw.ktlib.kthttp.coder.ICoder;
 import com.adazhdw.ktlib.kthttp.coder.UrlCoder;
 import com.adazhdw.ktlib.kthttp.converter.GsonConverter;
@@ -77,7 +77,7 @@ public class KtConfig {
 
     private static Interceptor getLoggingInterceptor2() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new OkHttpLogger());
-        if (BuildConfig.DEBUG) {
+        if (KtLib.INSTANCE.isDebug$ktlib_debug()) {
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         } else {
             interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
@@ -87,7 +87,7 @@ public class KtConfig {
 
     public static Interceptor getLoggingInterceptor() {
         Level level;
-        if (BuildConfig.DEBUG) {
+        if (KtLib.INSTANCE.isDebug$ktlib_debug()) {
             level = Level.BODY;
         } else {
             level = Level.BASIC;
