@@ -9,7 +9,7 @@ import java.lang.reflect.Type
  * description：
  **/
 object ClazzUtil {
-    fun getClassType(subclass: Class<*>): Type? {
+    fun getClassType(subclass: Class<*>): Type {
         val superclass = subclass.genericSuperclass
         if (superclass is Class<*>) {
             throw RuntimeException("Missing type parameter.")

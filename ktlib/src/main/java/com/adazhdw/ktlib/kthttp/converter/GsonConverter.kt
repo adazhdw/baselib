@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.kthttp.converter
 
-import com.adazhdw.ktlib.kthttp.model.KtConfig.Companion.ktConfig
+import com.adazhdw.ktlib.kthttp.model.KtConfig
 import com.adazhdw.ktlib.kthttp.util.GsonUtils
 import com.google.gson.Gson
 import java.lang.reflect.Type
@@ -22,7 +22,7 @@ class GsonConverter private constructor(private val gson: Gson) : IConverter {
     override fun <T> convert(result: String, type: Type?, needDecodeResult: Boolean): T {
         var result2 = result
         if (needDecodeResult) {
-            result2 = ktConfig.coder().decode(result2)
+            result2 = KtConfig.coder.decode(result2)
         }
         if (type === String::class.java) return result2 as T
         return gson.fromJson(result, type)

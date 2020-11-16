@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.kthttp.model
 
-import com.adazhdw.ktlib.KtLib.isDebug
+import com.adazhdw.ktlib.BuildConfig
 import com.adazhdw.ktlib.kthttp.coder.ICoder
 import com.adazhdw.ktlib.kthttp.coder.UrlCoder
 import com.adazhdw.ktlib.kthttp.converter.GsonConverter
@@ -20,56 +20,16 @@ import java.util.concurrent.TimeUnit
  * date-time：2020/11/16 15:05
  * description：
  **/
-class KtConfig private constructor() {
-    companion object {
-        val ktConfig: KtConfig by lazy { KtConfig() }
-    }
+object KtConfig {
 
-    private var coder: ICoder = UrlCoder.create()
-    private var converter: IConverter = GsonConverter.create()
-    private var needDecodeResult = false
-    private var mOkHttpClient = getOkHttpClient(HttpConstant.DEFAULT_TIMEOUT)
-    private var debug = true
+    var coder: ICoder = UrlCoder.create()
+    var converter: IConverter = GsonConverter.create()
+    var needDecodeResult = false
+    var mOkHttpClient = getOkHttpClient()
+    var debug: Boolean = BuildConfig.DEBUG
 
-    fun setCoder(coder: ICoder): KtConfig {
-        this.coder = coder
-        return this
-    }
-
-    fun coder() = coder
-
-    fun setConverter(iConverter: IConverter): KtConfig {
-        this.converter = iConverter
-        return this
-    }
-
-    fun converter() = converter
-
-    fun setNeedDecodeResult(needDecodeResult: Boolean): KtConfig {
-        this.needDecodeResult = needDecodeResult
-        return this
-    }
-
-    fun needDecodeResult() = needDecodeResult
-
-    fun setDebug(debug: Boolean): KtConfig {
-        this.debug = debug
-        return this
-    }
-
-    fun debug() = debug
-
-
-    fun getOkHttpClient(): OkHttpClient {
-        return this.mOkHttpClient
-    }
-
-    fun setOkHttpClient(mOkHttpClient: OkHttpClient): KtConfig {
-        this.mOkHttpClient = mOkHttpClient
-        return this
-    }
-
-    fun getOkHttpClient(timeout: Long): OkHttpClient {
+    @JvmOverloads
+    fun getOkHttpClient(timeout: Long = HttpConstant.DEFAULT_TIMEOUT): OkHttpClient {
         val sslParams = HttpsUtils.getSslSocketFactory()
         return OkHttpClient.Builder()
             .connectTimeout(timeout, TimeUnit.SECONDS)
@@ -80,9 +40,9 @@ class KtConfig private constructor() {
             .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager).build()
     }
 
-    private fun getLoggingInterceptor2(): Interceptor {
+    fun getLoggingInterceptor2(): Interceptor {
         val interceptor = HttpLoggingInterceptor(OkHttpLogger())
-        if (isDebug) {
+        if (debug) {
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         } else {
             interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC)
@@ -91,7 +51,7 @@ class KtConfig private constructor() {
     }
 
     fun getLoggingInterceptor(): Interceptor {
-        val level: Level = if (isDebug) Level.BODY else Level.BASIC
+        val level: Level = if (debug) Level.BODY else Level.BASIC
         return LoggingInterceptor.Builder()
             .setLevel(level).build()
     }
