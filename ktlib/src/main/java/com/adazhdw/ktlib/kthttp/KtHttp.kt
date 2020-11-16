@@ -9,7 +9,7 @@ import com.adazhdw.ktlib.kthttp.model.HttpConstant
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.request.*
-import com.adazhdw.ktlib.utils.NetworkUtils
+import com.adazhdw.ktlib.utils.NetworkUtil
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Headers
@@ -229,7 +229,7 @@ class KtHttp private constructor() {
                     message = "request timeout"
                 } else if (e is InterruptedIOException && e.message == "timeout") {
                     message = "request timeout"
-                } else if (e is UnknownHostException && !NetworkUtils.isConnected()) {
+                } else if (e is UnknownHostException && !NetworkUtil.isConnected()) {
                     message = "network unavailable"
                     code = HttpConstant.ERROR_NETWORK_UNAVAILABLE
                     ex = NetWorkUnAvailableException()

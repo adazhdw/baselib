@@ -10,10 +10,14 @@ import java.lang.reflect.Type
 /**
  * Author: dgz
  * Date: 2020/8/21 14:50
- * Description: Json回调转换泛型类 T
+ * Description: Gson回调转换泛型类 T
  */
 abstract class RequestJsonCallback<T : Any> : RequestCallbackImpl() {
-    private val mType: Type = ClazzUtil.getClassType(javaClass)
+    private val mType: Type?
+
+    init {
+        mType = getSuperclassTypeParameter(javaClass)
+    }
 
     override fun onHttpResponse(httpResponse: Response, result: String) {
         try {
@@ -29,6 +33,10 @@ abstract class RequestJsonCallback<T : Any> : RequestCallbackImpl() {
 
     override fun onFailure(e: Exception, code: Int, msg: String?) {
         this.onError(code, msg)
+    }
+
+    private fun getSuperclassTypeParameter(subclass: Class<*>): Type? {
+        return ClazzUtil.getClassType(subclass)
     }
 
 }

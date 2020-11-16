@@ -9,6 +9,10 @@ import com.adazhdw.ktlib.Application
  **/
 class LibApp : Application() {
 
+    override fun onCreate() {
+        super.onCreate()
+    }
+
     override fun isDebug(): Boolean {
         return BuildConfig.DEBUG
     }
