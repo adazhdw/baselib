@@ -1,6 +1,7 @@
 package com.adazhdw.ktlib.kthttp.util;
 
-import com.google.gson.internal.$Gson$Types;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -18,9 +19,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Properties;
-
-import static com.google.gson.internal.$Gson$Preconditions.checkArgument;
-import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
 /**
  * author：daguozhu
@@ -127,7 +125,7 @@ public class TypeUtil {
             // Neal isn't either but suspects some pathological case related
             // to nested classes exists.
             Type rawType = parameterizedType.getRawType();
-            checkArgument(rawType instanceof Class);
+            Preconditions.checkArgument(rawType instanceof Class);
             return (Class<?>) rawType;
 
         } else if (type instanceof GenericArrayType) {
@@ -270,7 +268,7 @@ public class TypeUtil {
             // wildcards are useless for resolving supertypes. As the upper bound has the same raw type, use it instead
             context = ((WildcardType) context).getUpperBounds()[0];
         }
-        checkArgument(supertype.isAssignableFrom(contextRawType));
+        Preconditions.checkArgument(supertype.isAssignableFrom(contextRawType));
         return resolve(context, contextRawType,
                 TypeUtil.getGenericSupertype(context, contextRawType, supertype));
     }
@@ -327,7 +325,7 @@ public class TypeUtil {
     }
 
     public static Type resolve(Type context, Class<?> contextRawType, Type toResolve) {
-        return resolve(context, contextRawType, toResolve, new HashSet<TypeVariable>());
+        return resolve(context, contextRawType, toResolve, new HashSet<>());
     }
 
     private static Type resolve(Type context, Class<?> contextRawType, Type toResolve,
@@ -447,7 +445,7 @@ public class TypeUtil {
     }
 
     static void checkNotPrimitive(Type type) {
-        checkArgument(!(type instanceof Class<?>) || !((Class<?>) type).isPrimitive());
+        Preconditions.checkArgument(!(type instanceof Class<?>) || !((Class<?>) type).isPrimitive());
     }
 
     private static final class ParameterizedTypeImpl implements ParameterizedType, Serializable {
@@ -462,23 +460,25 @@ public class TypeUtil {
                 Class<?> rawTypeAsClass = (Class<?>) rawType;
                 boolean isStaticOrTopLevelClass = Modifier.isStatic(rawTypeAsClass.getModifiers())
                         || rawTypeAsClass.getEnclosingClass() == null;
-                checkArgument(ownerType != null || isStaticOrTopLevelClass);
+                Preconditions.checkArgument(ownerType != null || isStaticOrTopLevelClass);
             }
 
             this.ownerType = ownerType == null ? null : canonicalize(ownerType);
             this.rawType = canonicalize(rawType);
             this.typeArguments = typeArguments.clone();
             for (int t = 0, length = this.typeArguments.length; t < length; t++) {
-                checkNotNull(this.typeArguments[t]);
+                Preconditions.checkNotNull(this.typeArguments[t]);
                 checkNotPrimitive(this.typeArguments[t]);
                 this.typeArguments[t] = canonicalize(this.typeArguments[t]);
             }
         }
 
+        @NotNull
         public Type[] getActualTypeArguments() {
             return typeArguments.clone();
         }
 
+        @NotNull
         public Type getRawType() {
             return rawType;
         }
@@ -490,7 +490,7 @@ public class TypeUtil {
         @Override
         public boolean equals(Object other) {
             return other instanceof ParameterizedType
-                    && $Gson$Types.equals(this, (ParameterizedType) other);
+                    && TypeUtil.equals(this, (ParameterizedType) other);
         }
 
         @Override
@@ -500,6 +500,7 @@ public class TypeUtil {
                     ^ hashCodeOrZero(ownerType);
         }
 
+        @NotNull
         @Override
         public String toString() {
             int length = typeArguments.length;
@@ -524,6 +525,7 @@ public class TypeUtil {
             this.componentType = canonicalize(componentType);
         }
 
+        @NotNull
         public Type getGenericComponentType() {
             return componentType;
         }
@@ -531,7 +533,7 @@ public class TypeUtil {
         @Override
         public boolean equals(Object o) {
             return o instanceof GenericArrayType
-                    && $Gson$Types.equals(this, (GenericArrayType) o);
+                    && TypeUtil.equals(this, (GenericArrayType) o);
         }
 
         @Override
@@ -556,18 +558,18 @@ public class TypeUtil {
         private final Type lowerBound;
 
         public WildcardTypeImpl(Type[] upperBounds, Type[] lowerBounds) {
-            checkArgument(lowerBounds.length <= 1);
-            checkArgument(upperBounds.length == 1);
+            Preconditions.checkArgument(lowerBounds.length <= 1);
+            Preconditions.checkArgument(upperBounds.length == 1);
 
             if (lowerBounds.length == 1) {
-                checkNotNull(lowerBounds[0]);
+                Preconditions.checkNotNull(lowerBounds[0]);
                 checkNotPrimitive(lowerBounds[0]);
-                checkArgument(upperBounds[0] == Object.class);
+                Preconditions.checkArgument(upperBounds[0] == Object.class);
                 this.lowerBound = canonicalize(lowerBounds[0]);
                 this.upperBound = Object.class;
 
             } else {
-                checkNotNull(upperBounds[0]);
+                Preconditions.checkNotNull(upperBounds[0]);
                 checkNotPrimitive(upperBounds[0]);
                 this.lowerBound = null;
                 this.upperBound = canonicalize(upperBounds[0]);
@@ -578,6 +580,7 @@ public class TypeUtil {
             return new Type[]{upperBound};
         }
 
+        @NotNull
         public Type[] getLowerBounds() {
             return lowerBound != null ? new Type[]{lowerBound} : EMPTY_TYPE_ARRAY;
         }
@@ -585,7 +588,7 @@ public class TypeUtil {
         @Override
         public boolean equals(Object other) {
             return other instanceof WildcardType
-                    && $Gson$Types.equals(this, (WildcardType) other);
+                    && TypeUtil.equals(this, (WildcardType) other);
         }
 
         @Override
