@@ -1,7 +1,7 @@
 package com.adazhdw.ktlib.kthttp.callback
 
 import com.adazhdw.ktlib.kthttp.model.HttpConstant
-import com.adazhdw.ktlib.kthttp.model.KtConfig
+import com.adazhdw.ktlib.kthttp.model.KtConfig.Companion.ktConfig
 import com.adazhdw.ktlib.kthttp.util.ClazzUtil
 import com.google.gson.JsonParseException
 import okhttp3.Response
@@ -21,8 +21,7 @@ abstract class RequestGsonCallback<T : Any> : RequestCallbackImpl() {
 
     override fun onHttpResponse(httpResponse: Response, result: String) {
         try {
-            val data =
-                KtConfig.getConverter().convert<T>(result, mType, KtConfig.isNeedDecodeResult())
+            val data = ktConfig.converter().convert<T>(result, mType, ktConfig.needDecodeResult())
             this.onSuccess(data)
         } catch (e: JsonParseException) {
             onFailure(e, HttpConstant.ERROR_JSON_PARSE_EXCEPTION, "Data parse error${e.message}")
