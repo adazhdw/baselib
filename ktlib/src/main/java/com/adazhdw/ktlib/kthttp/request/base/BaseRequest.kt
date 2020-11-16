@@ -31,4 +31,6 @@ abstract class BaseRequest(
         }
         return builder
     }
+
+    open fun getRealUrl() = url
 }

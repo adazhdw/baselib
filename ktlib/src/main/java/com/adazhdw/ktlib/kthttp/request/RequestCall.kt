@@ -3,6 +3,7 @@ package com.adazhdw.ktlib.kthttp.request
 import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.model.KtConfig
+import com.adazhdw.ktlib.kthttp.model.Params
 import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
 import okhttp3.Call
 import okhttp3.OkHttpClient
@@ -12,7 +13,11 @@ import okhttp3.OkHttpClient
  * date-time：2020/11/13 15:28
  * description：
  **/
-class RequestCall(private val baseRequest: BaseRequest) {
+class RequestCall(
+    private val baseRequest: BaseRequest,
+    val url: String = baseRequest.getRealUrl(),
+    val params: Params = baseRequest.params
+) {
 
     private val okHttpClient: OkHttpClient = KtConfig.getOkHttpClient()
     var mCall: Call? = null
@@ -32,9 +37,8 @@ class RequestCall(private val baseRequest: BaseRequest) {
      */
     @Suppress("UNCHECKED_CAST")
     fun execute(callback: RequestCallback?) {
-        val call = getRawCall()
+        mCall = getRawCall()
         ktHttp.execute(this, callback)
-        mCall = call
     }
 
     /**
@@ -42,6 +46,7 @@ class RequestCall(private val baseRequest: BaseRequest) {
      */
     fun cancel() {
         mCall?.cancel()
+        mCall = null
     }
 
 }

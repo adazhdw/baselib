@@ -27,4 +27,5 @@ abstract class EmptyRequest(
 
     final override fun getRequestBody(): RequestBody = EMPTY_REQUEST
 
+    override fun getRealUrl(): String = mUrl
 }
