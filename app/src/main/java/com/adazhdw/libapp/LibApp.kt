@@ -10,6 +10,6 @@ import com.adazhdw.ktlib.Application
 class LibApp : Application() {
 
     override fun isDebug(): Boolean {
-        return true
+        return BuildConfig.DEBUG
     }
 }
