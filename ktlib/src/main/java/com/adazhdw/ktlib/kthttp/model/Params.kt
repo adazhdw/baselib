@@ -16,9 +16,9 @@ import java.io.File
  * Description:
  */
 class Params internal constructor(var tag: String = "") {
-    internal var headers: Map<String, String> = mapOf()
+    internal var headers = HttpHeaders()
         private set
-    internal var params: Map<String, String> = mapOf()
+    internal var params: HashMap<String, String> = hashMapOf()
         private set
     internal var files: List<Part> = listOf()
         private set
@@ -74,8 +74,8 @@ class Params internal constructor(var tag: String = "") {
         private var urlEncoder: Boolean = false
         private var needHeaders: Boolean = false
         private var jsonBody: String = ""
-        private val mHeaders: MutableMap<String, String> = mutableMapOf()
-        private val params: MutableMap<String, String> = mutableMapOf()
+        private val mHeaders: HashMap<String, String> = hashMapOf()
+        private val params: HashMap<String, String> = hashMapOf()
         private val files: MutableList<Part> = mutableListOf()
 
         fun setTag(mTag: String): Builder {
@@ -146,7 +146,7 @@ class Params internal constructor(var tag: String = "") {
 
         fun build(): Params {
             val option = Params(mTag)
-            option.headers = this.mHeaders
+            option.headers.putAll(this.mHeaders)
             option.params = this.params
             option.files = this.files
             option.urlEncoder = this.urlEncoder

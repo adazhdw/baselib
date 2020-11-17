@@ -27,7 +27,7 @@ abstract class BaseRequest(
     protected fun requestBuilder(): Request.Builder {
         if (params.needHeaders) {
             if (commonHeaders.isNotEmpty()) builder.headers(ktHttp.getCommonHttpHeaders())
-            for ((key, value) in params.headers) builder.addHeader(key, value)
+            for ((key, value) in params.headers.mHeaders) builder.addHeader(key, value)
         }
         return builder
     }

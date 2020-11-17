@@ -31,8 +31,8 @@ class KtHttp private constructor() {
         val ktHttp by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { KtHttp() }
     }
 
-    private val commonParamBuilder = Params.Builder()
-    private var commonParams: Params? = null
+    private val mParams: HashMap<String, Any> = hashMapOf()
+    private val mHeaders: HashMap<String, String> = hashMapOf()
 
     /**
      * 请求
@@ -163,29 +163,23 @@ class KtHttp private constructor() {
      * 设置 公共 header 参数
      */
     fun addCommonHeaders(headers: Map<String, String>): KtHttp {
-        commonParamBuilder.addHeaders(headers)
+        mHeaders.putAll(headers)
         return this
     }
 
     /**
      * 获取 公共 header 参数
      */
-    fun getCommonHeaders(): Map<String, String> {
-        if (commonParams == null) {
-            commonParams = commonParamBuilder.build()
-        }
-        return commonParams?.headers ?: mapOf()
+    fun getCommonHeaders(): HashMap<String, String> {
+        return mHeaders
     }
 
     /**
      * 获取 公共 header 参数
      */
     fun getCommonHttpHeaders(): Headers {
-        if (commonParams == null) {
-            commonParams = commonParamBuilder.build()
-        }
         val headers = Headers.Builder()
-        for ((name, value) in commonParams!!.headers) {
+        for ((name, value) in mHeaders) {
             headers.add(name, value)
         }
         return headers.build()
@@ -195,18 +189,15 @@ class KtHttp private constructor() {
      * 设置 公共参数
      */
     fun setCommonParams(params: Map<String, String>): KtHttp {
-        commonParamBuilder.addParams(params)
+        mParams.putAll(params)
         return this
     }
 
     /**
      * 获取 公共参数
      */
-    fun getCommonParams(): Map<String, String> {
-        if (commonParams == null) {
-            commonParams = commonParamBuilder.build()
-        }
-        return commonParams?.params ?: mapOf()
+    fun getCommonParams(): HashMap<String, Any> {
+        return mParams
     }
 
     /**
