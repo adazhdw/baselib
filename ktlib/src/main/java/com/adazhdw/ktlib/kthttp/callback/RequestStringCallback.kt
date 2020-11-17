@@ -10,6 +10,7 @@ import okhttp3.Response
 abstract class RequestStringCallback : RequestCallbackImpl() {
 
     override fun onHttpResponse(httpResponse: Response, result: String) {
+        super.onHttpResponse(httpResponse, result)
         onSuccess(result)
     }
 
@@ -18,6 +19,7 @@ abstract class RequestStringCallback : RequestCallbackImpl() {
     abstract fun onError(code: Int, msg: String?)
 
     override fun onFailure(e: Exception, code: Int, msg: String?) {
+        super.onFailure(e, code, msg)
         onError(code, msg)
     }
 }

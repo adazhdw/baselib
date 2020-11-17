@@ -20,6 +20,7 @@ abstract class RequestJsonCallback<T : Any> : RequestCallbackImpl() {
     }
 
     override fun onHttpResponse(httpResponse: Response, result: String) {
+        super.onHttpResponse(httpResponse, result)
         try {
             val data = KtConfig.converter.convert<T>(result, mType, KtConfig.needDecodeResult)
             this.onSuccess(data)
@@ -32,6 +33,7 @@ abstract class RequestJsonCallback<T : Any> : RequestCallbackImpl() {
     abstract fun onError(code: Int, msg: String?)
 
     override fun onFailure(e: Exception, code: Int, msg: String?) {
+        super.onFailure(e, code, msg)
         this.onError(code, msg)
     }
 

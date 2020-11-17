@@ -1,5 +1,7 @@
 package com.adazhdw.ktlib.kthttp.callback
 
+import com.adazhdw.ktlib.ext.logD
+import com.adazhdw.ktlib.ext.logE
 import okhttp3.Call
 import okhttp3.Response
 
@@ -25,19 +27,23 @@ interface RequestCallback {
 
 abstract class RequestCallbackImpl : RequestCallback {
 
-    override fun onStart(call: Call) {
+    companion object {
+        const val TAG = "RequestCallbackImpl"
+    }
 
+    override fun onStart(call: Call) {
+        "onStart".logD(TAG)
     }
 
     override fun onHttpResponse(httpResponse: Response, result: String) {
-
+        "onHttpResponse".logD(TAG)
     }
 
     override fun onFailure(e: Exception, code: Int, msg: String?) {
-
+        "onFailure:$e".logE(TAG)
     }
 
     override fun onFinish() {
-
+        "onFinish".logD(TAG)
     }
 }
