@@ -7,7 +7,7 @@ import com.adazhdw.ktlib.kthttp.exception.HttpStatusException
 import com.adazhdw.ktlib.kthttp.exception.NetWorkUnAvailableException
 import com.adazhdw.ktlib.kthttp.model.HttpConstant
 import com.adazhdw.ktlib.kthttp.model.Method
-import com.adazhdw.ktlib.kthttp.model.Params
+import com.adazhdw.ktlib.kthttp.model.Param
 import com.adazhdw.ktlib.kthttp.request.*
 import com.adazhdw.ktlib.utils.NetworkUtil
 import okhttp3.Call
@@ -31,7 +31,7 @@ class KtHttp private constructor() {
         val ktHttp by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { KtHttp() }
     }
 
-    private val mParams: HashMap<String, Any> = hashMapOf()
+    private val mParams: HashMap<String, String> = hashMapOf()
     private val mHeaders: HashMap<String, String> = hashMapOf()
 
     /**
@@ -44,16 +44,16 @@ class KtHttp private constructor() {
     fun request(
         method: Method,
         url: String,
-        params: Params = Params(url),
+        param: Param = Param.build(),
         callback: RequestCallback? = null
     ): RequestCall {
         return when (method) {
-            Method.GET -> get(url, params, callback)
-            Method.DELETE -> delete(url, params, callback)
-            Method.HEAD -> head(url, params, callback)
-            Method.POST -> post(url, params, callback)
-            Method.PUT -> put(url, params, callback)
-            Method.PATCH -> patch(url, params, callback)
+            Method.GET -> get(url, param, callback)
+            Method.DELETE -> delete(url, param, callback)
+            Method.HEAD -> head(url, param, callback)
+            Method.POST -> post(url, param, callback)
+            Method.PUT -> put(url, param, callback)
+            Method.PATCH -> patch(url, param, callback)
         }
     }
 
@@ -65,11 +65,10 @@ class KtHttp private constructor() {
     @JvmOverloads
     fun get(
         url: String,
-        params: Params = Params(url),
+        param: Param = Param.build(),
         callback: RequestCallback? = null
     ): RequestCall {
-        if (params.tag.isEmpty()) params.tag = url
-        val request = RequestCall(GetRequest(url, params))
+        val request = RequestCall(GetRequest(url, param))
         request.execute(callback)
         return request
     }
@@ -82,11 +81,10 @@ class KtHttp private constructor() {
     @JvmOverloads
     fun post(
         url: String,
-        params: Params = Params(url),
+        param: Param = Param.build(),
         callback: RequestCallback? = null
     ): RequestCall {
-        if (params.tag.isEmpty()) params.tag = url
-        val request = RequestCall(PostRequest(url, params))
+        val request = RequestCall(PostRequest(url, param))
         request.execute(callback)
         return request
     }
@@ -99,11 +97,10 @@ class KtHttp private constructor() {
     @JvmOverloads
     fun put(
         url: String,
-        params: Params = Params(url),
+        param: Param = Param.build(),
         callback: RequestCallback? = null
     ): RequestCall {
-        if (params.tag.isEmpty()) params.tag = url
-        val request = RequestCall(PutRequest(url, params))
+        val request = RequestCall(PutRequest(url, param))
         request.execute(callback)
         return request
     }
@@ -116,11 +113,10 @@ class KtHttp private constructor() {
     @JvmOverloads
     fun delete(
         url: String,
-        params: Params = Params(url),
+        param: Param = Param.build(),
         callback: RequestCallback? = null
     ): RequestCall {
-        if (params.tag.isEmpty()) params.tag = url
-        val request = RequestCall(DeleteRequest(url, params))
+        val request = RequestCall(DeleteRequest(url, param))
         request.execute(callback)
         return request
     }
@@ -133,11 +129,10 @@ class KtHttp private constructor() {
     @JvmOverloads
     fun head(
         url: String,
-        params: Params = Params(url),
+        param: Param = Param.build(),
         callback: RequestCallback? = null
     ): RequestCall {
-        if (params.tag.isEmpty()) params.tag = url
-        val request = RequestCall(HeadRequest(url, params))
+        val request = RequestCall(HeadRequest(url, param))
         request.execute(callback)
         return request
     }
@@ -150,11 +145,10 @@ class KtHttp private constructor() {
     @JvmOverloads
     fun patch(
         url: String,
-        params: Params = Params(url),
+        param: Param = Param.build(),
         callback: RequestCallback? = null
     ): RequestCall {
-        if (params.tag.isEmpty()) params.tag = url
-        val request = RequestCall(PatchRequest(url, params))
+        val request = RequestCall(PatchRequest(url, param))
         request.execute(callback)
         return request
     }
@@ -196,7 +190,7 @@ class KtHttp private constructor() {
     /**
      * 获取 公共参数
      */
-    fun getCommonParams(): HashMap<String, Any> {
+    fun getCommonParams(): HashMap<String, String> {
         return mParams
     }
 

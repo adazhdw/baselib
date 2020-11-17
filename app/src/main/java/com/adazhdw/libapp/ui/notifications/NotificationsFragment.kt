@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.adazhdw.ktlib.base.mvvm.viewModel
 import com.adazhdw.ktlib.kthttp.ext.postRequest
-import com.adazhdw.ktlib.kthttp.model.Params
+import com.adazhdw.ktlib.kthttp.model.Param
 import com.adazhdw.libapp.R
 
 class NotificationsFragment : Fragment() {
@@ -34,15 +34,16 @@ class NotificationsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val textView: TextView = view.findViewById(R.id.text_notifications)
-
-        postRequest<String>(
-            url = "https://www.wanandroid.com/article/query/0/json",
-            params = Params.Builder().addParam("k", "ViewModel").build(),
-            success = { data ->
-                textView.text = data.parseAsHtml()
-            }, error = { code, msg ->
-                textView.text = ("code:$code,msg:$msg")
-            }
-        )
+        textView.setOnClickListener {
+            postRequest<String>(
+                url = "https://www.wanandroid.com/article/query/0/json",
+                param = Param.build().addParam("k", "ViewModel"),
+                success = { data ->
+                    textView.text = data.parseAsHtml()
+                }, error = { code, msg ->
+                    textView.text = ("code:$code,msg:$msg")
+                }
+            )
+        }
     }
 }

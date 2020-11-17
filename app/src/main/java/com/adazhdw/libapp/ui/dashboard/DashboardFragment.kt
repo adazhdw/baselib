@@ -11,7 +11,7 @@ import com.adazhdw.ktlib.base.fragment.BaseFragment
 import com.adazhdw.ktlib.base.mvvm.viewModel
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.kthttp.ext.postCoroutines
-import com.adazhdw.ktlib.kthttp.model.Params
+import com.adazhdw.ktlib.kthttp.model.Param
 import com.adazhdw.libapp.R
 import com.adazhdw.libapp.bean.DataFeed
 import com.adazhdw.libapp.bean.NetResponse
@@ -38,21 +38,22 @@ class DashboardFragment(override val layoutId: Int = R.layout.fragment_dashboard
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val textView: TextView = view.findViewById(R.id.text_dashboard)
+        textView.setOnClickListener {
+            launchOnUI {
+                val time = measureTimeMillis {
+                    val data = postCoroutines<NetResponse<DataFeed>>(
+                        url = "https://www.wanandroid.com/article/query/0/json",
+                        param = Param.build().addParam("k", "ViewModel")
+                    )
 
-        launchOnUI {
-            val time = measureTimeMillis {
-                val data = postCoroutines<NetResponse<DataFeed>>(
-                    url = "https://www.wanandroid.com/article/query/0/json",
-                    params = Params.Builder().addParam("k", "ViewModel").build()
-                )
-
-                val stringBuilder = StringBuilder()
-                for (item in data.data.datas) {
-                    stringBuilder.append("标题：${item.title}".parseAsHtml()).append("\n\n")
+                    val stringBuilder = StringBuilder()
+                    for (item in data.data.datas) {
+                        stringBuilder.append("标题：${item.title}".parseAsHtml()).append("\n\n")
+                    }
+                    textView.text = stringBuilder.toString()
                 }
-                textView.text = stringBuilder.toString()
+                "$time".logD(TAG)
             }
-            "$time".logD(TAG)
         }
     }
 }

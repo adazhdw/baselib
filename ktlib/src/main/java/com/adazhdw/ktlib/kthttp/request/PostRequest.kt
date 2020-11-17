@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.kthttp.request
 
-import com.adazhdw.ktlib.kthttp.model.Params
+import com.adazhdw.ktlib.kthttp.model.Param
 import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -12,13 +12,13 @@ import okhttp3.RequestBody
  **/
 class PostRequest(
     url: String,
-    params: Params
-) : BaseRequest(url, params) {
+    param: Param
+) : BaseRequest(url, param) {
 
-    override fun getRequestBody(): RequestBody = params.getRequestBody()
+    override fun getRequestBody(): RequestBody = param.getRequestBody()
 
     override fun getRequest(requestBody: RequestBody): Request {
-        return requestBuilder().post(requestBody).url(url).tag(params.tag).build()
+        return requestBuilder().post(requestBody).url(url).tag(tag).build()
     }
 
 }

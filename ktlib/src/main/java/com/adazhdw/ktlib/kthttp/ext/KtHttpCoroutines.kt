@@ -3,7 +3,7 @@ package com.adazhdw.ktlib.kthttp.ext
 import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestJsonCallback
 import com.adazhdw.ktlib.kthttp.model.Method
-import com.adazhdw.ktlib.kthttp.model.Params
+import com.adazhdw.ktlib.kthttp.model.Param
 import com.adazhdw.ktlib.kthttp.request.RequestCall
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -20,9 +20,9 @@ import kotlin.coroutines.resumeWithException
  */
 suspend inline fun <reified T : Any> getCoroutines(
     url: String,
-    params: Params = Params.Builder().setTag(url).build()
+    param: Param = Param.build()
 ): T {
-    return requestCoroutines(method = Method.GET, url, params)
+    return requestCoroutines(method = Method.GET, url, param)
 }
 
 /**
@@ -30,9 +30,9 @@ suspend inline fun <reified T : Any> getCoroutines(
  */
 suspend inline fun <reified T : Any> postCoroutines(
     url: String,
-    params: Params = Params.Builder().setTag(url).build()
+    param: Param = Param.build()
 ): T {
-    return requestCoroutines(method = Method.POST, url, params)
+    return requestCoroutines(method = Method.POST, url, param)
 }
 
 /**
@@ -41,14 +41,14 @@ suspend inline fun <reified T : Any> postCoroutines(
 suspend inline fun <reified T : Any> requestCoroutines(
     method: Method = Method.GET,
     url: String,
-    params: Params = Params.Builder().setTag(url).build()
+    param: Param = Param.build()
 ): T {
     return suspendCancellableCoroutine { continuation ->
         var request: RequestCall? = null
         continuation.invokeOnCancellation {
             request?.cancel()
         }
-        request = ktHttp.request(method, url, params, object : RequestJsonCallback<T>() {
+        request = ktHttp.request(method, url, param, object : RequestJsonCallback<T>() {
 
             override fun onFailure(e: Exception, code: Int, msg: String?) {
                 super.onFailure(e, code, msg)

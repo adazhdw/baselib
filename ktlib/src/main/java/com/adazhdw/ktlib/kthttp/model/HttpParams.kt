@@ -13,12 +13,12 @@ import java.io.File
 class HttpParams(val isMultipart: Boolean) {
     /** 是否有流参数 */
     /** 请求头存放集合 */
-    val mParams: HashMap<String, Any> = KtHttp.ktHttp.getCommonParams()
+    val mParams: HashMap<String, String> = KtHttp.ktHttp.getCommonParams()
 
     /** 上传文件集合 */
     val files: MutableList<Part> = mutableListOf()
 
-    fun put(key: String, value: Any) {
+    fun put(key: String, value: String) {
         mParams[key] = value
     }
 

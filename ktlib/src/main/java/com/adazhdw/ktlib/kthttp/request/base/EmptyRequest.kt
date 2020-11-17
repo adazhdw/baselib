@@ -1,7 +1,6 @@
 package com.adazhdw.ktlib.kthttp.request.base
 
-import com.adazhdw.ktlib.kthttp.KtHttp
-import com.adazhdw.ktlib.kthttp.model.Params
+import com.adazhdw.ktlib.kthttp.model.Param
 import com.adazhdw.ktlib.kthttp.util.RequestUrlUtil
 import okhttp3.RequestBody
 import okhttp3.internal.EMPTY_REQUEST
@@ -13,19 +12,13 @@ import okhttp3.internal.EMPTY_REQUEST
  **/
 abstract class EmptyRequest(
     url: String,
-    params: Params
-) : BaseRequest(url, params) {
-    protected val mUrl: String
-
-    init {
-        val commonParams = mutableMapOf<String, String>().apply {
-            putAll(KtHttp.ktHttp.getCommonParams())
-            putAll(params.params)
-        }
-        mUrl = RequestUrlUtil.getFullUrl2(url, commonParams, params.urlEncoder)
-    }
+    param: Param
+) : BaseRequest(url, param) {
 
     final override fun getRequestBody(): RequestBody = EMPTY_REQUEST
 
-    override fun getRealUrl(): String = mUrl
+    override fun getRealUrl(): String {
+        val commonParams = param.params.mParams
+        return RequestUrlUtil.getFullUrl2(url, commonParams, param.urlEncoder)
+    }
 }

@@ -1,7 +1,6 @@
 package com.adazhdw.ktlib.kthttp.request.base
 
-import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
-import com.adazhdw.ktlib.kthttp.model.Params
+import com.adazhdw.ktlib.kthttp.model.Param
 import okhttp3.Request
 import okhttp3.RequestBody
 
@@ -12,10 +11,9 @@ import okhttp3.RequestBody
  **/
 abstract class BaseRequest(
     val url: String,
-    val params: Params
+    val param: Param
 ) {
-    private val commonHeaders = ktHttp.getCommonHeaders()
-    private val builder = Request.Builder()
+    protected var tag = ""
 
     abstract fun getRequestBody(): RequestBody
 
@@ -25,12 +23,24 @@ abstract class BaseRequest(
      * 生成一个 Request.Builder，并且给当前请求 Request 添加 headers
      */
     protected fun requestBuilder(): Request.Builder {
-        if (params.needHeaders) {
-            if (commonHeaders.isNotEmpty()) builder.headers(ktHttp.getCommonHttpHeaders())
-            for ((key, value) in params.headers.mHeaders) builder.addHeader(key, value)
+        val builder = Request.Builder()
+        if (param.needHeaders) {
+            for ((key, value) in param.headers.mHeaders) {
+                builder.addHeader(key, value)
+            }
         }
         return builder
     }
 
     open fun getRealUrl() = url
+
+    open fun setTag(tag: Any): BaseRequest {
+        setTag(tag.toString())
+        return this
+    }
+
+    open fun setTag(tag: String): BaseRequest {
+        this.tag = tag
+        return this
+    }
 }

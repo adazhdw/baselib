@@ -3,7 +3,7 @@ package com.adazhdw.ktlib.kthttp.request
 import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.model.KtConfig
-import com.adazhdw.ktlib.kthttp.model.Params
+import com.adazhdw.ktlib.kthttp.model.Param
 import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
 import okhttp3.Call
 import okhttp3.OkHttpClient
@@ -16,7 +16,7 @@ import okhttp3.OkHttpClient
 class RequestCall(
     private val baseRequest: BaseRequest,
     val url: String = baseRequest.getRealUrl(),
-    val params: Params = baseRequest.params
+    val params: Param = baseRequest.param
 ) {
 
     private val okHttpClient: OkHttpClient = KtConfig.mOkHttpClient

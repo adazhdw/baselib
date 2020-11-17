@@ -10,7 +10,7 @@ import com.adazhdw.ktlib.base.fragment.BaseFragment
 import com.adazhdw.ktlib.base.mvvm.viewModel
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.kthttp.ext.getCoroutines
-import com.adazhdw.ktlib.kthttp.model.Params
+import com.adazhdw.ktlib.kthttp.model.Param
 import com.adazhdw.libapp.R
 import com.adazhdw.libapp.bean.DataFeed
 import com.adazhdw.libapp.bean.NetResponse
@@ -38,19 +38,21 @@ class HomeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         val textView: TextView = view.findViewById(R.id.text_home)
 
-        launchOnUI {
-            val time = measureTimeMillis {
-                val data = getCoroutines<NetResponse<DataFeed>>(
-                    url = "https://wanandroid.com/wxarticle/list/408/1/json",
-                    params = Params.Builder().addParam("k", "Android").build()
-                )
-                val stringBuilder = StringBuilder()
-                for (item in data.data.datas) {
-                    stringBuilder.append("标题：${item.title}").append("\n\n")
+        textView.setOnClickListener {
+            launchOnUI {
+                val time = measureTimeMillis {
+                    val data = getCoroutines<NetResponse<DataFeed>>(
+                        url = "https://wanandroid.com/wxarticle/list/408/1/json",
+                        param = Param.build().addParam("k", "Android")
+                    )
+                    val stringBuilder = StringBuilder()
+                    for (item in data.data.datas) {
+                        stringBuilder.append("标题：${item.title}").append("\n\n")
+                    }
+                    textView.text = stringBuilder.toString()
                 }
-                textView.text = stringBuilder.toString()
+                "$time".logD(TAG)
             }
-            "$time".logD(TAG)
         }
     }
 

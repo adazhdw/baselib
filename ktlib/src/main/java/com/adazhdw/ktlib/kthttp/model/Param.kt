@@ -16,8 +16,8 @@ import org.json.JSONObject
 /** @param isMultipart 是否有流参数 */
 class Param private constructor(isMultipart: Boolean) {
 
-    private val headers: HttpHeaders = HttpHeaders()
-    private val params: HttpParams = HttpParams(isMultipart)
+    internal val headers: HttpHeaders = HttpHeaders()
+    internal val params: HttpParams = HttpParams(isMultipart)
     private var jsonBody: String = ""
     private var isJsonRequest: Boolean = false
     private val urlCoder = UrlCoder.create()
@@ -25,8 +25,8 @@ class Param private constructor(isMultipart: Boolean) {
     /**
      * URL编码，只对GET,DELETE,HEAD有效
      */
-    private var urlEncoder: Boolean = false
-    private var needHeaders: Boolean = false
+    internal var urlEncoder: Boolean = false
+    internal var needHeaders: Boolean = false
 
     internal fun getRequestBody(): RequestBody {
         return if (isJsonRequest) getJsonRequestBody()
