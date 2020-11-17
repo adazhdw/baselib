@@ -233,6 +233,9 @@ class KtHttp private constructor() {
                     message = "network unavailable"
                     code = HttpConstant.ERROR_NETWORK_UNAVAILABLE
                     ex = NetWorkUnAvailableException()
+                } else if (e.message == "Canceled") {
+                    code = HttpConstant.ERROR_REQUEST_CANCEL_ERROR
+                    message = "request canceled"
                 }
                 //回调跳转主线程
                 KtExecutors.mainThread.execute { handleFailure(ex, code, message, callback) }
@@ -255,10 +258,8 @@ class KtHttp private constructor() {
                     if (e is HttpStatusException) {
                         handleFailure(e, e.statusCode, e.message, callback)
                     } else {
-                        handleFailure(
-                            e,
-                            HttpConstant.ERROR_RESPONSE_NORMAL_ERROR, e.message, callback
-                        )
+                        val code = HttpConstant.ERROR_RESPONSE_NORMAL_ERROR
+                        handleFailure(e, code, e.message, callback)
                     }
                 }
             }
