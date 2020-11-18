@@ -30,7 +30,7 @@ abstract class BaseRequest(val url: String, val param: Param) {
     @Suppress("UNCHECKED_CAST")
     fun execute(callback: RequestCallback?) {
         mCallProxy = RequestCallProxy(getRawCall())
-        mCallProxy!!.enqueue(OkHttpCallbackImpl(callback, mCallProxy!!))
+        mCallProxy!!.enqueue(OkHttpCallbackImpl(mCallProxy!!, callback))
     }
 
     /**

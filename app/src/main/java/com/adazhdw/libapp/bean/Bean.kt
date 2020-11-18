@@ -57,3 +57,7 @@ data class DataFeed(
 )
 
 data class NetResponse<T>(val data: T, val errorCode: Int, val errorMsg: String)
+
+open class BaseResponse(val errorCode: Int = 0, val errorMsg: String = "")
+
+data class DateFeedResponse(val data: DataFeed) : BaseResponse()

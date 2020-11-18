@@ -8,13 +8,12 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import com.adazhdw.ktlib.base.fragment.BaseFragment
 import com.adazhdw.ktlib.base.mvvm.viewModel
-import com.adazhdw.ktlib.ext.logD
-import com.adazhdw.ktlib.kthttp.ext.getCoroutines
+import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
+import com.adazhdw.ktlib.kthttp.coroutines.toResponse
 import com.adazhdw.ktlib.kthttp.model.Param
 import com.adazhdw.libapp.R
 import com.adazhdw.libapp.bean.DataFeed
 import com.adazhdw.libapp.bean.NetResponse
-import kotlin.system.measureTimeMillis
 
 class HomeFragment : BaseFragment() {
 
@@ -40,19 +39,28 @@ class HomeFragment : BaseFragment() {
 
         textView.setOnClickListener {
             launchOnUI {
-                val time = measureTimeMillis {
-                    val data = getCoroutines<NetResponse<DataFeed>>(
-                        url = "https://wanandroid.com/wxarticle/list/408/1/json",
-                        param = Param.build().addParam("k", "Android")
-                    )
+                val data = ktHttp.get(
+                    url = "https://wanandroid.com/wxarticle/list/408/1/json",
+                    param = Param.build().addParam("k", "Android")
+                ).toResponse<NetResponse<DataFeed>>().await()
+                val stringBuilder = StringBuilder()
+                for (item in data.data.datas) {
+                    stringBuilder.append("标题：${item.title}").append("\n\n")
+                }
+                textView.text = stringBuilder.toString()
+            }
+            /*getRequest<NetResponse<DataFeed>>(
+                url = "https://wanandroid.com/wxarticle/list/408/1/json",
+                param = Param.build().addParam("k", "Android"),
+                success = { data ->
                     val stringBuilder = StringBuilder()
                     for (item in data.data.datas) {
                         stringBuilder.append("标题：${item.title}").append("\n\n")
                     }
                     textView.text = stringBuilder.toString()
-                }
-                "$time".logD(TAG)
-            }
+                }, error = { code, msg ->
+
+                })*/
         }
     }
 

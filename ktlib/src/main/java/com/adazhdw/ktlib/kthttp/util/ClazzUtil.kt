@@ -9,12 +9,12 @@ import java.lang.reflect.Type
  * description：
  **/
 object ClazzUtil {
-    fun getClassType(subclass: Class<*>): Type {
+    fun getClassType(subclass: Class<*>, index: Int = 0): Type {
         val superclass = subclass.genericSuperclass
         if (superclass is Class<*>) {
             throw RuntimeException("Missing type parameter.")
         }
         val parameterized: ParameterizedType = superclass as ParameterizedType
-        return TypeUtil.canonicalize(parameterized.actualTypeArguments[0])
+        return TypeUtil.canonicalize(parameterized.actualTypeArguments[index])
     }
 }

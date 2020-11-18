@@ -181,4 +181,24 @@ class KtHttp private constructor() {
     fun getCommonParams(): HashMap<String, String> {
         return mParams
     }
+
+    @JvmOverloads
+    fun get(url: String, param: Param = Param.build()): GetRequest = GetRequest(url, param)
+
+    @JvmOverloads
+    fun post(url: String, param: Param = Param.build()): PostRequest = PostRequest(url, param)
+
+    @JvmOverloads
+    fun delete(url: String, param: Param = Param.build()): DeleteRequest = DeleteRequest(url, param)
+
+    @JvmOverloads
+    fun head(url: String, param: Param = Param.build()): HeadRequest = HeadRequest(url, param)
+
+    @JvmOverloads
+    fun put(url: String, param: Param = Param.build()): PutRequest = PutRequest(url, param)
+
+    @JvmOverloads
+    fun patch(url: String, param: Param = Param.build()): PatchRequest = PatchRequest(url, param)
+
+
 }

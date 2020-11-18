@@ -15,12 +15,14 @@ import okhttp3.Response
  **/
 
 open class OkHttpCallbackImpl(
-    private val requestCallback: RequestCallback?,
     callProxy: RequestCallProxy,
+    private val requestCallback: RequestCallback?
 ) : OkHttpCallback(callProxy, requestCallback?.mLifecycleOwner) {
     init {
         KtExecutors.mainThread.execute {
-            if (isLifecycleActive()) requestCallback?.onStart(mCallProxy.call)
+            if (isLifecycleActive()) {
+                requestCallback?.onStart(mCallProxy.call)
+            }
         }
     }
 
