@@ -1,6 +1,5 @@
 package com.adazhdw.ktlib.kthttp.request.base
 
-import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.kthttp.model.Param
 import okhttp3.RequestBody
 
@@ -9,7 +8,6 @@ import okhttp3.RequestBody
  * date-time：2020/11/17 20:20
  * description：
  **/
-abstract class BodyRequest(url: String, param: Param, lifecycleOwner: LifecycleOwner) :
-    BaseRequest(url, param, lifecycleOwner) {
+abstract class BodyRequest(url: String, param: Param) : BaseRequest(url, param) {
     override fun getRequestBody(): RequestBody = param.getRequestBody()
 }

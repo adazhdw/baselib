@@ -42,7 +42,7 @@ inline fun <reified T : Any> netRequest(
     crossinline success: ((data: T) -> Unit),
     crossinline error: ((code: Int, msg: String?) -> Unit)
 ): BaseRequest {
-    return ktHttp.request(lifecycleOwner, method, url, param, object : RequestJsonCallback<T>() {
+    return ktHttp.request(method, url, param, object : RequestJsonCallback<T>(lifecycleOwner) {
 
         override fun onError(code: Int, msg: String?) {
             error.invoke(code, msg)

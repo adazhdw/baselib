@@ -4,6 +4,7 @@ import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestJsonCallback
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Param
+import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -43,11 +44,11 @@ suspend inline fun <reified T : Any> requestCoroutines(
     param: Param = Param.build()
 ): T {
     return suspendCancellableCoroutine { continuation ->
-        var request: RequestCall? = null
+        var request: BaseRequest? = null
         continuation.invokeOnCancellation {
             request?.cancel()
         }
-        request = ktHttp.request(method, url, param, object : RequestJsonCallback<T>() {
+        request = ktHttp.request(method, url, param, object : RequestJsonCallback<T>(null) {
 
             override fun onFailure(e: Exception, code: Int, msg: String?) {
                 super.onFailure(e, code, msg)

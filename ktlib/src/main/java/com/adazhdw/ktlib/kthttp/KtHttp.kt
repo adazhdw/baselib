@@ -1,6 +1,5 @@
 package com.adazhdw.ktlib.kthttp
 
-import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Param
@@ -31,19 +30,18 @@ class KtHttp private constructor() {
      */
     @JvmOverloads
     fun request(
-        lifecycleOwner: LifecycleOwner,
         method: Method,
         url: String,
         param: Param = Param.build(),
         callback: RequestCallback? = null
     ): BaseRequest {
         return when (method) {
-            Method.GET -> get(lifecycleOwner, url, param, callback)
-            Method.DELETE -> delete(lifecycleOwner, url, param, callback)
-            Method.HEAD -> head(lifecycleOwner, url, param, callback)
-            Method.POST -> post(lifecycleOwner, url, param, callback)
-            Method.PUT -> put(lifecycleOwner, url, param, callback)
-            Method.PATCH -> patch(lifecycleOwner, url, param, callback)
+            Method.GET -> get(url, param, callback)
+            Method.DELETE -> delete(url, param, callback)
+            Method.HEAD -> head(url, param, callback)
+            Method.POST -> post(url, param, callback)
+            Method.PUT -> put(url, param, callback)
+            Method.PATCH -> patch(url, param, callback)
         }
     }
 
@@ -54,12 +52,11 @@ class KtHttp private constructor() {
      */
     @JvmOverloads
     fun get(
-        lifecycleOwner: LifecycleOwner,
         url: String,
         param: Param = Param.build(),
         callback: RequestCallback? = null
     ): BaseRequest {
-        val request = GetRequest(url, param, lifecycleOwner)
+        val request = GetRequest(url, param)
         request.execute(callback)
         return request
     }
@@ -71,12 +68,11 @@ class KtHttp private constructor() {
      */
     @JvmOverloads
     fun post(
-        lifecycleOwner: LifecycleOwner,
         url: String,
         param: Param = Param.build(),
         callback: RequestCallback? = null
     ): BaseRequest {
-        val request = PostRequest(url, param, lifecycleOwner)
+        val request = PostRequest(url, param)
         request.execute(callback)
         return request
     }
@@ -88,12 +84,11 @@ class KtHttp private constructor() {
      */
     @JvmOverloads
     fun delete(
-        lifecycleOwner: LifecycleOwner,
         url: String,
         param: Param = Param.build(),
         callback: RequestCallback? = null
     ): BaseRequest {
-        val request = DeleteRequest(url, param, lifecycleOwner)
+        val request = DeleteRequest(url, param)
         request.execute(callback)
         return request
     }
@@ -105,12 +100,11 @@ class KtHttp private constructor() {
      */
     @JvmOverloads
     fun head(
-        lifecycleOwner: LifecycleOwner,
         url: String,
         param: Param = Param.build(),
         callback: RequestCallback? = null
     ): BaseRequest {
-        val request = HeadRequest(url, param, lifecycleOwner)
+        val request = HeadRequest(url, param)
         request.execute(callback)
         return request
     }
@@ -122,12 +116,11 @@ class KtHttp private constructor() {
      */
     @JvmOverloads
     fun put(
-        lifecycleOwner: LifecycleOwner,
         url: String,
         param: Param = Param.build(),
         callback: RequestCallback? = null
     ): BaseRequest {
-        val request = PutRequest(url, param, lifecycleOwner)
+        val request = PutRequest(url, param)
         request.execute(callback)
         return request
     }
@@ -139,12 +132,11 @@ class KtHttp private constructor() {
      */
     @JvmOverloads
     fun patch(
-        lifecycleOwner: LifecycleOwner,
         url: String,
         param: Param = Param.build(),
         callback: RequestCallback? = null
     ): BaseRequest {
-        val request = PatchRequest(url, param, lifecycleOwner)
+        val request = PatchRequest(url, param)
         request.execute(callback)
         return request
     }

@@ -1,6 +1,5 @@
 package com.adazhdw.ktlib.kthttp.callback
 
-import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.core.KtExecutors
 import com.adazhdw.ktlib.kthttp.exception.ExceptionHelper
 import com.adazhdw.ktlib.kthttp.exception.NetException
@@ -16,11 +15,9 @@ import okhttp3.Response
  **/
 
 open class OkHttpCallbackImpl(
-    lifecycleOwner: LifecycleOwner,
+    private val requestCallback: RequestCallback?,
     callProxy: RequestCallProxy,
-    private val requestCallback: RequestCallback?
-) : OkHttpCallback(lifecycleOwner, callProxy) {
-
+) : OkHttpCallback(callProxy, requestCallback?.mLifecycleOwner) {
     init {
         KtExecutors.mainThread.execute {
             if (isLifecycleActive()) requestCallback?.onStart(mCallProxy.call)
@@ -28,13 +25,11 @@ open class OkHttpCallbackImpl(
     }
 
     override fun onResponse(response: Response) {
-        KtExecutors.networkIO.submit {
-            val result = ExceptionHelper.getNotNullResult(response).string()
-            KtExecutors.mainThread.execute {
-                if (isLifecycleActive()) {
-                    requestCallback?.onHttpResponse(response, result)
-                    requestCallback?.onFinish()
-                }
+        val result = ExceptionHelper.getNotNullResult(response).string()
+        KtExecutors.mainThread.execute {
+            if (isLifecycleActive()) {
+                requestCallback?.onHttpResponse(response, result)
+                requestCallback?.onFinish()
             }
         }
     }

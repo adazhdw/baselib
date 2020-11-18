@@ -1,5 +1,6 @@
 package com.adazhdw.ktlib.kthttp.callback
 
+import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.kthttp.model.HttpConstant
 import com.adazhdw.ktlib.kthttp.model.KtConfig
 import com.adazhdw.ktlib.kthttp.util.ClazzUtil
@@ -12,7 +13,7 @@ import java.lang.reflect.Type
  * Date: 2020/8/21 14:50
  * Description: Gson回调转换泛型类 T
  */
-abstract class RequestJsonCallback<T : Any> : RequestCallbackImpl() {
+abstract class RequestJsonCallback<T : Any>(owner: LifecycleOwner?) : RequestCallbackImpl(owner) {
     private val mType: Type?
 
     init {

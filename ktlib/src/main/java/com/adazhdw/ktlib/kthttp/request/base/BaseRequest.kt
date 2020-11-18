@@ -1,6 +1,5 @@
 package com.adazhdw.ktlib.kthttp.request.base
 
-import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.kthttp.callback.OkHttpCallbackImpl
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.model.KtConfig
@@ -16,11 +15,7 @@ import okhttp3.RequestBody
  * date-time：2020/9/3 10:11
  * description：
  **/
-abstract class BaseRequest(
-    val url: String,
-    val param: Param,
-    val lifecycleOwner: LifecycleOwner
-) {
+abstract class BaseRequest(val url: String, val param: Param) {
     private val okHttpClient: OkHttpClient = KtConfig.mOkHttpClient
     private var mCallProxy: RequestCallProxy? = null
     protected var tag = ""
@@ -35,7 +30,7 @@ abstract class BaseRequest(
     @Suppress("UNCHECKED_CAST")
     fun execute(callback: RequestCallback?) {
         mCallProxy = RequestCallProxy(getRawCall())
-        mCallProxy!!.enqueue(OkHttpCallbackImpl(lifecycleOwner, mCallProxy!!, callback))
+        mCallProxy!!.enqueue(OkHttpCallbackImpl(callback, mCallProxy!!))
     }
 
     /**

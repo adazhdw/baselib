@@ -1,5 +1,6 @@
 package com.adazhdw.ktlib.kthttp.callback
 
+import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.ext.logE
 import okhttp3.Call
@@ -11,6 +12,7 @@ import okhttp3.Response
  * description：
  **/
 interface RequestCallback {
+    val mLifecycleOwner: LifecycleOwner?
 
     /** 请求网络开始前，UI线程 */
     fun onStart(call: Call)
@@ -25,11 +27,14 @@ interface RequestCallback {
     fun onFinish()
 }
 
-abstract class RequestCallbackImpl : RequestCallback {
+abstract class RequestCallbackImpl(private val lifecycleOwner: LifecycleOwner?) : RequestCallback {
 
     companion object {
         const val TAG = "RequestCallbackImpl"
     }
+
+    override val mLifecycleOwner: LifecycleOwner?
+        get() = lifecycleOwner
 
     override fun onStart(call: Call) {
         "onStart".logD(TAG)
