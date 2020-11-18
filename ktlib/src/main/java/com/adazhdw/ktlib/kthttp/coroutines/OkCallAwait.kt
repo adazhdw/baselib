@@ -12,7 +12,7 @@ import kotlin.coroutines.resumeWithException
 /**
  * Author: dgz
  * Date: 2020/8/21 14:50
- * Description: 网络请求协程类
+ * Description: okhttp3.Call await 方法
  */
 
 internal suspend fun Call.await(): Response {

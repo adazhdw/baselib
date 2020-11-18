@@ -10,7 +10,7 @@ import java.lang.reflect.Type
  * date-time：2020/11/18 11:12
  * description：将Response对象解析成泛型T对象
  **/
-open class NormalParser<T> : AbstractParser<T> {
+open class NormalParser<T> : IParserImpl<T> {
     /**
      * 此构造方法适用于任意Class对象，但更多用于带泛型的Class对象
      */

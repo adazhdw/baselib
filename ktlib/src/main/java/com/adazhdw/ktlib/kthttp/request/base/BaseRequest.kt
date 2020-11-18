@@ -64,12 +64,12 @@ abstract class BaseRequest(val url: String, val param: Param) {
 
     open fun getRealUrl() = url
 
-    open fun setTag(tag: Any): BaseRequest {
-        setTag(tag.toString())
+    open fun tag(tag: Any?): BaseRequest {
+        this.tag(tag.toString())
         return this
     }
 
-    open fun setTag(tag: String): BaseRequest {
+    open fun tag(tag: String): BaseRequest {
         this.tag = tag
         return this
     }

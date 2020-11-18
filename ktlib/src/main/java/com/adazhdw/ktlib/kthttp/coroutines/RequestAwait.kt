@@ -7,9 +7,11 @@ import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
 /**
  * author：daguozhu
  * date-time：2020/11/18 13:37
- * description：
+ * description： BaseRequest,协程 await 方法
  **/
 
-fun <T> BaseRequest.awaitImpl(parser: IParser<T>): IAwait<T> = IAwaitImpl(this, parser)
+fun <T> BaseRequest.awaitImpl(
+    parser: IParser<T>
+): IAwait<T> = IAwaitImpl(this, parser)
 
 inline fun <reified T : Any> BaseRequest.toResponse() = awaitImpl(object : NormalParser<T>() {})

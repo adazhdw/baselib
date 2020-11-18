@@ -1,10 +1,11 @@
 package com.adazhdw.ktlib.kthttp
 
+import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.constant.Method
 import com.adazhdw.ktlib.kthttp.model.Param
 import com.adazhdw.ktlib.kthttp.request.*
-import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
+import okhttp3.Call
 import okhttp3.Headers
 
 /**
@@ -34,8 +35,8 @@ class KtHttp private constructor() {
         url: String,
         param: Param = Param.build(),
         callback: RequestCallback? = null
-    ): BaseRequest {
-        return when (method) {
+    ) {
+        when (method) {
             Method.GET -> get(url, param, callback)
             Method.DELETE -> delete(url, param, callback)
             Method.HEAD -> head(url, param, callback)
@@ -55,10 +56,8 @@ class KtHttp private constructor() {
         url: String,
         param: Param = Param.build(),
         callback: RequestCallback? = null
-    ): BaseRequest {
-        val request = GetRequest(url, param)
-        request.execute(callback)
-        return request
+    ) {
+        get(url, param).tag(callback?.mLifecycleOwner).execute(callback)
     }
 
     /**
@@ -71,10 +70,8 @@ class KtHttp private constructor() {
         url: String,
         param: Param = Param.build(),
         callback: RequestCallback? = null
-    ): BaseRequest {
-        val request = PostRequest(url, param)
-        request.execute(callback)
-        return request
+    ) {
+        post(url, param).tag(callback?.mLifecycleOwner).execute(callback)
     }
 
     /**
@@ -87,10 +84,8 @@ class KtHttp private constructor() {
         url: String,
         param: Param = Param.build(),
         callback: RequestCallback? = null
-    ): BaseRequest {
-        val request = DeleteRequest(url, param)
-        request.execute(callback)
-        return request
+    ) {
+        delete(url, param).tag(callback?.mLifecycleOwner).execute(callback)
     }
 
     /**
@@ -103,10 +98,8 @@ class KtHttp private constructor() {
         url: String,
         param: Param = Param.build(),
         callback: RequestCallback? = null
-    ): BaseRequest {
-        val request = HeadRequest(url, param)
-        request.execute(callback)
-        return request
+    ) {
+        head(url, param).tag(callback?.mLifecycleOwner).execute(callback)
     }
 
     /**
@@ -119,10 +112,8 @@ class KtHttp private constructor() {
         url: String,
         param: Param = Param.build(),
         callback: RequestCallback? = null
-    ): BaseRequest {
-        val request = PutRequest(url, param)
-        request.execute(callback)
-        return request
+    ) {
+        put(url, param).tag(callback?.mLifecycleOwner).execute(callback)
     }
 
     /**
@@ -135,10 +126,37 @@ class KtHttp private constructor() {
         url: String,
         param: Param = Param.build(),
         callback: RequestCallback? = null
-    ): BaseRequest {
-        val request = PatchRequest(url, param)
-        request.execute(callback)
-        return request
+    ) {
+        patch(url, param).tag(callback?.mLifecycleOwner).execute(callback)
+    }
+
+    /**
+     * 取消请求
+     */
+    fun cancel(lifecycleOwner: LifecycleOwner) {
+        cancel(lifecycleOwner.toString())
+    }
+
+    /**
+     * 根据 TAG 取消请求任务
+     */
+    fun cancel(tag: Any?) {
+        if (tag == null) return
+        val client = KtConfig.mOkHttpClient
+
+        //清除排队的请求任务
+        for (call: Call in client.dispatcher.queuedCalls()) {
+            if (tag == call.request().tag()) {
+                call.cancel()
+            }
+        }
+
+        //清除正在执行的任务
+        for (call: Call in client.dispatcher.runningCalls()) {
+            if (tag == call.request().tag()) {
+                call.cancel()
+            }
+        }
     }
 
     /**

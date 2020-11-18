@@ -1,12 +1,10 @@
 package com.adazhdw.ktlib.kthttp.ext
 
 import androidx.lifecycle.LifecycleOwner
-import com.adazhdw.ktlib.core.lifecycle.addOnDestroy
 import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestJsonCallback
 import com.adazhdw.ktlib.kthttp.constant.Method
 import com.adazhdw.ktlib.kthttp.model.Param
-import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
 
 /**
  * Author: dgz
@@ -20,8 +18,7 @@ inline fun <reified T : Any> LifecycleOwner.getRequest(
     crossinline success: ((data: T) -> Unit),
     crossinline error: ((code: Int, msg: String?) -> Unit)
 ) {
-    val request = netRequest(this, url, param, Method.GET, success, error)
-    addOnDestroy { request.cancel() }
+    netRequest(this, url, param, Method.GET, success, error)
 }
 
 inline fun <reified T : Any> LifecycleOwner.postRequest(
@@ -30,8 +27,7 @@ inline fun <reified T : Any> LifecycleOwner.postRequest(
     crossinline success: ((data: T) -> Unit),
     crossinline error: ((code: Int, msg: String?) -> Unit)
 ) {
-    val request = netRequest(this, url, param, Method.POST, success, error)
-    addOnDestroy { request.cancel() }
+    netRequest(this, url, param, Method.POST, success, error)
 }
 
 inline fun <reified T : Any> netRequest(
@@ -41,8 +37,8 @@ inline fun <reified T : Any> netRequest(
     method: Method = Method.GET,
     crossinline success: ((data: T) -> Unit),
     crossinline error: ((code: Int, msg: String?) -> Unit)
-): BaseRequest {
-    return ktHttp.request(method, url, param, object : RequestJsonCallback<T>(lifecycleOwner) {
+) {
+    ktHttp.request(method, url, param, object : RequestJsonCallback<T>(lifecycleOwner) {
 
         override fun onError(code: Int, msg: String?) {
             error.invoke(code, msg)

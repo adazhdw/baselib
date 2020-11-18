@@ -20,7 +20,7 @@ abstract class OkHttpCallback(
 ) : Callback {
 
     init {
-        LifecycleUtil.bind(mLifecycleOwner)
+        LifecycleUtil.bind(mLifecycleOwner, onDestroyListener = { mCallProxy.cancel() })
     }
 
     override fun onResponse(call: Call, response: Response) {

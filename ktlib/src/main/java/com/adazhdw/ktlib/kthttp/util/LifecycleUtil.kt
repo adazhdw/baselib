@@ -9,14 +9,14 @@ import androidx.lifecycle.LifecycleOwner
  * date-time：2020/11/17 20:45
  * description：
  **/
-class LifecycleUtil : LifecycleEventObserver {
+class LifecycleUtil(private val onDestroyListener: (() -> Unit)?) : LifecycleEventObserver {
 
     companion object {
         /**
          * 绑定组件的生命周期
          */
-        fun bind(lifecycleOwner: LifecycleOwner?) {
-            lifecycleOwner?.lifecycle?.addObserver(LifecycleUtil())
+        fun bind(lifecycleOwner: LifecycleOwner?, onDestroyListener: (() -> Unit)? = null) {
+            lifecycleOwner?.lifecycle?.addObserver(LifecycleUtil(onDestroyListener))
         }
 
         /**
@@ -31,6 +31,7 @@ class LifecycleUtil : LifecycleEventObserver {
         if (event == Lifecycle.Event.ON_DESTROY) {
             source.lifecycle.removeObserver(this)
             //cancel request
+            onDestroyListener?.invoke()
         }
     }
 
