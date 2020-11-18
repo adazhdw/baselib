@@ -11,7 +11,7 @@ import org.json.JSONObject
 /**
  * Author: dgz
  * Date: 2020/8/21 14:50
- * Description:
+ * Description:请求参数工具类
  */
 /** @param isMultipart 是否有流参数 */
 class Param private constructor(isMultipart: Boolean) {

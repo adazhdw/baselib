@@ -4,7 +4,6 @@ import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestJsonCallback
 import com.adazhdw.ktlib.kthttp.model.Method
 import com.adazhdw.ktlib.kthttp.model.Param
-import com.adazhdw.ktlib.kthttp.request.RequestCall
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException

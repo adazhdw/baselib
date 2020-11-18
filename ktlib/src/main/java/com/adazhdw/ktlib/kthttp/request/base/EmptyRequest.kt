@@ -1,5 +1,6 @@
 package com.adazhdw.ktlib.kthttp.request.base
 
+import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.kthttp.model.Param
 import com.adazhdw.ktlib.kthttp.util.RequestUrlUtil
 import okhttp3.RequestBody
@@ -10,10 +11,8 @@ import okhttp3.internal.EMPTY_REQUEST
  * date-time：2020/9/3 16:25
  * description：
  **/
-abstract class EmptyRequest(
-    url: String,
-    param: Param
-) : BaseRequest(url, param) {
+abstract class EmptyRequest(url: String, param: Param, lifecycleOwner: LifecycleOwner) :
+    BaseRequest(url, param, lifecycleOwner) {
 
     final override fun getRequestBody(): RequestBody = EMPTY_REQUEST
 
