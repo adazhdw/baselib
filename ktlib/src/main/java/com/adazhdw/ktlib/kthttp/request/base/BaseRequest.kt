@@ -55,7 +55,7 @@ abstract class BaseRequest(val url: String, val param: Param) {
     protected fun requestBuilder(): Request.Builder {
         val builder = Request.Builder()
         if (param.needHeaders) {
-            for ((key, value) in param.headers.mHeaders) {
+            for ((key, value) in param.headers()) {
                 builder.addHeader(key, value)
             }
         }

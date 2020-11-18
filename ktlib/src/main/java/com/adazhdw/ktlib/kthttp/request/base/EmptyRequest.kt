@@ -15,7 +15,7 @@ abstract class EmptyRequest(url: String, param: Param) : BaseRequest(url, param)
     final override fun getRequestBody(): RequestBody = EMPTY_REQUEST
 
     override fun getRealUrl(): String {
-        val commonParams = param.params.mParams
+        val commonParams = param.params()
         return RequestUrlUtil.getFullUrl2(url, commonParams, param.urlEncoder)
     }
 }

@@ -14,10 +14,10 @@ import java.io.File
  **/
 class HttpParams(val isMultipart: Boolean) {
     /** 请求头存放集合 */
-    val mParams: HashMap<String, String> = KtHttp.ktHttp.getCommonParams()
+    internal val mParams: HashMap<String, String> = KtHttp.ktHttp.getCommonParams()
 
     /** 上传文件集合 */
-    val files: MutableList<Part> = mutableListOf()
+    internal val files: MutableList<Part> = mutableListOf()
 
     fun put(key: String, value: String) {
         mParams[key] = value
@@ -31,7 +31,7 @@ class HttpParams(val isMultipart: Boolean) {
         mParams.remove(key)
     }
 
-    fun get(key: String): Any? = mParams[key]
+    fun get(key: String): String? = mParams[key]
 
     fun isEmpty(): Boolean = mParams.isEmpty()
 

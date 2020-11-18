@@ -9,7 +9,7 @@ import com.adazhdw.ktlib.kthttp.KtHttp
  **/
 class HttpHeaders {
     /** 请求头存放集合 */
-    val mHeaders: HashMap<String, String> = KtHttp.ktHttp.getCommonHeaders()
+    internal val mHeaders: HashMap<String, String> = KtHttp.ktHttp.getCommonHeaders()
 
     fun put(key: String, value: String) {
         mHeaders[key] = value

@@ -8,6 +8,7 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
+import java.io.File
 
 /**
  * Author: dgz
@@ -17,8 +18,8 @@ import org.json.JSONObject
 /** @param isMultipart 是否有流参数 */
 class Param private constructor(isMultipart: Boolean) {
 
-    internal val headers: HttpHeaders = HttpHeaders()
-    internal val params: HttpParams = HttpParams(isMultipart)
+    private val headers: HttpHeaders = HttpHeaders()
+    private val params: HttpParams = HttpParams(isMultipart)
     private var jsonBody: String = ""
     private var isJsonRequest: Boolean = false
     private val urlCoder = UrlCoder.create()
@@ -93,6 +94,10 @@ class Param private constructor(isMultipart: Boolean) {
         return this
     }
 
+    fun headers(): HashMap<String, String> {
+        return this.headers.mHeaders
+    }
+
     fun addParam(key: String, value: String): Param {
         this.params.put(key, value)
         return this
@@ -101,6 +106,18 @@ class Param private constructor(isMultipart: Boolean) {
     fun addParams(paramMap: Map<String, String>): Param {
         this.params.putAll(paramMap)
         return this
+    }
+
+    fun params(): HashMap<String, String> {
+        return this.params.mParams
+    }
+
+    fun addFormDataPart(key: String, file: File) {
+        this.params.addFormDataPart(key, file)
+    }
+
+    fun addFormDataPart(map: Map<String, File>) {
+        this.params.addFormDataPart(map)
     }
 
     companion object {
