@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.kthttp.converter.parser
+package com.adazhdw.ktlib.kthttp.coroutines.parser
 
 import com.adazhdw.ktlib.kthttp.converter.convert
 import okhttp3.Response

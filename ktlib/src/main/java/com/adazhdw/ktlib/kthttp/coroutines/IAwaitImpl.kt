@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.kthttp.coroutines
 
-import com.adazhdw.ktlib.kthttp.converter.parser.IParser
+import com.adazhdw.ktlib.kthttp.coroutines.parser.IParser
 import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
 
 /**

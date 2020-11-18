@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import com.adazhdw.ktlib.base.fragment.BaseFragment
 import com.adazhdw.ktlib.base.mvvm.viewModel
 import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
-import com.adazhdw.ktlib.kthttp.coroutines.toResponse
+import com.adazhdw.ktlib.kthttp.coroutines.toClazz
 import com.adazhdw.ktlib.kthttp.model.Param
 import com.adazhdw.libapp.R
 import com.adazhdw.libapp.bean.DataFeed
@@ -42,7 +42,7 @@ class HomeFragment : BaseFragment() {
                 val data = ktHttp.get(
                     url = "https://wanandroid.com/wxarticle/list/408/1/json",
                     param = Param.build().addParam("k", "Android")
-                ).toResponse<NetResponse<DataFeed>>().await()
+                ).toClazz<NetResponse<DataFeed>>().await()
                 val stringBuilder = StringBuilder()
                 for (item in data.data.datas) {
                     stringBuilder.append("标题：${item.title}").append("\n\n")

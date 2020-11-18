@@ -11,7 +11,7 @@ import okhttp3.Headers
 /**
  * Author: dgz
  * Date: 2020/8/21 14:50
- * Description: 请求类
+ * Description: 请求工具类
  */
 
 class KtHttp private constructor() {
@@ -34,7 +34,7 @@ class KtHttp private constructor() {
         method: Method,
         url: String,
         param: Param = Param.build(),
-        callback: RequestCallback? = null
+        callback: RequestCallback
     ) {
         when (method) {
             Method.GET -> get(url, param, callback)
@@ -55,9 +55,9 @@ class KtHttp private constructor() {
     fun get(
         url: String,
         param: Param = Param.build(),
-        callback: RequestCallback? = null
+        callback: RequestCallback
     ) {
-        get(url, param).tag(callback?.mLifecycleOwner).execute(callback)
+        get(url, param).tag(callback.mLifecycleOwner).execute(callback)
     }
 
     /**
@@ -69,9 +69,9 @@ class KtHttp private constructor() {
     fun post(
         url: String,
         param: Param = Param.build(),
-        callback: RequestCallback? = null
+        callback: RequestCallback
     ) {
-        post(url, param).tag(callback?.mLifecycleOwner).execute(callback)
+        post(url, param).tag(callback.mLifecycleOwner).execute(callback)
     }
 
     /**
@@ -83,9 +83,9 @@ class KtHttp private constructor() {
     fun delete(
         url: String,
         param: Param = Param.build(),
-        callback: RequestCallback? = null
+        callback: RequestCallback
     ) {
-        delete(url, param).tag(callback?.mLifecycleOwner).execute(callback)
+        delete(url, param).tag(callback.mLifecycleOwner).execute(callback)
     }
 
     /**
@@ -97,9 +97,9 @@ class KtHttp private constructor() {
     fun head(
         url: String,
         param: Param = Param.build(),
-        callback: RequestCallback? = null
+        callback: RequestCallback
     ) {
-        head(url, param).tag(callback?.mLifecycleOwner).execute(callback)
+        head(url, param).tag(callback.mLifecycleOwner).execute(callback)
     }
 
     /**
@@ -111,9 +111,9 @@ class KtHttp private constructor() {
     fun put(
         url: String,
         param: Param = Param.build(),
-        callback: RequestCallback? = null
+        callback: RequestCallback
     ) {
-        put(url, param).tag(callback?.mLifecycleOwner).execute(callback)
+        put(url, param).tag(callback.mLifecycleOwner).execute(callback)
     }
 
     /**
@@ -125,9 +125,9 @@ class KtHttp private constructor() {
     fun patch(
         url: String,
         param: Param = Param.build(),
-        callback: RequestCallback? = null
+        callback: RequestCallback
     ) {
-        patch(url, param).tag(callback?.mLifecycleOwner).execute(callback)
+        patch(url, param).tag(callback.mLifecycleOwner).execute(callback)
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.kthttp.coroutines
 
-import com.adazhdw.ktlib.kthttp.converter.parser.IParser
+import com.adazhdw.ktlib.kthttp.coroutines.parser.IParser
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.Call
 import okhttp3.Callback
