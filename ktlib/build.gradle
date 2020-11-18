@@ -96,7 +96,7 @@ ext {
 
     publishedGroupId = 'com.adazhdw' // the id you want to add in "implement" line
     artifact = 'ktlib' // = libraryName  the id you want to add in "implement" line--must be the module name in android project
-    libraryVersion = '0.9.8'
+    libraryVersion = '0.9.9'
 
     libraryDescription = 'KtHttp coroutines add:IAwait IParser... '
     siteUrl = 'https://github.com/adazhdw/KtLibTest'
