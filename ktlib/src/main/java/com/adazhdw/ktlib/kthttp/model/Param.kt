@@ -1,6 +1,7 @@
 package com.adazhdw.ktlib.kthttp.model
 
 import com.adazhdw.ktlib.kthttp.coder.UrlCoder
+import com.adazhdw.ktlib.kthttp.constant.HttpConstant
 import okhttp3.FormBody
 import okhttp3.MultipartBody
 import okhttp3.RequestBody

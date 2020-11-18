@@ -4,7 +4,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.core.lifecycle.addOnDestroy
 import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestJsonCallback
-import com.adazhdw.ktlib.kthttp.model.Method
+import com.adazhdw.ktlib.kthttp.constant.Method
 import com.adazhdw.ktlib.kthttp.model.Param
 import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
 

@@ -1,8 +1,8 @@
 package com.adazhdw.ktlib.kthttp.callback
 
 import androidx.lifecycle.LifecycleOwner
-import com.adazhdw.ktlib.kthttp.model.HttpConstant
-import com.adazhdw.ktlib.kthttp.model.KtConfig
+import com.adazhdw.ktlib.kthttp.KtConfig
+import com.adazhdw.ktlib.kthttp.constant.HttpConstant
 import com.adazhdw.ktlib.kthttp.util.ClazzUtil
 import com.google.gson.JsonParseException
 import okhttp3.Response

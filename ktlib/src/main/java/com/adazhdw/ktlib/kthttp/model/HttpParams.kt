@@ -1,6 +1,7 @@
 package com.adazhdw.ktlib.kthttp.model
 
 import com.adazhdw.ktlib.kthttp.KtHttp
+import com.adazhdw.ktlib.kthttp.constant.HttpConstant
 import com.adazhdw.ktlib.utils.MimeUtil
 import okhttp3.MediaType
 import java.io.File
@@ -9,9 +10,9 @@ import java.io.File
  * author：daguozhu
  * date-time：2020/11/17 16:40
  * description：请求参数封装
+ * @param isMultipart /** 是否有流参数 */
  **/
 class HttpParams(val isMultipart: Boolean) {
-    /** 是否有流参数 */
     /** 请求头存放集合 */
     val mParams: HashMap<String, String> = KtHttp.ktHttp.getCommonParams()
 

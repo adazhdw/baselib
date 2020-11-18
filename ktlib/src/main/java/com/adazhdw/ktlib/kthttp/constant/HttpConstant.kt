@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.kthttp.model
+package com.adazhdw.ktlib.kthttp.constant
 
 import okhttp3.MediaType.Companion.toMediaType
 

@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.kthttp.exception
 
-import com.adazhdw.ktlib.kthttp.model.HttpConstant
+import com.adazhdw.ktlib.kthttp.constant.HttpConstant
 import com.adazhdw.ktlib.utils.NetworkUtil
 import okhttp3.Response
 import okhttp3.ResponseBody

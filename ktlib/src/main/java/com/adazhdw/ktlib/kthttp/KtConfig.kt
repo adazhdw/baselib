@@ -1,8 +1,9 @@
-package com.adazhdw.ktlib.kthttp.model
+package com.adazhdw.ktlib.kthttp
 
 import com.adazhdw.ktlib.KtLib
 import com.adazhdw.ktlib.kthttp.coder.ICoder
 import com.adazhdw.ktlib.kthttp.coder.UrlCoder
+import com.adazhdw.ktlib.kthttp.constant.HttpConstant
 import com.adazhdw.ktlib.kthttp.converter.GsonConverter
 import com.adazhdw.ktlib.kthttp.converter.IConverter
 import com.adazhdw.ktlib.kthttp.interceptor.RetryInterceptor

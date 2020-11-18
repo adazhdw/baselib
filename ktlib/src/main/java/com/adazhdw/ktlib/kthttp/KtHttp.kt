@@ -1,7 +1,7 @@
 package com.adazhdw.ktlib.kthttp
 
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
-import com.adazhdw.ktlib.kthttp.model.Method
+import com.adazhdw.ktlib.kthttp.constant.Method
 import com.adazhdw.ktlib.kthttp.model.Param
 import com.adazhdw.ktlib.kthttp.request.*
 import com.adazhdw.ktlib.kthttp.request.base.BaseRequest

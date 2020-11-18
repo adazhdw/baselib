@@ -1,7 +1,7 @@
 package com.adazhdw.ktlib.kthttp.converter
 
+import com.adazhdw.ktlib.kthttp.KtConfig
 import com.adazhdw.ktlib.kthttp.exception.ExceptionHelper
-import com.adazhdw.ktlib.kthttp.model.KtConfig
 import okhttp3.Response
 import java.io.IOException
 import java.lang.reflect.Type
