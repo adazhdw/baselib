@@ -41,7 +41,6 @@ object KtLib {
         } catch (e: ClassNotFoundException) {
             e.printStackTrace()
         }
-
         throw NullPointerException("u should init first")
     }
 

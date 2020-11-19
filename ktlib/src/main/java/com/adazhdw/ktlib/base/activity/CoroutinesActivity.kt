@@ -42,7 +42,7 @@ abstract class CoroutinesActivity : AppCompatActivity() {
                 tryBlock = block,
                 catchBlock = {
                     error?.invoke(it)
-                    "error:${it.message}".logE(TAG)
+                    "error:${it}".logE(TAG)
                 },
                 finallyBlock = {},
                 handleCancellationExceptionManually = true

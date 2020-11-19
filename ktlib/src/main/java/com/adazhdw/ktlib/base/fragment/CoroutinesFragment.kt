@@ -33,7 +33,7 @@ abstract class CoroutinesFragment : Fragment() {
                 tryBlock = block,
                 catchBlock = {
                     error?.invoke(it)
-                    "error:${it.message}".logE(TAG)
+                    "error:$it".logE(TAG)
                 },
                 finallyBlock = {},
                 handleCancellationExceptionManually = true
@@ -51,7 +51,7 @@ abstract class CoroutinesFragment : Fragment() {
             try {
                 tryBlock()
             } catch (e: Exception) {
-                if (e !is CancellationException || handleCancellationExceptionManually) {
+                if (e !is CancellationException || handleCancellationExceptionManually) {//如果不是协程取消的异常，就执行catchBlock
                     catchBlock(e)
                 } else {
                     throw e
