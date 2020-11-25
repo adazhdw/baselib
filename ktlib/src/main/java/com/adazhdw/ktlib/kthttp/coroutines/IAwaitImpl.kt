@@ -13,8 +13,8 @@ class IAwaitImpl<T>(
     private val parser: IParser<T>
 ) : IAwait<T> {
     override suspend fun await(): T {
-        val call = baseRequest.getRawCall()
         return try {
+            val call = baseRequest.getRawCall()
             call.await(parser)
         } catch (t: Throwable) {
             t.printStackTrace()

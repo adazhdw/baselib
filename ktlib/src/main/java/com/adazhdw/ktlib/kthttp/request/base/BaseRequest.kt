@@ -18,6 +18,7 @@ import okhttp3.RequestBody
 abstract class BaseRequest(val url: String, val param: Param) {
     private val okHttpClient: OkHttpClient = KtConfig.mOkHttpClient
     private var mCallProxy: RequestCallProxy? = null
+    private var mCall: Call? = null
     protected var tag = ""
 
     abstract fun getRequestBody(): RequestBody
@@ -27,7 +28,6 @@ abstract class BaseRequest(val url: String, val param: Param) {
     /**
      * 执行网络请求
      */
-    @Suppress("UNCHECKED_CAST")
     fun execute(callback: RequestCallback?) {
         mCallProxy = RequestCallProxy(getRawCall())
         mCallProxy!!.enqueue(OkHttpCallbackImpl(mCallProxy!!, callback))
@@ -43,10 +43,13 @@ abstract class BaseRequest(val url: String, val param: Param) {
     /**
      * 获取当前请求的 okhttp.Call
      */
-    fun getRawCall(): Call {
-        val requestBody = getRequestBody()
-        val mRequest = getRequest(requestBody)
-        return okHttpClient.newCall(mRequest)
+    internal fun getRawCall(): Call {
+        if (mCall == null) {
+            val requestBody = getRequestBody()
+            val mRequest = getRequest(requestBody)
+            mCall = okHttpClient.newCall(mRequest)
+        }
+        return mCall!!
     }
 
     /**
