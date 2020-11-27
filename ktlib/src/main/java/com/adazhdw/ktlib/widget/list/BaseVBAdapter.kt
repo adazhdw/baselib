@@ -10,7 +10,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 
 /**
- * Administrator
+ * daguozhu
  * create at 2020/4/8 11:08
  * description: 使用 ViewBinding 的 RecyclerView 的 Adapter
  */

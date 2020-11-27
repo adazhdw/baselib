@@ -11,7 +11,7 @@ import com.adazhdw.ktlib.widget.LinearSpacingItemDecoration
 
 
 /**
- * Administrator
+ * daguozhu
  * create at 2020/4/13 10:11
  * description:
  */
