@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.list.loadmore;
+package com.adazhdw.ktlib.widget.list.loadmore;
 
 import android.view.View;
 import android.view.ViewGroup;
