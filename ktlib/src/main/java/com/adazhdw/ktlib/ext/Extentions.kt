@@ -11,7 +11,6 @@ import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.adazhdw.ktlib.KtLib
 
 
 inline fun <reified T : Activity> Fragment.startActivity(vararg extras: Pair<String, Any?>) {
@@ -23,17 +22,12 @@ inline fun <reified T : Activity> FragmentActivity.startActivity(vararg extras: 
 }
 
 
-fun Fragment.toast(msg: CharSequence): Toast =
-    Toast.makeText(context, msg, Toast.LENGTH_SHORT).apply { show() }
+fun Fragment.toast(msg: CharSequence): Toast? = context?.toast(msg, Toast.LENGTH_SHORT)
 
-fun FragmentActivity.toast(msg: CharSequence): Toast =
-    Toast.makeText(this, msg, Toast.LENGTH_SHORT).apply { show() }
+fun FragmentActivity.toast(msg: CharSequence): Toast = toast(msg, Toast.LENGTH_SHORT)
 
-fun Context.toast(msg: CharSequence): Toast =
-    Toast.makeText(this, msg, Toast.LENGTH_SHORT).apply { show() }
-
-fun toast(msg: CharSequence): Toast =
-    Toast.makeText(KtLib.getApp(), msg, Toast.LENGTH_SHORT).apply { show() }
+fun Context.toast(msg: CharSequence, duration: Int = Toast.LENGTH_SHORT): Toast =
+    Toast.makeText(this, msg, duration).apply { show() }
 
 
 fun Fragment.getColorEx(@ColorRes res: Int): Int {
