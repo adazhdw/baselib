@@ -3,7 +3,7 @@ package com.adazhdw.ktlib.kthttp
 import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.constant.Method
-import com.adazhdw.ktlib.kthttp.model.Param
+import com.adazhdw.ktlib.kthttp.entity.Param
 import com.adazhdw.ktlib.kthttp.request.*
 import okhttp3.Call
 import okhttp3.Headers

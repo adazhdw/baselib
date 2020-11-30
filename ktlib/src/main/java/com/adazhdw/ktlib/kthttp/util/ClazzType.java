@@ -25,10 +25,10 @@ import java.util.Properties;
  * date-time：2020/11/16 14:12
  * description：Static methods for working with types.
  **/
-public class TypeUtil {
+public class ClazzType {
     static final Type[] EMPTY_TYPE_ARRAY = new Type[]{};
 
-    private TypeUtil() {
+    private ClazzType() {
         throw new UnsupportedOperationException();
     }
 
@@ -40,7 +40,7 @@ public class TypeUtil {
      */
     public static ParameterizedType newParameterizedTypeWithOwner(
             Type ownerType, Type rawType, Type... typeArguments) {
-        return new TypeUtil.ParameterizedTypeImpl(ownerType, rawType, typeArguments);
+        return new ClazzType.ParameterizedTypeImpl(ownerType, rawType, typeArguments);
     }
 
     /**
@@ -50,7 +50,7 @@ public class TypeUtil {
      * @return a {@link java.io.Serializable serializable} generic array type.
      */
     public static GenericArrayType arrayOf(Type componentType) {
-        return new TypeUtil.GenericArrayTypeImpl(componentType);
+        return new ClazzType.GenericArrayTypeImpl(componentType);
     }
 
     /**
@@ -66,7 +66,7 @@ public class TypeUtil {
         } else {
             upperBounds = new Type[]{bound};
         }
-        return new TypeUtil.WildcardTypeImpl(upperBounds, EMPTY_TYPE_ARRAY);
+        return new ClazzType.WildcardTypeImpl(upperBounds, EMPTY_TYPE_ARRAY);
     }
 
     /**
@@ -81,7 +81,7 @@ public class TypeUtil {
         } else {
             lowerBounds = new Type[]{bound};
         }
-        return new TypeUtil.WildcardTypeImpl(new Type[]{Object.class}, lowerBounds);
+        return new ClazzType.WildcardTypeImpl(new Type[]{Object.class}, lowerBounds);
     }
 
     /**
@@ -92,20 +92,20 @@ public class TypeUtil {
     public static Type canonicalize(Type type) {
         if (type instanceof Class) {
             Class<?> c = (Class<?>) type;
-            return c.isArray() ? new TypeUtil.GenericArrayTypeImpl(canonicalize(c.getComponentType())) : c;
+            return c.isArray() ? new ClazzType.GenericArrayTypeImpl(canonicalize(c.getComponentType())) : c;
 
         } else if (type instanceof ParameterizedType) {
             ParameterizedType p = (ParameterizedType) type;
-            return new TypeUtil.ParameterizedTypeImpl(p.getOwnerType(),
+            return new ClazzType.ParameterizedTypeImpl(p.getOwnerType(),
                     p.getRawType(), p.getActualTypeArguments());
 
         } else if (type instanceof GenericArrayType) {
             GenericArrayType g = (GenericArrayType) type;
-            return new TypeUtil.GenericArrayTypeImpl(g.getGenericComponentType());
+            return new ClazzType.GenericArrayTypeImpl(g.getGenericComponentType());
 
         } else if (type instanceof WildcardType) {
             WildcardType w = (WildcardType) type;
-            return new TypeUtil.WildcardTypeImpl(w.getUpperBounds(), w.getLowerBounds());
+            return new ClazzType.WildcardTypeImpl(w.getUpperBounds(), w.getLowerBounds());
 
         } else {
             // type is either serializable as-is or unsupported
@@ -270,7 +270,7 @@ public class TypeUtil {
         }
         Preconditions.checkArgument(supertype.isAssignableFrom(contextRawType));
         return resolve(context, contextRawType,
-                TypeUtil.getGenericSupertype(context, contextRawType, supertype));
+                ClazzType.getGenericSupertype(context, contextRawType, supertype));
     }
 
     /**
@@ -490,7 +490,7 @@ public class TypeUtil {
         @Override
         public boolean equals(Object other) {
             return other instanceof ParameterizedType
-                    && TypeUtil.equals(this, (ParameterizedType) other);
+                    && ClazzType.equals(this, (ParameterizedType) other);
         }
 
         @Override
@@ -533,7 +533,7 @@ public class TypeUtil {
         @Override
         public boolean equals(Object o) {
             return o instanceof GenericArrayType
-                    && TypeUtil.equals(this, (GenericArrayType) o);
+                    && ClazzType.equals(this, (GenericArrayType) o);
         }
 
         @Override
@@ -588,7 +588,7 @@ public class TypeUtil {
         @Override
         public boolean equals(Object other) {
             return other instanceof WildcardType
-                    && TypeUtil.equals(this, (WildcardType) other);
+                    && ClazzType.equals(this, (WildcardType) other);
         }
 
         @Override

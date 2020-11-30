@@ -3,7 +3,7 @@ package com.adazhdw.ktlib.kthttp.callback
 import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.core.KtExecutors
 import com.adazhdw.ktlib.kthttp.request.RequestCallProxy
-import com.adazhdw.ktlib.kthttp.util.LifecycleUtil
+import com.adazhdw.ktlib.kthttp.util.HttpLifecycleObserver
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
@@ -20,7 +20,7 @@ abstract class OkHttpCallback(
 ) : Callback {
 
     init {
-        LifecycleUtil.bind(mLifecycleOwner, onDestroy = { mCallProxy.cancel() })
+        HttpLifecycleObserver.bind(mLifecycleOwner, onDestroy = { mCallProxy.cancel() })
     }
 
     override fun onResponse(call: Call, response: Response) {

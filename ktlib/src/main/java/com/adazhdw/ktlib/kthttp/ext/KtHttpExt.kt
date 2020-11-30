@@ -4,7 +4,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.kthttp.KtHttp.Companion.ktHttp
 import com.adazhdw.ktlib.kthttp.callback.RequestJsonCallback
 import com.adazhdw.ktlib.kthttp.constant.Method
-import com.adazhdw.ktlib.kthttp.model.Param
+import com.adazhdw.ktlib.kthttp.entity.Param
 
 /**
  * Author: dgz
@@ -31,7 +31,7 @@ inline fun <reified T : Any> LifecycleOwner.postRequest(
 }
 
 inline fun <reified T : Any> netRequest(
-    lifecycleOwner: LifecycleOwner,
+    lifecycleOwner: LifecycleOwner?,
     url: String,
     param: Param = Param.build(),
     method: Method = Method.GET,

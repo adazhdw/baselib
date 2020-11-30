@@ -4,7 +4,7 @@ import com.adazhdw.ktlib.core.KtExecutors
 import com.adazhdw.ktlib.kthttp.exception.ExceptionHelper
 import com.adazhdw.ktlib.kthttp.exception.NetException
 import com.adazhdw.ktlib.kthttp.request.RequestCallProxy
-import com.adazhdw.ktlib.kthttp.util.LifecycleUtil
+import com.adazhdw.ktlib.kthttp.util.HttpLifecycleObserver
 import okhttp3.Call
 import okhttp3.Response
 
@@ -50,6 +50,6 @@ open class OkHttpCallbackImpl(
     /**
      * 判断当前宿主是否处于活动状态
      */
-    private fun isLifecycleActive() = LifecycleUtil.isLifecycleActive(mLifecycleOwner)
+    private fun isLifecycleActive() = HttpLifecycleObserver.isLifecycleActive(mLifecycleOwner)
 
 }

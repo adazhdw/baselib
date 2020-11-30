@@ -1,8 +1,8 @@
 package com.adazhdw.ktlib.kthttp.coroutines.parser
 
+import com.adazhdw.ktlib.kthttp.util.ClazzType
 import com.adazhdw.ktlib.kthttp.util.ClazzUtil
 import com.adazhdw.ktlib.kthttp.util.Preconditions
-import com.adazhdw.ktlib.kthttp.util.TypeUtil
 import java.lang.reflect.Type
 
 /**
@@ -26,7 +26,7 @@ abstract class ParserImpl<T> : Parser<T> {
      * 此构造方法仅适用于不带泛型的Class对象
      */
     constructor(type: Type) {
-        mType = TypeUtil.canonicalize(Preconditions.checkNotNull(type))
+        mType = ClazzType.canonicalize(Preconditions.checkNotNull(type))
     }
 
     /**

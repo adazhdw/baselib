@@ -15,6 +15,6 @@ object ClazzUtil {
             throw RuntimeException("Missing type parameter.")
         }
         val parameterized: ParameterizedType = superclass as ParameterizedType
-        return TypeUtil.canonicalize(parameterized.actualTypeArguments[index])
+        return ClazzType.canonicalize(parameterized.actualTypeArguments[index])
     }
 }

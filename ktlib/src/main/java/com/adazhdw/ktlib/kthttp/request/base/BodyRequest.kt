@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.kthttp.request.base
 
-import com.adazhdw.ktlib.kthttp.model.Param
+import com.adazhdw.ktlib.kthttp.entity.Param
 import okhttp3.RequestBody
 
 /**

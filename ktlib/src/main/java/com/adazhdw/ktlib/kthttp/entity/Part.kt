@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.kthttp.model
+package com.adazhdw.ktlib.kthttp.entity
 
 import okhttp3.MediaType
 import java.io.File

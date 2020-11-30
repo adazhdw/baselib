@@ -9,8 +9,8 @@ import androidx.core.text.parseAsHtml
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.adazhdw.ktlib.base.mvvm.viewModel
+import com.adazhdw.ktlib.kthttp.entity.Param
 import com.adazhdw.ktlib.kthttp.ext.postRequest
-import com.adazhdw.ktlib.kthttp.model.Param
 import com.adazhdw.libapp.R
 
 class NotificationsFragment : Fragment() {

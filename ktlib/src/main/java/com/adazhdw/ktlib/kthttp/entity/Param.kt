@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.kthttp.model
+package com.adazhdw.ktlib.kthttp.entity
 
 import com.adazhdw.ktlib.kthttp.coder.UrlCoder
 import com.adazhdw.ktlib.kthttp.constant.BodyType
