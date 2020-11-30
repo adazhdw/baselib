@@ -1,7 +1,7 @@
 package com.adazhdw.ktlib.kthttp.coroutines
 
-import com.adazhdw.ktlib.kthttp.coroutines.parser.IParser
 import com.adazhdw.ktlib.kthttp.coroutines.parser.NormalParser
+import com.adazhdw.ktlib.kthttp.coroutines.parser.Parser
 import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
 
 /**
@@ -11,7 +11,7 @@ import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
  **/
 
 fun <T> BaseRequest.awaitImpl(
-    parser: IParser<T>
+    parser: Parser<T>
 ): IAwait<T> = IAwaitImpl(this, parser)
 
 inline fun <reified T : Any> BaseRequest.toClazz() = awaitImpl(object : NormalParser<T>() {})

@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.kthttp.coroutines
 
-import com.adazhdw.ktlib.kthttp.coroutines.parser.IParser
+import com.adazhdw.ktlib.kthttp.coroutines.parser.Parser
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.Call
 import okhttp3.Callback
@@ -32,7 +32,7 @@ internal suspend fun Call.await(): Response {
     }
 }
 
-internal suspend fun <T> Call.await(parser: IParser<T>): T {
+internal suspend fun <T> Call.await(parser: Parser<T>): T {
     return suspendCancellableCoroutine { continuation ->
         continuation.invokeOnCancellation {
             cancel()

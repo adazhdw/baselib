@@ -8,7 +8,7 @@ import okhttp3.Response
  * description：
  **/
 
-interface IParser<T> {
+interface Parser<T> {
 
     fun parse(response: Response): T
 

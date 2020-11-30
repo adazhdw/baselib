@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.kthttp.coroutines
 
-import com.adazhdw.ktlib.kthttp.coroutines.parser.IParser
+import com.adazhdw.ktlib.kthttp.coroutines.parser.Parser
 import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
 
 /**
@@ -10,7 +10,7 @@ import com.adazhdw.ktlib.kthttp.request.base.BaseRequest
  **/
 class IAwaitImpl<T>(
     private val baseRequest: BaseRequest,
-    private val parser: IParser<T>
+    private val parser: Parser<T>
 ) : IAwait<T> {
     override suspend fun await(): T {
         return try {

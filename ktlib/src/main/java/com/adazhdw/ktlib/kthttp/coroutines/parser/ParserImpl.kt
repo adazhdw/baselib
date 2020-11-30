@@ -10,7 +10,7 @@ import java.lang.reflect.Type
  * date-time：2020/11/18 11:04
  * description：
  **/
-abstract class IParserImpl<T> : IParser<T> {
+abstract class ParserImpl<T> : Parser<T> {
 
     @JvmField
     protected val mType: Type

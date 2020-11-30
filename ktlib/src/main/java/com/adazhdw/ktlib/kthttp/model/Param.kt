@@ -1,6 +1,7 @@
 package com.adazhdw.ktlib.kthttp.model
 
 import com.adazhdw.ktlib.kthttp.coder.UrlCoder
+import com.adazhdw.ktlib.kthttp.constant.BodyType
 import com.adazhdw.ktlib.kthttp.constant.HttpConstant
 import okhttp3.FormBody
 import okhttp3.MultipartBody
@@ -21,7 +22,7 @@ class Param private constructor(isMultipart: Boolean) {
     private val headers: HttpHeaders = HttpHeaders()
     private val params: HttpParams = HttpParams(isMultipart)
     private var jsonBody: String = ""
-    private var isJsonRequest: Boolean = false
+    private var bodyType: BodyType = BodyType.FORM
     private val urlCoder = UrlCoder.create()
 
     /**
@@ -31,8 +32,11 @@ class Param private constructor(isMultipart: Boolean) {
     internal var needHeaders: Boolean = false
 
     internal fun getRequestBody(): RequestBody {
-        return if (isJsonRequest) getJsonRequestBody()
-        else getParamFormBody()
+        return if (bodyType() == BodyType.JSON) {
+            getJsonRequestBody()
+        } else {
+            getFormBody()
+        }
     }
 
     private fun getJsonRequestBody(): RequestBody {
@@ -45,7 +49,7 @@ class Param private constructor(isMultipart: Boolean) {
         }
     }
 
-    private fun getParamFormBody(): RequestBody {
+    private fun getFormBody(): RequestBody {
         if (params.isMultipart && params.files.isNotEmpty()) {
             val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
             for (part in params.files) {
@@ -68,6 +72,12 @@ class Param private constructor(isMultipart: Boolean) {
         }
     }
 
+    fun bodyType(bodyType: BodyType): Param {
+        this.bodyType = bodyType
+        return this
+    }
+
+    fun bodyType() = this.bodyType
 
     fun setUrlEncoder(urlEncoder: Boolean): Param {
         this.urlEncoder = urlEncoder
@@ -121,7 +131,8 @@ class Param private constructor(isMultipart: Boolean) {
     }
 
     companion object {
-        fun build(isMultipart: Boolean = false) = Param(isMultipart)
+        fun build(isMultipart: Boolean = false, bodyType: BodyType = BodyType.FORM) =
+            Param(isMultipart).bodyType(bodyType)
     }
 
 }
