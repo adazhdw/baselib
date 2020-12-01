@@ -1,10 +1,13 @@
-@file:Suppress("NOTHING_TO_INLINE","unused")
+@file:Suppress("NOTHING_TO_INLINE", "unused")
 
 package com.adazhdw.ktlib.ext
 
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.text.Html
+import android.text.Spanned
+import androidx.core.text.HtmlCompat
 import java.util.regex.Pattern
 
 /**
@@ -17,7 +20,7 @@ fun String.trimPunct(): String {
     } else this.replace("[\\pP\\p{Punct}]".toRegex(), "")
 }
 
-fun String.formatNum():String{
+fun String.formatNum(): String {
     val regEx = "[^0-9]"
     val p = Pattern.compile(regEx)
     val m = p.matcher(this)
@@ -73,4 +76,19 @@ fun Context.pasteText(): String? {
 fun String.startWidth(prefix: String, ignoreCase: Boolean = true): Boolean {
     return startsWith(prefix, ignoreCase)
 }
+
+inline fun String.parseAsHtml(
+    flags: Int = HtmlCompat.FROM_HTML_MODE_LEGACY,
+    imageGetter: Html.ImageGetter? = null,
+    tagHandler: Html.TagHandler? = null
+): Spanned = HtmlCompat.fromHtml(this, flags, imageGetter, tagHandler)
+
+/**
+ * Returns a string of HTML from the spans in this [Spanned].
+ *
+ * @see Html.toHtml
+ */
+inline fun Spanned.toHtml(
+    option: Int = HtmlCompat.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE
+): String = HtmlCompat.toHtml(this, option)
 
