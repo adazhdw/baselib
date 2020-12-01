@@ -1,11 +1,11 @@
 package com.adazhdw.ktlib.kthttp.callback
 
 import androidx.lifecycle.LifecycleOwner
+import com.adazhdw.ktlib.core.KtExecutors
 import com.adazhdw.ktlib.kthttp.KtConfig
 import com.adazhdw.ktlib.kthttp.constant.HttpConstant
 import com.adazhdw.ktlib.kthttp.util.ClazzUtil
 import com.google.gson.JsonParseException
-import okhttp3.Response
 import java.lang.reflect.Type
 
 /**
@@ -20,25 +20,25 @@ abstract class RequestJsonCallback<T : Any>(owner: LifecycleOwner?) : RequestCal
         mType = getSuperclassTypeParameter(javaClass)
     }
 
-    override fun onHttpResponse(httpResponse: Response, result: String) {
-        super.onHttpResponse(httpResponse, result)
+    override fun onResult(result: String) {
+        super.onResult(result)
         try {
             val data = KtConfig.converter.convert<T>(result, mType, KtConfig.needDecodeResult)
-            this.onSuccess(data)
+            KtExecutors.mainThread.execute { this.onSuccess(data) }
         } catch (e: JsonParseException) {
             onFailure(e, HttpConstant.ERROR_JSON_PARSE_EXCEPTION, "Data parse error${e.message}")
         }
     }
-
-    abstract fun onSuccess(data: T)
-    abstract fun onError(code: Int, msg: String?)
 
     override fun onFailure(e: Exception, code: Int, msg: String?) {
         super.onFailure(e, code, msg)
         this.onError(code, msg)
     }
 
-    private fun getSuperclassTypeParameter(subclass: Class<*>): Type? {
+    abstract fun onSuccess(data: T)
+    abstract fun onError(code: Int, msg: String?)
+
+    private fun getSuperclassTypeParameter(subclass: Class<*>): Type {
         return ClazzUtil.getClassType(subclass)
     }
 

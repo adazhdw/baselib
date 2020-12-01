@@ -15,7 +15,6 @@ import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.utils.UriUtil
 import com.adazhdw.ktlib.utils.permission.KtPermission
 import com.adazhdw.ktlib.utils.permission.PermissionCallback
-import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -31,6 +30,7 @@ fun ForResultActivity.selectImage(
 ) {
     KtPermission.request(
         this,
+        Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         callback = object : PermissionCallback {
             override fun invoke(p1: Boolean, p2: List<String>) {

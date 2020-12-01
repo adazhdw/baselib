@@ -2,7 +2,7 @@ package com.adazhdw.ktlib.kthttp.callback
 
 import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.core.KtExecutors
-import com.adazhdw.ktlib.kthttp.request.RequestCallProxy
+import com.adazhdw.ktlib.kthttp.request.CallProxy
 import com.adazhdw.ktlib.kthttp.util.HttpLifecycleObserver
 import okhttp3.Call
 import okhttp3.Callback
@@ -14,8 +14,9 @@ import java.io.IOException
  * date-time：2020/11/17 20:25
  * description：
  **/
+
 abstract class OkHttpCallback(
-    val mCallProxy: RequestCallProxy,
+    val mCallProxy: CallProxy,
     val mLifecycleOwner: LifecycleOwner?
 ) : Callback {
 

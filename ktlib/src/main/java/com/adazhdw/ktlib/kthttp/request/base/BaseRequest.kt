@@ -4,7 +4,7 @@ import com.adazhdw.ktlib.kthttp.KtConfig
 import com.adazhdw.ktlib.kthttp.callback.OkHttpCallbackImpl
 import com.adazhdw.ktlib.kthttp.callback.RequestCallback
 import com.adazhdw.ktlib.kthttp.entity.Param
-import com.adazhdw.ktlib.kthttp.request.RequestCallProxy
+import com.adazhdw.ktlib.kthttp.request.CallProxy
 import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -17,7 +17,7 @@ import okhttp3.RequestBody
  **/
 abstract class BaseRequest(val url: String, val param: Param) {
     private val okHttpClient: OkHttpClient = KtConfig.mOkHttpClient
-    private var mCallProxy: RequestCallProxy? = null
+    private var mCallProxy: CallProxy? = null
     private var mCall: Call? = null
     protected var tag = ""
 
@@ -29,7 +29,7 @@ abstract class BaseRequest(val url: String, val param: Param) {
      * 执行网络请求
      */
     fun execute(callback: RequestCallback?) {
-        mCallProxy = RequestCallProxy(getRawCall())
+        mCallProxy = CallProxy(getRawCall())
         mCallProxy!!.enqueue(OkHttpCallbackImpl(mCallProxy!!, callback))
     }
 

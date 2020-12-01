@@ -3,7 +3,7 @@ package com.adazhdw.ktlib.kthttp.callback
 import com.adazhdw.ktlib.core.KtExecutors
 import com.adazhdw.ktlib.kthttp.exception.ExceptionHelper
 import com.adazhdw.ktlib.kthttp.exception.NetException
-import com.adazhdw.ktlib.kthttp.request.RequestCallProxy
+import com.adazhdw.ktlib.kthttp.request.CallProxy
 import com.adazhdw.ktlib.kthttp.util.HttpLifecycleObserver
 import okhttp3.Call
 import okhttp3.Response
@@ -14,8 +14,8 @@ import okhttp3.Response
  * description：
  **/
 
-open class OkHttpCallbackImpl(
-    callProxy: RequestCallProxy,
+open class OkHttpCallbackImpl constructor(
+    callProxy: CallProxy,
     private val requestCallback: RequestCallback?
 ) : OkHttpCallback(callProxy, requestCallback?.mLifecycleOwner) {
     init {
@@ -28,21 +28,19 @@ open class OkHttpCallbackImpl(
 
     override fun onResponse(response: Response) {
         val result = ExceptionHelper.getNotNullResult(response).string()
-        KtExecutors.mainThread.execute {
-            if (isLifecycleActive()) {
-                requestCallback?.onHttpResponse(response, result)
-                requestCallback?.onFinish()
-            }
+        if (isLifecycleActive() && requestCallback != null) {
+            requestCallback.onResult(result)
+            KtExecutors.mainThread.execute { requestCallback.onFinish() }
         }
     }
 
     override fun onFailure(e: Exception, call: Call) {
         e.printStackTrace()
         val ex: NetException = ExceptionHelper.callError(e)
-        KtExecutors.mainThread.execute {
-            if (isLifecycleActive()) {
-                requestCallback?.onFailure(ex, ex.code, ex.msg)
-                requestCallback?.onFinish()
+        if (isLifecycleActive() && requestCallback != null) {
+            KtExecutors.mainThread.execute {
+                requestCallback.onFailure(ex, ex.code, ex.msg)
+                requestCallback.onFinish()
             }
         }
     }

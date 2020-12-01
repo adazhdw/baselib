@@ -4,28 +4,25 @@ import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.ext.logE
 import okhttp3.Call
-import okhttp3.Response
 
 /**
  * author：daguozhu
- * date-time：2020/11/25 17:10
+ * date-time：2020/12/1 14:58
  * description：
  **/
-
-abstract class RequestCallbackImpl(private val lifecycleOwner: LifecycleOwner?) : RequestCallback {
+open class RequestCallbackImpl(private val owner: LifecycleOwner?) : RequestCallback {
+    final override val mLifecycleOwner: LifecycleOwner?
+        get() = owner
 
     companion object {
         const val TAG = "RequestCallbackImpl"
     }
 
-    override val mLifecycleOwner: LifecycleOwner?
-        get() = lifecycleOwner
-
     override fun onStart(call: Call) {
         "onStart".logD(TAG)
     }
 
-    override fun onHttpResponse(httpResponse: Response, result: String) {
+    override fun onResult(result: String) {
         "onHttpResponse".logD(TAG)
     }
 
@@ -36,4 +33,5 @@ abstract class RequestCallbackImpl(private val lifecycleOwner: LifecycleOwner?) 
     override fun onFinish() {
         "onFinish".logD(TAG)
     }
+
 }

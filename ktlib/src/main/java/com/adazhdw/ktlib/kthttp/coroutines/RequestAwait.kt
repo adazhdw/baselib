@@ -14,4 +14,5 @@ fun <T> BaseRequest.awaitImpl(
     parser: Parser<T>
 ): IAwait<T> = IAwaitImpl(this, parser)
 
-inline fun <reified T : Any> BaseRequest.toClazz() = awaitImpl(object : NormalParser<T>() {})
+inline fun <reified T : Any> BaseRequest.toClazz(): IAwait<T> =
+    awaitImpl(object : NormalParser<T>() {})
