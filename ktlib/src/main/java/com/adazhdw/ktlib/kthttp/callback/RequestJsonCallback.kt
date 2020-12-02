@@ -3,9 +3,8 @@ package com.adazhdw.ktlib.kthttp.callback
 import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.core.KtExecutors
 import com.adazhdw.ktlib.kthttp.KtConfig
-import com.adazhdw.ktlib.kthttp.constant.HttpConstant
 import com.adazhdw.ktlib.kthttp.util.ClazzUtil
-import com.google.gson.JsonParseException
+import okhttp3.ResponseBody
 import java.lang.reflect.Type
 
 /**
@@ -20,13 +19,12 @@ abstract class RequestJsonCallback<T : Any>(owner: LifecycleOwner?) : RequestCal
         mType = getSuperclassTypeParameter(javaClass)
     }
 
-    override fun onResult(result: String) {
-        super.onResult(result)
-        try {
-            val data = KtConfig.converter.convert<T>(result, mType, KtConfig.needDecodeResult)
-            KtExecutors.mainThread.execute { this.onSuccess(data) }
-        } catch (e: JsonParseException) {
-            onFailure(e, HttpConstant.ERROR_JSON_PARSE_EXCEPTION, "Data parse error${e.message}")
+    override fun onResult(body: ResponseBody, result: String) {
+        super.onResult(body, result)
+        val data = KtConfig.converter.convert<T>(result, mType, KtConfig.needDecodeResult)
+        KtExecutors.mainThread.execute {
+            this.onSuccess(data)
+            this.onFinish()
         }
     }
 

@@ -27,10 +27,10 @@ open class OkHttpCallbackImpl constructor(
     }
 
     override fun onResponse(response: Response) {
-        val result = ExceptionHelper.getNotNullResult(response).string()
+        val body = ExceptionHelper.getNotNullResponseBody(response)
+        val result = body.string()
         if (isLifecycleActive() && requestCallback != null) {
-            requestCallback.onResult(result)
-            KtExecutors.mainThread.execute { requestCallback.onFinish() }
+            requestCallback.onResult(body, result)
         }
     }
 

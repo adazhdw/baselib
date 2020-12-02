@@ -4,6 +4,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.adazhdw.ktlib.core.KtExecutors
 import com.adazhdw.ktlib.kthttp.request.CallProxy
 import com.adazhdw.ktlib.kthttp.util.HttpLifecycleObserver
+import com.google.gson.JsonParseException
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
@@ -29,6 +30,8 @@ abstract class OkHttpCallback(
             KtExecutors.networkIO.submit {
                 response.use { onResponse(it) }
             }
+        } catch (e: JsonParseException) {
+            onFailure(e, call)
         } catch (e: Exception) {
             onFailure(e, call)
         }

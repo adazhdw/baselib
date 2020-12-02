@@ -17,7 +17,7 @@ import java.net.UnknownHostException
 object ExceptionHelper {
 
     @Throws(IOException::class)
-    fun getNotNullResult(response: Response): ResponseBody {
+    fun getNotNullResponseBody(response: Response): ResponseBody {
         val body = response.body ?: throw HttpStatusException(response)
         if (!response.isSuccessful) throw HttpStatusException(response)
         return body

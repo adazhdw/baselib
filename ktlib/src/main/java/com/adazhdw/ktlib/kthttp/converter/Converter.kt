@@ -14,7 +14,7 @@ import java.lang.reflect.Type
 
 @Throws(IOException::class)
 fun <R> Response.convert(type: Type): R {
-    val body = ExceptionHelper.getNotNullResult(this).string()
+    val body = ExceptionHelper.getNotNullResponseBody(this).string()
     val needEncoder = KtConfig.needDecodeResult
     return KtConfig.converter.convert(body, type, needEncoder)
 }
