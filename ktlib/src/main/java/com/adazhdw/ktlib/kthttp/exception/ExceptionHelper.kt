@@ -24,21 +24,15 @@ object ExceptionHelper {
     }
 
     fun callError(e: Exception): NetException {
-        val ex: NetException /* = java.lang.Exception */
-        var code = HttpConstant.ERROR_REQUEST_ON_FAILURE
-        if (e is SocketTimeoutException) {
-            ex = RequestTimeoutException(code)
-        } else if (e is InterruptedIOException && e.message == "timeout") {
-            ex = RequestTimeoutException(code)
-        } else if (e is UnknownHostException && !NetworkUtil.isConnected()) {
-            code = HttpConstant.ERROR_NETWORK_UNAVAILABLE
-            ex = NetWorkUnAvailableException(code)
-        } else if (e is IOException && e.message == "Canceled") {
-            code = HttpConstant.ERROR_REQUEST_CANCEL_ERROR
-            ex = RequestCanceledException(code)
-        } else {
-            ex = NetException(code, e.message ?: "request error")
+        return when {
+            e is SocketTimeoutException -> RequestTimeoutException()
+            e is InterruptedIOException && e.message == "timeout" -> RequestTimeoutException()
+            e is UnknownHostException && !NetworkUtil.isConnected() -> NetWorkUnAvailableException()
+            e is IOException && e.message == "Canceled" -> RequestCanceledException()
+            else -> NetException(
+                HttpConstant.ERROR_REQUEST_ON_FAILURE,
+                e.message ?: "request error"
+            )
         }
-        return ex
     }
 }

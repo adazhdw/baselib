@@ -17,6 +17,7 @@ object HttpConstant {
     const val ERROR_NETWORK_UNAVAILABLE = 1003
     const val ERROR_RESPONSE_NORMAL_ERROR = 1004
     const val ERROR_REQUEST_CANCEL_ERROR = 1005
+    const val ERROR_REQUEST_TIMEOUT_ERROR = 1006
 
 
     val JSON = "application/json; charset=utf-8".toMediaType()

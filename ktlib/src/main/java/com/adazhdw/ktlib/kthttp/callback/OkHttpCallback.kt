@@ -28,20 +28,20 @@ abstract class OkHttpCallback(
     override fun onResponse(call: Call, response: Response) {
         try {
             KtExecutors.networkIO.submit {
-                response.use { onResponse(it) }
+                response.use { response(it) }
             }
         } catch (e: JsonParseException) {
-            onFailure(e, call)
+            failure(e, call)
         } catch (e: Exception) {
-            onFailure(e, call)
+            failure(e, call)
         }
     }
 
     override fun onFailure(call: Call, e: IOException) {
-        onFailure(e, call)
+        failure(e, call)
     }
 
-    abstract fun onResponse(response: Response)
+    abstract fun response(response: Response)
 
-    abstract fun onFailure(e: Exception, call: Call)
+    abstract fun failure(e: Exception, call: Call)
 }

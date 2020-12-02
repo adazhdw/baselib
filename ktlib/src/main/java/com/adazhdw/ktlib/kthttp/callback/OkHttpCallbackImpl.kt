@@ -26,7 +26,7 @@ open class OkHttpCallbackImpl constructor(
         }
     }
 
-    override fun onResponse(response: Response) {
+    override fun response(response: Response) {
         val body = ExceptionHelper.getNotNullResponseBody(response)
         val result = body.string()
         if (isLifecycleActive() && requestCallback != null) {
@@ -34,12 +34,12 @@ open class OkHttpCallbackImpl constructor(
         }
     }
 
-    override fun onFailure(e: Exception, call: Call) {
+    override fun failure(e: Exception, call: Call) {
         e.printStackTrace()
         val ex: NetException = ExceptionHelper.callError(e)
         if (isLifecycleActive() && requestCallback != null) {
             KtExecutors.mainThread.execute {
-                requestCallback.onFailure(ex, ex.code, ex.msg)
+                requestCallback.onFailure(e, ex.code, ex.msg)
                 requestCallback.onFinish()
             }
         }
