@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.viewbinding.ViewBinding
+import androidx.annotation.LayoutRes
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.FragmentActivity
 import com.adazhdw.ktlib.base.IFragment
 import org.greenrobot.eventbus.EventBus
 
@@ -15,10 +18,7 @@ import org.greenrobot.eventbus.EventBus
  * create at 2020/4/2 15:53
  * description:
  */
-abstract class BaseFragmentBinding : CoroutinesFragment(), IFragment {
-
-    final override val layoutId: Int
-        get() = 0
+abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
 
     /**
      * 是否初始化过布局
@@ -31,6 +31,12 @@ abstract class BaseFragmentBinding : CoroutinesFragment(), IFragment {
     protected var isDataInitiated = false
 
     protected lateinit var mContext: Context
+    lateinit var mActivity: FragmentActivity
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mActivity = context as FragmentActivity
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +44,7 @@ abstract class BaseFragmentBinding : CoroutinesFragment(), IFragment {
         savedInstanceState: Bundle?
     ): View? {
         return if (isViewBinding()) {
-            initViewBinding().root
+            initViewBinding(inflater, container, layoutId).root
         } else {
             null
         }
@@ -74,6 +80,18 @@ abstract class BaseFragmentBinding : CoroutinesFragment(), IFragment {
         }
     }
 
-    abstract fun initViewBinding(): ViewBinding
+    abstract fun initViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        @LayoutRes resId: Int
+    ): ViewDataBinding
+
     open fun isViewBinding(): Boolean = true
+
+    protected inline fun <reified T : ViewDataBinding> binding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        @LayoutRes resId: Int
+    ): T = DataBindingUtil.inflate(inflater, resId, container, false)
+
 }

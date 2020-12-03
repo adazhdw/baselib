@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.adazhdw.ktlib.R
 import com.adazhdw.ktlib.databinding.BaseFooterBinding
+import com.adazhdw.ktlib.databinding.BaseHeaderBinding
 import com.adazhdw.ktlib.ext.view.invisible
 import com.adazhdw.ktlib.ext.view.visible
 
@@ -32,8 +33,8 @@ abstract class LoadMoreAdapter<T> : BaseVBAdapter<T>() {
         val position = holder.adapterPosition
         if (data.isEmpty() || position == RecyclerView.NO_POSITION) return
         when {
-            isFooter(position) -> bindFooter(holder)
-            isHeader(position) -> bindHeader(holder)
+            isFooter(position) -> bindFooter(holder.viewBinding as BaseFooterBinding)
+            isHeader(position) -> bindHeader(holder.viewBinding as BaseHeaderBinding)
             else -> {
                 if (data.isEmpty()) return
                 bindHolder(holder, data[position - headerCount()], position - headerCount())
@@ -67,9 +68,9 @@ abstract class LoadMoreAdapter<T> : BaseVBAdapter<T>() {
     open fun footerId() = R.layout.base_footer
     open fun headerId() = R.layout.base_header
     open fun headerCount() = 0
-    open fun bindHeader(holder: BaseVBViewHolder) {}
-    open fun bindFooter(holder: BaseVBViewHolder) {
-        (holder.viewBinding as BaseFooterBinding).let {
+    open fun bindHeader(viewBinding: BaseHeaderBinding) {}
+    open fun bindFooter(viewBinding: BaseFooterBinding) {
+        viewBinding.let {
             when {
                 isLoadAll() -> {
                     it.loadProgress.invisible()

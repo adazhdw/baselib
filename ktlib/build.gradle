@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 repositories {
@@ -35,9 +34,8 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-
-    //开启viewBinding
-    viewBinding {
+    //开启 dataBinding
+    dataBinding {
         enabled = true
     }
 
@@ -75,11 +73,11 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
 
     //Gson
-    api 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     //OkHttp
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.5.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.8.0'
 
     //RecyclerViewAdapter
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
