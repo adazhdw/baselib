@@ -2,6 +2,7 @@ package com.adazhdw.libapp.ui.dashboard
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.adazhdw.ktlib.base.mvvm.BaseViewModelImpl
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.ext.parseAsHtml
 import com.adazhdw.ktlib.kthttp.KtHttp
@@ -9,7 +10,6 @@ import com.adazhdw.ktlib.kthttp.coroutines.toClazz
 import com.adazhdw.ktlib.kthttp.entity.Param
 import com.adazhdw.libapp.bean.DataFeed
 import com.adazhdw.libapp.bean.NetResponse
-import com.adazhdw.libapp.ui.BaseViewModelImpl
 import kotlin.system.measureTimeMillis
 
 class DashboardViewModel : BaseViewModelImpl() {
@@ -20,9 +20,8 @@ class DashboardViewModel : BaseViewModelImpl() {
     val text: LiveData<String> = _text
 
     fun getText() {
-
-        val time = measureTimeMillis {
-            launch {
+        launch {
+            val time = measureTimeMillis {
                 val data = KtHttp.ktHttp.post(
                     url = "https://www.wanandroid.com/article/query/0/json",
                     param = Param.build().addParam("k", "ViewModel")
@@ -33,7 +32,7 @@ class DashboardViewModel : BaseViewModelImpl() {
                 }
                 _text.postValue(stringBuilder.toString())
             }
+            time.toString().logD("DashboardViewModel")
         }
-        time.toString().logD("DashboardViewModel")
     }
 }

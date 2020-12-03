@@ -2,6 +2,7 @@ package com.adazhdw.libapp.ui.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.adazhdw.ktlib.base.mvvm.BaseViewModelImpl
 import com.adazhdw.ktlib.ext.logD
 import com.adazhdw.ktlib.ext.parseAsHtml
 import com.adazhdw.ktlib.kthttp.KtHttp
@@ -9,7 +10,6 @@ import com.adazhdw.ktlib.kthttp.coroutines.toClazz
 import com.adazhdw.ktlib.kthttp.entity.Param
 import com.adazhdw.libapp.bean.DataFeed
 import com.adazhdw.libapp.bean.NetResponse
-import com.adazhdw.libapp.ui.BaseViewModelImpl
 import kotlin.system.measureTimeMillis
 
 class HomeViewModel : BaseViewModelImpl() {
