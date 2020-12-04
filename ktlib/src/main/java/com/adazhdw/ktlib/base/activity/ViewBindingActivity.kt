@@ -21,11 +21,7 @@ abstract class ViewBindingActivity : ForResultActivity(), IActivity {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (isViewBinding()) {
-            initBinding()
-        } else {
-            return
-        }
+        initViewBinding()
         window.setBackgroundDrawable(null)
         initView()
         initData()
@@ -46,8 +42,7 @@ abstract class ViewBindingActivity : ForResultActivity(), IActivity {
         }
     }
 
-    open fun isViewBinding(): Boolean = true
-    abstract fun initBinding(): ViewDataBinding
+    abstract fun initViewBinding(): ViewDataBinding
 
     protected inline fun <reified T : ViewDataBinding> binding(@LayoutRes resId: Int): Lazy<T> {
         return lazy { DataBindingUtil.setContentView(this, resId) }

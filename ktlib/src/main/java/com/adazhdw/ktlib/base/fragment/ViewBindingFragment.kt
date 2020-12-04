@@ -43,11 +43,7 @@ abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return if (isViewBinding()) {
-            initViewBinding(inflater, container, layoutId).root
-        } else {
-            null
-        }
+        return initViewBinding(inflater, container, layoutId).root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,13 +76,13 @@ abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
         }
     }
 
+    override fun needEventBus(): Boolean = false
+
     abstract fun initViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
         @LayoutRes resId: Int
     ): ViewDataBinding
-
-    open fun isViewBinding(): Boolean = true
 
     protected inline fun <reified T : ViewDataBinding> binding(
         inflater: LayoutInflater,
