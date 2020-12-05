@@ -6,36 +6,35 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 
 /**
- * Administrator
+ * daguozhu
  * create at 2020/4/8 11:08
  * description: 使用 ViewBinding 的 RecyclerView 的 Adapter
  */
-abstract class BaseVBAdapter<T> : BaseQuickAdapter<T, BaseVBViewHolder>(mutableListOf()) {
+abstract class BaseVBAdapter<T> : BaseQuickAdapter<T, BaseVBViewHolder>(0, mutableListOf()) {
     protected val mHandler = Handler(Looper.getMainLooper())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseVBViewHolder {
-        if (mContext == null) mContext = parent.context
         return BaseVBViewHolder(viewBinding(parent, viewType))
     }
 
-    override fun convert(helper: BaseVBViewHolder, item: T) {
-        val position = helper.adapterPosition
-        if (mData.isEmpty() || position == RecyclerView.NO_POSITION) return
-        bindHolder(helper, item, position)
+    override fun convert(holder: BaseVBViewHolder, item: T) {
+        val position = holder.adapterPosition
+        if (data.isEmpty() || position == RecyclerView.NO_POSITION) return
+        bindHolder(holder, item, position)
     }
 
     abstract fun bindHolder(holder: BaseVBViewHolder, data: T, position: Int)
 
     abstract fun viewBinding(parent: ViewGroup, viewType: Int): ViewBinding
 
-    override fun getItemCount(): Int = mData.size
+    override fun getItemCount(): Int = data.size
 
     fun clearData() {
-        this.mData.clear()
+        this.data.clear()
         notifyDataSetChanged()
     }
 }

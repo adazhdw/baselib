@@ -5,10 +5,11 @@ import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 
 /**
- * author: daguozhu
- * created on: 2019/10/21 17:37
- * description:
- */
+ * author：daguozhu
+ * date-time：2020/12/3 16:09
+ * description：
+ **/
+
 
 //重写 onSupportNavigateUp 方法，返回 true
 fun AppCompatActivity.setupActionBar(@IdRes toolbarId: Int, action: ActionBar.() -> Unit) {
@@ -24,3 +25,5 @@ fun AppCompatActivity.setActionbarCompact(@IdRes toolbarId: Int) {
         setDisplayShowHomeEnabled(true)
     }
 }
+
+

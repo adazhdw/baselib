@@ -10,15 +10,15 @@ abstract class BaseVMActivity<R : BaseRepository, VM : BaseViewModel<R>> : BaseA
     override fun initData() {
         viewModel.netState.observe(this, Observer {
             when (it) {
-                is NetLoading -> showLoading()
-                is NetSuccess -> hideLoading()
-                is NetError -> showError(it)
+                is Loading -> showLoading()
+                is Success -> hideLoading()
+                is Error -> showError(it)
             }
         })
     }
 
     abstract fun showLoading()
     abstract fun hideLoading()
-    abstract fun showError(netError: NetError)
+    abstract fun showError(netError: Error)
 
 }

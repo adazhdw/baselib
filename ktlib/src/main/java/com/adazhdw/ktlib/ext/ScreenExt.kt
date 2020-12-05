@@ -4,10 +4,9 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Point
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.view.WindowManager
 import androidx.annotation.DrawableRes
-import com.adazhdw.ktlib.KtLib
+import androidx.core.content.ContextCompat
 
 /**
  * author: daguozhu
@@ -37,7 +36,11 @@ val Context.screenWidth: Int
     get() {
         val wm: WindowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val point = Point()
-        wm.defaultDisplay.getRealSize(point)// 小于17用：wm.defaultDisplay.getSize(point)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            display?.getRealSize(point)
+        } else {
+            wm.defaultDisplay.getRealSize(point)
+        }// 小于17用：wm.defaultDisplay.getSize(point)
         return point.x
     }
 
@@ -45,22 +48,14 @@ val Context.screenHeight: Int
     get() {
         val wm: WindowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val point = Point()
-        wm.defaultDisplay.getRealSize(point)// 小于17用：wm.defaultDisplay.getSize(point)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            display?.getRealSize(point)
+        } else {
+            wm.defaultDisplay.getRealSize(point)
+        }// 小于17用：wm.defaultDisplay.getSize(point)
         return point.y
     }
 
 fun Context.getDrawableEx(@DrawableRes res: Int): Drawable? {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        resources.getDrawable(res, null)
-    } else {
-        resources.getDrawable(res)
-    }
-}
-
-fun getDrawableEx(@DrawableRes res: Int): Drawable? {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        KtLib.context.resources.getDrawable(res, null)
-    } else {
-        KtLib.context.resources.getDrawable(res)
-    }
+    return ContextCompat.getDrawable(this, res)
 }

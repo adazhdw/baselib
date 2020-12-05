@@ -5,14 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import com.adazhdw.ktlib.http.khttp
-import com.adazhdw.ktlib.kthttp.param.KParams
+import com.adazhdw.ktlib.base.fragment.BaseFragment
+import com.adazhdw.ktlib.base.mvvm.viewModel
+import com.adazhdw.ktlib.ext.parseAsHtml
+import com.adazhdw.ktlib.kthttp.KtHttp
+import com.adazhdw.ktlib.kthttp.coroutines.toClazz
+import com.adazhdw.ktlib.kthttp.entity.Param
 import com.adazhdw.libapp.R
+import com.adazhdw.libapp.bean.DataFeed
+import com.adazhdw.libapp.bean.NetResponse
 
-class DashboardFragment : Fragment() {
+class DashboardFragment(override val layoutId: Int = R.layout.fragment_dashboard) : BaseFragment() {
 
     private lateinit var dashboardViewModel: DashboardViewModel
 
@@ -21,8 +25,7 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        dashboardViewModel =
-            ViewModelProviders.of(this).get(DashboardViewModel::class.java)
+        dashboardViewModel = viewModel<DashboardViewModel>()
         val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
         val textView: TextView = root.findViewById(R.id.text_dashboard)
         dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
@@ -34,10 +37,31 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val textView: TextView = view.findViewById(R.id.text_dashboard)
-        khttp.post<String>(url = "https://www.wanandroid.com/article/query/0/json",
-            param = KParams.Builder(true).addHeaders(mapOf("k" to "ViewModel")).build(),
-            onSuccess = { result ->
-                textView.text = result
-            })
+        textView.setOnClickListener {
+            launch {
+                val data = KtHttp.ktHttp.post(
+                    url = "https://www.wanandroid.com/article/query/0/json",
+                    param = Param.build().addParam("k", "ViewModel")
+                ).toClazz<NetResponse<DataFeed>>().await()
+                val stringBuilder = StringBuilder()
+                for (item in data.data.datas) {
+                    stringBuilder.append("标题：${item.title.parseAsHtml()}").append("\n\n")
+                }
+                textView.text = stringBuilder.toString()
+            }
+            /*dashboardViewModel.getText()
+            postRequest<NetResponse<DataFeed>>(
+                url = "https://www.wanandroid.com/article/query/0/json",
+                param = Param.build().addParam("k", "ViewModel"),
+                success = { data ->
+                    val stringBuilder = StringBuilder()
+                    for (item in data.data.datas) {
+                        stringBuilder.append("标题：${item.title}").append("\n\n")
+                    }
+                    textView.text = stringBuilder.toString()
+                }, error = { code, msg ->
+
+                })*/
+        }
     }
 }

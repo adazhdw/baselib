@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">baselibrary</string>
+    <string name="lib_app_name">baselibrary</string>
     <string name="net_work_unavailable" >Network is not available,check</string>
     <string name="permission_need_grant_title" >Permission tips</string>
     <string name="cancel" >Cancel</string>

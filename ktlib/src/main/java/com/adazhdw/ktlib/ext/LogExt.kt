@@ -1,7 +1,7 @@
 package com.adazhdw.ktlib.ext
 
 import android.util.Log
-import com.adazhdw.ktlib.isDebug
+import com.adazhdw.ktlib.KtLib
 
 
 const val TAG = "LogExt"
@@ -17,7 +17,7 @@ fun String?.logW(tag: String? = TAG) = log(tag, this, LEVEL.W)
 fun String?.logE(tag: String? = TAG) = log(tag, this, LEVEL.E)
 
 private fun log(tag: String?, content: String?, level: LEVEL) {
-    if (!isDebug) return
+    if (!KtLib.isDebug) return
     when (level) {
         LEVEL.V -> {
             Log.v(tag, content ?: "")

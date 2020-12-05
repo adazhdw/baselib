@@ -18,35 +18,39 @@ import com.adazhdw.ktlib.ext.startWidth
  * 解决正常情况下的回退栈问题
  */
 open class WebViewImpl : WebView {
-    constructor(context: Context?) : super(context)
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     var mTouchByUser = false
 
-    override fun loadUrl(url: String?) {
+    override fun loadUrl(url: String) {
         super.loadUrl(url)
         resetAllStateInternal(url)
     }
 
-    override fun loadUrl(url: String?, additionalHttpHeaders: MutableMap<String, String>?) {
+    override fun loadUrl(url: String, additionalHttpHeaders: MutableMap<String, String>) {
         super.loadUrl(url, additionalHttpHeaders)
         resetAllStateInternal(url)
     }
 
-    override fun postUrl(url: String?, postData: ByteArray?) {
+    override fun postUrl(url: String, postData: ByteArray) {
         super.postUrl(url, postData)
         resetAllStateInternal(url)
     }
 
-    override fun loadData(data: String?, mimeType: String?, encoding: String?) {
+    override fun loadData(data: String, mimeType: String?, encoding: String?) {
         super.loadData(data, mimeType, encoding)
         resetAllStateInternal(url)
     }
 
     override fun loadDataWithBaseURL(
         baseUrl: String?,
-        data: String?,
+        data: String,
         mimeType: String?,
         encoding: String?,
         historyUrl: String?
@@ -74,10 +78,10 @@ open class WebViewImpl : WebView {
         return super.onTouchEvent(event)
     }
 
-    override fun setWebViewClient(client: WebViewClient?) {
+    override fun setWebViewClient(client: WebViewClient) {
         super.setWebViewClient(object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                val handleByChild = null != client && client.shouldOverrideUrlLoading(view, url)
+                val handleByChild = client.shouldOverrideUrlLoading(view, url)
                 return if (handleByChild) {
                     // 开放client接口给上层业务调用，如果返回true，表示业务已处理。
                     true
@@ -86,13 +90,16 @@ open class WebViewImpl : WebView {
                     super.shouldOverrideUrlLoading(view, url)
                 } else {
                     //否则，属于二次加载某个链接的情况，为了解决拼接参数丢失问题，重新调用loadUrl方法添加固有参数。
-                    loadUrl(url)
+                    loadUrl(url ?: "")
                     true
                 }
             }
 
             @RequiresApi(Build.VERSION_CODES.N)
-            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
                 val handleByChild = null != client && client.shouldOverrideUrlLoading(view, request)
                 return if (handleByChild) {
                     true

@@ -6,10 +6,13 @@ import android.content.Context
 import com.adazhdw.ktlib.core.lifecycle.KtLifecycleCallback
 import java.lang.reflect.InvocationTargetException
 
+
 object KtLib {
 
     private var currentApplication: Application? = null
     private val mKtLifecycleCallback = KtLifecycleCallback()
+    internal var isDebug = true
+    internal var mBaseUrl = ""
 
     val context: Context
         get() = getApp()
@@ -38,7 +41,6 @@ object KtLib {
         } catch (e: ClassNotFoundException) {
             e.printStackTrace()
         }
-
         throw NullPointerException("u should init first")
     }
 
@@ -61,9 +63,6 @@ object KtLib {
  */
 fun Application.initLibrary(baseUrl: String, debug: Boolean = false) {
     KtLib.init(this)
-    mBaseUrl = baseUrl
-    isDebug = debug
+    KtLib.mBaseUrl = baseUrl
+    KtLib.isDebug = debug
 }
-
-internal var isDebug = true
-internal var mBaseUrl = ""

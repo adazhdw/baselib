@@ -12,8 +12,7 @@ import kotlin.reflect.KProperty
 inline fun <T> observer(
     initializeValue: T,
     crossinline onValueChange: (oldValue: T, newValue: T) -> Unit
-): ReadWriteProperty<Any?, T> =
-    object : ObservableProperty<T>(initializeValue) {
-        override fun afterChange(property: KProperty<*>, oldValue: T, newValue: T) =
-            onValueChange(oldValue, newValue)
-    }
+): ReadWriteProperty<Any?, T> = object : ObservableProperty<T>(initializeValue) {
+    override fun afterChange(property: KProperty<*>, oldValue: T, newValue: T) =
+        onValueChange(oldValue, newValue)
+}

@@ -6,12 +6,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.adazhdw.ktlib.R
 import com.adazhdw.ktlib.databinding.BaseFooterBinding
+import com.adazhdw.ktlib.databinding.BaseHeaderBinding
 import com.adazhdw.ktlib.ext.view.invisible
 import com.adazhdw.ktlib.ext.view.visible
 
 
 /**
- * Administrator
+ * daguozhu
  * create at 2020/4/8 17:10
  * description:
  */
@@ -28,21 +29,21 @@ abstract class LoadMoreAdapter<T> : BaseVBAdapter<T>() {
         return itemBinding(parent, viewType)
     }
 
-    override fun convert(helper: BaseVBViewHolder, item: T) {
-        val position = helper.adapterPosition
-        if (mData.isEmpty() || position == RecyclerView.NO_POSITION) return
+    override fun convert(holder: BaseVBViewHolder, item: T) {
+        val position = holder.adapterPosition
+        if (data.isEmpty() || position == RecyclerView.NO_POSITION) return
         when {
-            isFooter(position) -> bindFooter(helper)
-            isHeader(position) -> bindHeader(helper)
+            isFooter(position) -> bindFooter(holder.viewBinding as BaseFooterBinding)
+            isHeader(position) -> bindHeader(holder.viewBinding as BaseHeaderBinding)
             else -> {
-                if (mData.isEmpty()) return
-                bindHolder(helper, mData[position - headerCount()], position - headerCount())
+                if (data.isEmpty()) return
+                bindHolder(holder, data[position - headerCount()], position - headerCount())
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return if (mData.isNotEmpty()) {
+        return if (data.isNotEmpty()) {
             data.size + if (needFooter()) 1 else 0 + headerCount()/*header和footer数量*/
         } else 0
     }
@@ -67,9 +68,9 @@ abstract class LoadMoreAdapter<T> : BaseVBAdapter<T>() {
     open fun footerId() = R.layout.base_footer
     open fun headerId() = R.layout.base_header
     open fun headerCount() = 0
-    open fun bindHeader(holder: BaseVBViewHolder) {}
-    open fun bindFooter(holder: BaseVBViewHolder) {
-        (holder.viewBinding as BaseFooterBinding).let {
+    open fun bindHeader(viewBinding: BaseHeaderBinding) {}
+    open fun bindFooter(viewBinding: BaseFooterBinding) {
+        viewBinding.let {
             when {
                 isLoadAll() -> {
                     it.loadProgress.invisible()
