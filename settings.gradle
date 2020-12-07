@@ -1,3 +1,2 @@
-include ':kt-http'
 include ':app'
 include ':ktlib'
