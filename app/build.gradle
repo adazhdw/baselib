@@ -54,7 +54,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
 //    implementation project(path: ':ktlib')
-    implementation 'com.adazhdw:ktlib:0.9.13'
+    implementation 'com.adazhdw:ktlib:0.9.14'
 
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

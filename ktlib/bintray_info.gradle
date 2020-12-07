@@ -1,0 +1,21 @@
+
+//发布jcenter    gradlew clean build install bintrayUpload
+ext {
+    bintrayRepo = 'android-libraries' // the repository name in Bintray dashboard
+    bintrayName = 'ktlib' // the package name of the bintray repository
+    libraryName = 'ktlib'// the module name in android studio project
+
+    publishedGroupId = 'com.adazhdw' // the id you want to add in "implement" line
+    artifact = 'ktlib' // = libraryName  the id you want to add in "implement" line--must be the module name in android project
+    libraryVersion = '0.9.14'
+
+    libraryDescription = 'bintray upload function files optimize'
+    siteUrl = 'https://github.com/adazhdw/KtLibTest'
+    gitUrl = 'https://github.com/adazhdw/KtLibTest.git'
+    developerId = 'adazhdw1207'
+    developerName = 'Lucas Da'
+    developerEmail = 'adazhdw1207@gmail.com'
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}

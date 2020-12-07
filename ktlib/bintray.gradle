@@ -1,4 +1,5 @@
 apply plugin: 'com.jfrog.bintray'
+apply from: 'bintray_info.gradle'
 
 version = libraryVersion
 
