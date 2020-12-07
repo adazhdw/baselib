@@ -50,10 +50,8 @@ class ProgressResponseBody(
         return object : ForwardingSource(source) {
             //当前读取字节数
             var totalBytesRead = 0L
-            var lastProgress //上次回调进度
-                    = 0
-            var lastTime //上次回调时间
-                    : Long = 0
+            var lastProgress = 0//上次回调进度
+            var lastTime: Long = 0//上次回调时间
 
             @Throws(IOException::class)
             override fun read(sink: Buffer, byteCount: Long): Long {
