@@ -79,7 +79,7 @@ dependencies {
 
     //OkHttp
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.8.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
 
     //RecyclerViewAdapter
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
@@ -87,9 +87,26 @@ dependencies {
     //EventBus
     implementation 'org.greenrobot:eventbus:3.2.0'
 }
-/*
 //发布jcenter    gradlew clean build install bintrayUpload
-*/
+ext {
+    bintrayRepo = 'android-libraries' // the repository name in Bintray dashboard
+    bintrayName = 'ktlib' // the package name of the bintray repository
+    libraryName = 'ktlib'// the module name in android studio project
+
+    publishedGroupId = 'com.adazhdw' // the id you want to add in "implement" line
+    artifact = 'ktlib' // = libraryName  the id you want to add in "implement" line--must be the module name in android project
+    libraryVersion = '1.0.1'
+
+    libraryDescription = 'add kthttp'
+    siteUrl = 'https://github.com/adazhdw/KtLibTest'
+    gitUrl = 'https://github.com/adazhdw/KtLibTest.git'
+    developerId = 'adazhdw1207'
+    developerName = 'Lucas Da'
+    developerEmail = 'adazhdw1207@gmail.com'
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
 /**
  * These lines will download the gradle tasks for uploading on bintray from the specified URLs.
  * Add these lines to publish library to bintray, This is the readymade scripts made by github user nuunoeoi to
