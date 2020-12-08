@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
+import com.adazhdw.kthttp.KtHttp
+import com.adazhdw.kthttp.coroutines.toClazz
+import com.adazhdw.kthttp.entity.Param
 import com.adazhdw.ktlib.base.fragment.BaseFragment
 import com.adazhdw.ktlib.base.mvvm.viewModel
 import com.adazhdw.ktlib.ext.parseAsHtml
-import com.adazhdw.ktlib.kthttp.KtHttp
-import com.adazhdw.ktlib.kthttp.coroutines.toClazz
-import com.adazhdw.ktlib.kthttp.entity.Param
 import com.adazhdw.libapp.R
 import com.adazhdw.libapp.bean.DataFeed
 import com.adazhdw.libapp.bean.NetResponse

@@ -87,6 +87,8 @@ dependencies {
     //EventBus
     implementation 'org.greenrobot:eventbus:3.2.0'
 }
+
+
 //发布jcenter    gradlew clean build install bintrayUpload
 ext {
     bintrayRepo = 'android-libraries' // the repository name in Bintray dashboard
