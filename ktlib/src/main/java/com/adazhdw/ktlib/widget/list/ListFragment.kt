@@ -3,11 +3,9 @@ package com.adazhdw.ktlib.widget.list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.adazhdw.ktlib.R
 import com.adazhdw.ktlib.base.fragment.ViewBindingFragment
 import com.adazhdw.ktlib.databinding.FragmentListLayoutBinding
 import com.adazhdw.ktlib.ext.dp2px
@@ -19,8 +17,6 @@ import com.adazhdw.ktlib.widget.LinearSpacingItemDecoration
  * description:
  */
 abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragment() {
-    override val layoutId: Int
-        get() = R.layout.fragment_list_layout
 
     private lateinit var viewBinding: FragmentListLayoutBinding
     protected val mDataAdapter by lazy { getDataAdapter() }
@@ -31,8 +27,7 @@ abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragme
 
     final override fun initViewBinding(
         inflater: LayoutInflater,
-        container: ViewGroup?,
-        @LayoutRes resId: Int
+        container: ViewGroup?
     ): ViewDataBinding {
         viewBinding = FragmentListLayoutBinding.inflate(inflater, container, false)
         return viewBinding

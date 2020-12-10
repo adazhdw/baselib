@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.fragment.app.FragmentActivity
 import androidx.viewbinding.ViewBinding
 import com.adazhdw.ktlib.base.IFragment
@@ -18,6 +17,9 @@ import org.greenrobot.eventbus.EventBus
  * description:
  */
 abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
+
+    final override val layoutId: Int
+        get() = 0
 
     /**
      * 是否初始化过布局
@@ -42,7 +44,7 @@ abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return initViewBinding(inflater, container, layoutId).root
+        return initViewBinding(inflater, container).root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,7 +81,6 @@ abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
 
     abstract fun initViewBinding(
         inflater: LayoutInflater,
-        container: ViewGroup?,
-        @LayoutRes resId: Int
+        container: ViewGroup?
     ): ViewBinding
 }
