@@ -1,7 +1,9 @@
 package com.adazhdw.ktlib.base.activity
 
 import android.os.Bundle
-import androidx.viewbinding.ViewBinding
+import androidx.annotation.LayoutRes
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import com.adazhdw.ktlib.base.IActivity
 import org.greenrobot.eventbus.EventBus
 
@@ -12,14 +14,14 @@ import org.greenrobot.eventbus.EventBus
  * description:
  */
 
-abstract class ViewBindingActivity : ForResultActivity(), IActivity {
+abstract class ViewDataBindingActivity : ForResultActivity(), IActivity {
 
     final override val layoutId: Int
         get() = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(initViewBinding().root)
+        initViewBinding()
         window.setBackgroundDrawable(null)
         initView()
         initData()
@@ -40,5 +42,9 @@ abstract class ViewBindingActivity : ForResultActivity(), IActivity {
         }
     }
 
-    abstract fun initViewBinding(): ViewBinding
+    abstract fun initViewBinding(): ViewDataBinding
+
+    protected inline fun <reified T : ViewDataBinding> binding(@LayoutRes resId: Int): Lazy<T> {
+        return lazy { DataBindingUtil.setContentView(this, resId) }
+    }
 }

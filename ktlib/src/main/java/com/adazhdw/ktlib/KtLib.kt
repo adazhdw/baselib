@@ -14,9 +14,11 @@ object KtLib {
     internal var isDebug = true
     internal var mBaseUrl = ""
 
+    @JvmStatic
     val context: Context
         get() = getApp()
 
+    @JvmStatic
     fun getApp(): Context {
         if (currentApplication != null) return currentApplication!!.applicationContext
         val app = getAppByReflect()

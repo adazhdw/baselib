@@ -6,8 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentActivity
-import androidx.viewbinding.ViewBinding
 import com.adazhdw.ktlib.base.IFragment
 import org.greenrobot.eventbus.EventBus
 
@@ -17,7 +18,7 @@ import org.greenrobot.eventbus.EventBus
  * create at 2020/4/2 15:53
  * description:
  */
-abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
+abstract class ViewDataBindingFragment : CoroutinesFragment(), IFragment {
 
     /**
      * 是否初始化过布局
@@ -81,5 +82,12 @@ abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
         inflater: LayoutInflater,
         container: ViewGroup?,
         @LayoutRes resId: Int
-    ): ViewBinding
+    ): ViewDataBinding
+
+    protected inline fun <reified T : ViewDataBinding> binding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        @LayoutRes resId: Int
+    ): T = DataBindingUtil.inflate(inflater, resId, container, false)
+
 }

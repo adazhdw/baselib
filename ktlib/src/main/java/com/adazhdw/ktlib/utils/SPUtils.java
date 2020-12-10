@@ -20,11 +20,11 @@ public final class SPUtils {
     private final SharedPreferences sp;
 
     private SPUtils(final String spName) {
-        sp = KtLib.INSTANCE.getApp().getSharedPreferences(spName, Context.MODE_PRIVATE);
+        sp = KtLib.getApp().getSharedPreferences(spName, Context.MODE_PRIVATE);
     }
 
     private SPUtils(final String spName, final int mode) {
-        sp = KtLib.INSTANCE.getApp().getSharedPreferences(spName, mode);
+        sp = KtLib.getApp().getSharedPreferences(spName, mode);
     }
 
     /**

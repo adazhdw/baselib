@@ -29,12 +29,12 @@ abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragme
     protected val mData: List<T>
         get() = mDataAdapter.data
 
-    override fun initViewBinding(
+    final override fun initViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
         @LayoutRes resId: Int
     ): ViewDataBinding {
-        viewBinding = binding(inflater, container, resId)
+        viewBinding = FragmentListLayoutBinding.inflate(inflater, container, false)
         return viewBinding
     }
 
@@ -109,7 +109,7 @@ abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragme
     }
 
     abstract fun onLoad(page: Int, callback: LoadDataCallback<T>)
-    abstract fun getDataAdapter(): LoadMoreAdapter<T>
+    abstract fun getDataAdapter(): A
     open fun startAtPage() = 0
     open fun perPage() = 20
     open fun onError(code: Int, msg: String?) {}
