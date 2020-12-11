@@ -3,9 +3,9 @@ package com.adazhdw.ktlib.widget.list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.adazhdw.ktlib.base.fragment.ViewBindingFragment
 import com.adazhdw.ktlib.databinding.FragmentListLayoutBinding
 import com.adazhdw.ktlib.ext.dp2px
@@ -23,12 +23,12 @@ abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragme
     private var currPage = 0
     open val loadMoreEnabled: Boolean = true
     protected val mData: List<T>
-        get() = mDataAdapter.data
+        get() = mDataAdapter.getData()
 
     final override fun initViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): ViewDataBinding {
+    ): ViewBinding {
         viewBinding = FragmentListLayoutBinding.inflate(inflater, container, false)
         return viewBinding
     }
@@ -41,8 +41,8 @@ abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragme
         viewBinding.dataRV.layoutManager = getLayoutManager()
         viewBinding.dataRV.addItemDecoration(itemDecoration())
         viewBinding.dataRV.adapter = mDataAdapter
-        viewBinding.dataRV.setLoadMoreListener(object : LoadMoreRV.LoadMoreListener {
-            override fun loadMore() {
+        viewBinding.dataRV.setLoadMoreListener(object : LoadMoreRVEx.LoadMoreListener {
+            override fun onLoadMore() {
                 requestData(false)
             }
         })
@@ -73,7 +73,7 @@ abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragme
             override fun onSuccess(data: List<T>, hasMore: Boolean) {
                 if (data.isNotEmpty()) currPage += 1
                 if (refreshing) {
-                    mDataAdapter.replaceData(data)
+                    mDataAdapter.setData(data)
                     if (data.isNotEmpty()) {
                         viewBinding.dataRV.scrollToPosition(0)
                     }
@@ -83,7 +83,7 @@ abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragme
                 viewBinding.swipe.isEnabled = true
                 viewBinding.swipe.isRefreshing = false
                 viewBinding.dataRV.setLoadMoreEnabled(true)
-                viewBinding.dataRV.setIsLoading(false)
+                viewBinding.dataRV.loadComplete(hasMore)
                 if (hasMore) {
                     mDataAdapter.loading()
                 } else {
@@ -96,7 +96,7 @@ abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragme
                 viewBinding.swipe.isEnabled = true
                 viewBinding.swipe.isRefreshing = false
                 viewBinding.dataRV.setLoadMoreEnabled(true)
-                viewBinding.dataRV.setIsLoading(false)
+                viewBinding.dataRV.loadComplete(hasMore = true, error = true)
                 mDataAdapter.loadError()
                 onError(code, msg)
             }

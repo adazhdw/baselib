@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.adazhdw.ktlib.R
 import com.adazhdw.ktlib.databinding.BaseFooterBinding
-import com.adazhdw.ktlib.databinding.BaseHeaderBinding
 import com.adazhdw.ktlib.ext.view.invisible
 import com.adazhdw.ktlib.ext.view.visible
 
@@ -19,56 +18,50 @@ import com.adazhdw.ktlib.ext.view.visible
 abstract class LoadMoreAdapter<T> : BaseVBAdapter<T>() {
 
     private var mLoadState: Int = LoadState.LOAD_ALL
+    protected var inflater: LayoutInflater? = null
 
+    /**
+     * 所有的Binding
+     */
     final override fun viewBinding(parent: ViewGroup, viewType: Int): ViewBinding {
-        if (viewType == footerId()) return footerBinding(parent, viewType)
-        if (viewType == headerId()) {
-            return headerBinding(parent, viewType)
-                ?: throw RuntimeException("headerBinding is null")
-        }
-        return itemBinding(parent, viewType)
+        if (inflater == null) inflater = LayoutInflater.from(parent.context)
+        if (viewType == footerId()) return getFooterBinding(inflater!!, parent)
+        return getItemBinding(inflater!!, parent)
     }
 
-    override fun convert(holder: BaseVBViewHolder, item: T) {
-        val position = holder.adapterPosition
-        if (data.isEmpty() || position == RecyclerView.NO_POSITION) return
+    abstract fun getItemBinding(inflater: LayoutInflater, parent: ViewGroup): ViewBinding
+    abstract fun bindItemHolder(holder: BaseVBViewHolder, data: T, position: Int)
+
+    /**
+     * 加载数据到Binding
+     */
+    override fun bindHolder(holder: BaseVBViewHolder, position: Int) {
+        if (mData.isEmpty() || position == RecyclerView.NO_POSITION) return
         when {
             isFooter(position) -> bindFooter(holder.viewBinding as BaseFooterBinding)
-            isHeader(position) -> bindHeader(holder.viewBinding as BaseHeaderBinding)
-            else -> {
-                if (data.isEmpty()) return
-                bindHolder(holder, data[position - headerCount()], position - headerCount())
-            }
+            else -> bindItemHolder(holder, mData[position], position)
         }
     }
 
     override fun getItemCount(): Int {
-        return if (data.isNotEmpty()) {
-            data.size + if (needFooter()) 1 else 0 + headerCount()/*header和footer数量*/
-        } else 0
+        return if (mData.isNotEmpty()) (mData.size + if (needFooter()) 1 else 0) else 0
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (isHeader(position)) return headerId()
         if (isFooter(position)) return footerId()
         return super.getItemViewType(position)
     }
 
-    private fun isFooter(position: Int) = position == data.size + headerCount() && needFooter()
-    private fun isHeader(position: Int) = position == 0 && headerCount() == 1
+    fun getData(): MutableList<T> = mData
 
-    open fun headerBinding(parent: ViewGroup, viewType: Int): ViewBinding? = null
-    open fun footerBinding(parent: ViewGroup, viewType: Int): ViewBinding =
-        BaseFooterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
-    abstract fun itemBinding(parent: ViewGroup, viewType: Int): ViewBinding
-
+    private fun isFooter(position: Int) = position == mData.size && needFooter()
     open fun needFooter() = true
-    open fun needHeader() = false
     open fun footerId() = R.layout.base_footer
-    open fun headerId() = R.layout.base_header
-    open fun headerCount() = 0
-    open fun bindHeader(viewBinding: BaseHeaderBinding) {}
+
+    open fun getFooterBinding(inflater: LayoutInflater, parent: ViewGroup): ViewBinding {
+        return BaseFooterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    }
+
     open fun bindFooter(viewBinding: BaseFooterBinding) {
         viewBinding.let {
             when {

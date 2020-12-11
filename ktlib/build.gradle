@@ -35,10 +35,8 @@ android {
     }
 
     //开启 dataBinding
-    buildFeatures{
-        dataBinding = true
-        // for view binding :
-        // viewBinding = true
+    viewBinding {
+        enabled = true
     }
 
     lintOptions {

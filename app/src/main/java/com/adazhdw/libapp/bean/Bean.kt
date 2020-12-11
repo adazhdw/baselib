@@ -56,7 +56,26 @@ data class DataFeed(
     val datas: MutableList<DatasBean>
 )
 
+data class WxArticleChapter(
+    var children: List<String>? = null,
+    var courseId: Int = 0,
+    var id: Int = 0,
+    var name: String? = null,
+    var order: Int = 0,
+    var parentChapterId: Int = 0,
+    var userControlSetTop: Boolean = false,
+    var visible: Int = 0
+) {
+    val chapterName get() = name
+}
+
 data class NetResponse<T>(val data: T, val errorCode: Int, val errorMsg: String)
+
+data class ListResponse<T>(
+    val errorCode: Int = 0,
+    val errorMsg: String = "",
+    val data: List<T>?
+)
 
 open class BaseResponse(val errorCode: Int = 0, val errorMsg: String = "")
 
