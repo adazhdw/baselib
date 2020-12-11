@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
  * description：只实现滑动到底部或者顶部loadMore方法的判断，
  *              footer或者header、loadMoreView使用 外部Adapter实现
  **/
-class LoadMoreRecyclerViewEx : RecyclerView {
+class LoadMoreRecyclerView : RecyclerView {
 
     companion object {
         const val SCROLL_DIRECTION_TOP = -1
@@ -23,7 +23,6 @@ class LoadMoreRecyclerViewEx : RecyclerView {
     }
 
     constructor(context: Context) : this(context, null)
-
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
         context,
@@ -103,19 +102,6 @@ class LoadMoreRecyclerViewEx : RecyclerView {
         this.hasMore = hasMore
     }
 
-    override fun setAdapter(adapter: Adapter<*>?) {
-        if (adapter == null) return
-        mWrapAdapter = WrapAdapter(adapter)
-        adapter.registerAdapterDataObserver(mDataObserver)
-        mDataObserver.onChanged()
-        super.setAdapter(mWrapAdapter)
-    }
-
-    override fun getAdapter(): Adapter<*>? {
-        if (mWrapAdapter != null) return mWrapAdapter!!.innerAdapter
-        return super.getAdapter()
-    }
-
     /**
      * 设置 loadmore 判断时是：已划到顶部（SCROLL_DIRECTION_TOP）或者底部（SCROLL_DIRECTION_BOTTOM）
      * SCROLL_DIRECTION_TOP 适用于 IM 中历史消息的加载
@@ -138,6 +124,19 @@ class LoadMoreRecyclerViewEx : RecyclerView {
 
     interface LoadMoreListener {
         fun onLoadMore()
+    }
+
+    override fun setAdapter(adapter: Adapter<*>?) {
+        if (adapter == null) return
+        mWrapAdapter = WrapAdapter(adapter)
+        adapter.registerAdapterDataObserver(mDataObserver)
+        mDataObserver.onChanged()
+        super.setAdapter(mWrapAdapter)
+    }
+
+    override fun getAdapter(): Adapter<*>? {
+        if (mWrapAdapter != null) return mWrapAdapter!!.innerAdapter
+        return super.getAdapter()
     }
 
     private inner class WrapAdapter<T : ViewHolder>(val innerAdapter: Adapter<T>) :

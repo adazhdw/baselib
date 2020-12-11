@@ -40,7 +40,7 @@ abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragme
         viewBinding.dataRV.layoutManager = getLayoutManager()
         viewBinding.dataRV.addItemDecoration(itemDecoration())
         viewBinding.dataRV.adapter = mDataAdapter
-        viewBinding.dataRV.setLoadMoreListener(object : LoadMoreRecyclerViewEx.LoadMoreListener {
+        viewBinding.dataRV.setLoadMoreListener(object : LoadMoreRecyclerView.LoadMoreListener {
             override fun onLoadMore() {
                 if (loadMoreAvailable()) requestData(false)
             }
@@ -108,7 +108,7 @@ abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragme
     open fun startAtPage() = 0/*开始页数*/
     open fun perPage() = 20/*每页个数pageSize*/
     open fun onError(code: Int, msg: String?) {}
-    open fun rvExtra(recyclerView: LoadMoreRecyclerViewEx) {}/*recyclerView其他属性设置*/
+    open fun rvExtra(recyclerView: LoadMoreRecyclerView) {}/*recyclerView其他属性设置*/
     open fun getLayoutManager(): RecyclerView.LayoutManager {
         return LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }

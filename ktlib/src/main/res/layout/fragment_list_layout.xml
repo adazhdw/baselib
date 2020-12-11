@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.adazhdw.ktlib.widget.list.LoadMoreRecyclerViewEx
+        <com.adazhdw.ktlib.widget.list.LoadMoreRecyclerView
             android:id="@+id/dataRV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
