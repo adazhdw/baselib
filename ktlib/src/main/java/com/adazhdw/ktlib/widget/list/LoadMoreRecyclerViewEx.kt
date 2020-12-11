@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
  * description：只实现滑动到底部或者顶部loadMore方法的判断，
  *              footer或者header、loadMoreView使用 外部Adapter实现
  **/
-class LoadMoreRVEx : RecyclerView {
+class LoadMoreRecyclerViewEx : RecyclerView {
 
     companion object {
         const val SCROLL_DIRECTION_TOP = -1
@@ -40,7 +40,8 @@ class LoadMoreRVEx : RecyclerView {
 
     private var isLoading = false//是否正在进行网络请求
     private var hasMore = true// 是否有更多数据
-    private var mLoadMoreEnabled = false// loadMore 是否可用
+    private var isLoadMoreAvailable = false//总开关，控制loadMore是否可用
+    private var isLoadMoreEnabled = false
     private var mLoadMoreListener: LoadMoreListener? = null
     private var mWrapAdapter: WrapAdapter<*>? = null
     private val mDataObserver: DataObserver = DataObserver()
@@ -84,7 +85,7 @@ class LoadMoreRVEx : RecyclerView {
                 if (itemCount == lastVisiblePosition + 1) canLoadMore = true
             }
         }
-        if (canLoadMore && state == SCROLL_STATE_IDLE && alreadyTopOrBottom() && mLoadMoreEnabled && hasMore && !isLoading) {
+        if (isLoadMoreAvailable && canLoadMore && state == SCROLL_STATE_IDLE && alreadyTopOrBottom() && isLoadMoreEnabled && hasMore && !isLoading) {
             doLoadMore()
         }
     }
@@ -124,7 +125,11 @@ class LoadMoreRVEx : RecyclerView {
     }
 
     fun setLoadMoreEnabled(enabled: Boolean) {
-        this.mLoadMoreEnabled = enabled
+        this.isLoadMoreEnabled = enabled
+    }
+
+    fun setLoadMoreAvailable(available: Boolean) {
+        this.isLoadMoreAvailable = available
     }
 
     fun setLoadMoreListener(listener: LoadMoreListener) {

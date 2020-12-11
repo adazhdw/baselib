@@ -36,6 +36,7 @@ abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        mContext = context
         mActivity = context as FragmentActivity
     }
 
@@ -50,7 +51,6 @@ abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         isViewInitiated = true
-        mContext = view.context
         initView(view)
         initData()
         prepareRequest()

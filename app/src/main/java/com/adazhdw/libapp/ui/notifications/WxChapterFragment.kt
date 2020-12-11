@@ -19,8 +19,17 @@ import com.adazhdw.libapp.databinding.NetChapterItemBinding
  **/
 
 class WxChaptersFragment : ListFragment<WxArticleChapter, ChaptersAdapter>() {
-    override val loadMoreEnabled: Boolean
-        get() = false
+    override fun loadMoreAvailable(): Boolean = false
+
+    /*
+    // IM模式，最新消息在最底，通过下拉到顶部，加载历史消息
+    override fun rvExtra(recyclerView: LoadMoreRecyclerViewEx) {
+        recyclerView.canScrollDirection(LoadMoreRecyclerViewEx.SCROLL_DIRECTION_TOP)
+    }
+
+    override fun getLayoutManager(): RecyclerView.LayoutManager {
+        return LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
+    }*/
 
     override fun getDataAdapter(): ChaptersAdapter = ChaptersAdapter()
 

@@ -21,7 +21,6 @@ abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragme
     private lateinit var viewBinding: FragmentListLayoutBinding
     protected val mDataAdapter by lazy { getDataAdapter() }
     private var currPage = 0
-    open val loadMoreEnabled: Boolean = true
     protected val mData: List<T>
         get() = mDataAdapter.getData()
 
@@ -37,13 +36,13 @@ abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragme
         viewBinding.swipe.setOnRefreshListener {
             requestStart()
         }
-        viewBinding.dataRV.setLoadMoreEnabled(loadMoreEnabled)
+        viewBinding.dataRV.setLoadMoreAvailable(loadMoreAvailable())
         viewBinding.dataRV.layoutManager = getLayoutManager()
         viewBinding.dataRV.addItemDecoration(itemDecoration())
         viewBinding.dataRV.adapter = mDataAdapter
-        viewBinding.dataRV.setLoadMoreListener(object : LoadMoreRVEx.LoadMoreListener {
+        viewBinding.dataRV.setLoadMoreListener(object : LoadMoreRecyclerViewEx.LoadMoreListener {
             override fun onLoadMore() {
-                requestData(false)
+                if (loadMoreAvailable()) requestData(false)
             }
         })
         rvExtra(viewBinding.dataRV)
@@ -84,7 +83,7 @@ abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragme
                 viewBinding.swipe.isRefreshing = false
                 viewBinding.dataRV.setLoadMoreEnabled(true)
                 viewBinding.dataRV.loadComplete(hasMore)
-                if (hasMore) {
+                if (hasMore && loadMoreAvailable()) {
                     mDataAdapter.loading()
                 } else {
                     mDataAdapter.loadAll()
@@ -105,16 +104,18 @@ abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragme
 
     abstract fun onLoad(page: Int, callback: LoadDataCallback<T>)
     abstract fun getDataAdapter(): A
-    open fun startAtPage() = 0
-    open fun perPage() = 20
+    open fun loadMoreAvailable(): Boolean = true/*总开关，控制loadMore是否可用*/
+    open fun startAtPage() = 0/*开始页数*/
+    open fun perPage() = 20/*每页个数pageSize*/
     open fun onError(code: Int, msg: String?) {}
-    open fun rvExtra(recyclerView: RecyclerView) {}
-    open fun getLayoutManager(): RecyclerView.LayoutManager =
-        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    open fun rvExtra(recyclerView: LoadMoreRecyclerViewEx) {}/*recyclerView其他属性设置*/
+    open fun getLayoutManager(): RecyclerView.LayoutManager {
+        return LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    }
 
-    open fun itemDecoration(): RecyclerView.ItemDecoration =
-        LinearSpacingItemDecoration(dp2px(15f), LinearLayoutManager.VERTICAL, true)
-
+    open fun itemDecoration(): RecyclerView.ItemDecoration {
+        return LinearSpacingItemDecoration(dp2px(15f), LinearLayoutManager.VERTICAL, true)
+    }
 
     interface LoadDataCallback<T> {
         fun onSuccess(data: List<T>, hasMore: Boolean)
