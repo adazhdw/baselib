@@ -30,18 +30,11 @@ class LoadMoreRecyclerView : RecyclerView {
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
-    ) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         initView(context)
     }
 
-    @IntDef(
-        SCROLL_DIRECTION_TOP,
-        SCROLL_DIRECTION_BOTTOM
-    )
+    @IntDef(SCROLL_DIRECTION_TOP, SCROLL_DIRECTION_BOTTOM)
     @Retention(AnnotationRetention.SOURCE)
     @Target(AnnotationTarget.VALUE_PARAMETER)
     annotation class ScrollDirection {}
@@ -57,7 +50,7 @@ class LoadMoreRecyclerView : RecyclerView {
     private lateinit var loadMoreView: LoadMoreView
 
     private fun initView(context: Context) {
-        loadMoreView = LoadMoreView(context)
+        loadMoreView = LoadMoreViewImpl(context)
     }
 
     override fun onScrollStateChanged(state: Int) {
@@ -174,7 +167,7 @@ class LoadMoreRecyclerView : RecyclerView {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             if (viewType == VIEW_TYPE_LOAD_MORE) {
-                return WrapViewHolder(loadMoreView)
+                return WrapViewHolder(loadMoreView.getContentView())
             }
             return innerAdapter.onCreateViewHolder(parent, viewType)
         }

@@ -23,14 +23,14 @@ abstract class BaseAdapter<T, VH : BaseViewHolder> : RecyclerView.Adapter<VH>() 
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         if (position == RecyclerView.NO_POSITION) return
-        bindHolder(holder, position)
+        bindHolder(holder, mData[position], position)
     }
 
     override fun getItemCount(): Int = mData.size
 
 
     abstract fun createHolder(parent: ViewGroup, viewType: Int): VH
-    abstract fun bindHolder(holder: VH, position: Int)
+    abstract fun bindHolder(holder: VH, data: T, position: Int)
 
     fun getData(): MutableList<T> = mData
 

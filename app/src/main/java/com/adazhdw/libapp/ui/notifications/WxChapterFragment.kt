@@ -35,7 +35,7 @@ class WxChaptersFragment : ListFragment<WxArticleChapter, ChaptersAdapter>() {
         launchOnUI {
             val url = "https://wanandroid.com/wxarticle/chapters/json"
             val data = KtHttp.ktHttp.get(url).toClazz<ListResponse<WxArticleChapter>>().await()
-            callback.onSuccess(data.data ?: listOf(), true)
+            callback.onSuccess(data.data ?: listOf(), false)
         }
     }
 }
@@ -46,7 +46,7 @@ class ChaptersAdapter : BaseVBAdapter<WxArticleChapter>() {
         return NetChapterItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     }
 
-    override fun bindHolder(holder: BaseVBViewHolder, position: Int) {
+    override fun bindHolder(holder: BaseVBViewHolder, data: WxArticleChapter, position: Int) {
         (holder.viewBinding as NetChapterItemBinding).chapterName.text = mData[position].chapterName
     }
 }
