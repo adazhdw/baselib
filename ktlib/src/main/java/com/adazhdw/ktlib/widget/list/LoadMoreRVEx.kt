@@ -76,7 +76,7 @@ class LoadMoreRVEx : RecyclerView {
             is StaggeredGridLayoutManager -> {
                 val into = intArrayOf(layoutManager.spanCount)
                 layoutManager.findFirstVisibleItemPositions(into)
-                lastVisiblePosition = into.maxOrNull() ?: 0
+                lastVisiblePosition = into.max() ?: 0
                 if (itemCount == lastVisiblePosition + 1) canLoadMore = true
             }
             is LinearLayoutManager -> {

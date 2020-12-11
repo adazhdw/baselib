@@ -45,6 +45,6 @@ abstract class ViewDataBindingActivity : ForResultActivity(), IActivity {
     abstract fun initViewBinding(): ViewDataBinding
 
     protected inline fun <reified T : ViewDataBinding> binding(@LayoutRes resId: Int): Lazy<T> {
-        return lazy { DataBindingUtil.setContentView(this, resId) }
+        return lazy { DataBindingUtil.setContentView<T>(this, resId) }
     }
 }
