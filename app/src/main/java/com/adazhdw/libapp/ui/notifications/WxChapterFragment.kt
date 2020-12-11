@@ -35,7 +35,7 @@ class WxChaptersFragment : ListFragment<WxArticleChapter, ChaptersAdapter>() {
         launchOnUI {
             val url = "https://wanandroid.com/wxarticle/chapters/json"
             val data = KtHttp.ktHttp.get(url).toClazz<ListResponse<WxArticleChapter>>().await()
-            callback.onSuccess(data.data ?: listOf(), false)
+            callback.onSuccess(data.data ?: listOf(), true)
         }
     }
 }

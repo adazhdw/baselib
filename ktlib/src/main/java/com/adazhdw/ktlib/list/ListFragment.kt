@@ -105,7 +105,7 @@ abstract class ListFragment<T : Any, A : BaseVBAdapter<T>> : ViewBindingFragment
     }
 
     open fun itemDecoration(): RecyclerView.ItemDecoration {
-        return LinearSpacingItemDecoration(dp2px(15f), LinearLayoutManager.VERTICAL, true)
+        return LinearSpacingItemDecoration(dp2px(0f), LinearLayoutManager.VERTICAL, true)
     }
 
     interface LoadDataCallback<T> {
