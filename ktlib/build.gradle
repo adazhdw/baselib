@@ -95,9 +95,9 @@ ext {
 
     publishedGroupId = 'com.adazhdw' // the id you want to add in "implement" line
     artifact = 'ktlib' // = libraryName  the id you want to add in "implement" line--must be the module name in android project
-    libraryVersion = '1.0.3'
+    libraryVersion = '1.0.4'
 
-    libraryDescription = 'optimize ViewDataBindingFragment'
+    libraryDescription = 'ListFragment crash bug fix'
     siteUrl = 'https://github.com/adazhdw/KtLibTest'
     gitUrl = 'https://github.com/adazhdw/KtLibTest.git'
     developerId = 'adazhdw1207'
