@@ -80,7 +80,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
 
     //RecyclerViewAdapter
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
+    //implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
 
     //EventBus
     implementation 'org.greenrobot:eventbus:3.2.0'

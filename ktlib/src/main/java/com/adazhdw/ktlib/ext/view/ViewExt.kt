@@ -3,9 +3,11 @@
 package com.adazhdw.ktlib.ext.view
 
 import android.os.Build
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
 
 /**
@@ -97,5 +99,9 @@ inline fun <reified T : ViewGroup.LayoutParams> View.updateLayoutParams(block: T
     val params = layoutParams as T
     block(params)
     layoutParams = params
+}
+
+fun LayoutInflater.inflate(@LayoutRes resId: Int): View {
+    return this.inflate(resId, null, false)
 }
 

@@ -1,7 +1,8 @@
-package com.adazhdw.ktlib.widget.list
+package com.adazhdw.ktlib.list.adapter
 
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
+import com.adazhdw.ktlib.list.holder.BaseVBViewHolder
 
 
 /**

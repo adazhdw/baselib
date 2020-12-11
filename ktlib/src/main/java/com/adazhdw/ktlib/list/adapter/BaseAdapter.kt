@@ -1,8 +1,10 @@
-package com.adazhdw.ktlib.widget.list
+package com.adazhdw.ktlib.list.adapter
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.IntRange
 import androidx.recyclerview.widget.RecyclerView
+import com.adazhdw.ktlib.list.holder.BaseViewHolder
 
 /**
  * author：daguozhu
@@ -12,8 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 abstract class BaseAdapter<T, VH : BaseViewHolder> : RecyclerView.Adapter<VH>() {
 
     protected var mData: MutableList<T> = mutableListOf()
+    protected var inflater: LayoutInflater? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+        if (inflater == null) inflater = LayoutInflater.from(parent.context)
         return createHolder(parent, viewType)
     }
 
@@ -27,6 +31,8 @@ abstract class BaseAdapter<T, VH : BaseViewHolder> : RecyclerView.Adapter<VH>() 
 
     abstract fun createHolder(parent: ViewGroup, viewType: Int): VH
     abstract fun bindHolder(holder: VH, position: Int)
+
+    fun getData(): MutableList<T> = mData
 
     /**
      * 设置新的数据源

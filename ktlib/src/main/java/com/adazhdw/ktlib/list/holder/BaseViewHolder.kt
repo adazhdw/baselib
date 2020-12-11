@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.widget.list
+package com.adazhdw.ktlib.list.holder
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable

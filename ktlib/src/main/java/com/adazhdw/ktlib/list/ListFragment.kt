@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.widget.list
+package com.adazhdw.ktlib.list
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.adazhdw.ktlib.base.fragment.ViewBindingFragment
-import com.adazhdw.ktlib.databinding.FragmentListLayoutBinding
+import com.adazhdw.ktlib.databinding.FragmentListLayoutExBinding
 import com.adazhdw.ktlib.ext.dp2px
+import com.adazhdw.ktlib.list.adapter.BaseVBAdapter
+import com.adazhdw.ktlib.list.view.LoadMoreRecyclerView
 import com.adazhdw.ktlib.widget.LinearSpacingItemDecoration
 
 /**
@@ -16,26 +18,21 @@ import com.adazhdw.ktlib.widget.LinearSpacingItemDecoration
  * create at 2020/4/13 10:11
  * description:
  */
-abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragment() {
+abstract class ListFragment<T : Any, A : BaseVBAdapter<T>> : ViewBindingFragment() {
 
-    private lateinit var viewBinding: FragmentListLayoutBinding
-    protected val mDataAdapter by lazy { getDataAdapter() }
+    private lateinit var viewBinding: FragmentListLayoutExBinding
     private var currPage = 0
+    protected val mDataAdapter: A by lazy { getDataAdapter() }
     protected val mData: List<T>
         get() = mDataAdapter.getData()
 
-    final override fun initViewBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): ViewBinding {
-        viewBinding = FragmentListLayoutBinding.inflate(inflater, container, false)
+    final override fun initViewBinding(inflater: LayoutInflater, container: ViewGroup?): ViewBinding {
+        viewBinding = FragmentListLayoutExBinding.inflate(inflater, container, false)
         return viewBinding
     }
 
     override fun initView(view: View) {
-        viewBinding.swipe.setOnRefreshListener {
-            requestStart()
-        }
+        viewBinding.swipe.setOnRefreshListener { requestStart() }
         viewBinding.dataRV.setLoadMoreAvailable(loadMoreAvailable())
         viewBinding.dataRV.layoutManager = getLayoutManager()
         viewBinding.dataRV.addItemDecoration(itemDecoration())
@@ -83,11 +80,6 @@ abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragme
                 viewBinding.swipe.isRefreshing = false
                 viewBinding.dataRV.setLoadMoreEnabled(true)
                 viewBinding.dataRV.loadComplete(hasMore)
-                if (hasMore && loadMoreAvailable()) {
-                    mDataAdapter.loading()
-                } else {
-                    mDataAdapter.loadAll()
-                }
             }
 
             override fun onFail(code: Int, msg: String?) {
@@ -96,7 +88,6 @@ abstract class ListFragment<T : Any, A : LoadMoreAdapter<T>> : ViewBindingFragme
                 viewBinding.swipe.isRefreshing = false
                 viewBinding.dataRV.setLoadMoreEnabled(true)
                 viewBinding.dataRV.loadComplete(hasMore = true, error = true)
-                mDataAdapter.loadError()
                 onError(code, msg)
             }
         })

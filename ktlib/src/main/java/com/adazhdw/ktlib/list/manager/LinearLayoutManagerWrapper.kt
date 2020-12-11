@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.widget.list
+package com.adazhdw.ktlib.list.manager
 
 import android.content.Context
 import android.util.AttributeSet

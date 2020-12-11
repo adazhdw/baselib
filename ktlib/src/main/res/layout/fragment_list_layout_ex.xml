@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipe"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -8,11 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.adazhdw.ktlib.widget.list.LoadMoreRecyclerView
+        <com.adazhdw.ktlib.list.view.LoadMoreRecyclerView
             android:id="@+id/dataRV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="never" />
+            android:nestedScrollingEnabled="true"
+            android:overScrollMode="never"
+            tools:targetApi="lollipop" />
 
     </FrameLayout>
 
