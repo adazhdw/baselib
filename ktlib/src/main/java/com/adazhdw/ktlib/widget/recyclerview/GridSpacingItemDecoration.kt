@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.widget
+package com.adazhdw.ktlib.widget.recyclerview
 
 import android.graphics.Rect
 import android.view.View

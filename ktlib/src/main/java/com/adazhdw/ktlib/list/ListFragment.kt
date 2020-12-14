@@ -11,7 +11,7 @@ import com.adazhdw.ktlib.databinding.FragmentListLayoutExBinding
 import com.adazhdw.ktlib.ext.dp2px
 import com.adazhdw.ktlib.list.adapter.BaseVBAdapter
 import com.adazhdw.ktlib.list.view.LoadMoreRecyclerView
-import com.adazhdw.ktlib.widget.LinearSpacingItemDecoration
+import com.adazhdw.ktlib.widget.recyclerview.LinearSpacingItemDecoration
 
 /**
  * daguozhu

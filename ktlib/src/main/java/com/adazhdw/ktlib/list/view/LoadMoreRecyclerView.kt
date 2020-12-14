@@ -45,7 +45,7 @@ class LoadMoreRecyclerView : RecyclerView {
     private var isLoadMoreEnabled = false
     private var mLoadMoreListener: LoadMoreListener? = null
     private var mWrapAdapter: WrapAdapter? = null
-    private val mDataObserver: DataObserver = DataObserver()
+    private var mDataObserver: DataObserver? = null
     private var mScrollDirection: Int = SCROLL_DIRECTION_BOTTOM
     private lateinit var loadMoreView: LoadMoreView
 
@@ -149,8 +149,16 @@ class LoadMoreRecyclerView : RecyclerView {
     override fun setAdapter(adapter: Adapter<*>?) {
         if (adapter == null) return
         mWrapAdapter = WrapAdapter(adapter as Adapter<ViewHolder>)
-        adapter.registerAdapterDataObserver(mDataObserver)
-        mDataObserver.onChanged()
+        if (mDataObserver != null) {
+            // 为原有的RecyclerAdapter移除数据监听对象
+            adapter.unregisterAdapterDataObserver(mDataObserver!!)
+        }
+        if (mDataObserver == null) {
+            mDataObserver = DataObserver()
+            // 为原有的RecyclerAdapter添加数据监听对象
+            adapter.registerAdapterDataObserver(mDataObserver!!)
+            mDataObserver?.onChanged()
+        }
         super.setAdapter(mWrapAdapter)
     }
 
