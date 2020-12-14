@@ -19,10 +19,9 @@ import com.adazhdw.libapp.databinding.NetChapterItemBinding
  **/
 
 class WxChaptersFragment : ListFragment<WxArticleChapter, ChaptersAdapter>() {
-    /*
     // IM模式，最新消息在最底，通过下拉到顶部，加载历史消息
-    override fun rvExtra(recyclerView: LoadMoreRecyclerViewEx) {
-        recyclerView.canScrollDirection(LoadMoreRecyclerViewEx.SCROLL_DIRECTION_TOP)
+    /*override fun rvExtra(recyclerView: LoadMoreRecyclerView) {
+        recyclerView.canScrollDirection(LoadMoreRecyclerView.SCROLL_DIRECTION_TOP)
     }
 
     override fun getLayoutManager(): RecyclerView.LayoutManager {
@@ -34,8 +33,9 @@ class WxChaptersFragment : ListFragment<WxArticleChapter, ChaptersAdapter>() {
     override fun onLoad(page: Int, callback: LoadDataCallback<WxArticleChapter>) {
         launchOnUI {
             val url = "https://wanandroid.com/wxarticle/chapters/json"
-            val data = KtHttp.ktHttp.get(url).toClazz<ListResponse<WxArticleChapter>>().await()
-            callback.onSuccess(data.data ?: listOf(), false)
+            val data = KtHttp.ktHttp.get(url).toClazz<ListResponse<WxArticleChapter>>().await().data ?: listOf()
+            val hasmore = dataSize < 25
+            callback.onSuccess(data, hasmore)
         }
     }
 }

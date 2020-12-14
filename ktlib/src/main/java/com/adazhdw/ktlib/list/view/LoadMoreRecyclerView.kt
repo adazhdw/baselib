@@ -183,11 +183,9 @@ class LoadMoreRecyclerView : RecyclerView {
         }
 
         override fun getItemCount(): Int {
-            return if (isLoadMoreEnabled) {
-                innerItemCount() + if (isLoadMoreAvailable) 1 else 0
-            } else {
-                innerItemCount()
-            }
+            return if (isLoadMoreEnabled && isLoadMoreAvailable) {
+                innerItemCount() + 1/*if (hasMoreData) 1 else 0*/
+            } else innerItemCount()
         }
 
         override fun getItemViewType(position: Int): Int {

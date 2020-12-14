@@ -23,8 +23,12 @@ abstract class ListFragment<T : Any, A : BaseVBAdapter<T>> : ViewBindingFragment
     private lateinit var viewBinding: FragmentListLayoutExBinding
     private var currPage = 0
     protected val mDataAdapter: A by lazy { getDataAdapter() }
+    protected val isRefreshing: Boolean
+        get() = viewBinding.swipe.isRefreshing
     protected val mData: List<T>
         get() = mDataAdapter.getData()
+    protected val dataSize: Int
+        get() = if (isRefreshing) 0 else mData.size
 
     final override fun initViewBinding(inflater: LayoutInflater, container: ViewGroup?): ViewBinding {
         viewBinding = FragmentListLayoutExBinding.inflate(inflater, container, false)
@@ -67,6 +71,10 @@ abstract class ListFragment<T : Any, A : BaseVBAdapter<T>> : ViewBindingFragment
         }
         onLoad(currPage, object : LoadDataCallback<T> {
             override fun onSuccess(data: List<T>, hasMore: Boolean) {
+                viewBinding.swipe.isEnabled = true
+                viewBinding.swipe.isRefreshing = false
+                viewBinding.dataRV.setLoadMoreEnabled(true)
+                viewBinding.dataRV.loadComplete(hasMore)
                 if (data.isNotEmpty()) currPage += 1
                 if (refreshing) {
                     mDataAdapter.setData(data)
@@ -76,10 +84,6 @@ abstract class ListFragment<T : Any, A : BaseVBAdapter<T>> : ViewBindingFragment
                 } else {
                     mDataAdapter.addData(data)
                 }
-                viewBinding.swipe.isEnabled = true
-                viewBinding.swipe.isRefreshing = false
-                viewBinding.dataRV.setLoadMoreEnabled(true)
-                viewBinding.dataRV.loadComplete(hasMore)
             }
 
             override fun onFail(code: Int, msg: String?) {
