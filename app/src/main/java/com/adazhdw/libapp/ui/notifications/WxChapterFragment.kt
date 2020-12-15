@@ -5,7 +5,7 @@ import androidx.viewbinding.ViewBinding
 import com.adazhdw.kthttp.KtHttp
 import com.adazhdw.kthttp.coroutines.toClazz
 import com.adazhdw.ktlib.list.ListFragment
-import com.adazhdw.ktlib.list.adapter.BaseVBAdapter
+import com.adazhdw.ktlib.list.adapter.ViewBindingAdapter
 import com.adazhdw.ktlib.list.holder.BaseVBViewHolder
 import com.adazhdw.libapp.bean.ListResponse
 import com.adazhdw.libapp.bean.WxArticleChapter
@@ -39,7 +39,7 @@ class WxChaptersFragment : ListFragment<WxArticleChapter, ChaptersAdapter>() {
     }
 }
 
-class ChaptersAdapter() : BaseVBAdapter<WxArticleChapter>() {
+class ChaptersAdapter() : ViewBindingAdapter<WxArticleChapter>() {
 
     override fun viewBinding(parent: ViewGroup, viewType: Int): ViewBinding {
         return NetChapterItemBinding.inflate(inflater, parent, false)

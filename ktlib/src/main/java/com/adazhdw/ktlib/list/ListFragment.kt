@@ -9,7 +9,7 @@ import androidx.viewbinding.ViewBinding
 import com.adazhdw.ktlib.base.fragment.ViewBindingFragment
 import com.adazhdw.ktlib.databinding.FragmentListLayoutExBinding
 import com.adazhdw.ktlib.ext.dp2px
-import com.adazhdw.ktlib.list.adapter.BaseVBAdapter
+import com.adazhdw.ktlib.list.adapter.ViewBindingAdapter
 import com.adazhdw.ktlib.list.view.LoadMoreRecyclerView
 import com.adazhdw.ktlib.widget.recyclerview.LinearSpacingItemDecoration
 
@@ -18,7 +18,7 @@ import com.adazhdw.ktlib.widget.recyclerview.LinearSpacingItemDecoration
  * create at 2020/4/13 10:11
  * description:
  */
-abstract class ListFragment<T : Any, A : BaseVBAdapter<T>> : ViewBindingFragment() {
+abstract class ListFragment<T : Any, A : ViewBindingAdapter<T>> : ViewBindingFragment() {
 
     private lateinit var viewBinding: FragmentListLayoutExBinding
     private var currPage = 0
