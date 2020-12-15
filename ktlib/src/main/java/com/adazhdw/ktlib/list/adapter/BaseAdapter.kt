@@ -28,6 +28,10 @@ abstract class BaseAdapter<T, VH : BaseViewHolder> : RecyclerView.Adapter<VH>() 
 
     override fun getItemCount(): Int = mData.size
 
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        if (inflater == null) inflater = LayoutInflater.from(recyclerView.context)
+    }
 
     abstract fun createHolder(parent: ViewGroup, viewType: Int): VH
     abstract fun bindHolder(holder: VH, data: T, position: Int)

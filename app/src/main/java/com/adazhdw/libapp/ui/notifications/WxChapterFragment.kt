@@ -1,6 +1,5 @@
 package com.adazhdw.libapp.ui.notifications
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 import com.adazhdw.kthttp.KtHttp
@@ -43,7 +42,7 @@ class WxChaptersFragment : ListFragment<WxArticleChapter, ChaptersAdapter>() {
 class ChaptersAdapter : BaseVBAdapter<WxArticleChapter>() {
 
     override fun viewBinding(parent: ViewGroup, viewType: Int): ViewBinding {
-        return NetChapterItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return NetChapterItemBinding.inflate(inflater!!, parent, false)
     }
 
     override fun bindHolder(holder: BaseVBViewHolder, data: WxArticleChapter, position: Int) {
