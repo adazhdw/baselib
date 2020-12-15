@@ -1,5 +1,7 @@
 package com.adazhdw.ktlib.list.adapter
 
+import android.content.Context
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 import com.adazhdw.ktlib.list.holder.BaseVBViewHolder
@@ -10,9 +12,9 @@ import com.adazhdw.ktlib.list.holder.BaseVBViewHolder
  * create at 2020/4/8 11:08
  * description: 使用 ViewBinding 的 RecyclerView 的 Adapter
  */
-abstract class BaseVBAdapter<T> : BaseAdapter<T, BaseVBViewHolder>() {
+abstract class BaseVBAdapter<T : Any>(context: Context) : ListAdapter<T, BaseVBViewHolder>(context) {
 
-    override fun createHolder(parent: ViewGroup, viewType: Int): BaseVBViewHolder {
+    override fun notifyCreateHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): BaseVBViewHolder {
         return BaseVBViewHolder(viewBinding(parent, viewType))
     }
 
