@@ -1,6 +1,5 @@
 package com.adazhdw.ktlib.list
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +40,7 @@ abstract class ListFragment<T : Any, A : BaseVBAdapter<T>> : ViewBindingFragment
         viewBinding.dataRV.setLoadMoreAvailable(loadMoreAvailable())
         viewBinding.dataRV.layoutManager = getLayoutManager()
         viewBinding.dataRV.addItemDecoration(itemDecoration())
-        mDataAdapter = getDataAdapter(view.context)
+        mDataAdapter = getDataAdapter()
         viewBinding.dataRV.adapter = mDataAdapter
         viewBinding.dataRV.setLoadMoreListener(object : LoadMoreRecyclerView.LoadMoreListener {
             override fun onLoadMore() {
@@ -100,7 +99,7 @@ abstract class ListFragment<T : Any, A : BaseVBAdapter<T>> : ViewBindingFragment
     }
 
     abstract fun onLoad(page: Int, callback: LoadDataCallback<T>)
-    abstract fun getDataAdapter(context: Context): A
+    abstract fun getDataAdapter(): A
     open fun loadMoreAvailable(): Boolean = true/*总开关，控制loadMore是否可用*/
     open fun startAtPage() = 0/*开始页数*/
     open fun perPage() = 20/*每页个数pageSize*/

@@ -10,12 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
  * date-time：2020/12/15 9:26
  * description：继承自 RecyclerView.Adapter 抽象类
  **/
-abstract class AbsAdapter<VH : RecyclerView.ViewHolder>(context: Context) : RecyclerView.Adapter<VH>() {
+abstract class AbsAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
 
-    protected val inflater: LayoutInflater = LayoutInflater.from(context)
+    protected var mContext: Context? = null
+    protected val inflater: LayoutInflater by lazy { LayoutInflater.from(mContext) }
     protected var recyclerView: RecyclerView? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+        if (mContext == null) mContext = parent.context
         return notifyCreateHolder(inflater, parent, viewType)
     }
 
@@ -29,6 +31,7 @@ abstract class AbsAdapter<VH : RecyclerView.ViewHolder>(context: Context) : Recy
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
+        if (mContext == null) mContext = recyclerView.context
         this.recyclerView = recyclerView
     }
 

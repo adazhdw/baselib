@@ -1,6 +1,5 @@
 package com.adazhdw.ktlib.list.adapter
 
-import android.content.Context
 import androidx.annotation.IntRange
 import androidx.recyclerview.widget.RecyclerView
 
@@ -9,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
  * date-time：2020/12/15 15:18
  * description：继承自 AbsAdapter 的 数据管理类
  **/
-abstract class ListAdapter<T : Any, VH : RecyclerView.ViewHolder>(context: Context) : AbsAdapter<VH>(context) {
+abstract class ListAdapter<T : Any, VH : RecyclerView.ViewHolder>() : AbsAdapter<VH>() {
 
     private var items: MutableList<T> = mutableListOf()
 
