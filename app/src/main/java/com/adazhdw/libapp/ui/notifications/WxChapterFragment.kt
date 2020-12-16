@@ -39,14 +39,18 @@ class WxChaptersFragment : ListFragment<WxArticleChapter, ChaptersAdapter>() {
     }
 }
 
-class ChaptersAdapter() : ViewBindingAdapter<WxArticleChapter>() {
+class ChaptersAdapter : ViewBindingAdapter<WxArticleChapter>() {
 
     override fun viewBinding(parent: ViewGroup, viewType: Int): ViewBinding {
         return NetChapterItemBinding.inflate(inflater, parent, false)
     }
 
     override fun notifyBind(holder: BaseVBViewHolder, position: Int) {
-        (holder.viewBinding as NetChapterItemBinding).chapterName.text = getItem(position).chapterName
+
+    }
+
+    override fun notifyBind(holder: BaseVBViewHolder, data: WxArticleChapter, position: Int) {
+        (holder.viewBinding as NetChapterItemBinding).chapterName.text = data.chapterName
     }
 
 }

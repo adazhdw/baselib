@@ -18,6 +18,12 @@ abstract class ListAdapter<T : Any, VH : RecyclerView.ViewHolder>() : AbsAdapter
 
     fun getItem(position: Int): T = this.items[position]
 
+    override fun notifyBind(holder: VH, position: Int) {
+        notifyBind(holder, getItem(position), position)
+    }
+
+    abstract fun notifyBind(holder: VH, data: T, position: Int)
+
     /**
      * 设置新的数据源
      */
