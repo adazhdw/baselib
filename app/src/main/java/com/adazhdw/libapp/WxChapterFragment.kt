@@ -1,4 +1,4 @@
-package com.adazhdw.libapp.notifications
+package com.adazhdw.libapp
 
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding

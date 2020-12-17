@@ -3,7 +3,6 @@ package com.adazhdw.libapp
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.adazhdw.ktlib.ext.addFragment
-import com.adazhdw.libapp.notifications.NotificationsFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -11,6 +10,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        addFragment(NotificationsFragment(), R.id.container)
+        addFragment(WxChaptersFragment(), R.id.container)
     }
 }
