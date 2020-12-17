@@ -1,4 +1,4 @@
-package com.adazhdw.libapp.ui.notifications
+package com.adazhdw.libapp.notifications
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

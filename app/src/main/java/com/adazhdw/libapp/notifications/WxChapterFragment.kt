@@ -1,4 +1,4 @@
-package com.adazhdw.libapp.ui.notifications
+package com.adazhdw.libapp.notifications
 
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
@@ -43,10 +43,6 @@ class ChaptersAdapter : ViewBindingAdapter<WxArticleChapter>() {
 
     override fun viewBinding(parent: ViewGroup, viewType: Int): ViewBinding {
         return NetChapterItemBinding.inflate(inflater, parent, false)
-    }
-
-    override fun notifyBind(holder: BaseVBViewHolder, position: Int) {
-
     }
 
     override fun notifyBind(holder: BaseVBViewHolder, data: WxArticleChapter, position: Int) {

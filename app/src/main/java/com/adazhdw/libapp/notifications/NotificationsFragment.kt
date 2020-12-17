@@ -1,4 +1,4 @@
-package com.adazhdw.libapp.ui.notifications
+package com.adazhdw.libapp.notifications
 
 import android.os.Bundle
 import android.view.LayoutInflater
