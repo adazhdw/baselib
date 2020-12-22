@@ -1,6 +1,6 @@
 package com.adazhdw.ktlib.list.adapter
 
-import android.content.Context
+import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,15 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
  * date-time：2020/12/15 9:26
  * description：继承自 RecyclerView.Adapter 抽象类
  **/
-abstract class AbsAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
+abstract class BaseAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
 
-    protected var mContext: Context? = null
-    protected val inflater: LayoutInflater by lazy { LayoutInflater.from(mContext) }
     protected var recyclerView: RecyclerView? = null
+    private val layoutInflaterCache = SparseArray<LayoutInflater>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        if (mContext == null) mContext = parent.context
-        return notifyCreateHolder(inflater, parent, viewType)
+        return notifyCreateHolder(layoutInflaterCache.get(0) ?: LayoutInflater.from(parent.context), parent, viewType)
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
@@ -31,12 +29,13 @@ abstract class AbsAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<V
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
-        if (mContext == null) mContext = recyclerView.context
+        layoutInflaterCache.put(0, LayoutInflater.from(recyclerView.context))
         this.recyclerView = recyclerView
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         super.onDetachedFromRecyclerView(recyclerView)
+        layoutInflaterCache.clear()
         this.recyclerView = null
     }
 

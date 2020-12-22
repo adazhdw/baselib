@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
  * date-time：2020/12/15 15:18
  * description：继承自 AbsAdapter 的 数据管理类
  **/
-abstract class ListAdapter<T : Any, VH : RecyclerView.ViewHolder>() : AbsAdapter<VH>() {
+abstract class ListAdapter<T : Any, VH : RecyclerView.ViewHolder> : BaseAdapter<VH>() {
 
     private var items: MutableList<T> = mutableListOf()
 
@@ -109,6 +109,42 @@ abstract class ListAdapter<T : Any, VH : RecyclerView.ViewHolder>() : AbsAdapter
     fun clearData() {
         this.items.clear()
         notifyDataSetChanged()
+    }
+
+    /**
+     * 划到顶部
+     */
+    fun scrollToTop() {
+        if (this.items.isNotEmpty()) {
+            recyclerView?.scrollToPosition(0)
+        }
+    }
+
+    /**
+     * 划到底部
+     */
+    fun scrollToBottom() {
+        if (this.items.isNotEmpty()) {
+            recyclerView?.scrollToPosition(this.items.size - 1)
+        }
+    }
+
+    /**
+     * smooth划到顶部
+     */
+    fun smoothScrollToTop() {
+        if (this.items.isNotEmpty()) {
+            recyclerView?.smoothScrollToPosition(0)
+        }
+    }
+
+    /**
+     * smooth划到底部
+     */
+    fun smoothScrollToBottom() {
+        if (this.items.isNotEmpty()) {
+            recyclerView?.smoothScrollToPosition(this.items.size - 1)
+        }
     }
 
 }
