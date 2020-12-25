@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.adazhdw.ktlib.base.fragment.ViewBindingFragment
-import com.adazhdw.ktlib.databinding.FragmentListLayoutExBinding
+import com.adazhdw.ktlib.databinding.FragmentListLayoutBinding
 import com.adazhdw.ktlib.ext.dp2px
 import com.adazhdw.ktlib.list.adapter.ViewBindingAdapter
 import com.adazhdw.ktlib.list.view.LoadMoreRecyclerView
@@ -20,7 +20,7 @@ import com.adazhdw.ktlib.widget.recyclerview.LinearSpacingItemDecoration
  */
 abstract class ListFragment<T : Any, A : ViewBindingAdapter<T>> : ViewBindingFragment() {
 
-    private lateinit var viewBinding: FragmentListLayoutExBinding
+    private lateinit var viewBinding: FragmentListLayoutBinding
     private var currPage = 0
     protected lateinit var mDataAdapter: A
     protected val isRefreshing: Boolean
@@ -31,7 +31,7 @@ abstract class ListFragment<T : Any, A : ViewBindingAdapter<T>> : ViewBindingFra
         get() = if (isRefreshing) 0 else mData.size
 
     final override fun initViewBinding(inflater: LayoutInflater, container: ViewGroup?): ViewBinding {
-        viewBinding = FragmentListLayoutExBinding.inflate(inflater, container, false)
+        viewBinding = FragmentListLayoutBinding.inflate(inflater, container, false)
         return viewBinding
     }
 
