@@ -14,8 +14,8 @@ import com.adazhdw.ktlib.list.holder.BaseVBViewHolder
 abstract class ViewBindingAdapter<T : Any> : ListAdapter<T, BaseVBViewHolder>() {
 
     override fun notifyCreateHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): BaseVBViewHolder {
-        return BaseVBViewHolder(viewBinding(parent, viewType))
+        return BaseVBViewHolder(viewBinding(parent, inflater, viewType))
     }
 
-    abstract fun viewBinding(parent: ViewGroup, viewType: Int): ViewBinding
+    abstract fun viewBinding(parent: ViewGroup, inflater: LayoutInflater, viewType: Int): ViewBinding
 }

@@ -80,6 +80,7 @@ dependencies {
 
     //RecyclerViewAdapter
     //implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
+    implementation 'com.github.adazhdw:RVAdapter:1.0.9'
 
     //EventBus
     implementation 'org.greenrobot:eventbus:3.2.0'

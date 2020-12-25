@@ -1,6 +1,9 @@
 package com.adazhdw.libapp
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.adazhdw.kthttp.KtHttp
 import com.adazhdw.kthttp.coroutines.toClazz
@@ -37,11 +40,15 @@ class WxChaptersFragment : ListFragment<WxArticleChapter, ChaptersAdapter>() {
             callback.onSuccess(data, hasmore)
         }
     }
+
+    override fun getLayoutManager(): RecyclerView.LayoutManager {
+        return GridLayoutManager(context, 2)
+    }
 }
 
 class ChaptersAdapter : ViewBindingAdapter<WxArticleChapter>() {
 
-    override fun viewBinding(parent: ViewGroup, viewType: Int): ViewBinding {
+    override fun viewBinding(parent: ViewGroup, inflater: LayoutInflater, viewType: Int): ViewBinding {
         return NetChapterItemBinding.inflate(inflater, parent, false)
     }
 
