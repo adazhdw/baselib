@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="lib_app_name">baselibrary</string>
     <string name="net_work_unavailable" >网络不可用，请检查网络</string>
     <string name="permission_need_grant_title" >权限提示</string>
     <string name="cancel" >取消</string>

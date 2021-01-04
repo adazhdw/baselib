@@ -21,7 +21,7 @@ import androidx.core.view.ViewCompat;
 /**
  *
  */
-public class ClickUtils {
+public class ClickUtil {
 
     private static final int PRESSED_VIEW_SCALE_TAG = -1;
     private static final float PRESSED_VIEW_SCALE_DEFAULT_VALUE = -0.06f;
@@ -39,7 +39,7 @@ public class ClickUtils {
     private static final int DEBOUNCING_TAG = -7;
     private static final long DEBOUNCING_DEFAULT_VALUE = 700;
 
-    private ClickUtils() {
+    private ClickUtil() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 

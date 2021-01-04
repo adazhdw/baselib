@@ -49,9 +49,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public final class ImageUtils {
+public final class ImageUtil {
 
-    private ImageUtils() {
+    private ImageUtil() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
