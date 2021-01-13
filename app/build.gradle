@@ -53,7 +53,7 @@ dependencies {
 
     implementation project(path: ':ktlib')
 //    implementation 'com.adazhdw:ktlib:1.1.1'
-    implementation 'com.adazhdw:kthttp:0.1.1'
+    implementation 'com.adazhdw:kthttp:0.2.11'
 
     //RecyclerViewAdapter
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'

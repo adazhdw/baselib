@@ -110,13 +110,13 @@ fun Context.getUriForFile(file: File): Uri {
 }
 
 @Throws(IOException::class)
-private fun Context.createImageFile(): File {
+private fun Context.createImageFile(isJPG: Boolean = true): File {
     val timeStamp =
         SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA).format(Date(System.currentTimeMillis()))
     val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
     return File.createTempFile(
-        "JPEG_${timeStamp}_", /* prefix */
-        ".jpg", /* suffix */
+        if (isJPG) "JPEG_${timeStamp}_" else "PNG_${timeStamp}_", /* prefix */
+        if (isJPG) ".jpg" else ".png", /* suffix */
         storageDir /* directory */
     )
 }

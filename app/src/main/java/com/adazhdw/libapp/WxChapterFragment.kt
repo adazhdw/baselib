@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.adazhdw.kthttp.KtHttp
 import com.adazhdw.kthttp.coroutines.toClazz
+import com.adazhdw.kthttp.ext.httpRequest
 import com.adazhdw.ktlib.list.ListFragment
 import com.adazhdw.ktlib.list.adapter.ViewBindingAdapter
 import com.adazhdw.ktlib.list.holder.BaseVBViewHolder
@@ -35,7 +35,7 @@ class WxChaptersFragment : ListFragment<WxArticleChapter, ChaptersAdapter>() {
     override fun onLoad(page: Int, callback: LoadDataCallback<WxArticleChapter>) {
         launchOnUI {
             val url = "https://wanandroid.com/wxarticle/chapters/json"
-            val data = KtHttp.ktHttp.get(url).toClazz<ListResponse<WxArticleChapter>>().await().data ?: listOf()
+            val data = httpRequest { url(url) }.toClazz<ListResponse<WxArticleChapter>>().await().data ?: listOf()
             val hasmore = dataSize < 25
             callback.onSuccess(data, hasmore)
         }
