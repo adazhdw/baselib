@@ -2,7 +2,6 @@
 
 package com.adazhdw.ktlib.ext.recycler
 
-import android.content.Context
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,10 +19,25 @@ fun RecyclerView.isScrollToTop(): Boolean {
     return canScrollVertically(-1)//的值表示是否能向下滚动，false表示已经滚动到顶部
 }
 
-fun Context.gridLayoutManager(spanCount: Int) =
-    GridLayoutManager(this, spanCount, GridLayoutManager.VERTICAL, false)
+fun RecyclerView.vertical(spanCount: Int = 0, isStaggered: Boolean = false): RecyclerView {
+    layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+    if (spanCount != 0) {
+        layoutManager = GridLayoutManager(context, spanCount)
+    }
+    if (isStaggered) {
+        layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
+    }
+    return this
+}
 
-fun Context.linearLayoutManager() = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+fun RecyclerView.horizontal(spanCount: Int = 0, isStaggered: Boolean = false): RecyclerView {
+    layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+    if (spanCount != 0) {
+        layoutManager = GridLayoutManager(context, spanCount, GridLayoutManager.HORIZONTAL, false)
+    }
+    if (isStaggered) {
+        layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.HORIZONTAL)
+    }
+    return this
+}
 
-fun Context.staggeredGridLayoutManager(spanCount: Int) =
-    StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)

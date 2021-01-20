@@ -11,7 +11,7 @@ import com.adazhdw.ktlib.list.holder.BaseVBViewHolder
  * create at 2020/4/8 11:08
  * description: 使用 ViewBinding 的 RecyclerView 的 Adapter
  */
-abstract class ViewBindingAdapter<T : Any> : ListAdapter<T, BaseVBViewHolder>() {
+abstract class ViewBindingAdapter<T : Any> : BaseAdapter<T, BaseVBViewHolder>() {
 
     override fun notifyCreateHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): BaseVBViewHolder {
         return BaseVBViewHolder(viewBinding(parent, inflater, viewType))

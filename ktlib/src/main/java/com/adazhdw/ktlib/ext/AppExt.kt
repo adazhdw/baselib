@@ -1,3 +1,5 @@
+@file:JvmName("IntentExtKt")
+
 package com.adazhdw.ktlib.ext
 
 import android.content.ComponentName
@@ -10,15 +12,6 @@ import android.os.Build
 import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentActivity
 import java.io.File
-
-
-val Context.versionName: String
-    get() = packageManager.getPackageInfo(packageName, 0).versionName
-
-val Context.versionCode: Long
-    get() = with(packageManager.getPackageInfo(packageName, 0)) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) longVersionCode else versionCode.toLong()
-    }
 
 
 /**

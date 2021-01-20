@@ -2,6 +2,11 @@
 
 package com.adazhdw.ktlib.ext
 
+import android.app.Activity
+import android.content.Intent
+import android.os.Build
+import android.widget.Toast
+import androidx.annotation.ColorRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -12,6 +17,22 @@ import androidx.fragment.app.FragmentTransaction
  * created on: 2019/10/21 17:36
  * description:
  */
+
+
+inline fun <reified T : Activity> Fragment.startActivity(vararg extras: Pair<String, Any?>) {
+    startActivity(Intent(context, T::class.java).putExtrasEx(*extras))
+}
+
+
+fun Fragment.toast(msg: CharSequence): Toast? = context?.toast(msg, Toast.LENGTH_SHORT)
+
+fun Fragment.getColorEx(@ColorRes res: Int): Int {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        resources.getColor(res, context?.theme)
+    } else {
+        resources.getColor(res)
+    }
+}
 
 
 fun FragmentActivity.addFragment(
