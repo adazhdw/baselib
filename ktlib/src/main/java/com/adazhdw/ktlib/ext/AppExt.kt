@@ -1,4 +1,3 @@
-@file:JvmName("IntentExtKt")
 
 package com.adazhdw.ktlib.ext
 
