@@ -7,11 +7,9 @@ import android.app.Application
  */
 open class Application : Application() {
 
+    protected open val isDebug = false
     override fun onCreate() {
         super.onCreate()
-        initLibrary(baseUrl(), isDebug())
+        initLibrary(isDebug)
     }
-
-    open fun baseUrl(): String = ""
-    open fun isDebug(): Boolean = false
 }

@@ -12,7 +12,6 @@ object KtLib {
     private var currentApplication: Application? = null
     private val mKtLifecycleCallback = KtLifecycleCallback()
     internal var isDebug = true
-    internal var mBaseUrl = ""
 
     @JvmStatic
     val context: Context
@@ -63,8 +62,7 @@ object KtLib {
 /**
  * 初始化 Utils工具包 和 BaseUrl
  */
-fun Application.initLibrary(baseUrl: String, debug: Boolean = false) {
+fun Application.initLibrary(debug: Boolean = false) {
     KtLib.init(this)
-    KtLib.mBaseUrl = baseUrl
     KtLib.isDebug = debug
 }

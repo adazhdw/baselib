@@ -1,5 +1,6 @@
 package com.adazhdw.libapp
 
+import com.adazhdw.kthttp.BuildConfig
 import com.adazhdw.ktlib.Application
 
 /**
@@ -9,11 +10,10 @@ import com.adazhdw.ktlib.Application
  **/
 class LibApp : Application() {
 
+    override val isDebug: Boolean
+        get() = BuildConfig.DEBUG
+
     override fun onCreate() {
         super.onCreate()
-    }
-
-    override fun isDebug(): Boolean {
-        return BuildConfig.DEBUG
     }
 }
