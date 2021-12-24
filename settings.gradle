@@ -1,3 +1,2 @@
-include ':net'
 include ':app'
 include ':ktlib'
