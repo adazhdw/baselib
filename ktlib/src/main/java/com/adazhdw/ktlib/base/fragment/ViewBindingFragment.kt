@@ -79,8 +79,5 @@ abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
 
     override fun needEventBus(): Boolean = false
 
-    abstract fun initViewBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): ViewBinding
+    abstract fun initViewBinding(inflater: LayoutInflater, container: ViewGroup?): ViewBinding
 }
