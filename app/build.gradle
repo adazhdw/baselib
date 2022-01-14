@@ -51,15 +51,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
     implementation project(path: ':ktlib')
-    implementation project(path: ':net')
 //    implementation 'com.github.adazhdw:KtLibTest:0.5.0'
     implementation 'com.github.adazhdw:KtHttp:0.2.35'
-
-    //Gson
-    implementation 'com.google.code.gson:gson:2.8.6'
-
-    //OkHttp
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
 
     //RecyclerViewAdapter
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7'
