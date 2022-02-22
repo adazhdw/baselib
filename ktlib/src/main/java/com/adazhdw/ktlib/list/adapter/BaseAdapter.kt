@@ -15,6 +15,7 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
 
     protected var recyclerView: RecyclerView? = null
     private val layoutInflaterCache = SparseArray<LayoutInflater>()
+    private var itemClickListener: ((holder: VH, data: T, position: Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         return notifyCreateHolder(layoutInflaterCache.get(0) ?: LayoutInflater.from(parent.context), parent, viewType)
@@ -22,7 +23,11 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         if (position == RecyclerView.NO_POSITION) return
-        notifyBind(holder, getItem(position), position)
+        val data = getItem(position)
+        holder.itemView.setOnClickListener {
+            itemClickListener?.invoke(holder, data, position)
+        }
+        notifyBind(holder, data, position)
     }
 
     abstract fun notifyCreateHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): VH
@@ -38,6 +43,10 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
         super.onDetachedFromRecyclerView(recyclerView)
         layoutInflaterCache.clear()
         this.recyclerView = null
+    }
+
+    fun setItemClickListener(listener: (holder: VH, data: T, position: Int) -> Unit) {
+        this.itemClickListener = listener
     }
 
     private var items: MutableList<T> = mutableListOf()

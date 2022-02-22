@@ -51,7 +51,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
     implementation project(path: ':ktlib')
-//    implementation 'com.github.adazhdw:KtLibTest:0.5.0'
+//    implementation 'com.github.adazhdw:KtLib:0.8.5'
     implementation 'com.github.adazhdw:KtHttp:0.2.35'
 
     //RecyclerViewAdapter
