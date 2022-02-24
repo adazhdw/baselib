@@ -12,10 +12,12 @@ import org.greenrobot.eventbus.EventBus
  * description:
  */
 
-abstract class ViewBindingActivity : ForResultActivity(), IActivity {
+abstract class ViewBindingActivity<T : ViewBinding> : ForResultActivity(), IActivity {
 
     final override val layoutId: Int
         get() = 0
+
+    protected val viewBinding:T by lazy { initViewBinding() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,5 +42,5 @@ abstract class ViewBindingActivity : ForResultActivity(), IActivity {
         }
     }
 
-    abstract fun initViewBinding(): ViewBinding
+    abstract fun initViewBinding(): T
 }

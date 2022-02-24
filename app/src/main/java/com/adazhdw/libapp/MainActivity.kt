@@ -1,15 +1,17 @@
 package com.adazhdw.libapp
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import com.adazhdw.ktlib.base.activity.ViewBindingActivity
 import com.adazhdw.ktlib.ext.addFragment
+import com.adazhdw.libapp.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ViewBindingActivity<ActivityMainBinding>() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
+    override fun initView() {
         addFragment(WxChaptersFragment(), R.id.container)
+    }
+
+    override fun initViewBinding(): ActivityMainBinding {
+        return ActivityMainBinding.inflate(layoutInflater)
     }
 }
