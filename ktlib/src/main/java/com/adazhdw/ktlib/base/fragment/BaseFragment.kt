@@ -27,6 +27,8 @@ abstract class BaseFragment : CoroutinesFragment(), IFragment {
     protected var isDataInitiated = false
 
     protected var mContentView: View? = null
+    override val needEventBus: Boolean
+        get() = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,7 +74,7 @@ abstract class BaseFragment : CoroutinesFragment(), IFragment {
     override fun onStart() {
         super.onStart()
         "onStart".logD(TAG)
-        if (needEventBus()) {
+        if (needEventBus) {
             EventBus.getDefault().register(this)
         }
     }
@@ -80,7 +82,7 @@ abstract class BaseFragment : CoroutinesFragment(), IFragment {
     override fun onStop() {
         "onStop".logD(TAG)
         super.onStop()
-        if (needEventBus()) {
+        if (needEventBus) {
             EventBus.getDefault().unregister(this)
         }
     }

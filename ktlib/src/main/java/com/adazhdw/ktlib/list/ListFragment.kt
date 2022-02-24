@@ -1,14 +1,13 @@
 package com.adazhdw.ktlib.list
 
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
+import com.adazhdw.ktlib.R
 import com.adazhdw.ktlib.base.fragment.ViewBindingFragment
 import com.adazhdw.ktlib.databinding.FragmentListLayoutBinding
 import com.adazhdw.ktlib.ext.dp2px
+import com.adazhdw.ktlib.ext.viewBind
 import com.adazhdw.ktlib.list.adapter.ViewBindingAdapter
 import com.adazhdw.ktlib.list.view.LoadMoreRecyclerView
 import com.adazhdw.ktlib.widget.recyclerview.LinearSpacingItemDecoration
@@ -20,20 +19,17 @@ import com.adazhdw.ktlib.widget.recyclerview.LinearSpacingItemDecoration
  */
 abstract class ListFragment<T : Any, A : ViewBindingAdapter<T>> : ViewBindingFragment() {
 
-    private lateinit var viewBinding: FragmentListLayoutBinding
-    private var currPage = 0
-    protected lateinit var mDataAdapter: A
+    override val layoutId: Int
+        get() = R.layout.fragment_list_layout
     protected val isRefreshing: Boolean
         get() = viewBinding.swipe.isRefreshing
     protected val mData: List<T>
         get() = mDataAdapter.getData()
     protected val dataSize: Int
         get() = if (isRefreshing) 0 else mData.size
-
-    final override fun initViewBinding(inflater: LayoutInflater, container: ViewGroup?): ViewBinding {
-        viewBinding = FragmentListLayoutBinding.inflate(inflater, container, false)
-        return viewBinding
-    }
+    private var currPage = 0
+    protected lateinit var mDataAdapter: A
+    private val viewBinding by viewBind<FragmentListLayoutBinding>()
 
     override fun initView(view: View) {
         viewBinding.swipe.setOnRefreshListener { requestStart() }

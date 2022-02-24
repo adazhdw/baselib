@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.viewbinding.ViewBinding
 import com.adazhdw.ktlib.base.IFragment
+import com.adazhdw.ktlib.ext.viewBind
 import org.greenrobot.eventbus.EventBus
 
 
@@ -18,8 +19,8 @@ import org.greenrobot.eventbus.EventBus
  */
 abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
 
-    final override val layoutId: Int
-        get() = 0
+    override val needEventBus: Boolean
+        get() = false
 
     /**
      * 是否初始化过布局
@@ -31,7 +32,7 @@ abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
      */
     protected var isDataInitiated = false
 
-    protected lateinit var mContext: Context
+    lateinit var mContext: Context
     lateinit var mActivity: FragmentActivity
 
     override fun onAttach(context: Context) {
@@ -40,12 +41,8 @@ abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
         mActivity = context as FragmentActivity
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return initViewBinding(inflater, container).root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return layoutInflater.inflate(layoutId, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,19 +62,15 @@ abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
 
     override fun onStart() {
         super.onStart()
-        if (needEventBus()) {
+        if (needEventBus) {
             EventBus.getDefault().register(this)
         }
     }
 
     override fun onStop() {
         super.onStop()
-        if (needEventBus()) {
+        if (needEventBus) {
             EventBus.getDefault().unregister(this)
         }
     }
-
-    override fun needEventBus(): Boolean = false
-
-    abstract fun initViewBinding(inflater: LayoutInflater, container: ViewGroup?): ViewBinding
 }

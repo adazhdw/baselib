@@ -27,7 +27,7 @@ interface IFragment {
     /**
      * 是否需要EventBus
      */
-    fun needEventBus(): Boolean = false
+    val needEventBus: Boolean
 
     /**
      * 网络请求开始
