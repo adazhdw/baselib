@@ -21,6 +21,7 @@ interface IFragment {
 
     /**
      * 初始化View
+     * ViewBindingFragment 需在此方法初始化相关View，必须重写调用
      */
     fun initView(view: View){}
 
