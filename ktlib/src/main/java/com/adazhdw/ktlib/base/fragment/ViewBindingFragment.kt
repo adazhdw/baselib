@@ -6,9 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
-import androidx.viewbinding.ViewBinding
 import com.adazhdw.ktlib.base.IFragment
-import com.adazhdw.ktlib.ext.viewBind
 import org.greenrobot.eventbus.EventBus
 
 

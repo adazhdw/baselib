@@ -19,12 +19,12 @@ import kotlin.reflect.KProperty
  */
 
 
-inline fun <reified T : ViewBinding> Activity.viewBinding(layoutInflater: LayoutInflater): T {
+inline fun <reified T : ViewBinding> Activity.inflate(layoutInflater: LayoutInflater): T {
     return T::class.java.getMethod("inflate", LayoutInflater::class.java).invoke(null, layoutInflater) as T
 }
 
-inline fun <reified T : ViewBinding> Activity.viewBind() = lazy {
-    viewBinding<T>(layoutInflater).apply { setContentView(this.root) }
+inline fun <reified T : ViewBinding> Activity.inflate() = lazy {
+    this.inflate<T>(layoutInflater).apply { setContentView(this.root) }
 }
 
 
@@ -51,7 +51,7 @@ class FragmentViewBindingDelegate<T : ViewBinding>(private val clazz: Class<T>) 
     }
 }
 
-inline fun <reified T : ViewBinding> Fragment.viewBind() = FragmentViewBindingDelegate<T>(T::class.java)
+inline fun <reified T : ViewBinding> Fragment.bind() = FragmentViewBindingDelegate<T>(T::class.java)
 
 class FragmentViewBindingDelegate2<T : ViewBinding>(
     val fragment: Fragment,
