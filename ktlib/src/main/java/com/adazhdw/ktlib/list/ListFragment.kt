@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.adazhdw.ktlib.R
 import com.adazhdw.ktlib.base.fragment.ViewBindingFragment
 import com.adazhdw.ktlib.databinding.FragmentListLayoutBinding
+import com.adazhdw.ktlib.ext.bind
 import com.adazhdw.ktlib.ext.dp2px
-import com.adazhdw.ktlib.ext.viewBind2
 import com.adazhdw.ktlib.list.adapter.ViewBindingAdapter
 import com.adazhdw.ktlib.list.view.LoadMoreRecyclerView
 import com.adazhdw.ktlib.widget.recyclerview.LinearSpacingItemDecoration
@@ -29,7 +29,7 @@ abstract class ListFragment<T : Any, A : ViewBindingAdapter<T>> : ViewBindingFra
         get() = if (isRefreshing) 0 else mData.size
     private var currPage = 0
     protected lateinit var mDataAdapter: A
-    private val viewBinding by viewBind2(FragmentListLayoutBinding::bind)
+    private val viewBinding by bind<FragmentListLayoutBinding>()
 
     override fun initView(view: View) {
         viewBinding.swipe.setOnRefreshListener { requestStart() }
