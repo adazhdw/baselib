@@ -5,8 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adazhdw.ktlib.R
 import com.adazhdw.ktlib.base.fragment.ViewBindingFragment
+import com.adazhdw.ktlib.core.viewbinding.bind
 import com.adazhdw.ktlib.databinding.FragmentListLayoutBinding
-import com.adazhdw.ktlib.ext.bind
 import com.adazhdw.ktlib.ext.dp2px
 import com.adazhdw.ktlib.list.adapter.ViewBindingAdapter
 import com.adazhdw.ktlib.list.view.LoadMoreRecyclerView

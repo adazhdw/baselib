@@ -7,11 +7,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.viewbinding.ViewBinding
+import com.adazhdw.ktlib.core.lifecycle.addOnDestroy
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 
-class FragmentViewBindingDelegate<T : ViewBinding>(val fragment: Fragment, val viewBindingFactory: (View) -> T) : ReadOnlyProperty<Fragment, T> {
+class FragmentViewBindingDelegate2<T : ViewBinding>(val fragment: Fragment, val viewBindingFactory: (View) -> T) : ReadOnlyProperty<Fragment, T> {
     private var binding: T? = null
 
     init {
@@ -52,4 +53,22 @@ class FragmentViewBindingDelegate<T : ViewBinding>(val fragment: Fragment, val v
 }
 
 fun <T : ViewBinding> Fragment.viewBind(viewBindingFactory: (View) -> T) =
-    FragmentViewBindingDelegate(this, viewBindingFactory)
+    FragmentViewBindingDelegate2(this, viewBindingFactory)
+
+
+class FragmentViewBindingDelegate<T : ViewBinding>(private val clazz: Class<T>) : ReadOnlyProperty<Fragment, T> {
+    private var binding: T? = null
+
+    @Suppress("UNCHECKED_CAST")
+    override fun getValue(thisRef: Fragment, property: KProperty<*>): T {
+        if (binding == null) {
+            binding = clazz.getMethod("bind", View::class.java).invoke(null, thisRef.requireView()) as T
+            thisRef.viewLifecycleOwner.addOnDestroy {
+                binding = null
+            }
+        }
+        return binding!!
+    }
+}
+
+inline fun <reified T : ViewBinding> Fragment.bind() = FragmentViewBindingDelegate<T>(T::class.java)

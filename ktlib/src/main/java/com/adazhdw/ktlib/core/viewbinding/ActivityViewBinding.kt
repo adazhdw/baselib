@@ -27,6 +27,16 @@ class ActivityViewBindingDelegate<T : ViewBinding>(private val clazz: Class<T>) 
     }
 }
 
-inline fun <reified T : ViewBinding> Activity.inflate() = ActivityViewBindingDelegate<T>(T::class.java)
+inline fun <reified T : ViewBinding> Activity.inflate2() = ActivityViewBindingDelegate<T>(T::class.java)
+
+
+
+inline fun <reified T : ViewBinding> Activity.inflate(layoutInflater: LayoutInflater): T {
+    return T::class.java.getMethod("inflate", LayoutInflater::class.java).invoke(null, layoutInflater) as T
+}
+
+inline fun <reified T : ViewBinding> Activity.inflate() = lazy(LazyThreadSafetyMode.NONE) {
+    this.inflate<T>(layoutInflater).apply { setContentView(this.root) }
+}
 
 
