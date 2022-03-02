@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.list.manager
+package com.adazhdw.ktlib.widget.recyclerview
 
 import android.content.Context
 import android.util.AttributeSet

@@ -9,8 +9,8 @@ import com.adazhdw.kthttp.coroutines.toClazz
 import com.adazhdw.kthttp.getRequest
 import com.adazhdw.ktlib.ext.toast
 import com.adazhdw.ktlib.list.ListFragment
-import com.adazhdw.ktlib.list.adapter.ViewBindingAdapter
-import com.adazhdw.ktlib.list.holder.BaseVBViewHolder
+import com.adazhdw.ktlib.list.BaseVBAdapter
+import com.adazhdw.ktlib.list.BaseVBViewHolder
 import com.adazhdw.libapp.bean.ListResponse
 import com.adazhdw.libapp.bean.WxArticleChapter
 import com.adazhdw.libapp.databinding.NetChapterItemBinding
@@ -51,13 +51,13 @@ class WxChaptersFragment : ListFragment<WxArticleChapter, ChaptersAdapter>() {
     }
 }
 
-class ChaptersAdapter : ViewBindingAdapter<WxArticleChapter>() {
+class ChaptersAdapter : BaseVBAdapter<WxArticleChapter>() {
 
     override fun viewBinding(parent: ViewGroup, inflater: LayoutInflater, viewType: Int): ViewBinding {
         return NetChapterItemBinding.inflate(inflater, parent, false)
     }
 
-    override fun notifyBind(holder: BaseVBViewHolder, data: WxArticleChapter, position: Int) {
+    override fun notifyBindVH(holder: BaseVBViewHolder, data: WxArticleChapter, position: Int) {
         (holder.viewBinding as NetChapterItemBinding).chapterName.text = data.chapterName
     }
 

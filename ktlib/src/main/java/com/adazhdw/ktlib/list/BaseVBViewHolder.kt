@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.list.holder
+package com.adazhdw.ktlib.list
 
 import androidx.viewbinding.ViewBinding
 

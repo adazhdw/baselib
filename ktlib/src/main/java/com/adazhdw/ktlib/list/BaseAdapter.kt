@@ -1,4 +1,4 @@
-package com.adazhdw.ktlib.list.adapter
+package com.adazhdw.ktlib.list
 
 import android.util.SparseArray
 import android.view.LayoutInflater
@@ -18,7 +18,7 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
     private var itemClickListener: ((holder: VH, data: T, position: Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        return notifyCreateHolder(layoutInflaterCache.get(0) ?: LayoutInflater.from(parent.context), parent, viewType)
+        return notifyCreateVH(layoutInflaterCache.get(0) ?: LayoutInflater.from(parent.context), parent, viewType)
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
@@ -27,11 +27,11 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
         holder.itemView.setOnClickListener {
             itemClickListener?.invoke(holder, data, position)
         }
-        notifyBind(holder, data, position)
+        notifyBindVH(holder, data, position)
     }
 
-    abstract fun notifyCreateHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): VH
-    abstract fun notifyBind(holder: VH, data: T, position: Int)
+    abstract fun notifyCreateVH(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): VH
+    abstract fun notifyBindVH(holder: VH, data: T, position: Int)
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -49,9 +49,9 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
         this.itemClickListener = listener
     }
 
-    private var items: MutableList<T> = mutableListOf()
-
     override fun getItemCount(): Int = items.size
+
+    private var items: MutableList<T> = mutableListOf()
 
     fun getData(): MutableList<T> = items
 
