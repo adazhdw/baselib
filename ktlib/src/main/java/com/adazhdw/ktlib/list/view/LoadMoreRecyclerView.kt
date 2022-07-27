@@ -79,7 +79,7 @@ class LoadMoreRecyclerView : RecyclerView {
             is StaggeredGridLayoutManager -> {
                 val into = intArrayOf(layoutManager.spanCount)
                 layoutManager.findFirstVisibleItemPositions(into)
-                lastVisiblePosition = into.max() ?: 0
+                lastVisiblePosition = into.maxOrNull() ?: 0
                 //if (itemCount == lastVisiblePosition + 1) canLoadMore = true
                 if (itemCount == lastVisiblePosition) canLoadMore = true//因为增加了loadView，所以计算需要-1
             }
