@@ -25,10 +25,10 @@ fun WebView.initSetting() {
     //禁用文字缩放
     settings.textZoom = 100
     //10M缓存，api 18后，系统自动管理。
-    settings.setAppCacheMaxSize(10 * 1024 * 1024)
-    //允许缓存，设置缓存位置
-    settings.setAppCacheEnabled(true)
-    settings.setAppCachePath(context.getDir(context.applicationInfo.name, 0).path)
+//    settings.setAppCacheMaxSize(10 * 1024 * 1024)
+//    //允许缓存，设置缓存位置
+//    settings.setAppCacheEnabled(true)
+//    settings.setAppCachePath(context.getDir(context.applicationInfo.name, 0).path)
     //允许WebView使用File协议
     settings.allowFileAccess = true
     //不保存密码
@@ -53,7 +53,6 @@ fun WebView.onClient(titleCallback: ((title: String?) -> Unit)? = null) {
 }
 
 ////移除部分系统JavaScript接口
-@TargetApi(11)
 private fun WebView.removeJavascriptInterfaces() {
     try {
         if (Build.VERSION.SDK_INT in 11..16) {

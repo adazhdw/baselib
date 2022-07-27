@@ -1,5 +1,7 @@
 package com.adazhdw.libapp
 
+import android.content.Context
+import androidx.multidex.MultiDex
 import com.adazhdw.kthttp.BuildConfig
 import com.adazhdw.ktlib.Application
 import com.adazhdw.ktlib.core.delegate.DelegateExt
@@ -16,6 +18,11 @@ class LibApp : Application() {
 
     companion object {
         var instance: LibApp by DelegateExt.notNullSingleValue()
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
     }
 
     override fun onCreate() {
