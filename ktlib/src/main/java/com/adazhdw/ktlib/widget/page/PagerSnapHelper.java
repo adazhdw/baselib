@@ -135,7 +135,7 @@ public class PagerSnapHelper extends SnapHelper {
             return false;
         }
 
-        RecyclerView.SmoothScroller smoothScroller = createSnapScroller(layoutManager);
+        RecyclerView.SmoothScroller smoothScroller = createScroller(layoutManager);
         if (smoothScroller == null) {
             return false;
         }
@@ -156,7 +156,8 @@ public class PagerSnapHelper extends SnapHelper {
      * @param layoutManager 布局故哪里去
      * @return 自定义 LinearSmoothScroller
      */
-    protected LinearSmoothScroller createSnapScroller(RecyclerView.LayoutManager layoutManager) {
+    @Override
+    protected LinearSmoothScroller createScroller(@NonNull RecyclerView.LayoutManager layoutManager) {
         if (!(layoutManager instanceof RecyclerView.SmoothScroller.ScrollVectorProvider)) {
             return null;
         }
