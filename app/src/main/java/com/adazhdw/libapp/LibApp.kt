@@ -14,7 +14,7 @@ import com.adazhdw.ktlib.core.delegate.DelegateExt
 class LibApp : Application() {
 
     override val isDebug: Boolean
-        get() = BuildConfig.DEBUG
+        get() = true
 
     companion object {
         var instance: LibApp by DelegateExt.notNullSingleValue()

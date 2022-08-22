@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import com.adazhdw.ktlib.base.IFragment
+import com.adazhdw.ktlib.ext.logD
 import org.greenrobot.eventbus.EventBus
 
 
@@ -35,20 +36,38 @@ abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        "onAttach".logD(TAG)
         mContext = context
         mActivity = context as FragmentActivity
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        "onCreate".logD(TAG)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return layoutInflater.inflate(layoutId, container, false)
+        "onCreateView".logD(TAG)
+        return inflater.inflate(layoutId, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        "onViewCreated".logD(TAG)
         isViewInitiated = true
         initView(view)
         initData()
         prepareRequest()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        "onActivityCreated".logD(TAG)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        "onViewStateRestored".logD(TAG)
     }
 
     private fun prepareRequest() {
@@ -60,15 +79,45 @@ abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
 
     override fun onStart() {
         super.onStart()
+        "onStart".logD(TAG)
         if (needEventBus) {
             EventBus.getDefault().register(this)
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        "onResume".logD(TAG)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        "onPause".logD(TAG)
+    }
+
     override fun onStop() {
+        "onStop".logD(TAG)
         super.onStop()
         if (needEventBus) {
             EventBus.getDefault().unregister(this)
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        isViewInitiated = false
+        isDataInitiated = false
+        "onDestroyView".logD(TAG)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        "onDestroy".logD(TAG)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        "onDetach".logD(TAG)
+    }
+
 }

@@ -30,11 +30,17 @@ abstract class BaseFragment : CoroutinesFragment(), IFragment {
     override val needEventBus: Boolean
         get() = false
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        "onAttach".logD(TAG)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        "onCreate".logD(TAG)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         "onCreateView".logD(TAG)
         initData()
         mContentView = inflater.inflate(layoutId, container, false)
@@ -49,9 +55,14 @@ abstract class BaseFragment : CoroutinesFragment(), IFragment {
         prepareRequest()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        "onDestroyView".logD(TAG)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        "onActivityCreated".logD(TAG)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        "onViewStateRestored".logD(TAG)
     }
 
     private fun prepareRequest() {
@@ -61,29 +72,11 @@ abstract class BaseFragment : CoroutinesFragment(), IFragment {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        "onAttach".logD(TAG)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        "onDetach".logD(TAG)
-    }
-
     override fun onStart() {
         super.onStart()
         "onStart".logD(TAG)
         if (needEventBus) {
             EventBus.getDefault().register(this)
-        }
-    }
-
-    override fun onStop() {
-        "onStop".logD(TAG)
-        super.onStop()
-        if (needEventBus) {
-            EventBus.getDefault().unregister(this)
         }
     }
 
@@ -97,14 +90,24 @@ abstract class BaseFragment : CoroutinesFragment(), IFragment {
         "onPause".logD(TAG)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        "onCreate".logD(TAG)
+    override fun onStop() {
+        "onStop".logD(TAG)
+        super.onStop()
+        if (needEventBus) {
+            EventBus.getDefault().unregister(this)
+        }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        "onActivityCreated".logD(TAG)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        isViewInitiated = false
+        isDataInitiated = false
+        "onDestroyView".logD(TAG)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        "onDetach".logD(TAG)
     }
 
     override fun onDestroy() {
