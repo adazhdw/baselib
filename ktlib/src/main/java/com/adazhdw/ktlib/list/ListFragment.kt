@@ -39,7 +39,7 @@ abstract class ListFragment<T : Any, A : BaseVBAdapter<T>> : ViewBindingFragment
         viewBinding.dataRV.adapter = mDataAdapter
         viewBinding.dataRV.setLoadMoreListener(object : LoadMoreRecyclerView.LoadMoreListener {
             override fun onLoadMore() {
-                if (loadMoreAvailable()) requestData(false)
+                if (loadMoreAvailable()) loadData()
             }
         })
         rvExtra(viewBinding.dataRV)
@@ -53,10 +53,14 @@ abstract class ListFragment<T : Any, A : BaseVBAdapter<T>> : ViewBindingFragment
         if (!viewBinding.swipe.isRefreshing) {
             viewBinding.swipe.isRefreshing = true
         }
-        requestData(viewBinding.swipe.isRefreshing)
+        requestData(true)
     }
 
-    private fun requestData(refreshing: Boolean) {
+    fun loadData() {
+        requestData(false)
+    }
+
+    fun requestData(refreshing: Boolean) {
         if (refreshing) {
             currPage = startAtPage()
             viewBinding.dataRV.setLoadMoreEnabled(false)
