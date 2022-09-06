@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
+import androidx.viewbinding.ViewBinding
 import com.adazhdw.ktlib.base.IFragment
 import com.adazhdw.ktlib.ext.logD
 import org.greenrobot.eventbus.EventBus
@@ -16,10 +17,15 @@ import org.greenrobot.eventbus.EventBus
  * create at 2020/4/2 15:53
  * description:
  */
-abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
+abstract class ViewBindingFragment<VB : ViewBinding> : CoroutinesFragment(), IFragment {
 
     override val needEventBus: Boolean
         get() = false
+
+    override val layoutId: Int
+        get() = 0
+
+    protected lateinit var viewBinding: VB
 
     /**
      * 是否初始化过布局
@@ -48,8 +54,11 @@ abstract class ViewBindingFragment : CoroutinesFragment(), IFragment {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         "onCreateView".logD(TAG)
-        return inflater.inflate(layoutId, container, false)
+        viewBinding = inflateViewBinding(inflater, container)
+        return viewBinding.root
     }
+
+    abstract fun inflateViewBinding(inflater: LayoutInflater, container: ViewGroup?): VB
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
