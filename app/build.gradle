@@ -23,8 +23,8 @@ android {
     }
     
     //开启viewBinding
-    viewBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding = true
     }
 
     compileOptions {

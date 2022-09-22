@@ -12,13 +12,15 @@ import org.greenrobot.eventbus.EventBus
  * description:
  */
 
-abstract class ViewBindingActivity : ForResultActivity(), IActivity {
+abstract class ViewBindingActivity<VB : ViewBinding> : ForResultActivity(), IActivity {
 
     final override val layoutId: Int
         get() = 0
+    abstract val viewBinding: VB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(viewBinding.root)
         window.setBackgroundDrawable(null)
         initView()
         initData()

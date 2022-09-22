@@ -5,12 +5,11 @@ import com.adazhdw.ktlib.core.viewbinding.inflate
 import com.adazhdw.ktlib.ext.addFragment
 import com.adazhdw.libapp.databinding.ActivityMainBinding
 
-class MainActivity : ViewBindingActivity() {
+class MainActivity : ViewBindingActivity<ActivityMainBinding>() {
 
-    private val binding by inflate<ActivityMainBinding>()
+    override val viewBinding by inflate<ActivityMainBinding>()
 
     override fun initView() {
-        setContentView(binding.root)
         addFragment(WxChaptersFragment(), R.id.container)
     }
 
