@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.adazhdw.ktlib.base.fragment.ViewBindingFragment
 import com.adazhdw.ktlib.databinding.FragmentListLayoutBinding
 import com.adazhdw.ktlib.ext.dp2px
-import com.adazhdw.ktlib.list.view.LoadMoreRecyclerView
+import com.adazhdw.ktlib.list.view.LoadMoreRecyclerViewV2
 import com.adazhdw.ktlib.widget.recyclerview.LinearSpacingItemDecoration
 
 /**
@@ -33,12 +33,12 @@ abstract class ListFragment<T : Any, A : BaseVBAdapter<T>> : ViewBindingFragment
 
     override fun initView(view: View) {
         viewBinding.swipe.setOnRefreshListener { requestStart() }
-        viewBinding.dataRV.setLoadMoreAvailable(loadMoreAvailable())
+        viewBinding.dataRV.setLoadMoreEnabled(loadMoreAvailable())
         viewBinding.dataRV.layoutManager = getLayoutManager()
         viewBinding.dataRV.addItemDecoration(itemDecoration())
         mDataAdapter = getDataAdapter()
         viewBinding.dataRV.adapter = mDataAdapter
-        viewBinding.dataRV.setLoadMoreListener(object : LoadMoreRecyclerView.LoadMoreListener {
+        viewBinding.dataRV.setLoadMoreListener(object : LoadMoreRecyclerViewV2.LoadMoreListener {
             override fun onLoadMore() {
                 if (loadMoreAvailable()) loadData()
             }
@@ -104,7 +104,7 @@ abstract class ListFragment<T : Any, A : BaseVBAdapter<T>> : ViewBindingFragment
     open fun startAtPage() = 0/*开始页数*/
     open fun perPage() = 20/*每页个数pageSize*/
     open fun onError(code: Int, msg: String?) {}
-    open fun rvExtra(recyclerView: LoadMoreRecyclerView) {}/*recyclerView其他属性设置*/
+    open fun rvExtra(recyclerView: LoadMoreRecyclerViewV2) {}/*recyclerView其他属性设置*/
     open fun getLayoutManager(): RecyclerView.LayoutManager {
         return LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
