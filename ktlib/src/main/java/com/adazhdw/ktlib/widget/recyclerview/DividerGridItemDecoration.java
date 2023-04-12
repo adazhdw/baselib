@@ -18,7 +18,7 @@ import java.util.Objects;
 
 public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
     private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
-    private Drawable mDivider;
+    private final Drawable mDivider;
 
     public DividerGridItemDecoration(Context context) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);

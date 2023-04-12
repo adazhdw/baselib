@@ -3,7 +3,7 @@ package com.adazhdw.ktlib.core.lifecycle
 import android.app.Activity
 import java.util.*
 
-object KtManager {
+object ActivityManager {
 
     private val mActivityList = LinkedList<Activity>()
 

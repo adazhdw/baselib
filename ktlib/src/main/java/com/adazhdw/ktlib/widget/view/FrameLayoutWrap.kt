@@ -20,33 +20,18 @@ class FrameLayoutWrap : FrameLayout {
     override fun measureChild(child: View, parentWidthMeasureSpec: Int, parentHeightMeasureSpec: Int) {
         val lp = child.layoutParams
 
-        val childWidthMeasureSpec: Int
-        val childHeightMeasureSpec: Int = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        val childHeightMeasureSpec: Int = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
 
-        childWidthMeasureSpec =
-            ViewGroup.getChildMeasureSpec(parentWidthMeasureSpec, paddingLeft + paddingRight, lp.width)
+        val childWidthMeasureSpec: Int = ViewGroup.getChildMeasureSpec(parentWidthMeasureSpec, paddingLeft + paddingRight, lp.width)
 
         child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
     }
 
-    override fun measureChildWithMargins(
-        child: View,
-        parentWidthMeasureSpec: Int,
-        widthUsed: Int,
-        parentHeightMeasureSpec: Int,
-        heightUsed: Int
-    ) {
-        val lp = child.layoutParams as ViewGroup.MarginLayoutParams
+    override fun measureChildWithMargins(child: View, parentWidthMeasureSpec: Int, widthUsed: Int, parentHeightMeasureSpec: Int, heightUsed: Int) {
+        val lp = child.layoutParams as MarginLayoutParams
 
-        val childWidthMeasureSpec = ViewGroup.getChildMeasureSpec(
-            parentWidthMeasureSpec,
-            paddingLeft + paddingRight + lp.leftMargin + lp.rightMargin
-                    + widthUsed, lp.width
-        )
-        val childHeightMeasureSpec = View.MeasureSpec.makeMeasureSpec(
-            lp.topMargin + lp.bottomMargin,
-            View.MeasureSpec.UNSPECIFIED
-        )//Layout不限制子View的高度的核心代码
+        val childWidthMeasureSpec = ViewGroup.getChildMeasureSpec(parentWidthMeasureSpec, paddingLeft + paddingRight + lp.leftMargin + lp.rightMargin + widthUsed, lp.width)
+        val childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(lp.topMargin + lp.bottomMargin, MeasureSpec.UNSPECIFIED)//Layout不限制子View的高度的核心代码
 
         child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
         //        super.measureChildWithMargins(child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);

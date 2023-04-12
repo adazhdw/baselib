@@ -11,6 +11,7 @@ class MainActivity : ViewBindingActivity<ActivityMainBinding>() {
     override val viewBinding by inflate3<ActivityMainBinding>()
 
     override fun initView() {
+        viewBinding.container
         addFragment(WxChaptersFragment(), R.id.container)
     }
 

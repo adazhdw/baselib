@@ -2,7 +2,7 @@ package com.adazhdw.ktlib.base.activity
 
 import android.os.Bundle
 import com.adazhdw.ktlib.base.IActivity
-import com.adazhdw.ktlib.core.lifecycle.KtManager
+import com.adazhdw.ktlib.core.lifecycle.ActivityManager
 import org.greenrobot.eventbus.EventBus
 
 abstract class BaseActivity : ForResultActivity(), IActivity {
@@ -10,7 +10,7 @@ abstract class BaseActivity : ForResultActivity(), IActivity {
         super.onCreate(savedInstanceState)
         setContentView(layoutId)
 
-        KtManager.pushActivity(this)
+        ActivityManager.pushActivity(this)
 
         window.setBackgroundDrawable(null)
         initView()
@@ -34,7 +34,7 @@ abstract class BaseActivity : ForResultActivity(), IActivity {
 
     override fun onDestroy() {
         super.onDestroy()
-        KtManager.popActivity(this)
+        ActivityManager.popActivity(this)
     }
 
 }
