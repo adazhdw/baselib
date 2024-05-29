@@ -8,6 +8,7 @@ interface IWrapperView {
     fun headerView():View
     fun footerView():View
     fun isLoadMoreEnabled(): Boolean
+    fun isLoading(): Boolean
 
     val headerCount:Int
     val footerCount:Int

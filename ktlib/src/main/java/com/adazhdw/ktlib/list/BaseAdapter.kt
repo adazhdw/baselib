@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.IntRange
 import androidx.recyclerview.widget.RecyclerView
+import com.adazhdw.ktlib.list.view.LoadMoreRecyclerView
 
 /**
  * author：daguozhu
@@ -177,6 +178,26 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
     fun smoothScrollToBottom() {
         if (this.items.isNotEmpty()) {
             recyclerView?.smoothScrollToPosition(this.items.size - 1)
+        }
+    }
+
+    /**
+     * 加载更多，加载成功
+     */
+    fun loadComplete(hasMore: Boolean, error: Boolean) {
+        val recyclerView = this.recyclerView
+        if (recyclerView is LoadMoreRecyclerView) {
+            recyclerView.loadComplete(hasMore, error)
+        }
+    }
+
+    /**
+     * 加载更多，加载成功
+     */
+    fun loadEnd(gone: Boolean) {
+        val recyclerView = this.recyclerView
+        if (recyclerView is LoadMoreRecyclerView) {
+            recyclerView.loadEnd(gone)
         }
     }
 

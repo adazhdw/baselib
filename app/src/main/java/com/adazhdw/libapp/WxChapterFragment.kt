@@ -13,7 +13,7 @@ import com.adazhdw.ktlib.ext.toast
 import com.adazhdw.ktlib.list.ListFragment
 import com.adazhdw.ktlib.list.BaseVBAdapter
 import com.adazhdw.ktlib.list.BaseVBViewHolder
-import com.adazhdw.ktlib.list.view.LoadMoreRecyclerViewV2
+import com.adazhdw.ktlib.list.view.LoadMoreRecyclerView
 import com.adazhdw.ktlib.list.view.LoadMoreViewImpl
 import com.adazhdw.libapp.bean.ListResponse
 import com.adazhdw.libapp.bean.WxArticleChapter
@@ -35,7 +35,7 @@ class WxChaptersFragment : ListFragment<WxArticleChapter, ChaptersAdapter>() {
         return LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
 
-    override fun rvExtra(recyclerView: LoadMoreRecyclerViewV2) {
+    override fun rvExtra(recyclerView: LoadMoreRecyclerView) {
         recyclerView.setLoadMoreView(LoadMoreViewImpl(recyclerView.context))
         val footer = layoutInflater.inflate(R.layout.base_header, null, false)
         val header = layoutInflater.inflate(R.layout.base_header, null, false)

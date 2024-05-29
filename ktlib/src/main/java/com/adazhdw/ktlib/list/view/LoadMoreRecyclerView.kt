@@ -13,11 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 
+
 internal const val VIEW_TYPE_HEAD = 20000001
 internal const val VIEW_TYPE_FOOTER = 20000002
 internal const val VIEW_TYPE_LOAD_MORE = 20000003
 
-class LoadMoreRecyclerViewV2 @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+class LoadMoreRecyclerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     RecyclerView(context, attrs, defStyleAttr), IWrapperView {
 
     private val mHandler = Handler(Looper.getMainLooper())
@@ -28,23 +29,23 @@ class LoadMoreRecyclerViewV2 @JvmOverloads constructor(context: Context, attrs: 
     private var mLoadMoreListener: LoadMoreListener? = null
     private var mWrapAdapter: WrapperAdapter? = null
     private var mDataObserver: DataObserver? = null
-    private lateinit var loadMoreView: LoadMoreView
-    private lateinit var footerView: LinearLayout
-    private lateinit var headerView: LinearLayout
+    private var loadMoreView: LoadMoreView
+    private val footerView: LinearLayout
+    private val headerView: LinearLayout
 
     private val alreadyTopOrBottom: Boolean
         get() = !canScrollVertically(1) || !canScrollVertically(-1)
 
     init {
-        initView(context)
-    }
-
-    private fun initView(context: Context) {
         loadMoreView = LoadMoreViewImpl(context)
         footerView = LinearLayout(context)
         footerView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         headerView = LinearLayout(context)
         headerView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+    }
+
+    override fun canScrollVertically(direction: Int): Boolean {
+        return super.canScrollVertically(direction) && !isLoading()
     }
 
     override fun onScrollStateChanged(state: Int) {
@@ -192,6 +193,7 @@ class LoadMoreRecyclerViewV2 @JvmOverloads constructor(context: Context, attrs: 
     override fun headerView(): View = headerView
     override fun footerView(): View = footerView
     override fun isLoadMoreEnabled(): Boolean = isLoadMoreEnabled
+    override fun isLoading(): Boolean = isLoading
     override val headerNotEmpty: Boolean get() = headerView.isNotEmpty()
     override val footerNotEmpty: Boolean get() = footerView.isNotEmpty()
     override val headerCount: Int get() = if (headerNotEmpty) 1 else 0
